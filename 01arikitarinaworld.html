@@ -3,10 +3,60 @@
 <head>
     <meta charset="utf-8" />
     <title>01はじめの一歩</title>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
 </head>
 <body>
-    <p>面倒なことは後回しにしてまずは画面に文字を表示させてみる。</p>
-    <!--yumetodo/2015_C_Textbook/tree/gh-pages-->
-    <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/001_arikitari_na_world.c"></script>
+    <section>
+        <h2>ありきたりなworld</h2>
+        <p>面倒なことは後回しにしてまずは画面に文字を表示させてみましょう。</p>
+        <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/001_arikitari_na_world.c"></script>
+        <p>え？なんでHello Worldじゃないんだ？私printf関数を使うって聞いたんだけどputsって何？いやいや、こっちのほうがありきたり（普通）ですから。（なぜprintfでなくputsを使ったのかは後で説明します）</p>
+    </section>
+    <section>
+        <h2>main関数の書き方</h2>
+        <p>さて、ちゃんと実行できましたでしょうか？C/C++言語は必ず関数があり、特に別途定めない限りmain関数から処理が始まります。<br>
+        ちなみに関数とは何かについては後で解説しますが、とりあえず処理の塊くらいに思ってください。</p>
+        <p>で、そのmain関数ですが、ANCI-C規格で書き方が決まっています。(非フリースタンディング環境の場合)</p>
+        <pre class="brush: cpp;">int main(void);
+int main(int argc, char* argv[]);
+int main()</pre>
+        <p>1行目は引数を無視する書き方で、2行目は引数を受け取るときの書き方、3行目はC++のmain関数の引数を受け取らない書き方となり、C99でも認められます。</p>
+        <p>というわけでmain関数は上記何れかの書き方で書きましょう、というお話です。個人的にはちゃんとvoidと書きたい派です。</p>
+        <p>まちがっても</p>
+        <pre class="brush: cpp;">main();
+void main(void);</pre>
+        <p>などとしてはいけません。</p>
+    </section>
+    <section>
+        <h2>main関数の引数って何？</h2>
+        <p>先ほどさらっと「引数」という言葉を使いましたが、解説がまだでした。実例を見て行きましょう。</p>
+        <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/002_show_argv.c"></script>
+        <p>さて疑問が噴出していることと思いますが気にすることはありません。ifとかforとかはちゃんと後で説明します。これをコンパイルしてできた002_show_argv.exeを</p>
+        <pre class="brush: plain;">002_show_argv.exe arikitari na world!</pre>
+        <p>のように実行してみてください。すると</p>
+        <pre class="brush: plain;">argv[0]:[任意の場所]\002_show_argv.exe
+argv[1]:arikitari
+argv[2]:na
+argv[3]:world!
+</pre>
+        <p>のようになったと思います。こんな感じでexeはコマンドライン引数を受け取れるんだなぁと思っていてください。</p>
+    </section>
+    <section>
+        <h2>コメントの書き方</h2>
+        <p>今はこんなに短いプログラムですから、必要性は薄いですが、もっと大規模に慣ればなるほど、ソースコードにメモを書きたくなります。すでにさらっと使っていますが、書き方は2通りあります。</p>
+        <pre class="brush: cpp;">/*これは行をまたがって使えるコメント*/
+//これはその行の終わりまでコメントになる</pre>
+        <p>2行目がANCI-C認められたのはC99からなんですが、ほとんどのコンパイラーが対応してましたからどんどんつかって構いません。</p>
+        <p>注意点ですが、一行目の書き方のコメントはネスト（入れ子）にできません</p>
+        <pre class="brush: cpp;">/*これはコメント
+/*ここもコメントだけど*/
+ここはコメントじゃない*/</pre>
+        <p>稀によくあるミスなので注意です。だから私はコメントを書くときは基本的に2行目のいわゆる行コメントを使うのをおすすめします。</p>
+    </section>
 </body>
 </html>
