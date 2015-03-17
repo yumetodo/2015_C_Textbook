@@ -18,21 +18,29 @@
         <p>面倒なことは後回しにしてまずは画面に文字を表示させてみましょう。</p>
         <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/001_arikitari_na_world.c"></script>
         <p>え？なんでHello Worldじゃないんだ？私printf関数を使うって聞いたんだけどputsって何？いやいや、こっちのほうがありきたり（普通）ですから。（なぜprintfでなくputsを使ったのかは後で説明します）</p>
+        <p>このコードから多くのことが学べます。まずは一行目。</p>
+        <pre class="brush: cpp;">#include&lt;stdio.h&gt;</pre>
+        <p>これはヘッダーファイルと呼ばれるものを読み込む部分です。stdio.hはC言語が提供する標準ライブラリで、標準入出力(STanDard Input and Output)に関わる関数群を提供します。puts関数とかprintf関数はこれを読み込むことで使えるようになります。</p>
+        <p>ついで2行目と4行目に注目してください。</p>
+        <pre class="brush: cpp; first-line: 2; highlight:[2,4];">int main(void){
+    puts("arikitari na world!");//画面に表示
+    return 0;
+}</pre>
+        <p>C/C++言語は必ず関数があり、特に別途定めない限りmain関数から処理が始まります。詳細説明は先送りするとして関数には戻り値というものがあり、void型以外では必ず戻り値を返す必要があります。<br>
+        main関数の戻り値は、プログラムの処理がmain関数から始まるため、プログラムの終了コード(Exist Code)とも呼ばれます。処理が成功した場合は0を返す(return 0;)のが慣習となっています。</p>
     </section>
     <section>
         <h2>main関数の書き方</h2>
-        <p>さて、ちゃんと実行できましたでしょうか？C/C++言語は必ず関数があり、特に別途定めない限りmain関数から処理が始まります。<br>
-        ちなみに関数とは何かについては後で解説しますが、とりあえず処理の塊くらいに思ってください。</p>
-        <p>で、そのmain関数ですが、ANCI-C規格で書き方が決まっています。(非フリースタンディング環境の場合)</p>
+        <p>main関数ですが、ANCI-C規格で書き方が決まっています。(非フリースタンディング環境の場合)</p>
         <pre class="brush: cpp;">int main(void);
 int main(int argc, char* argv[]);
 int main()</pre>
-        <p>1行目は引数を無視する書き方で、2行目は引数を受け取るときの書き方、3行目はC++のmain関数の引数を受け取らない書き方となり、C99でも認められます。</p>
+        <p>1行目は引数を無視する書き方で、2行目は引数(関数の解説の章で解説します)を受け取るときの書き方、3行目はC++のmain関数の引数を受け取らない書き方となり、C99でも認められます。</p>
         <p>というわけでmain関数は上記何れかの書き方で書きましょう、というお話です。個人的にはちゃんとvoidと書きたい派です。</p>
         <p>まちがっても</p>
         <pre class="brush: cpp;">main();
 void main(void);</pre>
-        <p>などとしてはいけません。</p>
+        <p>などとしてはいけません(前者は古いCの記法、後者は頭がおかしい書き方)。</p>
     </section>
     <section>
         <h2>main関数の引数って何？</h2>
@@ -59,6 +67,190 @@ argv[3]:world!
 /*ここもコメントだけど*/
 ここはコメントじゃない*/</pre>
         <p>稀によくあるミスなので注意です。だから私はコメントを書くときは基本的に2行目のいわゆる行コメントを使うのをおすすめします。</p>
+    </section>
+    <section>
+        <h2>変数と代入</h2>
+        <p>プログラミング言語で必ずあるものといえば、真っ先に変数が上がるでしょう。変数とは処理途中のデータ（数字など）を保管しておく箱のようなものです。</p>
+        <pre class="brush: cpp;">int a;
+a = 10;
+int numof_allocated_array_at_a_time = 15;
+char ch = getchar();</pre>
+        <p>1行目では変数を宣言し定義しています。宣言は「こんな変数があるよ」とコンパイラに教える作業で、定義は「ここで変数を確保するよ」とコンパイラに教えることです。<br>
+        定義して初めてメモリ上に実体を持ち、変数を使えるようになるわけです。が、とりあえずヘッダーファイルを分けるようなことになるまでは、宣言も定義も同じと考えていいです。<br>
+        まとめると、メモリ上に変数を保管する場所を確保し、場所に名前をつけた、という状態です。</p>
+        <p>2行目は1行目で定義した変数aに10という値を代入しています。変数aは初めてここで使うのでこれは初期化作業とも言います。</p>
+        <dl>
+            <dt>代入</dt>
+            <dd>数学の代入とは少し違います。2行目の場合はaに10という値を記憶する、という意味になります。ここでつまずくとプログラミングができなくなるので、しっかり抑えてください。</dd>
+            <dt>初期化</dt>
+            <dd>
+                初期化、という言葉はかなり多くの人が誤解しています。0を代入することを初期化、と考える人が後を絶ちません。<br>
+                1行目で変数を宣言し定義しましたが、この状態ではaにどんな値が入っているかは不定です。<br>
+                2行目のように、プログラマがその変数に何が入っているかわかるようにすることを初期化といいます。<br>
+                ポインタの話が出てこない限りは、とりあえず定義した後初めて値を代入すれば、初期化している、と思って構いません。<br>
+                ポインタが絡んだ時のことは、その時にゆっくり解説します。
+            </dd>
+        </dl>
+        <p>1行目でメモリーを確保し、その領域にお名前（識別名）をつけて、2行目でその領域に値を書き込んだ、といったほうがわかりやすい・・・のかな？</p>
+        <p>1行目と2行目をまとめて書いたのが3行目です。4行目のように関数の戻り値を代入することもできます（関数については後述）</p>
+    </section>
+    <section>
+        <h2>変数の型</h2>
+        <p>C/C++言語はとくに型にうるさい言語として知られています。(JavaScriptやperlなど型を明示できない言語もある)。C++なんて型なしではやっていけません。</p>
+        <p>じゃあその「型」ってなんでしょうか？</p>
+        <table>
+            <colgroup style="width: 32px;"></colgroup>
+            <colgroup style="width: 99px;"></colgroup>
+            <colgroup style="width: 85px;"></colgroup>
+            <colgroup style="width: 95px;"></colgroup>
+            <colgroup style="width: 95px;"></colgroup>
+            <colgroup style="width: 120px;"></colgroup>
+            <tr>
+                <th>基本型名</th>
+                <th>整数型/浮動小数点型</th>
+                <th>型の大きさ</th>
+                <th>signedの最大値を求めるマクロ</th>
+                <th>signedの(実数の)最小値を求めるマクロ</th>
+                <th>unsignedの最大値を求めるマクロ</th>
+                <th>使用例</th>
+            </tr>
+            <tr>
+                <td>void</td>
+                <td>不定</td>
+                <td>不定</td>
+                <td>不定</td>
+                <td>存在しない</td>
+                <td>存在しない</td>
+                <td>ほぼ例外なく関数かポインタとともに用いるので省略</td>
+            </tr>
+            <tr>
+                <td>char</td>
+                <td>整数型</td>
+                <td>1byte</td>
+                <td>SCHAR_MAX</td>
+                <td>SCHAR_MIN</td>
+                <td>UCHAR_MAX</td>
+                <td><pre class="brush: cpp; gutter:false;">char delim = ',';</pre></td>
+            </tr>
+            <tr>
+                <td>short(short int)</td>
+                <td>整数型</td>
+                <td>不定</td>
+                <td>SHRT_MAX</td>
+                <td>SHRT_MIN</td>
+                <td>USHRT_MAX</td>
+                <td><pre class="brush: cpp; gutter:false;">short rect_x = 320;</pre></td>
+            </tr>
+            <tr>
+                <td>int</td>
+                <td>整数型</td>
+                <td>不定</td>
+                <td>INT_MAX</td>
+                <td>INT_MIN</td>
+                <td>UINT_MAX</td>
+                <td><pre class="brush: cpp; gutter:false;">int a = 3;</pre></td>
+            </tr>
+            <tr>
+                <td>long(long int)</td>
+                <td>整数型</td>
+                <td>不定</td>
+                <td>LONG_MAX</td>
+                <td>LONG_MIN</td>
+                <td>ULONG_MAX</td>
+                <td><pre class="brush: cpp; gutter:false;">long size = 217;</pre></td>
+            </tr>
+            <tr>
+                <td>long long</td>
+                <td>整数型</td>
+                <td>不定</td>
+                <td>LLONG_MAX</td>
+                <td>LLONG_MIN</td>
+                <td>ULLONG_MAX</td>
+                <td><pre class="brush: cpp; gutter:false;">long long size = 217;</pre></td>
+            </tr>
+            <tr>
+                <td>float</td>
+                <td>浮動小数点型</td>
+                <td>不定</td>
+                <td>FLT_MAX</td>
+                <td>-FLT_MAX</td>
+                <td>そんなものはない</td>
+                <td><pre class="brush: cpp; gutter:false;">long long size = 217;</pre></td>
+            </tr>
+            <tr>
+                <td>double</td>
+                <td>浮動小数点型</td>
+                <td>不定</td>
+                <td>DBL_MAX</td>
+                <td>-DBL_MAX</td>
+                <td>そんなものはない</td>
+                <td><pre class="brush: cpp; gutter:false;">long long size = 217;</pre></td>
+            </tr>
+        </table>
+        <p>FLT_MAXって「魔法科高校の劣等生」の「<a href="http://www49.atwiki.jp/mahouka/pages/18.html">four leaves technology</a>」みたいでかっこいい！・・・話がそれた。<br>
+        以上にc言語(c99)の基本型を上げてみた。各型によってメモリー上での大きさ（表せる値の範囲）や表せるものが違う。</p>
+        <p>INT_MAXとかマクロとかって何？ってなると思うが、そう遠くなくお世話になるだろうから載せておく。解説は後ほど。</p>
+        <section class="description_detile">
+            <h3>ちと難しい話</h3>
+            <p>C言語で型の大きさについての規定はほとんどなく、</p>
+            <ul>
+                <li>char型は1バイト(8ビットとは言っていない)</li>
+                <li>型の大きさは、short <= int <= long <= long long　である。</li>
+                <li>int型は -32767～+32767 の範囲が扱える</li>
+            </ul>
+            <p>程度しかない。小数点型に関しては特に規定はないが、事実上IEEE 754に従うので、（今どき従わない非フリースタンディング環境なんてあるのかね？）浮動小数点型についてはIEEE 754を参照すると良い。</p>
+        </section>
+        <p>まあ、ほとんどcharかdoubleかintしか使わない。ほんと。</p>
+        <section class="common_misconception">
+            <h3>よくある誤解</h3>
+            <ul>
+                <li>
+                    char型は8bitだ<br>
+                    →誤り。1byteと定められているだけで、1byte=8bitとは限らない。（確かに殆どの場合でchar型は8bitだけど）
+                </li>
+                <li>
+                    1byte=8bitのとき、signed charは-128～127まで表せる<br>
+                    →誤り。トラップ表現があることがあるので-127～-127までとなる（殆どの場合でトラップ表現を考慮する必要はないが）<br>
+                    参考サイト:<a href="http://www.kijineko.co.jp/node/722">http://www.kijineko.co.jp/node/722</a>
+                </li>
+                <li>
+                    int型は4byteである<br>
+                    →誤り。2byteの時代もあったし、8byteの処理系も存在する。
+                </li>
+                <li>
+                    float型のほうがdouble型より演算が速い<br>
+                    →デマ。double型の演算器がない時代のお話。今はどちらでも等速。<br>
+                    <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/double_vs_float/double_vs_float/Source.cpp"></script>
+                </li>
+            </ul>
+        </section>
+        <section class="technique">
+            <h3>コーディングの作法</h3>
+            <p>厳密に型の大きさが定まっている必要が出ることは少なく、charかdoubleかintしか出番はないはず、それ以外を選択しようとしているなら、本当に必要か考えなおそう。</p>
+        </section>
+    </section>
+    <section>
+        <h2>signedとunsigned</h2>
+        <p>既にちらっと書いてますが、整数型にはsignedとunsignedがあります（浮動小数点型にunsignedはない）。<br>
+        御存知の通り、PCと言うのはすべてのデータを2進数で表しています。この2進数の一桁をbitと言うわけですが、<br>
+        1bitを使って正の数か負の数かわかるようにしているのがsigned、すべて正の数とみなすのがunsignedになります。<br>
+        正の数か負の数かのフラグを使わない分、unsignedの最大値はsignedの最大値のほぼ2倍になります。</p>
+        <p>
+            例：1byte=8bit,int型の大きさ(sizeof(int))を4byteと仮定すると、<br>
+            INT_MAX:    2147483647<br>
+            UINT_MAX:   4294967295
+        </p>
+        <p>char型以外では、signedやunsignedを省略するとsignedとして扱われます。char型の場合は処理系定義となります(VCのデフォルトはsigned)。</p>
+        <pre class="brush: cpp;">int tmp = 5;
+signed int tmp = 5;
+unsigned int tmp = 5;
+char temp = 6;
+signed char temp = 6;
+unsigned char temp = 6</pre>
+        <p>1行目と2行目は同値。4行目と5行目が同値である保証はないし、だからといって4行目と6行目が同値である保証もない（処理系定義）</p>
+    </section>
+    <section>
+        <h2></h2>
     </section>
 </body>
 </html>
