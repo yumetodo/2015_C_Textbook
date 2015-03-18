@@ -94,6 +94,7 @@ char ch = getchar();</pre>
         <p>1行目でメモリーを確保し、その領域にお名前（識別名）をつけて、2行目でその領域に値を書き込んだ、といったほうがわかりやすい・・・のかな？</p>
         <p>1行目と2行目をまとめて書いたのが3行目です。4行目のように関数の戻り値を代入することもできます（関数については後述）</p>
     </section>
+
     <section>
         <h2>変数の型</h2>
         <p>C/C++言語はとくに型にうるさい言語として知られています。(JavaScriptやperlなど型を明示できない言語もある)。C++なんて型なしではやっていけません。</p>
@@ -237,7 +238,7 @@ char ch = getchar();</pre>
         </section>
         <section class="technique">
             <h3>コーディングの作法</h3>
-            <p>厳密に型の大きさが定まっている必要が出ることは少なく、charかdoubleかintしか出番はないはず、それ以外を選択しようとしているなら、本当に必要か考えなおそう。</p>
+            <p>厳密に型の大きさが定まっている必要が出ることは少なく、boolかcharかdoubleかintしか出番はないはず、それ以外を選択しようとしているなら、本当に必要か考えなおそう。</p>
         </section>
     </section>
 
@@ -277,7 +278,7 @@ COLORREF window_head = 0x00FFCCFF;</pre>
             3行目では何をしているのかさっぱりですが、4行目を見るとなんか色が関係することをやってるんだな、と察せます。<br>
             さらに「COLORREF」でぐぐれば、その詳細もわかります。<br>
             <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd183449%28v=vs.85%29.aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/dd183449%28v=vs.85%29.aspx</a><br>
-            <q>When specifying an explicit RGB color, the COLORREF value has the following hexadecimal form:0x00bbggrr</q>
+            <q>When specifying an explicit RGB color, the COLORREF value has the following hexadecimal form:0x00bbggrr</q><br>
             ちなみに1行目と2行目はいずれもWindef.hで定義されているものの引用です。Win32APIに触りたいと思っている方、よく覚えておきましょう。かならすお世話になるでしょう。
         </p>
         <section class="technique">
@@ -289,6 +290,38 @@ typedef signed char myint8_t;</pre>
         </section>
     </section>
 
+    <section>
+        <h2>整数リテラル</h2>
+        <pre class="brush: cpp;">unsigned int len = 20;</pre>
+        <p>のように、何気なく数値を書いていますが、この数値は「リテラル」と呼ばれます。どう見ても小数ではないのでこれは「整数リテラル」ですね。</p>
+        <p>
+            なお、浮動小数点リテラルについては<br>
+            C++11の文法と機能(C++11: Syntax and Feature)<br>
+            <a href="http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.fcon">http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.fcon</a><br>
+            に投げます。
+        </p>
+        <dl>
+            <dt>2進数的記法(C++14,VisualStudio2013は未対応,VisualStudio2015は対応)</dt>
+            <dd>
+                <pre class="brush: cpp;">int a = 0b11;// 10進数では、3
+int d = 0B1011 ;// 10進数では、11</pre>
+                このように「0b」または「0B」のあとに数字を書きます。
+            </dd>
+            <dt>8進数的記法</dt>
+            <dd>
+                <pre class="brush: cpp; gutter:false;">int e = 01234;// 10進数では、668</pre>
+                このように「0」のあとに数字を書きます。<b>8進数リテラルは、10進数と区別しにくいので、気をつける必要があります。</b>
+            </dd>
+            <dt>10進数的記法</dt>
+            <dd><pre class="brush: cpp; gutter:false;">int t = 1234;</pre></dd>
+            <dt>16進数的記法</dt>
+            <dd>
+                <pre class="brush: cpp; gutter:false;">int x = 0x1234 ;// 10進数では、4660</pre>
+                このように「0x」のあとに数字を書きます。
+            </dd>
+        </dl>
+        <p>なにが言いたいかというと、<b>うっかりして0から数字を書くな</b>よ！ということです。</p>
+    </section>
     <section>
         <h2>const</h2>
         <p>ある変数をその後で変更する予定がないときはconstをつけるようにするべきです。constは変数を「Read-Only」にします。</p>
@@ -326,7 +359,7 @@ auto l = x;</pre>
     </section>
 
     <section>
-        <h2>四則演算とその他の演算</h2>
+        <h2>四則演算</h2>
         <p>やっぱり計算出来ないとプログラミングは始まりません。というわけでまずは四則演算。</p>
         <pre class="brush: cpp;">int i = 0, delay_time;
 //中略
@@ -360,7 +393,7 @@ i--;
 
     <section>
         <h2>暗黙の型変換とキャスト</h2>
-        <p>先ほどの例ではすべて計算するものの型は揃っていました。では違う場合はどうなるでしょう？</p>
+        <p>ここまでの例ではすべて計算するものの型は揃っていました。では違う場合はどうなるでしょう？</p>
         <pre class="brush: cpp;">const int a = 10;
 const double b = 3;
 auto ans = a / b;
@@ -373,7 +406,7 @@ auto ans3 = (int)ans;</pre>
             <dt>式の中で行われる変換</dt>
             <dd>
                 優先順位の高い型に変換されます。優先順位は<br>
-                <q>char &lt; short &lt; int &lt; long &lt; long long &lt; float &lt; double</q><br>
+                <q>bool &lt; char &lt; short &lt; int &lt; long &lt; long long &lt; float &lt; double</q><br>
                 です。
             </dd>
             <dt>代入時の変換</dt>
@@ -413,7 +446,26 @@ const double surplus = input - (divisor * temp);</pre>
             <p>もっとも、まともなコーディングをしていれば、malloc,calloc,realloc関数以外でキャストを使う場面はないはずです。<br>
             もしあなたがキャストを使おうとしているならば、それはあなたが寝ぼけているのか、ライブラリ作者がうっかりしている、ということになります。<br>
             後者なら、作者に文句を言いましょう。(実際私はDxLibraryの作者に色の扱いについて文句を言って、Ver 3.13eで修正してもらいました)</p>
+            <p>signedとunsignedの変換はとくに理由のない限りしないようにしましょう。</p>
         </section>
+    </section>
+    <section>
+        <h2>promotionsとconversions</h2>
+        <p>型変換、と一口に言っても2つあり、promotionsとconversionsとそれぞれ呼ばれます。</p>
+        <p>
+            promotionsがなにか、については<br>
+            C++11の文法と機能(C++11: Syntax and Feature)<br>
+            <a href="http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#conv.prom">http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#conv.prom</a><br>
+            に丸投げするとして、promotionsでなければconversionsである(そりゃそーだ)。
+        </p>
+        <p>conversionsは一般に危険をはらんでいます。何故かというと、変換元の数値を変換先の型で表せないかもしれないからです。</p>
+        <p>unsigned charが8ビット、unsigned intが16ビットと仮定して実例を上げてみましょう。</p>
+        <pre class="brush: cpp;">int main(void){
+    unsigned int ui = 1234 ;
+    unsigned char uc = ui ; // 210
+}</pre>
+        <p>この場合、unsigned int型は、16ビット、uiの値は、2進数で表すと0000010011010010になります。unsigned char型は8ビット。つまり、この場合の対応する下位桁の値は、2進数で11010010（uiの下位8ビット）です。よって、ucは、10進数で210となります。 </p>
+        <p>しかし、そもそも型変換でオーバーフローやアンダーフローを起こさないようにコーディングするべきでしょう。</p>
     </section>
     <section>
         <h2>stdint.h/cstdint</h2>
@@ -428,5 +480,114 @@ int64_t receive_timestamp;// 受信タイムスタンプ
 int64_t sum = sum1 + sum2;</pre>
         <p>よく使うのはこの2つかな？あるって知ってると何かと便利。</p>
     </section>
+    <section>
+        <h2>ビット演算</h2>
+        <p>ビッド演算とは、各bitに対して論理演算を行うことを指します。なお、特にシフト演算では、<b>変数はunsigned、または正の整数である必要があり</b>ます。負の数の場合動作は実装定義となります。</p>
+        <p>まあ、そもそもsignedな整数にビット演算をするべきではありません。</p>
+        <section>
+            <h3>左シフト</h3>
+            <pre class="brush: cpp;">uint32_t si_a = 5;//101
+const uint32_t si_b = 4;
+const uint32_t re_si = si_a &lt;&lt; si_b;//80:1010000</pre>
+            <p>1つ左シフトするごとに、2をかけているのと同じ効果が得られる。この場合は2<sup>4</sup> = 16倍していることになる。</p>
+            <p>かならず以下の点をコーディング時に確認して行うこと。</p>
+            <ul>
+                <li>
+                    オーバーフローしないか<br>
+                    左シフトの結果がその型の最大値を超えるようなことがあったらだめ、ということ。だからこれはだめ<br>
+                    <pre class="brush: cpp; gutter:false;">unsigned int re = UINT_MAX << 1;</pre>
+                </li>
+                <li>
+                    右オペランドが格上げ後の左オペランドの精度以下<br>
+                    「オーバーフローしないか」ともつながるが、例えば32bit変数を32回以上左シフトしたら必ずオーバーフローする。<br>
+                    具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしmath.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
+                    <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b < __popcnt(UINT_MAX))? si_a &lt;&lt; si_b : 0;</pre>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h3>右シフト</h3>
+            <pre class="brush: cpp;">uint32_t si_a = 37;//100101
+const uint32_t si_b = 4;
+const uint32_t re_si = si_a &gt;&gt; si_b;//2:10</pre>
+            <p>左シフトと逆の効果が得られる。</p>
+            <p>かならず以下の点をコーディング時に確認して行うこと。</p>
+            <ul>
+                <li>
+                    右オペランドが格上げ後の左オペランドの精度以下<br>
+                    「オーバーフローしないか」ともつながるが、例えば32bit変数を32回以上左シフトしたら必ずオーバーフローする。<br>
+                    具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしmath.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
+                    <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b < __popcnt(UINT_MAX))? si_a &gt;&gt; si_b : 0;</pre>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2>ビットの論理積</h2>
+            <pre class="brush: cpp;">const uint32_t a = 0b10110;//22
+const uint32_t b = 0b11010;//26
+const uint32_t re = a &amp; b;//18:0b10010</pre>
+            <p>各bitにAND演算をします。</p>
+            <img alt="AND" src="http://upload.wikimedia.org/wikipedia/ja/7/7b/Venn-Diagram-AND.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
+            <table>
+                <tr>
+                    <th>AND(&amp;)</th><th>1</th><th>0</th>
+                </tr>
+                <tr>
+                    <th>1</th><td>1</td><td>0</td>
+                </tr>
+                <tr>
+                    <th>0</th><td>0</td><td>0</td>
+                </tr>
+            </table>
+            <p>結果はこの表に従います。</p>
+        </section>
+        <section>
+            <h2>ビットの論理和</h2>
+            <pre class="brush: cpp;">const uint32_t a = 0b10110;//22
+const uint32_t b = 0b11010;//26
+const uint32_t re = a | b;//30:0b11110</pre>
+            <p>各bitにOR演算をします。</p>
+            <img alt="OR" src="http://upload.wikimedia.org/wikipedia/ja/5/5e/Venn-Diagram-OR.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
+            <table>
+                <tr>
+                    <th>OR(|)</th><th>1</th><th>0</th>
+                </tr>
+                <tr>
+                    <th>1</th><td>1</td><td>1</td>
+                </tr>
+                <tr>
+                    <th>0</th><td>1</td><td>0</td>
+                </tr>
+            </table>
+            <p>結果はこの表に従います。</p>
+        </section>
+        <section>
+            <h2>ビットの排他論理和</h2>
+            <pre class="brush: cpp;">const uint32_t a = 0b10110;//22
+const uint32_t b = 0b11010;//26
+const uint32_t re = a ^ b;//12:0b1100</pre>
+            <p>各bitにXOR演算をします。</p>
+            <img alt="XOR" src="http:////upload.wikimedia.org/wikipedia/ja/6/6b/Venn-Diagram-XOR.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
+            <table>
+                <tr>
+                    <th>XOR(|)</th><th>1</th><th>0</th>
+                </tr>
+                <tr>
+                    <th>1</th><td>0</td><td>1</td>
+                </tr>
+                <tr>
+                    <th>0</th><td>1</td><td>0</td>
+                </tr>
+            </table>
+            <p>結果はこの表に従います。</p>
+        </section>
+        <section>
+            <h2>ビットの反転</h2>
+            <pre class="brush: cpp;">const uint32_t a = 0b10110;//22
+const uint32_t re = ~a;//9:0b1001</pre>
+            <p>各ビットにNOT演算をします。1の補数をとる、ともいいます。</p>
+        </section>
+    </section>
+
 </body>
 </html>
