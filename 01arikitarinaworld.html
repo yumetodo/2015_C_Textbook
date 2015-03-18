@@ -124,6 +124,15 @@ char ch = getchar();</pre>
                 <td>ほぼ例外なく関数かポインタとともに用いるので省略</td>
             </tr>
             <tr>
+                <td>bool型(C99,C++)</td>
+                <td>論理型</td>
+                <td>不定</td>
+                <td>存在しない</td>
+                <td>存在しない</td>
+                <td>存在しない</td>
+                <td><pre class="brush: cpp; gutter:false;">bool is_alphabet = true;</pre></td>
+            </tr>
+            <tr>
                 <td>char</td>
                 <td>整数型</td>
                 <td>1byte</td>
@@ -220,6 +229,8 @@ char ch = getchar();</pre>
                 <li>
                     float型のほうがdouble型より演算が速い<br>
                     →デマ。double型の演算器がない時代のお話。今はどちらでも等速。<br>
+                    下記のコードで実験できる。いろんなコンパイルオプションで試してみよう。makeファイルとかslnファイルは<br>
+                    <a href="https://github.com/yumetodo/2015_C_Textbook/tree/gh-pages/src/double_vs_float">https://github.com/yumetodo/2015_C_Textbook/tree/gh-pages/src/double_vs_float</a><br>
                     <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/double_vs_float/double_vs_float/Source.cpp"></script>
                 </li>
             </ul>
@@ -229,6 +240,7 @@ char ch = getchar();</pre>
             <p>厳密に型の大きさが定まっている必要が出ることは少なく、charかdoubleかintしか出番はないはず、それ以外を選択しようとしているなら、本当に必要か考えなおそう。</p>
         </section>
     </section>
+
     <section>
         <h2>signedとunsigned</h2>
         <p>既にちらっと書いてますが、整数型にはsignedとunsignedがあります（浮動小数点型にunsignedはない）。<br>
@@ -249,8 +261,172 @@ signed char temp = 6;
 unsigned char temp = 6</pre>
         <p>1行目と2行目は同値。4行目と5行目が同値である保証はないし、だからといって4行目と6行目が同値である保証もない（処理系定義）</p>
     </section>
+
     <section>
-        <h2></h2>
+        <h2>typedef</h2>
+        <p>C/C++にはtypedefという便利な機能があります。さっそく使ってみましょう。</p>
+        <pre class="brush: cpp;">typedef unsigned long DWORD;
+typedef DWORD COLORREF;
+unsigned long window_head = 0x00FFCCFF;
+COLORREF window_head = 0x00FFCCFF;</pre>
+        <p>typedefとは、<b>"すでにある"</b>型に別名をつける機能です。<br>
+        1行目ではunsigned long型にDWORD型という別名をつけています。<br>
+        2行目ではDWORD型にCOLORREF型という別名をつけています。</p>
+        <p>
+            こんな風に別名を付けて何がありがたいかというと、型名を調べるだけでそのデータの格納方法がわかるということです。<br>
+            3行目では何をしているのかさっぱりですが、4行目を見るとなんか色が関係することをやってるんだな、と察せます。<br>
+            さらに「COLORREF」でぐぐれば、その詳細もわかります。<br>
+            <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd183449%28v=vs.85%29.aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/dd183449%28v=vs.85%29.aspx</a><br>
+            <q>When specifying an explicit RGB color, the COLORREF value has the following hexadecimal form:0x00bbggrr</q>
+            ちなみに1行目と2行目はいずれもWindef.hで定義されているものの引用です。Win32APIに触りたいと思っている方、よく覚えておきましょう。かならすお世話になるでしょう。
+        </p>
+        <section class="technique">
+            <h3>コーディングの作法</h3>
+            <p>char型は整数型ですが、主に文字を扱うのに使うことが多い型です。文字以外のデータを扱うのにchar型を使うことは、コードの可読性を下げます。</p>
+            <pre class="brush: cpp;">typedef unsigned char myuint8_t;
+typedef signed char myint8_t;</pre>
+            のようにtypedefして使うようにしましょう。
+        </section>
+    </section>
+
+    <section>
+        <h2>const</h2>
+        <p>ある変数をその後で変更する予定がないときはconstをつけるようにするべきです。constは変数を「Read-Only」にします。</p>
+        <pre class="brush: cpp;">const unsigned int len = 20;
+len = 21;//エラー</pre>
+        <p>constをつけるときは定義と初期化は同時である必要があります。だって「Read-Only」だもん、後から変更できないんだから初期化も一緒にやらないとダメだよね。</p>
+        <p>逆に言うと定義と初期化を同時に行うときは殆どの場合constをつけるべき場面です。</p>
+        <p>注意になりますが、constは「定数」を作るものではありません、あくまで「Read-Only」にするものです。その違いはポインタのところで解説します。</p>
+    </section>
+
+    <section>
+        <h2>自動変数の生存期間とスコープ</h2>
+        <p>自動変数ってなんなんだってばよっ！となってると思いますが、「いままで出てきたような」変数です。ということはそうでない変数があることくらいは「お察しください」。</p>
+        <p>スコープとはなにか、については見てもらったほうが速いと思います。</p>
+        <pre class="brush: cpp;">{
+    int a = 10;
+    printf("%d\n", a);
+}
+printf("%d\n", a);//エラー
+</pre>
+        <p>ずばり{}がスコープです。え？main関数を書いた時に見た？はい、それもスコープです。詳細は関数とはなにかのところで説明します。</p>
+        <p>スコープの中で確保された変数はスコープの外にでるときに開放されます。消えてなくなるわけです。よって5行目はエラーになります。</p>
+        <p>printf関数を使うのは初めてなので補足します、とりあえず今はこうすると整数を表示できるんだな、と思っておいてくだい。浮動小数点型だと%dじゃなくて%fだったりlong型だと%ldだったりするわけですが。</p>
+    </section>
+    <section>
+        <h2>C++11の型推論機能</h2>
+        <p>ちょっとC言語を離れてC++を見ていきます。今は型が短いのでいいですが、今に</p>
+        <pre class="brush: cpp;">vector&lt;string&gt;::iterator it;
+map&lt;int,list&lt;string&gt;&gt;::iterator i</pre>
+        <p>とか使い出します。こんなに長ったらく書くのはめんdいですし、タイピングミスしやすかったり、コードが見づらくなったりと、3拍子揃って書きたくないです。</p>
+        <p>そこでauto型の出番です。</p>
+        <pre class="brush: cpp;">unsigned int x = 10;
+auto l = x;</pre>
+        <p>とかすると変数lの型はint型になります。便利だね。なお、C++03まではautoは別の意味で使われていたので注意です。</p>
+    </section>
+
+    <section>
+        <h2>四則演算とその他の演算</h2>
+        <p>やっぱり計算出来ないとプログラミングは始まりません。というわけでまずは四則演算。</p>
+        <pre class="brush: cpp;">int i = 0, delay_time;
+//中略
+i = i + 1;
+double time = 8.5 - 2.1;
+double cure = 1.5 * time;
+double damage = cure / 10;
+unsigned int temp1 = delay_time / 60;
+tm_sec += delay_time % 60;
+i += 1;
+cure -= 10;
+i++;
+++i;
+i--;
+--i;</pre>
+        <p>3行目から7行目が四則演算ですね。6行目の割り算は整数精度で行われ、小数点以下は0に近い方向に切り捨てられることを忘れないで下さい。</p>
+        <p>8行目は割り算の余りを求めるものです。これは整数精度の時のみ使えます。もし浮動小数点型で割り算のあまりを求めたいときは、math.hのfmod関数を使いましょう。</p>
+        <p>9行目は2行目の略記です。10行目のように引き算などほかの演算記号も同じように使えます。</p>
+        <p>11行目と12行目はインクリメント演算子、13行目と14行目はデクリメント演算子と呼ばれます。1増やしたり1減らしたりする処理を簡便に書くことができます。</p>
+        <table>
+            <tr> <th>演算</th><th>演算子</th><th>例</th><th>意味</th> </tr>
+            <tr> <td rowspan="2">インクリメント</td><td rowspan="2" class="Cent">++</td><td>a++</td><td>a に 1 を加える（後置演算）</td> </tr>
+            <tr> <td>++a</td><td>a に 1 を加える（前置演算）</td> </tr>
+            <tr> <td rowspan="2">デクリメント</td><td rowspan="2" class="Cent">--</td><td>a--</td><td>a から 1 を引く（後置演算）</td> </tr>
+            <tr> <td>--a</td><td>a から 1 を引く（前置演算）</td> </tr>
+        </table>
+        <p>使用上の注意です。下のコードを見てくだい。</p>
+        <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/increment_decrement.c"></script>
+        <p>インクリメント・デクリメント演算子は前置と後置で意味が変わるので注意です。私は覚えるのがめんdいので、後置しか使わない派です。</p>
+    </section>
+
+    <section>
+        <h2>暗黙の型変換とキャスト</h2>
+        <p>先ほどの例ではすべて計算するものの型は揃っていました。では違う場合はどうなるでしょう？</p>
+        <pre class="brush: cpp;">const int a = 10;
+const double b = 3;
+auto ans = a / b;
+int ans2 = ans;
+auto ans3 = (int)ans;</pre>
+        <p>変数ansの型はdouble、ansには3.3333333(以下略)が入ります。</p>
+        <p>一方でans2の型はint、ans2には3が入ります。</p>
+        <p>また3行目のように型を明示することもできます。これを「キャスト」といいます。ans3の型はint型になります。</p>
+        <dl>
+            <dt>式の中で行われる変換</dt>
+            <dd>
+                優先順位の高い型に変換されます。優先順位は<br>
+                <q>char &lt; short &lt; int &lt; long &lt; long long &lt; float &lt; double</q><br>
+                です。
+            </dd>
+            <dt>代入時の変換</dt>
+            <dd>左辺の型と右辺の型が異なっている場合は、左辺の型に変換します。</dd>
+            <dt>キャスト時の変換</dt>
+            <dd>有無をいわさずに指定した型に変換されます。</dd>
+        </dl>
+        <p>この法則にしたがって解釈すると、3行目は、aの型はint、bの型はdoubleなのでaがdouble型に変換され(式の中で行われる変換)、double型同士の計算となります。<br>
+        また4行目は変数ansの型はdoubleですが、左辺のans2の型がintなのでint型に変換されます(代入時の変換)。</p>
+        <p>このことを利用して割り算の余り(surplus)を求めてみましょう。</p>
+        <pre class="brush: cpp;">const double input = 23;
+const int divisor = 7;
+const int temp = (int)input / divisor;
+const double surplus = input - (divisor * temp);</pre>
+        <p>inputをキャストする必要があるのか？と怒られそうですが、べつに整数精度の結果で事足るのでキャストしました。</p>
+        <p>よくキャストを「ある型とみなす」と説明する人が居ますが、誤りです。bitの並びが変わることもあることからわかるように、実際に変換されます。</p>
+        <section class="technique">
+            <h3>コーディングの作法</h3>
+            <p>C言語のキャストは、非常に強力で、どんな型にでも変換ができます。ゆえにしてはいけない型変換もできてしまいます。</p>
+            <p>そこでC++ではキャストが4種類にわかれました。</p>
+            <table>
+                <tbody>
+                    <tr><th> 名称 </th><th> 説明 </th><th> 使用 </th></tr>
+                    <tr><td>dynamic_cast</td><td> 基本クラスから派生クラスへのキャスト</td><td>使用するべきではない</td></tr>
+                    <tr><td>const_cast</td><td> const を外すキャスト</td><td>使用するべきではない</td></tr>
+                    <tr><td>static_cast</td><td> double から int など暗黙の変換のあるキャスト </td><td>使用可</td></tr>
+                    <tr><td>reinterpret_cast</td><td> double * から long long などの無理やりキャスト </td><td>なるべく使用しない</td></tr>
+                </tbody>
+            </table>
+            <p>
+                詳細な説明は<br>
+                キャスト | プログラマーズ雑記帳<br>
+                <a href="http://yohshiy.blog.fc2.com/blog-category-9.html">http://yohshiy.blog.fc2.com/blog-category-9.html</a><br>
+                に譲りますが、Cのキャストは理由がない限り使わず、C++のstatic_castを使用しましょう。
+            </p>
+            <pre class="brush: cpp;">const int temp = static_cast&lt;int&gt;(input) / divisor;</pre>
+            <p>もっとも、まともなコーディングをしていれば、malloc,calloc,realloc関数以外でキャストを使う場面はないはずです。<br>
+            もしあなたがキャストを使おうとしているならば、それはあなたが寝ぼけているのか、ライブラリ作者がうっかりしている、ということになります。<br>
+            後者なら、作者に文句を言いましょう。(実際私はDxLibraryの作者に色の扱いについて文句を言って、Ver 3.13eで修正してもらいました)</p>
+        </section>
+    </section>
+    <section>
+        <h2>stdint.h/cstdint</h2>
+        <p>先ほど「文字以外の目的でchar型を使うときはtypedefして使うようにしましょう」と言いましたが、毎回typedefするのはめんdいです。</p>
+        <p>また、先程から散々言ってるように、C/C++では型の大きさについて、明確な規定はほぼありません。これでは厳密に何bitかを使いたいとき(HTTP通信など)に困ってしまいます。</p>
+        <p>そこでstdint.h/cstdintの出番です。これはC99/C++11で追加された標準ライブラリで、主に以下の型が使えます。</p>
+        <blockquote>int8_t, uint8_t, int16_t, uint16_t, int32_t, uint32_t, int64_t, uint64_t</blockquote>
+        <p>これらは厳密に型の大きさが決まっています。(ゆえにすべての処理系で実装されているわけではない)</p>
+        <pre class="brush: cpp;">uint8_t color_r = 187;
+int64_t receive_timestamp;// 受信タイムスタンプ
+//中略
+int64_t sum = sum1 + sum2;</pre>
+        <p>よく使うのはこの2つかな？あるって知ってると何かと便利。</p>
     </section>
 </body>
 </html>
