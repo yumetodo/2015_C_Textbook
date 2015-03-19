@@ -11,7 +11,8 @@
 - 標準入力と標準出力、stderr,cin,cout,cerr,clog
 - 擬似乱数
 - 関数とは
-- ループ、Range-based for
+- プリプロセッサマクロ
+- ループ、Range-based for(C++11)
 - アドレス
 - ヘッダーファイルとか
 - 再帰関数は説明しない
@@ -36,3 +37,4 @@
 - http://blogs.msdn.com/b/vcblog/archive/2014/11/17/c-11-14-17-features-in-vs-2015-preview.aspx
 - http://www9.plala.or.jp/sgwr-t/index.html
 - http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml
+- https://www.jpcert.or.jp/sc-rules/
