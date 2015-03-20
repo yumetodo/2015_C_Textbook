@@ -40,6 +40,18 @@ int main(void){
 	}
 	puts(in_str2);
 
+	//文字列読み込み3
+	puts("文字列を入力してください");
+	char in_str3[100];
+	char buf[100];
+	if(nullptr == fgets(buf, 100, stdin)) return -1;
+#if defined (_MSC_VER) && _MSC_VER >= 1400//_s付き関数はVisual Studio2005から
+	sscanf_s(buf, "%s", in_str3, _countof(in_str3));
+#else
+	sscanf(buf, "%99s", in_str3);
+#endif
+	puts(in_str3);
+
 	//数値読み込み
 	puts("数値を入力してください");
 	const int in_num = get_integer_num(INT_MAX, INT_MIN);

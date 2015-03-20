@@ -757,6 +757,196 @@ argv[3]:world!
     </section>
 
     <section>
+        <h2>bool型と_BOOL型とBOOL型と</h2>
+        <p>
+            C++では当初から真と偽を表すbool型が導入され、C言語でもC99でbool型が使えるようになりました。<br>
+            C99のbool型は_BOOL型をマクロを使って実装しています（マクロが何かは後ほど）。<br>
+            実際に使い方を見ましょう。C++ではstdbool.hのincludeは不要です(無理にincludeしても勝手にincldueを外されます)。
+        </p>
+        <pre class="brush: cpp;">#include &lt;stdbool.h&gt;
+int main(void){
+    //前略
+    bool no_first_skip = true;
+    bool no_dct_decimate = false;
+    //後略
+    return 0;
+}</pre>
+        <p>C99/C++のbool型は、真と偽はtrueとfalseに対応し、int型に変換すると1と0になります。それ以外の値を入れられることは保証されていません。</p>
+        <p>
+            さて、ここまでならなんら問題はなかったのですが、問題はBOOL型です。ここでいうBOOL型はWin32APIのBOOL型です。<br>
+            Win32APIのBOOL型は何をキチがえたのか、平気で負の値とかが入っていたりします。それもそのはず、ただ単にint型をtypedefしてBOOL型を作っているからです。<br>
+            これにはC言語が真と偽を非0と0に対応づけてきた歴史も関わってきます。<br>
+            なにが言いたいかというと、false(FALSE)が0であることは保証されているが、true(TRUE)が1であることは保証されない、ということです。<br>
+            うっかりすると足を救われるので注意です。
+        </p>
+    </section>
+    <section>
+        <h2>条件文とループ</h2>
+        <section>
+            <h3>条件文</h3>
+            <p>
+                前にbit演算のところでAND演算とかOR演算とかやったと思いますが、それをbit単位でなく、変数単位でやるのが条件文です。<br>
+                条件文の演算結果は事実上bool型になります。つまり、真と偽は、1と0に対応します。例を見てみましょう。
+            </p>
+            <pre class="brush: cpp;">int a = 10;
+int tmp = (5 == a);//0になる</pre>
+            <p>条件文は多くの場合大小比較や同値比較と同時に用いられるので、その演算子をまとめておきましょう。</p>
+            <table>
+                <tr>
+                    <th>演算子</th>
+                    <th>意味</th>
+                </tr>
+
+                <tr>
+                    <td>==</td>
+                    <td>等しい</td>
+                </tr>
+                <tr>
+                    <td>!=</td>
+                    <td>等しくない</td>
+                </tr>
+                <tr>
+                    <td>&lt;=</td>
+                    <td>(左は)(右)以下である</td>
+                </tr>
+                <tr>
+                    <td>&gt;=</td>
+                    <td>(右は)(左)以下である</td>
+                </tr>
+                <tr>
+                    <td>&lt;</td>
+                    <td>(左は)(右)より小さい</td>
+                </tr>
+                <tr>
+                    <td>&gt;</td>
+                    <td>(左は)(右)より大きい</td>
+                </tr>
+            </table>
+            <p>これに加えてAND,OR,NOT演算子があります</p>
+            <table>
+                <tr>
+                    <th>演算子</th>
+                    <th>意味</th>
+                </tr>
+                <tr>
+                    <td>&amp;&amp;</td>
+                    <td>かつ(AND)</td>
+                </tr>
+                <tr>
+                    <td>||</td>
+                    <td>または(OR)</td>
+                </tr>
+                <tr>
+                    <td>!</td>
+                    <td>否定(NOT)</td>
+                </tr>
+            </table>
+        </section>
+        <section>
+            <h2>if文</h2>
+            <p>条件式をそれ単体で使うことは、そこまで多くなく、if文やこの後紹介するwhile,for,do-while文と共に用いられます。</p>
+            <p>if文はプログラムを組む上で無くてはならないものです。例を見てみましょう。</p>
+            <pre class="brush: cpp;">if(条件式)
+    //条件式が真の時
+else
+    //条件式が偽の時</pre>
+            <p>この書き方だと処理が一行しか書けません。複数行書くときは{}を使います。<br>
+            気をつけて欲しいのですが、{}がなくともスコープがあります。</p>
+            <pre class="brush: cpp;">int first_number, second_number, third_number, max_number, center_number, min_number;
+//3つの変数になにか値を代入
+if (first_number > second_number){//１番目の数と２番めの数を比較
+	max_number = first_number;
+	center_number = second_number;
+}
+else{
+	max_number = second_number;
+	center_number = first_number;
+}
+if (third_number > max_number){//３番めの数と上で出した「１番目の数と２番めの数」の大きい方と比較
+	min_number = center_number;
+	center_number = max_number;
+	max_number = third_number;
+}
+else if(third_number > center_number){//３番めの数と上で出した「１番目の数と２番めの数」の小さい方と比較
+	min_number = center_number;
+	center_number = third_number;
+}
+else{//3番目の数が最小の時
+	min_number = third_number;
+}</pre>
+            <p>このようにif文 else if のように連ねて書くことも可能です。</p>
+            <pre class="brush: cpp;">if(5 == a){
+    int x = 7;
+}
+else{
+    x = 6;//これはだめ
+}</pre>
+            <p>そもそもif文の中で変数を宣言しないようにしましょう。<b>変数を宣言したい、そう思ったら、直ちにその部分を関数化</b>しましょう。</p>
+            <section class="technique">
+                <h4>コーディングの作法</h4>
+                <p>if文では、else節に正常な動作を書くと、多くの場合ですっきり書けます。</p>
+                <pre class="brush: cpp;">if(条件文){
+    //エラー処理
+}
+else{
+    //正常動作
+}</pre>
+                <p>大切なのが、正常な動作の時の流れがもっとも簡潔であるように書くことです。</p>
+                <p>また、条件式を書く上での注意ですが、同値比較(==)は「=」が2つですが、ついうっかり1つにしてしまいがちです。そこで、このように書くようにしましょう</p>
+                <pre class="brush: cpp;">if(5 == a)//正しい書き方
+if(a == 5)//これも正しい書き方だが、推奨しない、ミスの元
+if(5 = a)//これはコンパイルエラー
+if(a = 5)//これはコンパイルエラーにならない</pre>
+                <p>constがついた変数や、数値、マクロで定義された値を左側、変数を右側に持っていくようにします。<br>
+                こうすることで、書き間違えた時にコンパイルエラーになります。(変更不可能なものに代入しようとしています、など)</p>
+            </section>
+        </section>
+        <section>
+            <h2>switch文</h2>
+            <p>if文が高級な条件分岐文とするならば、switch文は低級な条件分岐文といえますが、最大のメリットは、一度の条件式で複数の分岐が作れることです。</p>
+            <pre class="brush: cpp;">char time_when;
+//do something
+switch (time_when)
+{
+case 'a':
+	puts("朝");
+	break;
+case 'b':
+	puts("昼");
+	break;
+case 'c':
+	puts("夜");
+    break;
+default:
+	break;
+}</pre>
+            <p>
+                switch文には必ず「default:」を書きましょう。<br>
+                「case 'c':」とかは「ラベル」といいます。後述するgoto文にも登場するので頭の片隅においておいてください。<br>
+                「break;」はswitch文を抜け出すために用います。もし、6行目の「break;」がなかった場合、5行目を実行した後8行目を実行します。つまり必ずしもbreakは必須ではありません。<br>
+                switch文を「低級な条件分岐文」と表現したのは、アセンブリコードのjmp命令にそっくりの構文だからです。
+            </p>
+        </section>
+        <section>
+            <h2>while文</h2>
+            <p>プログラミング言語へのループ文の導入は画期的なものでした。while文はC言語におけるもっとも簡単なループ文です。</p>
+            <pre class="brush: cpp;">while(継続条件) 実行文;</pre>
+            <p>if文と同様、実行文は{}を使って複数行書くことができます。例を見てみましょう。</p>
+            <pre class="brush: cpp;">while('\n' != getchar());</pre>
+        </section>
+        <section>
+            <h2>for文</h2>
+            <p>はっきり言って、for文のほうがwhile文より使いやすいです。そしてfor文はこのあと説明する配列と殆どの場合一緒に使います。</p>
+            <pre class="brush: cpp;">for(初期化文; 継続条件; カウンター等実行文);</pre>
+            <pre class="brush: cpp;">for(unsigned int i = 0, sum = 0; i &lt; 10; i++) sum += i;</pre>
+            <p>こんな感じ。まあそのうち呼吸をするがごとく登場するので、これ以上は例を上げないでおきます。実用的な例を上げたほうが良いもんね、やっぱり。</p>
+        </section>
+        <section>
+            <h2>do-while文</h2>
+            <p>最後の</p>
+        </section>
+    </section>
+    <section>
         <h2>標準出力(stdout)</h2>
         <p>
             すでにputs関数やprintf関数を何気なく使っていますが、標準出力について説明していませんでした。<br>
@@ -804,7 +994,11 @@ int putchar(int c );</pre>
             まあ、実例を見て行きましょうか。
         </p>
         <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/stdin/stdin/Source.c"></script>
-        <p>個人的にはscanf関数は使いにくいなぁという印象です。私はfgetsで改行文字ごと読み込んで改行文字をNULL文字に置き換えるほうが好きです。</p>
+        <p>
+            2通り目と3通り目の文字列読み込みでは、文字入力で大概の参考書で真っ先に使うscanf関数を紹介しましたが、個人的にはscanf関数は使いにくいなぁという印象です。<br>
+            私はfgetsで改行文字ごと読み込んで改行文字をNULL文字に置き換えるほうが好きです。理屈が単純ということはそれだけバグを減らせるので。<br>
+            もちろんscanfにはそれなりの良さがあるわけですが、だとしても3番目のように一度読み込んでからsscanfしますね。
+        </p>
         <p>というわけでポインターと文字列について何一つ説明していないのにばんばん使っていますが、すみません。すぐに解説します。</p>
     </section>
 </body>
