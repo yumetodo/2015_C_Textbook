@@ -35,7 +35,7 @@
 						'while xor xor_eq signed unsigned bool char __int8 short __int16 ' + 
 						'__wchar_t wchar_t int __int32 long __int64 void float double ';
 
-		var macro = 	'errno AVSC_INLINE DEBUG NDEBUG NULL stdin stdout stderr tin tout ' +
+		var macro = 	'errno AVSC_INLINE DEBUG NDEBUG NULL EOF　stdin stdout stderr tin tout ' +
 						'terr tlog __DATE__ __FILE__ __LINE__ __STDC__ __TIME__ __TIMESTAMP__ _ATL_VER __AVX__ ' +
 						'__AVX2__ _CHAR_UNSIGNED __CLR_VER __cplusplus_cli __cplusplus_winrt __COUNTER__ __cplusplus _CPPRTTI _CPPUNWIND _DEBUG ' +
 						'_DLL __FUNCDNAME__ __FUNCSIG__ __FUNCTION__ _INTEGRAL_MAX_BITS _M_AMD64 _M_ARM _M_CEE _M_CEE_PURE _M_CEE_SAFE ' +
