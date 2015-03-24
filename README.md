@@ -1,40 +1,40 @@
-Œ»ÝŽÀ‘•’†B
+ï»¿ç¾åœ¨å®Ÿè£…ä¸­ã€‚
 
-# ‘‚«‚½‚¢€–Ú #
+# æ›¸ããŸã„é …ç›® #
 - Hello World
-- ƒRƒƒ“ƒg‚Ì‘‚«•û
-- •Ï”‚ÌŽí—ÞAƒXƒR[ƒv
-- Œ^‚Æstdint
+- ã‚³ãƒ¡ãƒ³ãƒˆã®æ›¸ãæ–¹
+- å¤‰æ•°ã®ç¨®é¡žã€ã‚¹ã‚³ãƒ¼ãƒ—
+- åž‹ã¨stdint
 - const
-- ðŒ•¶‚ÆboolŒ^
-- ”’l“ü—Í
-- •W€“ü—Í‚Æ•W€o—ÍAstderr,cin,cout,cerr,clog
-- ‹[Ž——”
-- ŠÖ”‚Æ‚Í
-- ƒvƒŠƒvƒƒZƒbƒTƒ}ƒNƒ
-- ƒ‹[ƒvARange-based for(C++11)
-- ƒAƒhƒŒƒX
-- ƒwƒbƒ_[ƒtƒ@ƒCƒ‹‚Æ‚©
-- Ä‹AŠÖ”‚Íà–¾‚µ‚È‚¢
+- æ¡ä»¶æ–‡ã¨boolåž‹
+- æ•°å€¤å…¥åŠ›
+- æ¨™æº–å…¥åŠ›ã¨æ¨™æº–å‡ºåŠ›ã€stderr,cin,cout,cerr,clog
+- æ“¬ä¼¼ä¹±æ•°
+- é–¢æ•°ã¨ã¯
+- ãƒ—ãƒªãƒ—ãƒ­ã‚»ãƒƒã‚µãƒžã‚¯ãƒ­
+- ãƒ«ãƒ¼ãƒ—ã€Range-based for(C++11)
+- ã‚¢ãƒ‰ãƒ¬ã‚¹
+- ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã‹
+- å†å¸°é–¢æ•°ã¯èª¬æ˜Žã—ãªã„
 
-# ƒ|ƒCƒ“ƒ^ #
-- ƒ|ƒCƒ“ƒ^‰‰ŽZ
+# ãƒã‚¤ãƒ³ã‚¿ #
+- ãƒã‚¤ãƒ³ã‚¿æ¼”ç®—
 - []
-- ƒ|ƒCƒ“ƒ^‚Æ•¶Žš—ñ
-	- ƒGƒXƒP[ƒvƒV[ƒPƒ“ƒX
-- ƒ|ƒCƒ“ƒ^‚Æ”z—ñ
-- ‘½ŽŸŒ³”z—ñ‚Æ‚¢‚¤‹•\
-- sizeof‚É‚Æ‚Á‚Ä”z—ñ‚Í“Á•ÊAnumofƒ}ƒNƒ
-- ƒ|ƒCƒ“ƒ^‚Æ•Ï”‚Ì¶‘¶ŠúŠÔ
-- ƒ|ƒCƒ“ƒ^‚Æ“®“IŠm•Û
-- ƒkƒ‹ƒ|ƒCƒ“ƒ^
-- ŽQÆŠÖŒW‚ª‚í‚©‚ç‚È‚­‚È‚éEEEƒ|ƒCƒ“ƒ^‚ÌƒRƒs[
-- ”ÍˆÍŠO‚ðŽw‚µ‚Ä‚¢‚µ‚Ü‚¢A—Ìˆæ”j‰ó‚ð‚µ‚Ä‚µ‚Ü‚¤
+- ãƒã‚¤ãƒ³ã‚¿ã¨æ–‡å­—åˆ—
+	- ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã‚·ãƒ¼ã‚±ãƒ³ã‚¹
+- ãƒã‚¤ãƒ³ã‚¿ã¨é…åˆ—
+- å¤šæ¬¡å…ƒé…åˆ—ã¨ã„ã†è™šæ§‹
+- sizeofã«ã¨ã£ã¦é…åˆ—ã¯ç‰¹åˆ¥ã€numofãƒžã‚¯ãƒ­
+- ãƒã‚¤ãƒ³ã‚¿ã¨å¤‰æ•°ã®ç”Ÿå­˜æœŸé–“
+- ãƒã‚¤ãƒ³ã‚¿ã¨å‹•çš„ç¢ºä¿
+- ãƒŒãƒ«ãƒã‚¤ãƒ³ã‚¿
+- å‚ç…§é–¢ä¿‚ãŒã‚ã‹ã‚‰ãªããªã‚‹ãƒ»ãƒ»ãƒ»ãƒã‚¤ãƒ³ã‚¿ã®ã‚³ãƒ”ãƒ¼
+- ç¯„å›²å¤–ã‚’æŒ‡ã—ã¦ã„ã—ã¾ã„ã€é ˜åŸŸç ´å£Šã‚’ã—ã¦ã—ã¾ã†
 
-- ŠÖ”ƒ|ƒCƒ“ƒ^
-	- \‘¢‘Ì‚Æ‹[Ž—ƒNƒ‰ƒX
+- é–¢æ•°ãƒã‚¤ãƒ³ã‚¿
+	- æ§‹é€ ä½“ã¨æ“¬ä¼¼ã‚¯ãƒ©ã‚¹
 
-# ŽQlƒTƒCƒg #
+# å‚è€ƒã‚µã‚¤ãƒˆ #
 - http://blogs.msdn.com/b/vcblog/archive/2014/11/17/c-11-14-17-features-in-vs-2015-preview.aspx
 - http://www9.plala.or.jp/sgwr-t/index.html
 - http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml

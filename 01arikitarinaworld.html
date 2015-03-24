@@ -851,7 +851,7 @@ int tmp = (5 == a);//0になる</pre>
 else
     //条件式が偽の時</pre>
             <p>この書き方だと処理が一行しか書けません。複数行書くときは{}を使います。<br>
-            気をつけて欲しいのですが、{}がなくともスコープがあります。</p>
+            気をつけて欲しいのですが、{}がなくともスコープがあります。ところで言うまでもないですが、else節はなくても構いません。</p>
             <pre class="brush: cpp;">int first_number, second_number, third_number, max_number, center_number, min_number;
 //3つの変数になにか値を代入
 if (first_number > second_number){//１番目の数と２番めの数を比較
@@ -875,12 +875,11 @@ else{//3番目の数が最小の時
 	min_number = third_number;
 }</pre>
             <p>このようにif文 else if のように連ねて書くことも可能です。</p>
-            <pre class="brush: cpp;">if(5 == a){
+            <pre class="brush: cpp;">if(5 == a)
     int x = 7;
-}
-else{
+else
     x = 6;//これはだめ
-}</pre>
+</pre>
             <p>そもそもif文の中で変数を宣言しないようにしましょう。<b>変数を宣言したい、そう思ったら、直ちにその部分を関数化</b>しましょう。</p>
             <section class="technique">
                 <h4>コーディングの作法</h4>
@@ -899,6 +898,7 @@ if(5 = a)//これはコンパイルエラー
 if(a = 5)//これはコンパイルエラーにならない、aに代入した後のaが0か否かが判別される</pre>
                 <p>constがついた変数や、数値、マクロで定義された値を左側、変数を右側に持っていくようにします。<br>
                 こうすることで、書き間違えた時にコンパイルエラーになります。(変更不可能なものに代入しようとしています、など)</p>
+                <p>エラー処理等、明確に実行文が1行しかない、と言える時を除き、原則{}はつけましょう。あとで文が増えた時に付け忘れるのを防ぐことができます。</p>
             </section>
         </section>
         <section>
@@ -926,6 +926,24 @@ default:
                 「break;」はswitch文を抜け出すために用います。もし、6行目の「break;」がなかった場合、5行目を実行した後8行目を実行します。つまり必ずしもbreakは必須ではありません。<br>
                 switch文を「低級な条件分岐文」と表現したのは、アセンブリコードのjmp命令にそっくりの構文だからです。
             </p>
+            <p>このjmp命令にそっくりという性質を活かして</p>
+            <pre class="brush: cpp;">send(register short *to, register short *from, register count)
+{
+	register n = (count + 7) / 8;
+	switch(count % 8) {
+	case 0:	do {	*to = *from++;
+	case 7:		*to = *from++;
+	case 6:		*to = *from++;
+	case 5:		*to = *from++;
+	case 4:		*to = *from++;
+	case 3:		*to = *from++;
+	case 2:		*to = *from++;
+	case 1:		*to = *from++;
+		} while(--n > 0);
+	}
+}</pre>
+            <p>なんていう、わけわかめなプログラム(<a href="http://ja.wikipedia.org/wiki/Duff%27s_device">Duff's device</a>というプログラム高速化のための最適化技法)を書いた人が居ますが、やめましょう。</p>
+            <p>このswitch文、あとで出てくる列挙型(enum)とものすごく相性がいいです。#defineをわんさか書こうとしているそこのアナタ、enumを使いましょう。</p>
         </section>
         <section>
             <h2>while文</h2>
@@ -947,6 +965,47 @@ default:
             <pre class="brush: cpp;">do{
     //実行文
 }while(継続条件)</pre>
+            <p>これまた多くの場合、ポインターや標準入力とともに使うので実例はその時に。</p>
+        </section>
+    </section>
+
+    <section>
+        <h2>プリプロセッサー</h2>
+        <p>
+            お待たせしました。ようやくプリプロセッサーのお話です。<br>
+            はい、#includeとかなにげに書いてきたものが何なのかわかります。
+        </p>
+        <ul>
+            <li>#include</li>
+            <li>#define</li>
+            <li>#if/#else</li>
+            <li>#ifdef/#ifndef</li>
+            <li>#error</li>
+            <li>#warning</li>
+            <li>
+                #pragma
+                <ul>
+                    <li>#pragma once</li>
+                    <li>#pragma comment</li>
+                    <li>#pragma ident</li>
+                </ul>
+            </li>
+        </ul>
+        <p>
+            これだけ種類が有ります。解説するのは#includeと#define、#pragma once、#pragma commentにとどめます。他は<br>
+            <a href="http://itref.fc2web.com/c/preprocessor.html">http://itref.fc2web.com/c/preprocessor.html</a><br>
+            を参照してください。なお、#if/#else/#ifdef/#ifndefはこれまでもこれからもしれっと使います。
+        </p>
+        <section>
+            <h2>#include</h2>
+            <p>.cとか.cppが読み込めないわけではないのですが、ほぼ100%ヘッダーファイルを読み込むのに使います。</p>
+            <pre class="brush: cpp;">#include "DxLib.h"
+#include &lt;stdio.h&gt;</pre>
+            <p>
+                一般的なお話として、&lt;&gt;で囲むとコンパイラーの規定の場所とコンパイルオプションで指定した(gccなら-Iオプション)場所からヘッダーファイルを探します。<br>
+                また、""で囲むと、それに加えて、#includeを書いたファイルと同じ場所も捜索対象になります。<br>
+                ゆえに自分で作ったヘッダーは""で囲い、C/C++標準ライブラリ―のヘッダーは&lt;&gt;で囲むのが普通です。ありきたり。
+            </p>
         </section>
     </section>
     <section>
