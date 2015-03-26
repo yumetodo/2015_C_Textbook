@@ -1,21 +1,52 @@
 ﻿現在実装中。
+# 執筆ルール
+とりあえず01arikitarinaworld.htmlにすべて書く。
 
-# 書きたい項目 #
+ファイルを増やすときは必ず
+- UTF-8
+- BOM付き
+- 改行コードはCR + LF
+- EOFが行頭に来るように、つまり～～～\r\nEOFのように、～～EOFはだめ(じゃないとgist-itが対応してない)
+
+    int main(void){
+    	//do domething
+    	return 0;
+    }EOF
+
+はだめ
+
+    int main(void){
+    	//do domething
+    	return 0;
+    }\r\n
+    EOF
+
+のように。
+# 暫定作成済みHTMLリスト
+- http://yumetodo.github.io/2015_C_Textbook/01arikitarinaworld.html
+
+# 書き終えた項目
 - Hello World
 - コメントの書き方
 - 変数の種類、スコープ
 - 型とstdint
 - const
 - 条件文とbool型
+- 関数とは
+
+# 執筆中
 - 数値入力
 - 標準入力と標準出力、stderr,cin,cout,cerr,clog
-- 擬似乱数
-- 関数とは
 - プリプロセッサマクロ
 - ループ、Range-based for(C++11)
-- アドレス
 - ヘッダーファイルとか
-- 再帰関数は説明しない
+
+# 書きたい項目 #
+- 擬似乱数
+- アドレス
+
+# 説明したくない項目
+- 再帰関数
 
 # ポインタ #
 - ポインタ演算
@@ -24,7 +55,7 @@
 	- エスケープシーケンス
 - ポインタと配列
 - 多次元配列という虚構
-- sizeofにとって配列は特別、numofマクロ
+- sizeofにとって配列は特別、_countof(numof)マクロ
 - ポインタと変数の生存期間
 - ポインタと動的確保
 - ヌルポインタ
@@ -39,6 +70,3 @@
 - http://www9.plala.or.jp/sgwr-t/index.html
 - http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml
 - https://www.jpcert.or.jp/sc-rules/
-
-# 暫定ファイルリスト
-- http://yumetodo.github.io/2015_C_Textbook/01arikitarinaworld.html
