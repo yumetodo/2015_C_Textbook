@@ -435,6 +435,7 @@ const double surplus = input - (divisor * temp);</pre>
             <p>signedとunsignedの変換はとくに理由のない限りしないようにしましょう。</p>
         </section>
     </section>
+
     <section>
         <h2>promotionsとconversions</h2>
         <p>型変換、と一口に言っても2つあり、promotionsとconversionsとそれぞれ呼ばれます。</p>
@@ -453,6 +454,7 @@ const double surplus = input - (divisor * temp);</pre>
         <p>この場合、unsigned int型は、16ビット、uiの値は、2進数で表すと0000010011010010になります。unsigned char型は8ビット。つまり、この場合の対応する下位桁の値は、2進数で11010010（uiの下位8ビット）です。よって、ucは、10進数で210となります。 </p>
         <p>しかし、そもそも型変換でオーバーフローやアンダーフローを起こさないようにコーディングするべきでしょう。</p>
     </section>
+
     <section>
         <h2>stdint.h/cstdint</h2>
         <p>先ほど「文字以外の目的でchar型を使うときはtypedefして使うようにしましょう」と言いましたが、毎回typedefするのはめんdいです。</p>
@@ -574,6 +576,7 @@ const uint8_t re = ~a;//233:0b11101001</pre>
             <p>各ビットにNOT演算をします。1の補数をとる、ともいいます。</p>
         </section>
     </section>
+
     <section>
         <h2>関数とは</h2>
         <p>既にそこかしこで出てますが、改めて。関数とは、処理の集合です。C/C++では、すべてのプログラムは必ず1つ以上の関数が含まれています。<br>
@@ -595,7 +598,10 @@ int do_something2(void){
         <p>関数の呼び出し規約は省略することが多いが(その場合__cdeclになる)、Win32APIを使うならお世話になるだろう。後述する。</p>
         <p>実際に関数を作るときには「プロトタイプ宣言」という物を書くことになる。書き方を立方体の体積を求める関数を例に説明する。</p>
         <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/call_function.cpp"></script>
-        <p>2行目が関数のプロトタイプ宣言と呼ばれるものだ。戻り値の型、(呼び出し規約)、関数名、仮引数リストを書く。</p>
+        <p>
+            2行目が関数のプロトタイプ宣言と呼ばれるものだ。戻り値の型、(呼び出し規約)、関数名、仮引数リストを書く。<br>
+            なお、その関数を使用するまでに関数が宣言されている必要があるため、原則として#define文やtypedefや定数宣言のあとにまとめて書いておくこと。
+        </p>
         <p>このcalc_volume関数が定義されるのは、10～13行目の部分だ。ここで関数の実際の処理を書く。</p>
         <p>この関数が呼び出される7行目だ。ここで初めて実際に定義に基づいて処理を行う。calc_volume関数内のreturn文にかいたものが変数resultに代入されている。</p>
         <section>
@@ -718,6 +724,7 @@ printf("%d", myGetRValue(color));</pre>
                 <p></p>
             </article>
         </section>
+
         <section>
             <h2>スタック領域</h2>
             <p>
@@ -757,6 +764,18 @@ argv[3]:world!
     </section>
 
     <section>
+        <h2>ヘッダーファイルを分ける</h2>
+        <p>一つのファイルですべてのソースコードを書くと、コンパイル時間が増加する要因となり、また見通しの悪いプログラムになりやすい(はい、私です。いっつもファイルを分けるのをめんdいからやらないのは)です。</p>
+        <p>
+            先に、プロトタイプ宣言はソースコードの冒頭に、と言いましたが、この内外部公開するものはヘッダーファイルに書きます。この他にヘッダーファイルに書くものとしては、共通してincludeするファイルや、公開する構造体定義や列挙型定義などです。<br>
+            通常変数やinline関数のプロトタイプ宣言を書くのはいろいろ面倒なので(externすればいいが)、あまりしません。とくに変数を共有しなければならないことは極めて稀だと思います。
+            例を見ましょう。
+        </p>
+        <pre class="brush: cpp;">//arikitari.h
+int get_integer_num()</pre>
+    </section>
+
+    <section>
         <h2>bool型と_BOOL型とBOOL型と</h2>
         <p>
             C++では当初から真と偽を表すbool型が導入され、C言語でもC99でbool型が使えるようになりました。<br>
@@ -780,6 +799,7 @@ int main(void){
             うっかりすると足を救われるので注意です。
         </p>
     </section>
+
     <section>
         <h2>条件文とループ</h2>
         <section>
@@ -1026,7 +1046,7 @@ int fputc(int c, FILE *stream);
 int putchar(int c );</pre>
         </section>
         <p>C言語の標準出力関数、とくにprintf関数はとても優秀で、正直C++の出力方法よりよほど使いやすいです。ちなみにC++では</p>
-        <pre class="brush: cpp;">std::cout << "arikitari na world!" << endl;</pre>
+        <pre class="brush: cpp;">std::cout << "arikitari na world!" << std::endl;</pre>
         <p>のようにします・・・が、はっきり言って使いにくいです。C++はたしかに使いやすいですが、標準出力の使いにくさだけはいただけません。</p>
     </section>
     <section>

@@ -39,3 +39,6 @@
 - http://www9.plala.or.jp/sgwr-t/index.html
 - http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml
 - https://www.jpcert.or.jp/sc-rules/
+
+# 暫定ファイルリスト
+- http://yumetodo.github.io/2015_C_Textbook/01arikitarinaworld.html
