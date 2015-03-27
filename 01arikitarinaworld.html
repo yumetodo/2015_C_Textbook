@@ -1100,7 +1100,7 @@ int getnum(void){
 		return -1;
 	return t;
 }
-int getnum_custom(const int max, const int min){
+int getnum_customized(const int max, const int min){
 	if (max < min)	return -1;
 	int flag0;
 	do{
@@ -1113,7 +1113,7 @@ int getnum_custom(const int max, const int min){
 }
 int main(void){
 	printf("値を入力してください。\n");
-	const int flag = getnum_custom(100, 0);
+	const int flag = getnum_customized(100, 0);
 	printf("取得した値は%dです。\n", flag);
 
 	return 0;
@@ -1167,7 +1167,7 @@ int get_integer_num(const int max, const int min){
 		return INT_MIN;
 	return (int)t;
 }
-int getnum_custom(const int max, const int min){
+int getnum_customized(const int max, const int min){
 	if (max < min)	return -1;
 	int flag0;
 	bool temp_judge;
@@ -1183,7 +1183,7 @@ int getnum_custom(const int max, const int min){
 }
 int main(void){
 	puts("値を入力してください。");
-	const int flag = getnum_custom(100, 0);
+	const int flag = getnum_customized(100, 0);
 	if(EOF == flag){
 		puts("ファイル終端です");
 	}
