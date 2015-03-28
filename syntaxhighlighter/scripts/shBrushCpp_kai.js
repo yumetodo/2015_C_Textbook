@@ -137,14 +137,21 @@
 						'false_type true_type unordered_map unordered_multimap unordered_multiset unordered_set tuple_element tuple_size identity pair ' +
 					    'gslice gslice_array indirect_array mask_array slice valarray vector '
 
+		var preprocessor_word = 'alloc_text auto_inline bss_seg check_stack code_seg comment component conform const_seg data_seg deprecated detect_mismatch ' +
+						'fenv_access float_control fp_contract function hdrstop include_alias init_seg inline_depth inline_recursion intrinsic ' +
+						'loop make_public managed message omp once optimize pack pointers_to_members pop_macro push_macro region endregion ' +
+						'runtime_checks section setlocale strict_gs_check unmanaged vtordisp warning defined '
+
 		this.regexList = [
 			{ regex: SyntaxHighlighter.regexLib.singleLineCComments,	css: 'comments' },			// one line comments
 			{ regex: SyntaxHighlighter.regexLib.multiLineCComments,		css: 'comments' },			// multiline comments
 			{ regex: SyntaxHighlighter.regexLib.doubleQuotedString,		css: 'string' },			// strings
 			{ regex: SyntaxHighlighter.regexLib.singleQuotedString,		css: 'string' },			// strings
-			{ regex: /^ *#.*(?:ifdef|ifndef|else|elif|endif|defined|define|if|include|pragma|comment)/gm,　css: 'preprocessor' },
-			{ regex: new RegExp(this.getKeywords(typedefined), 'gm'),		css: 'color1 bold' },
-			{ regex: new RegExp(this.getKeywords(macro), 'gm'),		css: 'color2 bold' },
+			{ regex: /#(?:define|error|import|undef|elif|if|include|using|ifdef|line|ifndef|pragma|else|endif)/g,　css: 'preprocessor' },
+			{ regex: /!(?:defined)/g,　css: 'preprocessor' },
+			{ regex: new RegExp(this.getKeywords(preprocessor_word), 'gm'),	css: 'preprocessor' },
+			{ regex: new RegExp(this.getKeywords(typedefined), 'gm'),	css: 'color1 bold' },
+			{ regex: new RegExp(this.getKeywords(macro), 'gm'),			css: 'color2 bold' },
 			{ regex: new RegExp(this.getKeywords(reserved), 'gm'),		css: 'keyword bold' }
 			];
 	};

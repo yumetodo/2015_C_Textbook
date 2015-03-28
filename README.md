@@ -23,7 +23,9 @@
 
 のように。
 # 暫定作成済みHTMLリスト
+- http://yumetodo.github.io/2015_C_Textbook/index.html
 - http://yumetodo.github.io/2015_C_Textbook/01arikitarinaworld.html
+- http://yumetodo.github.io/2015_C_Textbook/pointer.html
 
 # 書き終えた項目
 - Hello World

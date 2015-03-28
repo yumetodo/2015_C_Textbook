@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>ポインター</title>
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <section>
+        <h2>変数の住所</h2>
+        <p>
+            いままで変数はメモリー上に確保されると言ってきました。ところでメモリーと言っても実際にはCPUのキャッシュ領域(L1,L2,L3キャッシュ)、物理メモリー、HDDやSSDに置く仮想メモリーなどがあり、<br>
+            これらをOSが管理してくれているお陰で、プログラマーは(高速化を意識しない限り)これらを1つのメモリーとして扱えているわけです。<br>
+            GPGPUとかやるとOS管理領域のメモリーとGPU側のメモリーを別個に管理しないといけないのでものすご～く面倒なのです。一回一回メモリー転送するコードを書いたり。<br>
+            で、そのひとまとめの空間には仮想的に住所が割り振られます。<br>
+            言い換えるとすべての変数には住所があるわけです(関数だって住所がある)。<br>
+            では早速その住所(アドレス)を取得してみましょう。
+        </p>
+        <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+int main(void){
+    int p = 20,;
+    printf(
+        "変数p: %d\n"
+        "変数pのアドレス: %p\n",
+        p, &amp;p
+    );
+}</pre>
+        <p>
+            変数に入っている数値と変数のアドレスは無関係です、念のため。<br>
+            変数のアドレス(住所)は「&amp;」を変数名の前につけると取得できます。便利。<br>
+            なお、printfで表示するときは%pを使います。いや、たいていの処理系なら%xとか%dでもちゃんと表示してくれるだろうけどさ。<br>
+            実行例はこんなかんじかな。
+        </p>
+        <pre class="brush: plain">変数p: 20
+変数pのアドレス: 0038FBA4</pre>
+        <p>
+            このアドレスは実行するごとに変わっていると思います(まともなOSなら)。<br>
+            もしこれが変化しないor予測可能な場合を考えてみましょう。プログラムAで使っている変数やら関数やらのデータを、プログラムBから書き換えることが容易になります。<br>
+            これを利用したウィルスとかが一時期流行ったらしく、まともなOSならこれを防ぐためにスタック領域をランダムに配置する機能がついています。<br>
+            このおかげで毎回変数のアドレスが変化するわけです。OSに感謝。え？MS-DOS?知らない子ですね。
+        </p>
+    </section>
+    <section>
+        <h2>ポインター</h2>
+        <p>みなさま、大変ながらくお待たせいたしました。ようやくポインターのお話です。まあ既に何回もチラチラ出てきてるわけですが。実際に見てみましょう。</p>
+        <pre class="brush: cpp;">int a = 20;
+int *p;
+p = &amp;a;
+printf("%d, %p, %d", a, p, *p);</pre>
+        <p>3行目はさっきの変数のアドレスを取得するやつですね。こうすることでint*型の変数、pはaを指します。図を書いたほうがわかりやすいかな。</p>
+        <div style="background-color: white;"><img alt="スタック領域" src="./pic/de_pointer_01.png"></div>
+        <p>ポインターが指し示す先を取得するには変数名の前に「*」をつけます。「int *p;」の「*」とは意味が違います。なお</p>
+        <pre class="brush: cpp;">int *p;
+int* p;</pre>
+        <p>は同値ですが、</p>
+        <pre class="brush: cpp;">int* p1, p2;</pre>
+        <p>とした時、p2の型は「int型」です。もっとも</p>
+        <pre class="brush: cpp;">typedef int* int_ptr;
+int_ptr pi, p2;</pre>
+        <p>とすればどちらともint*型になりますが。C言語ってよぐわがんね。</p>
+        <p>
+            ポインターは、なにかを指すことで初めて意味を持つから派生型、とかいう言い方をするのですが、<br>
+            ポインターと言っても、他の型から派生するという違いこそあるものの、所詮ただの型であり、型なんだからポインター型の変数もポインター型の値もあるわけです。<br>
+            int型から派生したからint*型だったわけで、char型から派生すればchar*型になりますし、その他も以下略です。派生型ですから派生元の型しか差せません。
+        </p>
+        <p>
+            なお、どんな型でもさせるポインター型というのもあり、void*型がそれです。ただし、使用時はキャストして元の型をコンパイラーに教える必要があります。<br>
+            といったように内部的にchar*やint*があるわけではなく、単にコンパイラーが何から派生したか覚えてくれている、というだけのことなのです。
+        </p>
+        <pre class="brush: cpp;">#include&lt;stdio.h&gt;
+            #include&lt;stdlib.h&gt;
+#include&lt;limits.h&gt;//in gcc
+#include&lt;errno.h&gt;//in gcc
+#ifndef _cplusplus
+#define nullptr NULL
+#endif
+int get_integer_num(const int max, const int min){
+	//機能：標準入力を数字に変換する。
+	//引数：戻り値の最大値,戻り値の最小値
+	//戻り値：入力した数字、エラー時は-1,EOFのときはEOF
+	char s[100];
+	char *endptr;
+	if (nullptr == fgets(s, 100, stdin)){
+		if (feof(stdin)){//エラーの原因がEOFか切り分け
+			return EOF;
+		}
+		return INT_MIN;
+	}
+	if ('\n' == s[0]) return INT_MIN;
+	errno = 0;
+	const long t = strtol(s, &endptr, 10);
+	if (0 != errno || '\n' != *endptr || t < min || max < t)
+		return INT_MIN;
+	return (int)t;
+}
+int compare_int(const void *a, const void *b){
+    return *static_cast&lt;int*&gt;(a) - *static_cast&lt;int*&gt;(b);
+}
+int main(void){
+    const int num1 = get_integer_num(INT_MAX, INT_MIN);
+    if(num1 == INT_MIN) return -1;
+    const int num1 = get_integer_num(INT_MAX, INT_MIN);
+    if(num2 == INT_MIN) return -1;
+    const int result = compare_int(&amp;num1, &amp;num2);
+    if(result > 0){
+        puts("num1のほうが大きい");
+    }
+    else if(0 == result){
+        puts("num1とnum2は等しい");
+    }
+    else{
+        puts("num2のほうが大きい");
+    }
+}</pre>
+        <p>
+            さて、ポインターは宣言した時は普通の変数がそうであるように、変数の値に何が入っているかわかりません。つまり、どこを指しているかわからないポインター、というわけです。<br>
+            それで、どこも指していないことが保証されているポインターというのがあり、NULLポインターと呼ばれます。<br>
+            詳細は省きますが、C言語的にはNULLがNULLポインターなのですが、みなさんC言語といいつつC++なので、nullptrを使ってください。<br>
+            上のプログラムでもちゃっかり使っています。というかC言語でもnullptrって書きたいがためにむりくりdefineしてますが。<br>
+            下を見てください。C++11以降のC++と思ってください。
+        </p>
+        <pre class="brush: cpp;">bool hoge1 = (NULL == nullptr);//false
+void* hoge_ptr1 = NULL;
+void* hoge_ptr2 = nullptr;
+bool hoge2 = (hoge_ptr1 == hoge_ptr2);//true</pre>
+        <p>
+            とくに理由のない限り皆さんはC++としてコンパイルするわけで、標準規格への準拠がとっても遅いことで有名なVCもさすがにnullptrには対応しているので、こちらを使いましょう。<br>
+            え？なんでNULL使っちゃダメかって？・・・ええっとそれを説明するにはC++の関数のオーバーロードのお話をしないといけないので、自分で調べてください。<br>
+            C++ - NULL と nullptr って何が違う？ - Qiita<br>
+            <a href="http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1">http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1</a><br>
+            らへんが参考になると思います。ちなみにnullptrの型はstd::nullptr_t型です。JavaScriptだとNULLポインターはnullです。・・・まあ、細けーことはいいんだよ。
+        </p>
+    </section>
+    <section>
+        <h2>配列とポインター演算</h2>
+        <p>
+            はい、配列です。しょっちゅうポインターと混同されるかわいそうな子です。<br>
+            ・・・ちゃんと説明します。配列とは、英語ではarrayと言います。配列は、（宣言時に指定される要素数）×（配列の要素の型の大きさ）分メモリーをスタック領域に確保し、<br>
+            それを配列の要素の型の大きさづつに区切ってつかいます。忘れがちなことですが、<b>配列は0から始まります。</b><br>
+            まあ実際に使ってみましょう。
+        </p>
+        <pre class="brush: cpp; highlight:[8,15,25];">#include&lt;stdio.h&gt;
+#include&lt;time.h&gt;
+#if !defined (_countof)
+#define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
+#endif
+int main(void){
+    int num[10];//宣言時に指定される要素数）×（配列の要素の型の大きさ）分メモリーをスタック領域に確保
+    for(unsigned int i = 0; i < (sizeof(num) / sizeof(*num)); i++){
+        *(num + i) = clock();
+    }
+    for(unsigned int i = 0; i < (sizeof(num) / sizeof(*num)); i++){
+        printf("%d,", *(num + i));
+    }
+    putchar('\n');
+    int* num_p = num;
+    printf(
+    	"_countof(num):%d,_countof(num_p):%d, sizeof(num_:%d, sizeof(num_p):%d\n",
+    	_countof(num), _countof(num_p), sizeof(num), sizeof(num_p)
+    );
+    for(unsigned int i = 0; i < _countof(num); i++){
+        printf("%d,", *(num_p + i));
+    }
+    putchar('\n');
+    for(unsigned int i = 0; i < _countof(num); i++){
+        printf("%d,", num[i]);
+    }
+    putchar('\n');
+    for(unsigned int i = 0; i < _countof(num); i++){
+        printf("%d,", num_p[i]);
+    }
+    putchar('\n');
+    for(unsigned int i = 0; i < _countof(num); i++){
+        printf("&amp;num[%d]:%p\n", i, (void*)&amp;num[i]);
+    }
+    return 0;
+}</pre>
+        <p>実行例としてはこんなかんじでしょうか。</p>
+        <pre class="brush: plain">4859,4860,4860,4861,4861,4861,4862,4862,4862,4863,
+_countof(num):10,_countof(num_p):1, sizeof(num_:40, sizeof(num_p):4
+4859,4860,4860,4861,4861,4861,4862,4862,4862,4863,
+4859,4860,4860,4861,4861,4861,4862,4862,4862,4863,
+4859,4860,4860,4861,4861,4861,4862,4862,4862,4863,
+&num[0]:0xbfa4d84c
+&num[1]:0xbfa4d850
+&num[2]:0xbfa4d854
+&num[3]:0xbfa4d858
+&num[4]:0xbfa4d85c
+&num[5]:0xbfa4d860
+&num[6]:0xbfa4d864
+&num[7]:0xbfa4d868
+&num[8]:0xbfa4d86c
+&num[9]:0xbfa4d870</pre>
+        <p>
+            11～23行目と24～34行目を比較すれば分かるかと思いますが、以下の3つはすべて同値です。というより1番目の簡便記法が2番目と3番目です。
+        </p>
+        <pre class="brush: cpp;">*(num + i)
+num[i]
+i[num]</pre>
+        <p>ただし、3行目の書き方はしないようにしましょう。普通1行目の書き方はめんどいので2行目のように「num[i]」と書きます。といえば分かるように、演算子「[]」は配列とはなんの関係もない演算子です(添字演算子って言います)。</p>
+        <p>
+            よく勘違いされますが、numの型は「int*」型ではありません。「int[10]」型です。どう違うかは多次元配列のとこで説明します。
+        </p>
+        <p>
+            15行目を見てください。numはここでは配列の名前です。が、しかし単なるポインター型に読み替えられます。つまり、numと書いた瞬間それはint[10]型からint*型に読み替えられているわけです。<br>
+            ただし、sizeof演算子と&amp;演算子(アドレス演算子)のオペランドと配列初期化時の文字列リテラルは配列として扱われ、読み替えはされません。詳細はおいおい。
+        </p>
+        <p>
+            そしてここで代入したことでnum_pは配列numの先頭要素をさしています。だから配列と同じく*(num_p + i)とかnum_p[i]のように書けるわけです。<br>
+            ちなみにこのポインターが配列を挿してなかった場合、num_pは要素数1の配列のように扱われるので、num_p[1]とすることは許されてもnum_p[2]と書いたり、num_p[1]に何かを代入することは許されません。
+        </p>
+        <pre class="brush: cpp;">sizeof(num) / sizeof(*num)</pre>
+        <p>
+            と書きましたが、これ自体は配列の要素数を求めています。さっきの話通り、numはint[10]型だからsizeof(num)でnumの配列全体の大きさが分かるわけです。あとは要素1つの大きさで割れば要素数が求まるよね？<br>
+            ちなみにこの方法は有名なのでnumofマクロとか_countofマクロとして知られ、Visual Studioでは、stdlib.hをincludeすると_countofマクロが使えます。(日本語版のMSDNの訳が腐ってるので英語版を見てください)<br>
+            <a href="https://msdn.microsoft.com/en-US/library/ms175773.aspx">https://msdn.microsoft.com/en-US/library/ms175773.aspx</a><br>
+            gccの場合は・・・ここを参照してください。<br>
+            <a href="http://stackoverflow.com/questions/4415530/equivalents-to-msvcs-countof-in-other-compilers">http://stackoverflow.com/questions/4415530/equivalents-to-msvcs-countof-in-other-compilers</a><br>
+            これらを使うと配列以外に使用するとコンパイルエラーになってくれます。だってあくまでint[10]型だからこんなことが出来るわけで、int*型に対して使えるわけがないよね？<br>
+            C++なら参照を使えよ、という指摘はさておき。<br>
+            参考までにVCでの実装を書いておきます。C++の参照が何か理解してないと全く意味不明だろうけどね。
+        </p>
+        <pre class="brush: cpp; first-line: 356;">/* _countof helper */
+#if !defined (_countof)
+#if !defined (__cplusplus)
+#define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
+#else  /* !defined (__cplusplus) */
+extern "C++"
+{
+template &lt;typename _countoftype, size_t _sizeofarray&gt;
+char (*__countof_helper(_UNALIGNED _CountofType (&_Array)[_SizeOfArray]))[_SizeOfArray];
+#define _countof(_Array) (sizeof(*__countof_helper(_Array)) + 0)
+}
+#endif  /* !defined (__cplusplus) */
+#endif  /* !defined (_countof) */</pre>
+        <section>
+            <h3>ポインター演算</h3>
+            <p>
+                さて、先ほど*(num_p + i)のようにさらっとポインター演算という機能を使っていました。これはもともとC言語の前身、B言語にあった機能です。<br>
+                ポインター演算とは、ポインターに整数を足したり引いたりポインター同士で引き算を行ったりする演算です。<br>
+                コンパイラーには、numの要素の型の大きさがわかっています。だってでっかく確保したメモリー空間をint型の大きさで区切っただけだもんね、あたりまえだよね。<br>
+                この区切り一つ一つを配列の要素と言うわけですが、これに1加算すると隣の区切りが見られる、ということになります。例を見てください。
+            </p>
+            <pre class="brush: cpp;">int hoge[] = {5, 7, 9, 4};
+int * hoge_p = hoge;
+printf("sizeof(int)=%d", sizeof(int));
+printf("hoge_p..%p:%d", hoge_p, *hoge_p);
+hoge_p++;
+printf("hoge_p..%p:%d", hoge_p, *hoge_p);</pre>
+            <p>hoge_pの値がsizeof(int)分加算されているのがわかると思います。配列でhoge[2]とか書けるのはこの機能のおかげなのです。まあ普段は意識することはないのですが。</p>
+        </section>
+    </section>
+</body>
+</html>
