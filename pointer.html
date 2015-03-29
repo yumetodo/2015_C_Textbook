@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="ja">
 <head>
     <meta charset="utf-8" />
     <title>ポインター</title>
@@ -45,12 +45,18 @@ int main(void){
             このアドレスは実行するごとに変わっていると思います(まともなOSなら)。<br>
             もしこれが変化しないor予測可能な場合を考えてみましょう。プログラムAで使っている変数やら関数やらのデータを、プログラムBから書き換えることが容易になります。<br>
             これを利用したウィルスとかが一時期流行ったらしく、まともなOSならこれを防ぐためにスタック領域をランダムに配置する機能がついています。<br>
-            このおかげで毎回変数のアドレスが変化するわけです。OSに感謝。え？MS-DOS?知らない子ですね。
+            このおかげで毎回変数のアドレスが変化するわけです。OSに感謝。え？MS-DOS?知らない子ですね。<br>
+            なお、ほぼ同時に2回起動すると結果が同じになるかもしれません。これは、OSがプログラムを立ち上げるたびに適切に各プロセスにメモリーを割り当てた仮想的な空間の住所をポインターが表しているからです、まともなOSならね。
         </p>
     </section>
     <section>
         <h2>ポインター</h2>
-        <p>みなさま、大変ながらくお待たせいたしました。ようやくポインターのお話です。まあ既に何回もチラチラ出てきてるわけですが。実際に見てみましょう。</p>
+        <p>
+            みなさま、大変ながらくお待たせいたしました。ようやくポインターのお話です。まあ既に何回もチラチラ出てきてるわけですが。<br>
+            ポインターとは、矢印のことで、矢印であるからには、根本と指示す先が有ります。以上です。<br>
+            ・・・うそです。まあ大体今の説明でいいんだけど、例とか上げつつ実際に見てみましょう。でも今の矢印に例えるのは、C言語のポインターの理解にはものすごく役立つので覚えておいてください。<br>
+            どのくらい大事かていうと、冷蔵庫の卵を入れるとこくらいには重要です。
+        </p>
         <pre class="brush: cpp;">int a = 20;
 int *p;
 p = &amp;a;
@@ -120,24 +126,29 @@ int main(void){
         puts("num2のほうが大きい");
     }
 }</pre>
-        <p>
-            さて、ポインターは宣言した時は普通の変数がそうであるように、変数の値に何が入っているかわかりません。つまり、どこを指しているかわからないポインター、というわけです。<br>
-            それで、どこも指していないことが保証されているポインターというのがあり、NULLポインターと呼ばれます。<br>
-            詳細は省きますが、C言語的にはNULLがNULLポインターなのですが、みなさんC言語といいつつC++なので、nullptrを使ってください。<br>
-            上のプログラムでもちゃっかり使っています。というかC言語でもnullptrって書きたいがためにむりくりdefineしてますが。<br>
-            下を見てください。C++11以降のC++と思ってください。
-        </p>
-        <pre class="brush: cpp;">bool hoge1 = (NULL == nullptr);//false
+        <section>
+            <h3>NULLポインター</h3>
+            <p>
+                さて、ポインターは宣言した時は普通の変数がそうであるように、変数の値に何が入っているかわかりません。つまり、どこを指しているかわからないポインター、というわけです。<br>
+                それで、どこも指していないことが保証されているポインターというのがあり、NULLポインターと呼ばれます。<br>
+                詳細は省きますが、C言語的にはNULLがNULLポインターなのですが、みなさんC言語といいつつC++なので、<b>nullptrを使って</b>ください。<br>
+                上のプログラムでもちゃっかり使っています。というかC言語でもnullptrって書きたいがためにむりくりdefineしてますが。<br>
+                下を見てください。C++11以降のC++と思ってください。
+            </p>
+            <pre class="brush: cpp;">bool hoge1 = (NULL == nullptr);//false
 void* hoge_ptr1 = NULL;
 void* hoge_ptr2 = nullptr;
 bool hoge2 = (hoge_ptr1 == hoge_ptr2);//true</pre>
-        <p>
-            とくに理由のない限り皆さんはC++としてコンパイルするわけで、標準規格への準拠がとっても遅いことで有名なVCもさすがにnullptrには対応しているので、こちらを使いましょう。<br>
-            え？なんでNULL使っちゃダメかって？・・・ええっとそれを説明するにはC++の関数のオーバーロードのお話をしないといけないので、自分で調べてください。<br>
-            C++ - NULL と nullptr って何が違う？ - Qiita<br>
-            <a href="http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1">http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1</a><br>
-            らへんが参考になると思います。ちなみにnullptrの型はstd::nullptr_t型です。JavaScriptだとNULLポインターはnullです。・・・まあ、細けーことはいいんだよ。
-        </p>
+            <p>
+                とくに理由のない限り皆さんはC++としてコンパイルするわけで、標準規格への準拠がとっても遅いことで有名なVCもさすがにnullptrには対応しているので、こちらを使いましょう。<br>
+                え？なんでNULL使っちゃダメかって？・・・ええっとそれを説明するにはC++の関数のオーバーロードのお話をしないといけないので、自分で調べてください。<br>
+                C++ - NULL と nullptr って何が違う？ - Qiita<br>
+                <a href="http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1">http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1</a><br>
+                nullptrキーワード - yohhoyの日記<br>
+                <a href="http://d.hatena.ne.jp/yohhoy/20120503/p1">http://d.hatena.ne.jp/yohhoy/20120503/p1</a><br>
+                らへんが参考になると思います。ちなみにnullptrの型はstd::nullptr_t型です。javascriptだとnullポインターはnullです。・・・まあ、細けーことはいいんだよ、<b>nullptr使え</b>。
+            </p>
+        </section>
     </section>
     <section>
         <h2>配列とポインター演算</h2>
@@ -153,7 +164,7 @@ bool hoge2 = (hoge_ptr1 == hoge_ptr2);//true</pre>
 #define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
 #endif
 int main(void){
-    int num[10];//宣言時に指定される要素数）×（配列の要素の型の大きさ）分メモリーをスタック領域に確保
+    int num[10] = { 0 };//宣言時に指定される要素数）×（配列の要素の型の大きさ）分メモリーをスタック領域に確保
     for(unsigned int i = 0; i < (sizeof(num) / sizeof(*num)); i++){
         *(num + i) = clock();
     }
@@ -200,21 +211,33 @@ _countof(num):10,_countof(num_p):1, sizeof(num_:40, sizeof(num_p):4
 &num[8]:0xbfa4d86c
 &num[9]:0xbfa4d870</pre>
         <p>
+            7行目で「{}」という見慣れないものが有りますが、初期化子リストとかいうものです。この場合初期化する意味はないのですが、説明のために使っています。<br>
+            リストに書いた値の個数が配列の要素数より小さい場合、残りの要素が0で埋められる、という性質を利用しています。<br>
+            C++ならこんな面倒なことをしないでも{}と書けば十分なんですけどね。まあC++でも「初期化している感が出る」という理由でCっぽく{ 0 }と書く人もかなりいるんですが。<br>
+            この2者、微妙に意味が違い、さらにCとC++でも若干意味が違うので、興味があるなら下のサイトを見るといいかもしれません。<br>
+            本の虫: aggregateと初期化リストの不思議<br>
+            <a href="http://cpplover.blogspot.jp/2010/09/aggregate.html">http://cpplover.blogspot.jp/2010/09/aggregate.html</a><br>
+            本の虫: 多くのプログラマは言語を表面的な理解だけで使っている<br>
+            <a href="http://cpplover.blogspot.jp/2010/09/blog-post_18.html">http://cpplover.blogspot.jp/2010/09/blog-post_18.html</a>
+        </p>
+        <p>
             11～23行目と24～34行目を比較すれば分かるかと思いますが、以下の3つはすべて同値です。というより1番目の簡便記法が2番目と3番目です。
         </p>
         <pre class="brush: cpp;">*(num + i)
 num[i]
 i[num]</pre>
-        <p>ただし、3行目の書き方はしないようにしましょう。普通1行目の書き方はめんどいので2行目のように「num[i]」と書きます。といえば分かるように、演算子「[]」は配列とはなんの関係もない演算子です(添字演算子って言います)。</p>
+        <p>ただし、<b>3行目の書き方はしないように</b>しましょう。普通1行目の書き方はめんどいので2行目のように「num[i]」と書きます。といえば分かるように、演算子「[]」は配列とはなんの関係もない演算子です(添字演算子って言います)。</p>
         <p>
             よく勘違いされますが、numの型は「int*」型ではありません。「int[10]」型です。どう違うかは多次元配列のとこで説明します。
         </p>
+
+
         <p>
-            15行目を見てください。numはここでは配列の名前です。が、しかし単なるポインター型に読み替えられます。つまり、numと書いた瞬間それはint[10]型からint*型に読み替えられているわけです。<br>
             ただし、sizeof演算子と&amp;演算子(アドレス演算子)のオペランドと配列初期化時の文字列リテラルは配列として扱われ、読み替えはされません。詳細はおいおい。
         </p>
         <p>
-            そしてここで代入したことでnum_pは配列numの先頭要素をさしています。だから配列と同じく*(num_p + i)とかnum_p[i]のように書けるわけです。<br>
+            15行目を見てください。ここでnum代入したことでnum_pは配列numの先頭要素をさしています。だから配列と同じく*(num_p + i)とかnum_p[i]のように書けるわけです。<br>
+            ここについてはすぐに詳細解説をします。<br>
             ちなみにこのポインターが配列を挿してなかった場合、num_pは要素数1の配列のように扱われるので、num_p[1]とすることは許されてもnum_p[2]と書いたり、num_p[1]に何かを代入することは許されません。
         </p>
         <pre class="brush: cpp;">sizeof(num) / sizeof(*num)</pre>
@@ -257,6 +280,82 @@ hoge_p++;
 printf("hoge_p..%p:%d", hoge_p, *hoge_p);</pre>
             <p>hoge_pの値がsizeof(int)分加算されているのがわかると思います。配列でhoge[2]とか書けるのはこの機能のおかげなのです。まあ普段は意識することはないのですが。</p>
         </section>
+        <section>
+            <h3>添字演算子とポインターと配列と</h3>
+            <pre class="brush: cpp; first-line: 14; highlight:[15];">    putchar('\n');
+    int* num_p = num;
+    printf(
+    	"_countof(num):%d,_countof(num_p):%d, sizeof(num_:%d, sizeof(num_p):%d\n",
+    	_countof(num), _countof(num_p), sizeof(num), sizeof(num_p)
+    );
+</pre>
+            <p>
+                改めてさっきのプログラムの15行目を見てください。numはここでは配列の名前です。が、しかし単なるポインター型に読み替えられます。つまり、numと書いた瞬間それはint[10]型からint*型に読み替えられているわけです。<br>
+                注意して欲しいのが、「Cでは、配列名の後に[]を付けずに配列名だけ単独で書くと、配列の先頭要素へのポインター、という意味になります」というのは嘘だ、ということです。<br>
+                配列の宣言時に確かに[]を使いますが(俺は宣言時のをstd::vectorみたいに()にしてればこんな誤解はなかったと思うんだが)、それ以外では先にちらっと話した3つの例外を除き、<br>
+                <b>配列は問答無用でポインターに読み替えられます</b>。<br>
+                だって、これら全部同じ意味だもんね。あたりまえだよね。(プログラム例は前橋和弥著 C言語ポインター完全制覇p57-p61を改変)
+            </p>
+            <blockquote>
+                <h4>プログラムA</h4>
+                <pre class="brush: cpp; highlight:[6,7,8];">#include&lt;stdio.h&gt;
+int main(void){
+    int array[5] = { 0, 1, 2, 3, 4 };
+    unsigned int i;
+    int* p;
+    for(p = &amp;array[0]; p != &amp;array[5]; p++){
+        printf("%d," *p);
+    }
+    
+    return 0;
+}
+</pre>
+                <h4>プログラムB</h4>
+                <pre class="brush: cpp; first-line: 6;">p = &amp;array[0];
+for(i = 0; i < 5; i++){
+    printf("%d," *(p + i));
+}</pre>
+                <h4>プログラムC</h4>
+                <pre class="brush: cpp; first-line: 6;">p = array;
+//&amp;array[0] -&gt; &amp;*(array + 0) -&gt; array + 0 -&gt; array
+//みたいなイメージ。&amp;*(array + 0)なんて書き方はできないけど。
+for(i = 0; i < 5; i++){
+    printf("%d," *(p + i));
+}</pre>
+                <h4>プログラムD</h4>
+                <pre class="brush: cpp; first-line: 6;">p = array;
+for(i = 0; i < 5; i++){
+    printf("%d," p[i]);
+}</pre>
+                <h4>プログラムE</h4>
+                <pre class="brush: cpp; first-line: 6;">for(i = 0; i < 5; i++){
+    printf("%d," array[i]);
+}</pre>
+            </blockquote>
+            <p>それで、上記のプログラムからついでに</p>
+            <pre class="brush: cpp;">*(num + i)
+num[i]
+i[num]</pre>
+            <p>の証明もできたわけですが。</p>
+            <p>ちなみに、C++にはイテレータというポインターもどきのようなものが有り、これの使い方がプログラムAにそっくりなので頭の片隅に入れておきましょう。(サンプルはC++11の機能を使っています)</p>
+            <pre class="brush: cpp;">std::vector&lt;int&gt; data{ 0, 1, 2, 3, 4 };//This usage is a thing of C++11.
+int total = 0;
+for(data_it = data.begin(); data_it != data.end(); data_it++) {
+    total += *data_it; 
+}</pre>
+        </section>
+    </section>
+    <section>
+        <h2>多次元配列・・・という名の幻想</h2>
+        <p>
+            結論から言うとほとんど使いません。ほとんど後述する構造体配列、もしくはポインター型の配列で代替が効き、またそのほうが扱いやすいです。<br>
+            私なんかプログラミング講習会で習って以降、1回くらいしか使ったことがない気がします。<br>
+            多次元配列を使おうと思う前にまず、本当に構造体配列ではダメなのかを考えましょう。どうしても、って場合でもC++のvectorのvectorとか、C99の可変長配列を使いましょう。
+        </p>
+        <p>
+            そうはいってもこれを説明しないわけにはいかないので、無理やり例を考えました。この例の場合、私なら迷うことなく後述するmallocとか使ってポインター型の配列にしてしまいますが。
+        </p>
+        <pre class="brush: cpp;">int working_time[12][31] = { { 0 } };</pre>
     </section>
 </body>
 </html>
