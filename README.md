@@ -26,8 +26,10 @@
 - http://yumetodo.github.io/2015_C_Textbook/index.html
 - http://yumetodo.github.io/2015_C_Textbook/01arikitarinaworld.html
 - http://yumetodo.github.io/2015_C_Textbook/pointer.html
+- http://yumetodo.github.io/2015_C_Textbook/The_First_Step.html
 
-# 書き終えた項目
+# ポインター以外
+## 書き終えた項目
 - Hello World
 - コメントの書き方
 - 変数の種類、スコープ
@@ -36,31 +38,36 @@
 - 条件文とbool型
 - 関数とは
 
-# 執筆中
+## 執筆中
 - 数値入力
 - 標準入力と標準出力、stderr,cin,cout,cerr,clog
 - プリプロセッサマクロ
 - ループ、Range-based for(C++11)
 - ヘッダーファイルとか
 
-# 書きたい項目 #
+## 書きたい項目
 - 擬似乱数
 - アドレス
 
-# 説明したくない項目
+## 説明したくない項目
 - 再帰関数
 
-# ポインタ #
+# ポインタ
+## 書き終えた項目
 - ポインタ演算
 - []
-- ポインタと文字列
-	- エスケープシーケンス
 - ポインタと配列
 - 多次元配列という虚構
 - sizeofにとって配列は特別、_countof(numof)マクロ
-- ポインタと変数の生存期間
-- ポインタと動的確保
 - ヌルポインタ
+
+## 執筆中
+- ポインタと動的確保
+
+## 書きたい項目
+- ポインタと文字列
+	- エスケープシーケンス
+- ポインタと変数の生存期間
 - 参照関係がわからなくなる・・・ポインタのコピー
 - 範囲外を指していしまい、領域破壊をしてしまう
 
