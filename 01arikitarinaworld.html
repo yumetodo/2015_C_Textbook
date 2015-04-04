@@ -1201,7 +1201,7 @@ inline T_ max(T_ a, T_ b){
         <section>
             <h3>#pragma warning</h3>
             <p>実例を見たほうが早いでしょう。プログラムはAviUtlプラグインで有名な透過性ロゴフィルター(makki氏)のSIMD化版(rigaya氏)の一部です。</p>
-            <pre class="brush: cpp;">#pragma warning (push)
+            <pre class="brush: cpp; highlight:[11,12];">#pragma warning (push)
 #pragma warning (disable: 4244) //C4244: '=' : 'int' から 'short' への変換です。データが失われる可能性があります。
 static BOOL create_adj_exdata(FILTER *fp, LOGO_HEADER *adjdata, const LOGO_HEADER *data)
 {
@@ -1217,6 +1217,25 @@ static BOOL create_adj_exdata(FILTER *fp, LOGO_HEADER *adjdata, const LOGO_HEADE
 	return TRUE;
 }
 #pragma warning (pop)</pre>
+            <p>
+                このプログラムでは11,12行目がint型からshorに暗黙の型変換を行おうとしているのでコンパイル警告が出ます。<br>
+                もしshort型で表せない大きさのデータだったら正常に変換できないのでこの警告はもっともな話です。むしろ警告してくれてありがとうです。<br>
+                しかし、作者曰くこの場合はそうはならないらしいです。だとすればその警告は目障りです。なのでこのように#pragma warningを使って警告を消しています。<br>
+                ただしプログラム全体でその警告が消えると不都合なので、この関数だけ警告が消えるように#pragma warning (push)/(pop)しています。
+            </p>
+            <p>
+                ただしこの書き方はVCの書き方でgccだとまた書き方が違います。<br>
+                VCだと警告番号ですがgccだと警告の種類を指定するようです。
+            </p>
+            <pre class="brush: cpp;">#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "[警告の種類]"
+    //警告を無効にする部分のコード
+#pragma GCC diagnostic pop</pre>
+            <p>
+                大事なことを言います。本来警告が出たら出ないようなコードを書くべきなのです。このように警告を消したり、キャストして警告を消すのはやってはいけません。<br>
+                なんどでもいいますが、本来は「警告を出していただき、コンパイラー様、ありがとうございます」なのです。<br>
+                明確に問題ない、と言える警告を除き、警告を消すことのないようにしましょう。
+            </p>
         </section>
     </section>
     <section>
