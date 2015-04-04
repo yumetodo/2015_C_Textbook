@@ -117,7 +117,7 @@
 						'wstreambuf wistream wostream wiostream wstringbuf wistringstream wostringstream wstringstream wfilebuf wifstream ' +
 						'wofstream wfstream codecvt codecvt_base codecvt_byname collate collate_byname ctype ctype ctype_base ' +
 						'ctype_byname locale messages messages_base messages_byname money_base money_get value_compare map multimap ' +
-						'call_once lock adopt_lock_t defer_lock_t once_flag try_to_lock_t new_handler queue priority_queue random_device ' +
+						'call_once lock adopt_lock_t defer_lock_t once_flag try_to_lock_t new_handler priority_queue random_device ' +
 						'mt19937 bernoulli_distribution binomial_distribution cauchy_distribution chi_squared_distribution discard_block_engine discrete_distribution exponential_distribution extreme_value_distribution fisher_f_distribution ' +
 						'gamma_distribution generate_canonical geometric_distribution independent_bits_engine linear_congruential_engine lognormal_distribution mersenne_twister_engine negative_binomial_distribution normal_distribution piecewise_constant_distribution ' +
 						'piecewise_linear_distribution poisson_distribution random_device seed_seq shuffle_order_engine student_t_distribution subtract_with_carry_engine uniform_int_distribution uniform_real_distribution weibull_distribution ' +
@@ -147,7 +147,7 @@
 			{ regex: SyntaxHighlighter.regexLib.multiLineCComments,		css: 'comments' },			// multiline comments
 			{ regex: SyntaxHighlighter.regexLib.doubleQuotedString,		css: 'string' },			// strings
 			{ regex: SyntaxHighlighter.regexLib.singleQuotedString,		css: 'string' },			// strings
-			{ regex: /#(?:define|error|import|undef|elif|if|include|using|ifdef|line|ifndef|pragma|else|endif)/g,　css: 'preprocessor' },
+			{ regex: /#(?:define|error|import|undef|elif|include|using|ifdef|line|ifndef|if|pragma|else|endif)/g,　css: 'preprocessor' },
 			{ regex: /!(?:defined)/g,　css: 'preprocessor' },
 			{ regex: new RegExp(this.getKeywords(preprocessor_word), 'gm'),	css: 'preprocessor' },
 			{ regex: new RegExp(this.getKeywords(typedefined), 'gm'),	css: 'color1 bold' },
