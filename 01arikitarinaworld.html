@@ -771,8 +771,33 @@ argv[3]:world!
             通常変数やinline関数のプロトタイプ宣言を書くのはいろいろ面倒なので(externすればいいが)、あまりしません。とくに変数を共有しなければならないことは極めて稀だと思います。
             例を見ましょう。
         </p>
-        <pre class="brush: cpp;">//arikitari.h
-int get_integer_num()</pre>
+        <pre class="brush: cpp;" title="arikitari.h">#ifndef INC_ARIKITARI_H
+#define INC_ARIKITARI_H
+#if (defined(_MSC_VER) && _MSC_VER > 1000) || defined (__GNUC__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
+#pragma once
+#endif
+int get_integer_num(const int max, const int min);
+#endif INC_ARIKITARI_H</pre>
+        <pre class="brush: cpp;" title="arikitari.c">#include "arikitari.h"
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;limits.h&gt;//in gcc
+#include&lt;errno.h&gt;//in gcc
+int get_integer_num(const int max, const int min){
+    //中略
+}</pre>
+        <pre class="brush: cpp;" title="main.c">#include "arikitari.h"
+#include&lt;stdio.h&gt;
+#include&lt;limits.h&gt;
+int main(void){
+    const int input = get_integer_num(INT_MAX, INT_MIN);
+    printf("input=%d", input);
+    return 0;
+}</pre>
+        <p>ヘッダーファイルは必ず関数定義があるファイルと関数使用箇所両方でincludeするようにします。また、ヘッダーファイルの名前は普通関数定義があるファイル名と同じにします。</p>
+        <p>何度も言いますが、すべての関数を公開する、ヘッダーファイルで宣言する必要はありません。あくまで他のファイルからも使いたい関数等を公開するわけです。</p>
+        <pre class="brush: cpp; first-line: 3;">#if (defined(_MSC_VER) && _MSC_VER > 1000) || defined (__GNUC__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))</pre>
+        <p>は、#pragma onceに対応していないコンパイラー(というよりプリプロセッサか)に対応するものです。詳細はプリプロセッサの項目で。</p>
     </section>
 
     <section>
