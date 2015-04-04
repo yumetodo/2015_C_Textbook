@@ -770,6 +770,70 @@ argv[3]:world!
     </section>
 
     <section>
+        <h2>main関数の戻り値の意味</h2>
+        <p>
+            最初の方でも書きましたが、main関数はint型で、必ず値を返さなければなりません。<br>
+            今までのサンプルコードを見てきた人は、｢main関数は必ず0を返さなければいけないんですか？｣と思ったのではないでしょうか？(むしろ思っててほしいです)<br>
+            いいえ、そんなことはありません、下のサンプルを見てください。
+        </p>
+        <pre class="brush: cpp;">#include&amp;lt;stdio.h&amp;gt;
+#include&amp;lt;stdlib.h&amp;gt;
+#include&amp;lt;limits.h&amp;gt;//in gcc
+#include&amp;lt;errno.h&amp;gt;//in gcc
+#ifndef _cplusplus
+#define nullptr NULL
+#endif
+int get_integer_num(const int max, const int min){
+	//機能：標準入力を数字に変換する。
+	//引数：戻り値の最大値,戻り値の最小値
+	//戻り値：入力した数字、エラー時は-1,EOFのときはEOF
+	char s[100];
+	char *endptr;
+	if (nullptr == fgets(s, 100, stdin)){
+		return INT_MIN;
+	}
+	if ('\n' == s[0]) return INT_MIN;
+	errno = 0;
+	const long t = strtol(s, &amp;endptr, 10);
+	if (0 != errno || '\n' != *endptr || t &amp;lt; min || max &amp;lt; t)
+		return INT_MIN;
+	return (int)t;
+}
+int main(void){
+	printf("今の時間帯は？\n1.朝　2.昼　3.夜(まだ寝ない)　4.夜(もう寝る)\n");
+	const int time = get_integer_num(4, 1);
+	switch (time){
+	case 1:
+		printf("おはようございます\n");
+		break;
+	case 2:
+		printf("こんにちは\n");
+		break;
+	case 3:
+		printf("こんばんは\n");
+		break;
+	case 4:
+		printf("おやすみなさい\n");
+		break;
+	default:
+		time = -1;
+		break;
+	}
+	return time;
+}</pre>
+        <p>
+            このサンプルコードでは、時間帯を聞いたところで入力された値が返されるようになっています。<br>
+            ｢上のint get_integer_numは何？｣って？後で説明するのでここではスルーしてください。<br>
+            このように、main関数では必ずしも0を返す必要はありません。この程度のコードなら普通に0返せばいいじゃんと思うかもしれませんが、そんなのは今回どうでもいい話です。
+            問題なのはmain関数は0以外の値を返しても大丈夫かどうかなので。<br>
+            じゃあメイン関数の戻り値にはどういう意味があるのかって？そのプログラムの内部においては何にも関係ありません。この値はプログラムの外部に影響があります。<br>
+            我々が作ったプログラムはどうやって呼ばれるかというと、別の何らかのプログラムが呼び出しています。普通の関数がそうであるように、main関数も例外ではなく、呼び出し元に値を返します。<br>
+            この値をどう処理するかは各ＯＳによって異なり、さらにバッチファイルなどから呼び出す場合はその値に対する挙動はプログラマーが決められます。<br>
+            細かいことはどうでもいいです。とりあえずここでは、main関数内の値はプログラム内部には影響がないってことだけ覚えておいてください。
+        </p>
+    </section>
+
+    <section>
         <h2>ヘッダーファイルを分ける</h2>
         <p>一つのファイルですべてのソースコードを書くと、コンパイル時間が増加する要因となり、また見通しの悪いプログラムになりやすい(はい、私です。いっつもファイルを分けるのをめんdいからやらないのは)です。</p>
         <p>
