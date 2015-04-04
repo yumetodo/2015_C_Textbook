@@ -1225,12 +1225,26 @@ static BOOL create_adj_exdata(FILTER *fp, LOGO_HEADER *adjdata, const LOGO_HEADE
             </p>
             <p>
                 ただしこの書き方はVCの書き方でgccだとまた書き方が違います。<br>
-                VCだと警告番号ですがgccだと警告の種類を指定するようです。
+                VCだと警告番号ですがgccやclangだと警告の種類を指定するようです。<br>
+                warning | MSDN<br>
+                <a href="https://msdn.microsoft.com/ja-jp/library/2c8f766e.aspx">https://msdn.microsoft.com/ja-jp/library/2c8f766e.aspx</a><br>
+                Diagnostic Pragmas - Using the GNU Compiler Collection (GCC)<br>
+                <a href="https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Pragmas.html">https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Pragmas.html</a><br>
+                controlling diagnostics via pragmas | clang 3.7 documentation<br>
+                <a href="http://clang.llvm.org/docs/UsersManual.html#controlling-diagnostics-via-pragmas">http://clang.llvm.org/docs/UsersManual.html#controlling-diagnostics-via-pragmas</a>
             </p>
-            <pre class="brush: cpp;">#pragma GCC diagnostic push
+            <pre class="brush: cpp;" title="VC">#pragma warning (push)
+#pragma warning (disable: [警告番号])
+    //警告を無効にする部分のコード
+#pragma warning (pop)</pre>
+            <pre class="brush: cpp;" title="gcc">#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "[警告の種類]"
     //警告を無効にする部分のコード
 #pragma GCC diagnostic pop</pre>
+            <pre class="brush: cpp;" title="clang">#pragma clang diagnostic push
+#pragma clang diagnostic ignored "[警告の種類]"
+    //警告を無効にする部分のコード
+#pragma clang diagnostic pop</pre>
             <p>
                 大事なことを言います。本来警告が出たら出ないようなコードを書くべきなのです。このように警告を消したり、キャストして警告を消すのはやってはいけません。<br>
                 なんどでもいいますが、本来は「警告を出していただき、コンパイラー様、ありがとうございます」なのです。<br>
