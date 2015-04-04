@@ -952,6 +952,26 @@ if(a = 5)//これはコンパイルエラーにならない、aに代入した�
                 <p>エラー処理等、明確に実行文が1行しかない、と言える時を除き、原則{}はつけましょう。あとで文が増えた時に付け忘れるのを防ぐことができます。</p>
             </section>
         </section>
+
+        <section>
+            <h2>3項演算子</h2>
+            <p>if文とは一味ちがう書き方です。見てみましょう。</p>
+            <pre class="brush: cpp" title="3項演算子を使って書く">const int hoge = 17;
+const int isEven = (hoge % 2)? 1324 : 2432;</pre>
+            <pre class="brush: cpp;" title="if文で書く">const int hoge = 17;
+int isEven;
+if(hoge % 2){
+    isEven = 1324;
+}
+else{
+    isEven = 2432;
+}</pre>
+            <p>if文を使って書くより簡単ですし(スコープの問題がない)、代入する変数にconstが付けられます(ワタシ的にはここが美味しい)</p>
+            <p>
+                この書きかたですが、「一行で」かけるので、後に説明するプリプロセッサマクロでしばしば用いられます。<br>
+                ・・・って私は教わったんだけど、マクロにして使ったことってないなぁ。それくらいならinline関数(C++の機能)にしちゃうし。
+            </p>
+        </section>
         <section>
             <h2>switch文</h2>
             <p>if文が高級な条件分岐文とするならば、switch文は低級な条件分岐文といえますが、最大のメリットは、一度の条件式で複数の分岐が作れることです。</p>
@@ -1048,7 +1068,7 @@ default:
             を参照してください。なお、#if/#else/#ifdef/#ifndefはこれまでもこれからもしれっと使います。
         </p>
         <section>
-            <h2>#include</h2>
+            <h3>#include</h3>
             <p>.cとか.cppが読み込めないわけではないのですが、ほぼ100%ヘッダーファイルを読み込むのに使います。</p>
             <pre class="brush: cpp;">#include "DxLib.h"
 #include &lt;stdio.h&gt;</pre>
@@ -1057,6 +1077,82 @@ default:
                 また、""で囲むと、それに加えて、#includeを書いたファイルと同じ場所も捜索対象になります。<br>
                 ゆえに自分で作ったヘッダーは""で囲い、C/C++標準ライブラリ―のヘッダーは&lt;&gt;で囲むのが普通です。ありきたり。
             </p>
+        </section>
+        <section>
+            <h3>#define</h3>
+            <p>しばしば、const, enumと並んで定数を作る、と言われますが、残念ながらいずれも定数ではありません。</p>
+            <p>#defineはコンパイル前にソースコードを置換するものです。で、「マクロ」と呼ばれます。Excelとかのマクロとはちと違うので注意です。</p>
+            <pre class="brush: cpp;">#define WINDOW_HEIGH 1024</pre>
+            <p>こんな風に定数っぽいのを作ることもできますし</p>
+            <pre class="brush: cpp;">#define MAX(A, B) (A > B)? A : B</pre>
+            <p>みたいに関数もどきも作れます。・・・がしかし、使いません。だってそれぞれ</p>
+            <pre class="brush: cpp;">static const int WINDOW_HEIGH = 1024;
+template&lt;typename T_&gt;
+inline T_ max(T_ a, T_ b){
+    return (a > b)? a : b;
+}</pre>
+            <p>のほうがわかりやすいじゃん。で、マクロを何に使うかというと、コンパイラー間の差異を吸収するために使います。どういうことでしょうか？</p>
+            <p>
+                最初に話したとおり、コンパイラーには何種類か有りますが、その中でも人口が多いVisual Studio C Compiler(以降VC)とGNU C Compiler(以降gcc)の２つだけ見ても、その差異は大きいです。<br>
+                例えばfloat型とdouble型の計算速度のところで出したサンプルコードを見てみましょう。
+            </p>
+            <pre class="brush: cpp; first-line: 4">#ifndef __GNUC__
+#pragma comment(lib, "setupapi.lib")
+#pragma comment(lib, "hid.lib")
+#pragma comment(lib, "winmm.lib")
+#endif</pre>
+            <p>
+                ifndefというのはそのマクロ(この場合__GNUC__)が既に定義されているかを(プリプロセッサが)調べ、真なら対応するendifまでを有効にするものですが(偽ならその部分はコンパイラーに渡されない)<br>
+                あとで説明する通りgccは「#pragma comment」という書き方はできません。この場合だとコンパイルオプションに
+            </p>
+            <pre class="brush: plain">-lsetupapi -lhid -lwinmm</pre>
+            <p>つけるわけですが・・・ってそんな話はよくって、対応してない機能をコンパイラーに渡すと当然コンパイルエラーになるのでこのようにgccコンパイラーでコンパイルする時を考えてこのように書いています。</p>
+            <p>すでに察しているかもしれませんが何も書かなくてもいくつかのマクロがdefineされています。例えばVCなら_MSC_VER、gccなら__GNUC__,__GNUC_MINOR__などがその代表的なものになります。</p>
+            <pre class="brush: cpp; first-line: 3;" title="arikitari.h">#if (defined(_MSC_VER) && _MSC_VER > 1000) || defined (__GNUC__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
+#pragma once
+#endif</pre>
+            <p>
+                ヘッダーファイルに分ける、のところで書いたこの文の意味も今なら分かるでしょう。<br>
+                #pragma onceという書き方に対応したのがVisual Studio.NET 2003以降、gcc3.4以降だからです。
+            </p>
+        </section>
+        <section>
+            <h3>#pragma comment</h3>
+            <p>なんかすでに使っているので解説が必要か疑問ですが、.libファイルや.aファイルをリンカーにくっつけて、とお願いするために使います。ただし先述の通りVCやclang,bcc等限定の機能になります。</p>
+            <p>なのでgccでコンパイルする予定があるなら(常にその可能性を想定するべきですが)さっきのような対策が必要です。</p>
+        </section>
+        <section>
+            <h3>#pragma onceとインクルードガード</h3>
+            <p>その昔#pragma onceが使えなかった頃、ヘッダーファイルが複数読み込まれると、2重定義です、と言われコンパイルエラーになりました。この対策として</p>
+            <pre class="brush: cpp;">#ifndef _INC_STDIO
+#define_INC_STDIO
+//ヘッダーファイルの中身を書く
+#endif /* _INC_STDIO */</pre>
+            <p>といったことをしていました。こういう書き方をインクルードガードといいます。でもこんなの書くのはめんdいですよね？そこで生まれたのが#pragma onceです。</p>
+            <p>ヘッダーファイルの冒頭に</p>
+            <pre class="brush: cpp;">#pragma once</pre>
+            <p>と書くだけです。</p>
+            <p>ただし、普通は#defineを使ったインクルードガードと併用します。その理由は実際に使っていれば分かるはず。複数のヘッダーで同じことを書かないといけない時にこれがあると便利なんです。</p>
+        </section>
+        <section>
+            <h3>#pragma warning</h3>
+            <p>実例を見たほうが早いでしょう。プログラムはAviUtlプラグインで有名な透過性ロゴフィルター(makki氏)のSIMD化版(rigaya氏)の一部です。</p>
+            <pre class="brush: cpp;">#pragma warning (push)
+#pragma warning (disable: 4244) //C4244: '=' : 'int' から 'short' への変換です。データが失われる可能性があります。
+static BOOL create_adj_exdata(FILTER *fp, LOGO_HEADER *adjdata, const LOGO_HEADER *data)
+{
+	int i, j;
+	if (data == NULL)
+		return FALSE;
+	// ロゴ名コピー
+	memcpy(adjdata->name, data->name, LOGO_MAX_NAME);
+	// 左上座標設定（位置調整後）
+	adjdata->x = data->x + (int)(fp->track[LOGO_X]-LOGO_XY_MIN)/4 + LOGO_XY_MIN/4;
+	adjdata->y = data->y + (int)(fp->track[LOGO_Y]-LOGO_XY_MIN)/4 + LOGO_XY_MIN/4;
+	//中略
+	return TRUE;
+}
+#pragma warning (pop)</pre>
         </section>
     </section>
     <section>
