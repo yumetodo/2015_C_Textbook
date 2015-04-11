@@ -1,0 +1,223 @@
+﻿yumetodo@yumetodo-MSI MINGW32 /c/Users/yumetodo/Documents/2015_C_Textbook/src/book_list_storage
+$ clang++ ./book_list_storage/Source.cpp book_list_storage.exe -std=c++14
+book_list_storage.exe: 関数 `WinMainCRTStartup' 内:
+C:/git/MINGW-packages/mingw-w64-crt-git/src/crt/mingw-w64-crt/crt/crtexe.c:171: `WinMainCRTStartup' が重複して定義されています
+C:\msys64\mingw32\bin/../i686-w64-mingw32/lib\crt2.o:C:/git/MINGW-packages/mingw-w64-crt-git/src/crt/mingw-w64-crt/crt/crtexe.c:171: ここで最初に定義されています
+book_list_storage.exe: 関数 `mainCRTStartup' 内:
+C:/git/MINGW-packages/mingw-w64-crt-git/src/crt/mingw-w64-crt/crt/crtexe.c:199: `mainCRTStartup' が重複して定義されています
+C:\msys64\mingw32\bin/../i686-w64-mingw32/lib\crt2.o:C:/git/MINGW-packages/mingw-w64-crt-git/src/crt/mingw-w64-crt/crt/crtexe.c:199: ここで最初に定義されています
+book_list_storage.exe: 関数 `Z15new_book_data_tv' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:27: `new_book_data_t()' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0x40): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z18delete_book_data_tP13book_data_tag' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:30: `delete_book_data_t(book_data_tag*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0x60): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z16new_book_data_t2v' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:37: `new_book_data_t2()' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0xb0): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z14string_to_cstrRKSs' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:51: `string_to_cstr(std::string const&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__Z14string_to_cstrRKSs]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z8set_dataP13book_data_tagRKSsS2_S2_PK6date_tiy' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:66: `set_data(book_data_tag*, std::string const&, std::string const&, std::string const&, date_t const*, int, unsigned long long)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0x140): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z9push_listPP13book_data_tagRKSsS3_S3_PK6date_tiy' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:81: `push_list(book_data_tag**, std::string const&, std::string const&, std::string const&, date_t const*, int, unsigned long long)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0x260): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z8purseIntPKcii' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:86: `purseInt(char const*, int, int)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0x360): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z8purseIntPKcjjPi' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:93: `purseInt(char const*, unsigned int, unsigned int, int*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0x400): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z8purseIntPKcyyPi' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:102: `purseInt(char const*, unsigned long long, unsigned long long, int*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0x590): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z15get_integer_numii' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:111: `get_integer_num(int, int)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0x6a0): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z15get_integer_numjjPi' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:126: `get_integer_num(unsigned int, unsigned int, int*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0x760): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z15get_integer_numyyPi' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:145: `get_integer_num(unsigned long long, unsigned long long, int*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0x870): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt4moveIRSt6vectorISsSaISsEEEONSt16remove_referenceIT_E4typeEOS5_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/move.h:101: `std::remove_reference<std::vector<std::string, std::allocator<std::string> >&>::type&& std::move<std::vector<std::string, std::allocator<std::string> >&>(std::vector<std::string, std::allocator<std::string> >&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt4moveIRSt6vectorISsSaISsEEEONSt16remove_referenceIT_E4typeEOS5_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z5splitRKSsc' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:164: `split(std::string const&, char)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0xa30): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt4moveIR6date_tEONSt16remove_referenceIT_E4typeEOS3_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/move.h:101: `std::remove_reference<date_t&>::type&& std::move<date_t&>(date_t&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt4moveIR6date_tEONSt16remove_referenceIT_E4typeEOS3_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z18get_ymd_from_stdinPi' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:175: `get_ymd_from_stdin(int*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0xbd0): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z13get_push_listPP13book_data_tag' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:188: `get_push_list(book_data_tag**)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0xe10): ここで最初に定義されています
+book_list_storage.exe: 関数 `Z10print_listP13book_data_tag' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:211: `print_list(book_data_tag*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0x1130): ここで最初に定義されています
+book_list_storage.exe: 関数 `main' 内:
+C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:230: `main' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0x11b0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt4moveIRSsEONSt16remove_referenceIT_E4typeEOS2_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/move.h:101: `std::remove_reference<std::string&>::type&& std::move<std::string&>(std::string&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt4moveIRSsEONSt16remove_referenceIT_E4typeEOS2_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt6vectorISsSaISsEE9push_backEOSs' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:931: `std::vector<std::string, std::allocator<std::string> >::push_back(std::string&&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt6vectorISsSaISsEE9push_backEOSs]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt6vectorISsSaISsEE2atEj' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:822: `std::vector<std::string, std::allocator<std::string> >::at(unsigned int)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt6vectorISsSaISsEE2atEj]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt12_Vector_baseISsSaISsEEC2Ev' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:124: `std::_Vector_base<std::string, std::allocator<std::string> >::_Vector_base()' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt12_Vector_baseISsSaISsEEC2Ev]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt12_Vector_baseISsSaISsEED2Ev' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:159: `std::_Vector_base<std::string, std::allocator<std::string> >::~_Vector_base()' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt12_Vector_baseISsSaISsEED2Ev]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt12_Vector_baseISsSaISsEE19_M_get_Tp_allocatorEv' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:113: `std::_Vector_base<std::string, std::allocator<std::string> >::_M_get_Tp_allocator()' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt12_Vector_baseISsSaISsEE19_M_get_Tp_allocatorEv]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt8_DestroyIPSsSsEvT_S1_RSaIT0_E' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_construct.h:148: `void std::_Destroy<std::string*, std::string>(std::string*, std::string*, std::allocator<std::string>&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt8_DestroyIPSsSsEvT_S1_RSaIT0_E]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt7forwardISsEOT_RNSt16remove_referenceIS0_E4typeE' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/move.h:76: `std::string&& std::forward<std::string>(std::remove_reference<std::string>::type&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt7forwardISsEOT_RNSt16remove_referenceIS0_E4typeE]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt4moveIRSaISsEEONSt16remove_referenceIT_E4typeEOS3_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/move.h:101: `std::remove_reference<std::allocator<std::string>&>::type&& std::move<std::allocator<std::string>&>(std::allocator<std::string>&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt4moveIRSaISsEEONSt16remove_referenceIT_E4typeEOS3_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt12_Vector_baseISsSaISsEEC2EOS1_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:142: `std::_Vector_base<std::string, std::allocator<std::string> >::_Vector_base(std::_Vector_base<std::string, std::allocator<std::string> >&&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt12_Vector_baseISsSaISsEEC2EOS1_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNKSt6vectorISsSaISsEE14_M_range_checkEj' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:800: `std::vector<std::string, std::allocator<std::string> >::_M_range_check(unsigned int) const' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNKSt6vectorISsSaISsEE14_M_range_checkEj]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt6vectorISsSaISsEEixEj' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:779: `std::vector<std::string, std::allocator<std::string> >::operator[](unsigned int)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt6vectorISsSaISsEEixEj]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSaISsED2Ev' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/allocator.h:121: `std::allocator<std::string>::~allocator()' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSaISsED2Ev]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt12_Vector_baseISsSaISsEE13_M_deallocateEPSsj' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:174: `std::_Vector_base<std::string, std::allocator<std::string> >::_M_deallocate(std::string*, unsigned int)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt12_Vector_baseISsSaISsEE13_M_deallocateEPSsj]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt8_DestroyIPSsEvT_S1_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_construct.h:122: `void std::_Destroy<std::string*>(std::string*, std::string*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt8_DestroyIPSsEvT_S1_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt12_Vector_baseISsSaISsEE12_Vector_impl12_M_swap_dataERS2_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:101: `std::_Vector_base<std::string, std::allocator<std::string> >::_Vector_impl::_M_swap_data(std::_Vector_base<std::string, std::allocator<std::string> >::_Vector_impl&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt12_Vector_baseISsSaISsEE12_Vector_impl12_M_swap_dataERS2_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNKSt6vectorISsSaISsEE4sizeEv' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:654: `std::vector<std::string, std::allocator<std::string> >::size() const' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNKSt6vectorISsSaISsEE4sizeEv]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSaISsEC2Ev' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/allocator.h:113: `std::allocator<std::string>::allocator()' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSaISsEC2Ev]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZN9__gnu_cxx13new_allocatorISsED2Ev' 内:
+C:/msys64/mingw32/include/c++/4.9.2/ext/new_allocator.h:86: `__gnu_cxx::new_allocator<std::string>::~new_allocator()' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZN9__gnu_cxx13new_allocatorISsED2Ev]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt16allocator_traitsISaISsEE10deallocateERS0_PSsj' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/alloc_traits.h:382: `std::allocator_traits<std::allocator<std::string> >::deallocate(std::allocator<std::string>&, std::string*, unsigned int)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt16allocator_traitsISaISsEE10deallocateERS0_PSsj]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt12_Destroy_auxILb0EE9__destroyIPSsEEvT_S3_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_construct.h:100: `void std::_Destroy_aux<false>::__destroy<std::string*>(std::string*, std::string*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt12_Destroy_auxILb0EE9__destroyIPSsEEvT_S3_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNKSt6vectorISsSaISsEE12_M_check_lenEjPKc' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:1422: `std::vector<std::string, std::allocator<std::string> >::_M_check_len(unsigned int, char const*) const' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNKSt6vectorISsSaISsEE12_M_check_lenEjPKc]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt12_Vector_baseISsSaISsEE11_M_allocateEj' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:167: `std::_Vector_base<std::string, std::allocator<std::string> >::_M_allocate(unsigned int)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt12_Vector_baseISsSaISsEE11_M_allocateEj]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt34__uninitialized_move_if_noexcept_aIPSsS0_SaISsEET0_T_S3_S2_RT1_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_uninitialized.h:294: `std::string* std::__uninitialized_move_if_noexcept_a<std::string*, std::string*, std::allocator<std::string> >(std::string*, std::string*, std::string*, std::allocator<std::string>&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt34__uninitialized_move_if_noexcept_aIPSsS0_SaISsEET0_T_S3_S2_RT1_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt16allocator_traitsISaISsEE7destroyISsEEvRS0_PT_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/alloc_traits.h:410: `void std::allocator_traits<std::allocator<std::string> >::destroy<std::string>(std::allocator<std::string>&, std::string*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt16allocator_traitsISaISsEE7destroyISsEEvRS0_PT_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSaISsEC2ERKS_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/allocator.h:115: `std::allocator<std::string>::allocator(std::allocator<std::string> const&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSaISsEC2ERKS_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt4moveIRPSsEONSt16remove_referenceIT_E4typeEOS3_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/move.h:101: `std::remove_reference<std::string*&>::type&& std::move<std::string*&>(std::string*&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt4moveIRPSsEONSt16remove_referenceIT_E4typeEOS3_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt4swapIPSsEvRT_S2_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/move.h:166: `void std::swap<std::string*>(std::string*&, std::string*&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt4swapIPSsEvRT_S2_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZN9__gnu_cxx13new_allocatorISsEC2Ev' 内:
+C:/msys64/mingw32/include/c++/4.9.2/ext/new_allocator.h:79: `__gnu_cxx::new_allocator<std::string>::new_allocator()' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZN9__gnu_cxx13new_allocatorISsEC2Ev]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZN9__gnu_cxx13new_allocatorISsE10deallocateEPSsj' 内:
+C:/msys64/mingw32/include/c++/4.9.2/ext/new_allocator.h:109: `__gnu_cxx::new_allocator<std::string>::deallocate(std::string*, unsigned int)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZN9__gnu_cxx13new_allocatorISsE10deallocateEPSsj]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt11__addressofISsEPT_RS0_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/move.h:47: `std::string* std::__addressof<std::string>(std::string&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt11__addressofISsEPT_RS0_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt8_DestroyISsEvPT_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_construct.h:92: `void std::_Destroy<std::string>(std::string*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt8_DestroyISsEvPT_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNKSt6vectorISsSaISsEE8max_sizeEv' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:659: `std::vector<std::string, std::allocator<std::string> >::max_size() const' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNKSt6vectorISsSaISsEE8max_sizeEv]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt3maxIjERKT_S2_S2_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_algobase.h:217: `unsigned int const& std::max<unsigned int>(unsigned int const&, unsigned int const&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt3maxIjERKT_S2_S2_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt16allocator_traitsISaISsEE8allocateERS0_j' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/alloc_traits.h:356: `std::allocator_traits<std::allocator<std::string> >::allocate(std::allocator<std::string>&, unsigned int)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt16allocator_traitsISaISsEE8allocateERS0_j]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt32__make_move_if_noexcept_iteratorIPSsS0_ET0_T_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_iterator.h:1149: `std::string* std::__make_move_if_noexcept_iterator<std::string*, std::string*>(std::string*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt32__make_move_if_noexcept_iteratorIPSsS0_ET0_T_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt22__uninitialized_copy_aIPSsS0_SsET0_T_S2_S1_RSaIT1_E' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_uninitialized.h:276: `std::string* std::__uninitialized_copy_a<std::string*, std::string*, std::string>(std::string*, std::string*, std::string*, std::allocator<std::string>&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt22__uninitialized_copy_aIPSsS0_SsET0_T_S2_S1_RSaIT1_E]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZN9__gnu_cxx13new_allocatorISsEC2ERKS1_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/ext/new_allocator.h:81: `__gnu_cxx::new_allocator<std::string>::new_allocator(__gnu_cxx::new_allocator<std::string> const&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZN9__gnu_cxx13new_allocatorISsEC2ERKS1_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt16allocator_traitsISaISsEE8max_sizeERKS0_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/alloc_traits.h:421: `std::allocator_traits<std::allocator<std::string> >::max_size(std::allocator<std::string> const&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt16allocator_traitsISaISsEE8max_sizeERKS0_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNKSt12_Vector_baseISsSaISsEE19_M_get_Tp_allocatorEv' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_vector.h:117: `std::_Vector_base<std::string, std::allocator<std::string> >::_M_get_Tp_allocator() const' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNKSt12_Vector_baseISsSaISsEE19_M_get_Tp_allocatorEv]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZN9__gnu_cxx13new_allocatorISsE8allocateEjPKv' 内:
+C:/msys64/mingw32/include/c++/4.9.2/ext/new_allocator.h:99: `__gnu_cxx::new_allocator<std::string>::allocate(unsigned int, void const*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZN9__gnu_cxx13new_allocatorISsE8allocateEjPKv]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt18uninitialized_copyIPSsS0_ET0_T_S2_S1_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_uninitialized.h:107: `std::string* std::uninitialized_copy<std::string*, std::string*>(std::string*, std::string*, std::string*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt18uninitialized_copyIPSsS0_ET0_T_S2_S1_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZN9__gnu_cxx13new_allocatorISsE7destroyISsEEvPT_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/ext/new_allocator.h:124: `void __gnu_cxx::new_allocator<std::string>::destroy<std::string>(std::string*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZN9__gnu_cxx13new_allocatorISsE7destroyISsEEvPT_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt16allocator_traitsISaISsEE11_S_max_sizeIKS0_vEEjRT_i' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/alloc_traits.h:308: `unsigned int std::allocator_traits<std::allocator<std::string> >::_S_max_size<std::allocator<std::string> const, void>(std::allocator<std::string> const&, int)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt16allocator_traitsISaISsEE11_S_max_sizeIKS0_vEEjRT_i]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNK9__gnu_cxx13new_allocatorISsE8max_sizeEv' 内:
+C:/msys64/mingw32/include/c++/4.9.2/ext/new_allocator.h:113: `__gnu_cxx::new_allocator<std::string>::max_size() const' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNK9__gnu_cxx13new_allocatorISsE8max_sizeEv]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZNSt20__uninitialized_copyILb0EE13__uninit_copyIPSsS2_EET0_T_S4_S3_' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/stl_uninitialized.h:68: `std::string* std::__uninitialized_copy<false>::__uninit_copy<std::string*, std::string*>(std::string*, std::string*, std::string*)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZNSt20__uninitialized_copyILb0EE13__uninit_copyIPSsS2_EET0_T_S4_S3_]+0x0): ここで最初に定義されています
+book_list_storage.exe: 関数 `ZSt7forwardIRSsEOT_RNSt16remove_referenceIS1_E4typeE' 内:
+C:/msys64/mingw32/include/c++/4.9.2/bits/move.h:76: `std::string& std::forward<std::string&>(std::remove_reference<std::string&>::type&)' が重複して定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text[__ZSt7forwardIRSsEOT_RNSt16remove_referenceIS1_E4typeE]+0x0): ここで最初に定義されています
+book_list_storage.exe:crtexe.c:(.CRT+0x10): `mingw_pcinit' が重複して定義されています
+C:\msys64\mingw32\bin/../i686-w64-mingw32/lib\crt2.o:C:/git/MINGW-packages/mingw-w64-crt-git/src/crt/mingw-w64-crt/crt/crtexe.c:118: ここで最初に定義されています
+book_list_storage.exe:crtexe.c:(.data+0x0): `__mingw_winmain_nShowCmd' が重複して定義されています
+C:\msys64\mingw32\bin/../i686-w64-mingw32/lib\crt2.o:C:/git/MINGW-packages/mingw-w64-crt-git/src/crt/mingw-w64-crt/crt/crtexe.c:118: ここで最初に定義されています
+book_list_storage.exe:crtexe.c:(.CRT+0x4): `mingw_pcppinit' が重複して定義されています
+C:\msys64\mingw32\bin/../i686-w64-mingw32/lib\crt2.o:C:/git/MINGW-packages/mingw-w64-crt-git/src/crt/mingw-w64-crt/crt/crtexe.c:118: ここで最初に定義されています
+book_list_storage.exe:crtexe.c:(.idata+0x310): `_imp___ZSt3cin' が重複して定義されています
+book_list_storage.exe:crtexe.c:(.idata+0x310): ここで最初に定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0xc0c): `_fu0___ZSt3cin' が重複して定義されています
+book_list_storage.exe:C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:180: ここで最初に定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0xe7a): `_fu1___ZSt3cin' が重複して定義されています
+book_list_storage.exe:C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:194: ここで最初に定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0xeb0): `_fu2___ZSt3cin' が重複して定義されています
+book_list_storage.exe:C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:196: ここで最初に定義されています
+C:\msys64\tmp\Source-a777b4.o:(.text+0xee3): `_fu3___ZSt3cin' が重複して定義されています
+book_list_storage.exe:C:\Users\yumetodo\Documents\2015_C_Textbook\src\book_list_storage/book_list_storage/Source.cpp:198: ここで最初に定義されています
+clang++.exe: error: linker command failed with exit code 1 (use -v to see invocation)

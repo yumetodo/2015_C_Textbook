@@ -437,12 +437,12 @@ int main(void){
         </ul>
         <p>な感じ？使い方を改めて書きましょう。</p>
         <pre class="brush: cpp;">struct{
-    unsigend int high_num;
+    unsigned int high_num;
     unsigned int low_num;
 } big_num;</pre>
         <p>ここでhigh_numとかlow_numをメンバー変数と言います。なお変数名であるbig_numまでが型名です。はい、むちゃんこ長いです。こんな長い型名いちいち書いていられません。そこで</p>
         <pre class="brush: cpp;">struct BIGNUM{
-    unsigend int high_num;
+    unsigned int high_num;
     unsigned int low_num;
 };
 
@@ -452,7 +452,7 @@ struct BIGNUM big_num;</pre>
             1～3行目は普通関数の外に書きます。しかし変数宣言時にいちいち「struct」と書くのはめんdいです。なので
         </p>
         <pre class="brush: cpp;">struct BIGNUM{
-    unsigend int high_num;
+    unsigned int high_num;
     unsigned int low_num;
 };
 typedef struct BIGNUM bignum_t;
@@ -460,7 +460,7 @@ typedef struct BIGNUM bignum_t;
 bignum_t big_num;</pre>
         <p>とか構造体定義とtypedefも一緒にやるようにして</p>
         <pre class="brush: cpp;">typedef struct BIGNUM{
-    unsigend int high_num;
+    unsigned int high_num;
     unsigned int low_num;
 }bignum_t;
 
@@ -525,7 +525,7 @@ AVCodec *libavsmash_find_decoder
 const uint32_t max = conf.count;</pre>
         <p>配列同様初期化リストも使えます。また、配列と違い、「=」でコピーができます。</p>
         <pre class="brush: cpp;">typedef struct BIGNUM{
-    unsigend int high_num;
+    unsigned int high_num;
     unsigned int low_num;
 }bignum_t;
 const bignum_t big_num = { 327, 2268 };
@@ -541,7 +541,9 @@ const bignum_t big_num2 = big_num;</pre>
     uint8_t b;
 }rgb_t;
 rgb_t toGrayscale_stupid(rgb_t color){
-    const uint8_t y = ((4918 * color.r + 354) >> 10) + ((9655 * color.g + 585) >> 10) + ((1875 * color.b + 523) >> 10);
+    const uint8_t y = ((4918 * (uint32_t)color.r + 354) >> 10)
+                        + ((9655 * (uint32_t)color.g + 585) >> 10)
+                        + ((1875 * (uint32_t)color.b + 523) >> 10);
     const rgb_t re = {y, y, y};
     return re;
 }
@@ -555,7 +557,9 @@ int main(void){
 }</pre>
         <p>いくらなんでも無駄すぎます。そこで</p>
         <pre class="brush: cpp; first-line: 7;">rgb_t* toGrayscale_stupid2(rgb_t* color){
-    const uint8_t y = ((4918 * color->r + 354) >> 10) + ((9655 * color->g + 585) >> 10) + ((1875 * color->b + 523) >> 10);
+    const uint8_t y = ((4918 * (uint32_t)(color->r) + 354) >> 10)
+                        + ((9655 * (uint32_t)(color->g) + 585) >> 10)
+                        + ((1875 * (uint32_t)(color->b) + 523) >> 10);
     color->r = y;
     color->g = y;
     color->b = y;
@@ -579,7 +583,9 @@ int main(void){
         <p>が同値になる、という意味です。さて、グレースケール化関数を使いやすくしましょう。</p>
         <pre class="brush: cpp; first-line: 7;">void toGrayscale(rgb_t* color, size_t pixel_num){
     for(size_t i = 0; i < pixel_num; i++){
-        const uint8_t y = ((4918 * color[i].r + 354) >> 10) + ((9655 * color[i].g + 585) >> 10) + ((1875 * color[i].b + 523) >> 10);
+        const uint8_t y = ((4918 * static_cast&lt;uint32_t&gt;(color[i].r) + 354) >> 10)
+                            + ((9655 * static_cast&lt;uint32_t&gt;(color[i].g) + 585) >> 10)
+                            + ((1875 * static_cast&lt;uint32_t&gt;(color[i].b) + 523) >> 10);
         color[i].r = y;
         color[i].g = y;
         color[i].b = y;
@@ -614,7 +620,7 @@ int main(void){
         <p>
             配列では要素数が固定でした。やっぱり途中で要素数を変更したいことは有りますよね。そして多くの場合要素数は可変でなければならない局面が多いです。<br>
             しかし、純粋な動的確保はほとんどやりません。なぜなら、自分で要素数を増やしたり減らしたりするコード書くのは面倒だからです。<br>
-            C++のSTLにはこういうことをやってくれるコンテナ型がたくさんあるからです。それぞれ様々な特徴があります。<br>
+            C++のSTLにはこういうことをやってくれるコンテナ型がたくさんあり、それぞれ様々な特徴があります。<br>
         </p>
         <blockquote>
             vector, list, forward_list#, deque, priority_queue,<br>
@@ -640,8 +646,21 @@ int main(void){
             というところでしょうか。まあ、"動的"確保というだけあって、確保するサイズを実行中に決められたり、途中で大きさを変えられるわけです。<br>
             まあ使ってみましょう。とりあえず連結リストと呼ばれる物を作ってみましょう。目指すは蔵書管理システム。
         </p>
+        <script src="http://ideone.com/e.js/MJn3Un" type="text/javascript"></script>
+        <p>なんか50行くらいで終わるはずだったんだけどちょっと長くなったな・・・。Cで文字列扱う気にはならなかったのでC++のstd::string、splitする都合上std::vectorを利用しています。説明？するする、そのうち。</p>
+        <p>自分でライブラリーでも作んない限りC++を使えばお世話になることはまず無いです。あとはC++のクラスのコンストラクタの中くらいか・・・？</p>
+    </section>
+    <section>
+        <h2>lValueとrvalue</h2>
+        <p>一度ポインターから話が離れます。lValueとrValueです。左辺値と右辺値という風に訳されることが多いですが(JISのC++規格書日本語訳版がそう訳してる)、誤解を招くのでlValueとrValueと呼ぶことにします。</p>
 
     </section>
+    <section>
+        <h2>C++のlValue参照</h2>
+        <p>すでに何回か登場していますが、今説明しないとあとで</p>
+    </section>
+    
+
     <script src="http://ideone.com/e.js/1wxKrF" type="text/javascript"></script>
 </body>
 </html>
