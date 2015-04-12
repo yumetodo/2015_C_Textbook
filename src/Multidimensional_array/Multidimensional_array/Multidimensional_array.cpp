@@ -42,10 +42,10 @@ int main(void){
 
 	const int64_t time_sum = calc_annual_working_time(hanako_worked_time, 12);
 	const int64_t fee = time_sum * (1200 / 60);
-#ifndef __GNUC__
+#ifndef _INC__MINGW_H
 	printf("労働時間: %lld, 年収: %lld\n", time_sum, fee);
 #else
 	printf("労働時間: %I64d, 年収: %I64d\n", time_sum, fee);
-#endif // !__GNUC__
+#endif // !_INC__MINGW_H
 	return 0;
 }

@@ -61,7 +61,7 @@
 						'FPE_DENORMAL FPE_ZERODIVIDE FPE_OVERFLOW FPE_UNDERFLOW FPE_INEXACT FPE_UNEMULATED FPE_SQRTNEG FPE_STACKOVERFLOW FPE_STACKUNDERFLOW FPE_EXPLICITGEN ' +
 						'ATOMIC_CHAR_LOCK_FREE ATOMIC_CHAR_LOCK_FREE ATOMIC_CHAR_LOCK_FREE ATOMIC_CHAR16_T_LOCK_FREE ATOMIC_CHAR32_T_LOCK_FREE ATOMIC_WCHAR_T_LOCK_FREE ATOMIC_SHORT_LOCK_FREE ATOMIC_SHORT_LOCK_FREE ATOMIC_INT_LOCK_FREE ATOMIC_INT_LOCK_FREE ' +
 						'ATOMIC_LONG_LOCK_FREE ATOMIC_LONG_LOCK_FREE ATOMIC_LLONG_LOCK_FREE ATOMIC_LLONG_LOCK_FREE ' +
-						'_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES __GNUC__ __GNUC_MINOR__ __GNUC_PATCHLEVEL__ ';
+						'_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES __GNUC__ __GNUC_MINOR__ __GNUC_PATCHLEVEL__ _countof ';
 
 		var typedefined = 'INPUT_PLUGIN_TABLE INPUT_HANDLE FILTER_DLL EXFUNC AVI_FILE_HANDLE SYS_INFO FILE_INFO FRAME_STATUS FILTER_PROC_INFO __m128 ' +
 						'__m128i __m128d __m256 __m256i __m256d dummy_handler_t au_video_output_handler_t yuv420_list func_convert_yuv420ple_i_to_yuv444p16le AVFrame ' +
@@ -141,7 +141,7 @@
 		var preprocessor_word = 'alloc_text auto_inline bss_seg check_stack code_seg comment component conform const_seg data_seg deprecated detect_mismatch ' +
 						'fenv_access float_control fp_contract function hdrstop include_alias init_seg inline_depth inline_recursion intrinsic ' +
 						'loop make_public managed message omp once optimize pack pointers_to_members pop_macro push_macro region endregion ' +
-						'runtime_checks section setlocale strict_gs_check unmanaged vtordisp warning defined _countof'
+						'runtime_checks section setlocale strict_gs_check unmanaged vtordisp warning defined ';
 
 		this.regexList = [
 			{ regex: SyntaxHighlighter.regexLib.singleLineCComments,	css: 'comments' },			// one line comments
