@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>変数について</title>
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <section>
+        <h2>変数と代入</h2>
+        <p>プログラミング言語で必ずあるものといえば、真っ先に変数が上がるでしょう。変数とは処理途中のデータ（数字など）を保管しておく箱(オブジェクト)のようなものです。</p>
+        <pre class="brush: cpp;">int a;
+a = 10;
+int numof_allocated_array_at_a_time = 15;
+char ch = getchar();</pre>
+        <p>
+            1行目では変数を宣言し定義しています。宣言は「こんな変数があるよ」とコンパイラに教える作業で、定義は「ここで変数を確保するよ」とコンパイラに教えることです。<br>
+            定義して初めてメモリ上に実体を持ち、変数を使えるようになるわけです。が、とりあえずヘッダーファイルを分けるようなことになるまでは、宣言も定義も同じと考えていいです。<br>
+            まとめると、メモリ上に変数を保管する場所を確保し、場所に名前をつけた、という状態です。
+        </p>
+        <p>2行目は1行目で定義した変数aに10という値を代入しています。変数aは初めてここで使うのでこれは初期化作業とも言います。</p>
+        <dl>
+            <dt>代入</dt>
+            <dd>
+                数学の代入とは少し違います。2行目の場合はaに10という値を記憶する、という意味になります。ここでつまずくとプログラミングができなくなるので、しっかり抑えてください。<br>
+                なお、多くの言語で代入は「=」ですが、R言語のように「&lt;-」を用いる言語もあります。<br>
+                <div>
+                    <pre class="brush: plain;" title="R言語">x &lt;- 123</pre>
+                </div>
+            </dd>
+            <dt>初期化</dt>
+            <dd>
+                初期化、という言葉はかなり多くの人が誤解しています。0を代入することを初期化、と考える人が後を絶ちません。<br>
+                1行目で変数を宣言し定義しましたが、この状態ではaにどんな値が入っているかは不定です。<br>
+                2行目のように、プログラマがその変数に何が入っているかわかるようにすることを初期化といいます。<br>
+                ポインタの話が出てこない限りは、とりあえず定義した後初めて値を代入すれば、初期化している、と思って構いません。<br>
+                ポインタが絡んだ時のことは、その時にゆっくり解説します。
+            </dd>
+        </dl>
+        <p>1行目でメモリーを確保し、その領域にお名前（識別名）をつけて、2行目でその領域に値を書き込んだ、といったほうがわかりやすい・・・のかな？</p>
+        <p>1行目と2行目をまとめて書いたのが3行目です。4行目のように関数の戻り値を代入することもできます（関数については後述）</p>
+    </section>
+    <section>
+        <h2>変数の型</h2>
+        <p>C/C++言語はとくに型にうるさい言語として知られています。(JavaScriptやperlなど型を明示できない言語もある)。C++なんて型なしではやっていけません。</p>
+        <p>じゃあその「型」ってなんでしょうか？「型」とはコンパイラに変数をどういう風にメモリー上に配置したらいいのか教えるものです。</p>
+        <table>
+            <colgroup style="width: 32px;"></colgroup>
+            <colgroup style="width: 99px;"></colgroup>
+            <colgroup style="width: 85px;"></colgroup>
+            <colgroup style="width: 95px;"></colgroup>
+            <colgroup style="width: 95px;"></colgroup>
+            <colgroup style="width: 120px;"></colgroup>
+            <tr>
+                <th>基本型名</th>
+                <th>整数型/浮動小数点型</th>
+                <th>型の大きさ</th>
+                <th>signedの最大値を求めるマクロ</th>
+                <th>signedの(実数の)最小値を求めるマクロ</th>
+                <th>unsignedの最大値を求めるマクロ</th>
+                <th>使用例</th>
+            </tr>
+            <tr>
+                <td>void</td>
+                <td>不定</td>
+                <td>不定</td>
+                <td>不定</td>
+                <td>存在しない</td>
+                <td>存在しない</td>
+                <td>ほぼ例外なく関数かポインタとともに用いるので省略</td>
+            </tr>
+            <tr>
+                <td>bool型(C99,C++)</td>
+                <td>論理型</td>
+                <td>不定</td>
+                <td>存在しない</td>
+                <td>存在しない</td>
+                <td>存在しない</td>
+                <td><pre class="brush: cpp; gutter:false;">bool is_alphabet = true;</pre></td>
+            </tr>
+            <tr>
+                <td>char</td>
+                <td>整数型</td>
+                <td>1byte</td>
+                <td>SCHAR_MAX</td>
+                <td>SCHAR_MIN</td>
+                <td>UCHAR_MAX</td>
+                <td><pre class="brush: cpp; gutter:false;">char delim = ',';</pre></td>
+            </tr>
+            <tr>
+                <td>short(short int)</td>
+                <td>整数型</td>
+                <td>不定</td>
+                <td>SHRT_MAX</td>
+                <td>SHRT_MIN</td>
+                <td>USHRT_MAX</td>
+                <td><pre class="brush: cpp; gutter:false;">short rect_x = 320;</pre></td>
+            </tr>
+            <tr>
+                <td>int</td>
+                <td>整数型</td>
+                <td>不定</td>
+                <td>INT_MAX</td>
+                <td>INT_MIN</td>
+                <td>UINT_MAX</td>
+                <td><pre class="brush: cpp; gutter:false;">int a = 3;</pre></td>
+            </tr>
+            <tr>
+                <td>long(long int)</td>
+                <td>整数型</td>
+                <td>不定</td>
+                <td>LONG_MAX</td>
+                <td>LONG_MIN</td>
+                <td>ULONG_MAX</td>
+                <td><pre class="brush: cpp; gutter:false;">long size = 217;</pre></td>
+            </tr>
+            <tr>
+                <td>long long</td>
+                <td>整数型</td>
+                <td>不定</td>
+                <td>LLONG_MAX</td>
+                <td>LLONG_MIN</td>
+                <td>ULLONG_MAX</td>
+                <td><pre class="brush: cpp; gutter:false;">long long size = 217;</pre></td>
+            </tr>
+            <tr>
+                <td>float</td>
+                <td>浮動小数点型</td>
+                <td>不定</td>
+                <td>FLT_MAX</td>
+                <td>-FLT_MAX</td>
+                <td>そんなものはない</td>
+                <td><pre class="brush: cpp; gutter:false;">long long size = 217;</pre></td>
+            </tr>
+            <tr>
+                <td>double</td>
+                <td>浮動小数点型</td>
+                <td>不定</td>
+                <td>DBL_MAX</td>
+                <td>-DBL_MAX</td>
+                <td>そんなものはない</td>
+                <td><pre class="brush: cpp; gutter:false;">long long size = 217;</pre></td>
+            </tr>
+        </table>
+        <p>
+            FLT_MAXって「魔法科高校の劣等生」の「<a href="http://www49.atwiki.jp/mahouka/pages/18.html">four leaves technology</a>」みたいでかっこいい！・・・話がそれた。<br>
+            以上にc言語(c99)の基本型を上げてみた。各型によってメモリー上での大きさ（表せる値の範囲）や表せるものが違う。
+        </p>
+        <p>INT_MAXとかマクロとかって何？ってなると思うが、そう遠くなくお世話になるだろうから載せておく。解説は後ほど。</p>
+        <section class="description_detile">
+            <h3>ちと難しい話</h3>
+            <p>C言語で型の大きさについての規定はほとんどなく、</p>
+            <ul>
+                <li>char型は1バイト(8ビットとは言っていない)</li>
+                <li>型の大きさは、short <= int <= long <= long long　である。</li>
+                <li>int型は -32767～+32767 の範囲が扱える</li>
+            </ul>
+            <p>程度しかない。小数点型に関しては特に規定はないが、事実上IEEE 754に従うので、（今どき従わない非フリースタンディング環境なんてあるのかね？）浮動小数点型についてはIEEE 754を参照すると良い。</p>
+        </section>
+        <p>まあ、ほとんどcharかdoubleかintしか使わない。ほんと。</p>
+        <section class="common_misconception">
+            <h3>よくある誤解</h3>
+            <ul>
+                <li>
+                    char型は8bitだ<br>
+                    →誤り。1byteと定められているだけで、1byte=8bitとは限らない。（確かに殆どの場合でchar型は8bitだけど）
+                </li>
+                <li>
+                    1byte=8bitのとき、signed charは-128～127まで表せる<br>
+                    →誤り。トラップ表現があることがあるので-127～-127までとなる（殆どの場合でトラップ表現を考慮する必要はないが）<br>
+                    参考サイト:<a href="http://www.kijineko.co.jp/node/722">http://www.kijineko.co.jp/node/722</a>
+                </li>
+                <li>
+                    int型は4byteである<br>
+                    →誤り。2byteの時代もあったし、8byteの処理系も存在する。
+                </li>
+                <li>
+                    float型のほうがdouble型より演算が速い<br>
+                    →デマ。double型の演算器がない時代のお話。今はどちらでも等速。<br>
+                    下記のコードで実験できる。いろんなコンパイルオプションで試してみよう。makeファイルとかslnファイルは<br>
+                    <a href="https://github.com/yumetodo/2015_C_Textbook/tree/gh-pages/src/double_vs_float">https://github.com/yumetodo/2015_C_Textbook/tree/gh-pages/src/double_vs_float</a><br>
+                    <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/double_vs_float/double_vs_float/Source.cpp"></script>
+                </li>
+            </ul>
+        </section>
+        <section class="technique">
+            <h3>コーディングの作法</h3>
+            <p>厳密に型の大きさが定まっている必要が出ることは少なく、boolかcharかdoubleかintしか出番はないはず、それ以外を選択しようとしているなら、本当に必要か考えなおそう。</p>
+        </section>
+    </section>
+    <section>
+        <h2>signedとunsigned</h2>
+        <p>
+            既にちらっと書いてますが、整数型にはsignedとunsignedがあります（浮動小数点型にunsignedはない）。<br>
+            御存知の通り、PCと言うのはすべてのデータを2進数で表しています。この2進数の一桁をbitと言うわけですが、<br>
+            1bitを使って正の数か負の数かわかるようにしているのがsigned、すべて正の数とみなすのがunsignedになります。<br>
+            正の数か負の数かのフラグを使わない分、unsignedの最大値はsignedの最大値のほぼ2倍になります。
+        </p>
+        <p>
+            例：1byte=8bit,int型の大きさ(sizeof(int))を4byteと仮定すると、<br>
+            INT_MAX:    2147483647<br>
+            UINT_MAX:   4294967295
+        </p>
+        <p>char型以外では、signedやunsignedを省略するとsignedとして扱われます。char型の場合は処理系定義となります(VCのデフォルトはsigned)。</p>
+        <pre class="brush: cpp;">int tmp = 5;
+signed int tmp = 5;
+unsigned int tmp = 5;
+char temp = 6;
+signed char temp = 6;
+unsigned char temp = 6</pre>
+        <p>1行目と2行目は同値。4行目と5行目が同値である保証はないし、だからといって4行目と6行目が同値である保証もない（処理系定義）</p>
+    </section>
+    <section>
+        <h2>typedef</h2>
+        <p>C/C++にはtypedefという便利な機能があります。さっそく使ってみましょう。</p>
+        <pre class="brush: cpp;">typedef unsigned long DWORD;
+typedef DWORD COLORREF;
+unsigned long window_head = 0x00FFCCFF;
+COLORREF window_head = 0x00FFCCFF;</pre>
+        <p>
+            typedefとは、<b>"すでにある"</b>型に別名をつける機能です。<br>
+            1行目ではunsigned long型にDWORD型という別名をつけています。<br>
+            2行目ではDWORD型にCOLORREF型という別名をつけています。
+        </p>
+        <p>
+            こんな風に別名を付けて何がありがたいかというと、型名を調べるだけでそのデータの格納方法がわかるということです。<br>
+            3行目では何をしているのかさっぱりですが、4行目を見るとなんか色が関係することをやってるんだな、と察せます。<br>
+            さらに「COLORREF」でぐぐれば、その詳細もわかります。<br>
+            <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd183449%28v=vs.85%29.aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/dd183449%28v=vs.85%29.aspx</a><br>
+            <q>When specifying an explicit RGB color, the COLORREF value has the following hexadecimal form:0x00bbggrr</q><br>
+            ちなみに1行目と2行目はいずれもWindef.hで定義されているものの引用です。Win32APIに触りたいと思っている方、よく覚えておきましょう。かならすお世話になるでしょう。
+        </p>
+        <section class="technique">
+            <h3>コーディングの作法</h3>
+            <p>char型は整数型ですが、主に文字を扱うのに使うことが多い型です。文字以外のデータを扱うのにchar型を使うことは、コードの可読性を下げます。</p>
+            <pre class="brush: cpp;">typedef unsigned char myuint8_t;
+typedef signed char myint8_t;</pre>
+            のようにtypedefして使うようにしましょう。
+        </section>
+    </section>
+    <section>
+        <h2>stdint.h/cstdint</h2>
+        <p>先ほど「文字以外の目的でchar型を使うときはtypedefして使うようにしましょう」と言いましたが、毎回typedefするのはめんdいです。</p>
+        <p>また、先程から散々言ってるように、C/C++では型の大きさについて、明確な規定はほぼありません。これでは厳密に何bitかを使いたいとき(HTTP通信など)に困ってしまいます。</p>
+        <p>そこでstdint.h/cstdintの出番です。これはC99/C++11で追加された標準ライブラリで、主に以下の型が使えます。</p>
+        <blockquote>int8_t, uint8_t, int16_t, uint16_t, int32_t, uint32_t, int64_t, uint64_t</blockquote>
+        <p>これらは厳密に型の大きさが決まっています。(ゆえにすべての処理系で実装されているわけではない)</p>
+        <pre class="brush: cpp;">uint8_t color_r = 187;
+int64_t receive_timestamp;// 受信タイムスタンプ
+//中略
+int64_t sum = sum1 + sum2;</pre>
+        <p>よく使うのはこの2つかな？あるって知ってると何かと便利。</p>
+    </section>
+    <section>
+        <h2>整数リテラル</h2>
+        <pre class="brush: cpp;">unsigned int len = 20;</pre>
+        <p>のように、何気なく数値を書いていますが、この数値は「リテラル」と呼ばれます。どう見ても小数ではないのでこれは「整数リテラル」ですね。</p>
+        <p>
+            なお、浮動小数点リテラルについては<br>
+            C++11の文法と機能(C++11: Syntax and Feature)<br>
+            <a href="http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.fcon">http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.fcon</a><br>
+            に投げます。
+        </p>
+        <dl>
+            <dt>2進数的記法(C++14,VisualStudio2013は未対応,VisualStudio2015は対応)</dt>
+            <dd>
+                <pre class="brush: cpp;">int a = 0b11;// 10進数では、3
+int d = 0B1011 ;// 10進数では、11</pre>
+                このように「0b」または「0B」のあとに数字を書きます。
+            </dd>
+            <dt>8進数的記法</dt>
+            <dd>
+                <pre class="brush: cpp; gutter:false;">int e = 01234;// 10進数では、668</pre>
+                このように「0」のあとに数字を書きます。<b>8進数リテラルは、10進数と区別しにくいので、気をつける必要があります。</b>
+            </dd>
+            <dt>10進数的記法</dt>
+            <dd><pre class="brush: cpp; gutter:false;">int t = 1234;</pre></dd>
+            <dt>16進数的記法</dt>
+            <dd>
+                <pre class="brush: cpp; gutter:false;">int x = 0x1234 ;// 10進数では、4660</pre>
+                このように「0x」のあとに数字を書きます。
+            </dd>
+        </dl>
+        <p>なにが言いたいかというと、<b>うっかりして0から数字を書くな</b>よ！ということです。</p>
+    </section>
+    <section>
+        <h2>const</h2>
+        <p>ある変数をその後で変更する予定がないときはconstをつけるようにするべきです。constは変数を「Read-Only」にします。</p>
+        <pre class="brush: cpp;">const unsigned int len = 20;
+len = 21;//エラー</pre>
+        <p>constをつけるときは定義と初期化は同時である必要があります。だって「Read-Only」だもん、後から変更できないんだから初期化も一緒にやらないとダメだよね。</p>
+        <p>逆に言うと定義と初期化を同時に行うときは殆どの場合constをつけるべき場面です。</p>
+        <p>注意になりますが、constは「定数」を作るものではありません、あくまで「Read-Only」にするものです。その違いはポインタのところで解説します。</p>
+    </section>
+    <section>
+        <h2>自動変数の生存期間とスコープ</h2>
+        <p>自動変数ってなんなんだってばよっ！となってると思いますが、「いままで出てきたような」変数です。ということはそうでない変数があることくらいは「お察しください」。</p>
+        <p>スコープとはなにか、については見てもらったほうが速いと思います。</p>
+        <pre class="brush: cpp;">{
+    int a = 10;
+    printf("%d\n", a);
+}
+printf("%d\n", a);//エラー
+</pre>
+        <p>ずばり{}がスコープです。え？main関数を書いた時に見た？はい、それもスコープです。詳細は関数とはなにかのところで説明します。</p>
+        <p>スコープの中で確保された変数はスコープの外にでるときに開放されます。消えてなくなるわけです。よって5行目はエラーになります。</p>
+        <p>printf関数を使うのは初めてなので補足します、とりあえず今はこうすると整数を表示できるんだな、と思っておいてくだい。浮動小数点型だと%dじゃなくて%fだったりlong型だと%ldだったりするわけですが。</p>
+    </section>
+</body>
+</html>

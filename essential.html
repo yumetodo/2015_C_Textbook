@@ -1,0 +1,60 @@
+﻿<<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>01はじめの一歩　～基本事項編～</title>
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <section>
+        <h2>main関数の書き方</h2>
+        <p>main関数ですが、ANCI-C規格で書き方が決まっています。(非フリースタンディング環境の場合)</p>
+        <pre class="brush: cpp;">int main(void);
+int main(int argc, char* argv[]);
+int main()</pre>
+        <p>1行目は引数を無視する書き方で、2行目は引数(関数の解説の章で解説します)を受け取るときの書き方、3行目はC++のmain関数の引数を受け取らない書き方となり、C99でも認められます。</p>
+        <p>というわけでmain関数は上記何れかの書き方で書きましょう、というお話です。個人的にはちゃんとvoidと書きたい派です。</p>
+        <p>まちがっても</p>
+        <pre class="brush: cpp;">main();
+void main(void);</pre>
+        <p>などとしてはいけません(前者は古いCの記法、後者は頭がおかしい書き方)。</p>
+    </section>
+    <section>
+        <h2>コメントの書き方</h2>
+        <p>今はこんなに短いプログラムですから、必要性は薄いですが、もっと大規模に慣ればなるほど、ソースコードにメモを書きたくなります。すでにさらっと使っていますが、書き方は2通りあります。</p>
+        <pre class="brush: cpp;">/*これは行をまたがって使えるコメント*/
+//これはその行の終わりまでコメントになる</pre>
+        <p>2行目がANCI-C認められたのはC99からなんですが、ほとんどのコンパイラーが対応してましたからどんどんつかって構いません。</p>
+        <p>注意点ですが、一行目の書き方のコメントはネスト（入れ子）にできません</p>
+        <pre class="brush: cpp;">/*これはコメント
+/*ここもコメントだけど*/
+ここはコメントじゃない*/</pre>
+        <p>稀によくあるミスなので注意です。だから私はコメントを書くときは基本的に2行目のいわゆる行コメントを使うのをおすすめします。</p>
+    </section>
+    <section>
+        <h2>文字を表示する</h2>
+        <p>面倒なことは後回しにしてまずは画面に文字を表示させてみましょう。</p>
+        <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/001_arikitari_na_world.c"></script>
+        <p>え？なんでHello Worldじゃないんだ？私printf関数を使うって聞いたんだけどputsって何？いやいや、こっちのほうがありきたり（普通）ですから。（なぜprintfでなくputsを使ったのかは後で説明します）</p>
+        <p>このコードから多くのことが学べます。まずは一行目。</p>
+        <pre class="brush: cpp;">#include&lt;stdio.h&gt;</pre>
+        <p>これはヘッダーファイルと呼ばれるものを読み込む部分です。stdio.hはC言語が提供する標準ライブラリで、標準入出力(STanDard Input and Output)に関わる関数群を提供します。puts関数とかprintf関数はこれを読み込むことで使えるようになります。</p>
+        <p>ついで2行目と4行目に注目してください。</p>
+        <pre class="brush: cpp; first-line: 2; highlight:[2,4];">int main(void){
+    puts("arikitari na world!");//画面に表示
+    return 0;
+}</pre>
+        <p>
+            C/C++言語は必ず関数があり、特に別途定めない限りmain関数から処理が始まります。詳細説明は先送りするとして関数には戻り値というものがあり、void型以外では必ず戻り値を返す必要があります。<br>
+            main関数の戻り値は、プログラムの処理がmain関数から始まるため、プログラムの終了コード(Exist Code)とも呼ばれます。処理が成功した場合は0を返す(return 0;)のが慣習となっています。
+        </p>
+    </section>
+</body>
+</html>
