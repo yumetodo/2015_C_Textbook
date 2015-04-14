@@ -182,5 +182,49 @@ else{
                 ・・・って私は教わったんだけど、マクロにして使ったことってないなぁ。それくらいならinline関数(C++の機能)にしちゃうし。
             </p>
         </section>
+        <section>
+            <h2>switch文</h2>
+            <p>if文が高級な条件分岐文とするならば、switch文は低級な条件分岐文といえますが、最大のメリットは、一度の条件式で複数の分岐が作れることです。</p>
+            <pre class="brush: cpp;">char time_when;
+//do something
+switch (time_when)
+{
+case 'a':
+	puts("朝");
+	break;
+case 'b':
+	puts("昼");
+	break;
+case 'c':
+	puts("夜");
+    break;
+default:
+	break;
+}</pre>
+            <p>
+                switch文には必ず「default:」を書きましょう。<br>
+                「case 'c':」とかは「ラベル」といいます。後述するgoto文にも登場するので頭の片隅においておいてください。<br>
+                「break;」はswitch文を抜け出すために用います。もし、6行目の「break;」がなかった場合、5行目を実行した後8行目を実行します。つまり必ずしもbreakは必須ではありません。<br>
+                switch文を「低級な条件分岐文」と表現したのは、アセンブリコードのjmp命令にそっくりの構文だからです。
+            </p>
+            <p>このjmp命令にそっくりという性質を活かして</p>
+            <pre class="brush: cpp;">send(register short *to, register short *from, register count)
+{
+	register n = (count + 7) / 8;
+	switch(count % 8) {
+	case 0:	do {	*to = *from++;
+	case 7:		*to = *from++;
+	case 6:		*to = *from++;
+	case 5:		*to = *from++;
+	case 4:		*to = *from++;
+	case 3:		*to = *from++;
+	case 2:		*to = *from++;
+	case 1:		*to = *from++;
+		} while(--n > 0);
+	}
+}</pre>
+            <p>なんていう、わけわかめなプログラム(<a href="http://ja.wikipedia.org/wiki/Duff%27s_device">Duff's device</a>というプログラム高速化のための最適化技法)を書いた人が居ますが、やめましょう。</p>
+            <p>このswitch文、あとで出てくる列挙型(enum)とものすごく相性がいいです。#defineをわんさか書こうとしているそこのアナタ、enumを使いましょう。</p>
+        </section>
 </body>
 </html>
