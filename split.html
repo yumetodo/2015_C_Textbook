@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>01はじめの一歩</title>
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <section>
+        <h2>ソースファイルを分ける</h2>
+        <p>一つのファイルですべてのソースコードを書くと、コンパイル時間が増加する要因となり、また見通しの悪いプログラムになりやすい(はい、私です。いっつもファイルを分けるのをめんdいからやらないのは)です。</p>
+        <p>
+            先に、プロトタイプ宣言はソースコードの冒頭に、と言いましたが、この内外部公開するものはヘッダーファイルに書きます。この他にヘッダーファイルに書くものとしては、共通してincludeするファイルや、公開する構造体定義や列挙型定義などです。<br>
+            通常変数やinline関数のプロトタイプ宣言を書くのはいろいろ面倒なので(externすればいいが)、あまりしません。とくに変数を共有しなければならないことは極めて稀だと思います。
+            例を見ましょう。
+        </p>
+        <pre class="brush: cpp;" title="arikitari.h">#ifndef INC_ARIKITARI_H
+#define INC_ARIKITARI_H
+#if (defined(_MSC_VER) && _MSC_VER > 1000) || defined (__GNUC__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
+#pragma once
+#endif
+int get_integer_num(const int max, const int min);
+#endif INC_ARIKITARI_H</pre>
+        <pre class="brush: cpp;" title="arikitari.c">#include "arikitari.h"
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;limits.h&gt;//in gcc
+#include&lt;errno.h&gt;//in gcc
+int get_integer_num(const int max, const int min){
+    //中略
+}</pre>
+        <pre class="brush: cpp;" title="main.c">#include "arikitari.h"
+#include&lt;stdio.h&gt;
+#include&lt;limits.h&gt;
+int main(void){
+    const int input = get_integer_num(INT_MAX, INT_MIN);
+    printf("input=%d", input);
+    return 0;
+}</pre>
+        <p>ヘッダーファイルは必ず関数定義があるファイルと関数使用箇所両方でincludeするようにします。また、ヘッダーファイルの名前は普通関数定義があるファイル名と同じにします。</p>
+        <p>何度も言いますが、すべての関数を公開する、ヘッダーファイルで宣言する必要はありません。あくまで他のファイルからも使いたい関数等を公開するわけです。</p>
+        <pre class="brush: cpp; first-line: 3;">#if (defined(_MSC_VER) && _MSC_VER > 1000) || defined (__GNUC__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))</pre>
+        <p>は、#pragma onceに対応していないコンパイラー(というよりプリプロセッサか)に対応するものです。詳細はプリプロセッサの項目で。</p>
+    </section>
+
+    <section>
+        <h2>プリプロセッサー</h2>
+        <p>
+            お待たせしました。ようやくプリプロセッサーのお話です。<br>
+            はい、#includeとかなにげに書いてきたものが何なのかわかります。
+        </p>
+        <ul>
+            <li>#include</li>
+            <li>#define</li>
+            <li>#if/#else</li>
+            <li>#ifdef/#ifndef</li>
+            <li>#error</li>
+            <li>#warning</li>
+            <li>
+                #pragma
+                <ul>
+                    <li>#pragma once</li>
+                    <li>#pragma comment</li>
+                    <li>#pragma ident</li>
+                </ul>
+            </li>
+        </ul>
+        <p>
+            これだけ種類が有ります。解説するのは#includeと#define、#pragma once、#pragma commentにとどめます。他は<br>
+            <a href="http://itref.fc2web.com/c/preprocessor.html">http://itref.fc2web.com/c/preprocessor.html</a><br>
+            を参照してください。なお、#if/#else/#ifdef/#ifndefはこれまでもこれからもしれっと使います。
+        </p>
+        <section>
+            <h3>#include</h3>
+            <p>.cとか.cppが読み込めないわけではないのですが、ほぼ100%ヘッダーファイルを読み込むのに使います。</p>
+            <pre class="brush: cpp;">#include "DxLib.h"
+#include &lt;stdio.h&gt;</pre>
+            <p>
+                一般的なお話として、&lt;&gt;で囲むとコンパイラーの規定の場所とコンパイルオプションで指定した(gccなら-Iオプション)場所からヘッダーファイルを探します。<br>
+                また、""で囲むと、それに加えて、#includeを書いたファイルと同じ場所も捜索対象になります。<br>
+                ゆえに自分で作ったヘッダーは""で囲い、C/C++標準ライブラリ―のヘッダーは&lt;&gt;で囲むのが普通です。ありきたり。
+            </p>
+        </section>
+        <section>
+            <h3>#define</h3>
+            <p>しばしば、const, enumと並んで定数を作る、と言われますが、残念ながらいずれも定数ではありません。</p>
+            <p>#defineはコンパイル前にソースコードを置換するものです。で、「マクロ」と呼ばれます。Excelとかのマクロとはちと違うので注意です。</p>
+            <pre class="brush: cpp;">#define WINDOW_HEIGH 1024</pre>
+            <p>こんな風に定数っぽいのを作ることもできますし</p>
+            <pre class="brush: cpp;">#define MAX(A, B) (A > B)? A : B</pre>
+            <p>みたいに関数もどきも作れます。・・・がしかし、使いません。だってそれぞれ</p>
+            <pre class="brush: cpp;">static const int WINDOW_HEIGH = 1024;
+template&lt;typename T_&gt;
+inline T_ max(T_ a, T_ b){
+    return (a > b)? a : b;
+}</pre>
+            <p>のほうがわかりやすいじゃん。で、マクロを何に使うかというと、コンパイラー間の差異を吸収するために使います。どういうことでしょうか？</p>
+            <p>
+                最初に話したとおり、コンパイラーには何種類か有りますが、その中でも人口が多いVisual Studio C Compiler(以降VC)とGNU C Compiler(以降gcc)の２つだけ見ても、その差異は大きいです。<br>
+                例えばfloat型とdouble型の計算速度のところで出したサンプルコードを見てみましょう。
+            </p>
+            <pre class="brush: cpp; first-line: 4">#ifndef __GNUC__
+#pragma comment(lib, "setupapi.lib")
+#pragma comment(lib, "hid.lib")
+#pragma comment(lib, "winmm.lib")
+#endif</pre>
+            <p>
+                ifndefというのはそのマクロ(この場合__GNUC__)が既に定義されているかを(プリプロセッサが)調べ、真なら対応するendifまでを有効にするものですが(偽ならその部分はコンパイラーに渡されない)<br>
+                あとで説明する通りgccは「#pragma comment」という書き方はできません。この場合だとコンパイルオプションに
+            </p>
+            <pre class="brush: plain">-lsetupapi -lhid -lwinmm</pre>
+            <p>つけるわけですが・・・ってそんな話はよくって、対応してない機能をコンパイラーに渡すと当然コンパイルエラーになるのでこのようにgccコンパイラーでコンパイルする時を考えてこのように書いています。</p>
+            <p>すでに察しているかもしれませんが何も書かなくてもいくつかのマクロがdefineされています。例えばVCなら_MSC_VER、gccなら__GNUC__,__GNUC_MINOR__などがその代表的なものになります。</p>
+            <pre class="brush: cpp; first-line: 3;" title="arikitari.h">#if (defined(_MSC_VER) && _MSC_VER > 1000) || defined (__GNUC__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
+#pragma once
+#endif</pre>
+            <p>
+                ヘッダーファイルに分ける、のところで書いたこの文の意味も今なら分かるでしょう。<br>
+                #pragma onceという書き方に対応したのがVisual Studio.NET 2003以降、gcc3.4以降だからです。
+            </p>
+        </section>
+        <section>
+            <h3>#pragma comment</h3>
+            <p>なんかすでに使っているので解説が必要か疑問ですが、.libファイルや.aファイルをリンカーにくっつけて、とお願いするために使います。ただし先述の通りVCやclang,bcc等限定の機能になります。</p>
+            <p>なのでgccでコンパイルする予定があるなら(常にその可能性を想定するべきですが)さっきのような対策が必要です。</p>
+        </section>
+        <section>
+            <h3>#pragma onceとインクルードガード</h3>
+            <p>その昔#pragma onceが使えなかった頃、ヘッダーファイルが複数読み込まれると、2重定義です、と言われコンパイルエラーになりました。この対策として</p>
+            <pre class="brush: cpp;">#ifndef _INC_STDIO
+#define_INC_STDIO
+//ヘッダーファイルの中身を書く
+#endif /* _INC_STDIO */</pre>
+            <p>といったことをしていました。こういう書き方をインクルードガードといいます。でもこんなの書くのはめんdいですよね？そこで生まれたのが#pragma onceです。</p>
+            <p>ヘッダーファイルの冒頭に</p>
+            <pre class="brush: cpp;">#pragma once</pre>
+            <p>と書くだけです。</p>
+            <p>ただし、普通は#defineを使ったインクルードガードと併用します。その理由は実際に使っていれば分かるはず。複数のヘッダーで同じことを書かないといけない時にこれがあると便利なんです。</p>
+        </section>
+        <section>
+            <h3>#pragma warning</h3>
+            <p>実例を見たほうが早いでしょう。プログラムはAviUtlプラグインで有名な透過性ロゴフィルター(makki氏)のSIMD化版(rigaya氏)の一部です。</p>
+            <pre class="brush: cpp; highlight:[11,12];">#pragma warning (push)
+#pragma warning (disable: 4244) //C4244: '=' : 'int' から 'short' への変換です。データが失われる可能性があります。
+static BOOL create_adj_exdata(FILTER *fp, LOGO_HEADER *adjdata, const LOGO_HEADER *data)
+{
+	int i, j;
+	if (data == NULL)
+		return FALSE;
+	// ロゴ名コピー
+	memcpy(adjdata->name, data->name, LOGO_MAX_NAME);
+	// 左上座標設定（位置調整後）
+	adjdata->x = data->x + (int)(fp->track[LOGO_X]-LOGO_XY_MIN)/4 + LOGO_XY_MIN/4;
+	adjdata->y = data->y + (int)(fp->track[LOGO_Y]-LOGO_XY_MIN)/4 + LOGO_XY_MIN/4;
+	//中略
+	return TRUE;
+}
+#pragma warning (pop)</pre>
+            <p>
+                このプログラムでは11,12行目がint型からshorに暗黙の型変換を行おうとしているのでコンパイル警告が出ます。<br>
+                もしshort型で表せない大きさのデータだったら正常に変換できないのでこの警告はもっともな話です。むしろ警告してくれてありがとうです。<br>
+                しかし、作者曰くこの場合はそうはならないらしいです。だとすればその警告は目障りです。なのでこのように#pragma warningを使って警告を消しています。<br>
+                ただしプログラム全体でその警告が消えると不都合なので、この関数だけ警告が消えるように#pragma warning (push)/(pop)しています。
+            </p>
+            <p>
+                ただしこの書き方はVCの書き方でgccだとまた書き方が違います。<br>
+                VCだと警告番号ですがgccやclangだと警告の種類を指定するようです。<br>
+                warning | MSDN<br>
+                <a href="https://msdn.microsoft.com/ja-jp/library/2c8f766e.aspx">https://msdn.microsoft.com/ja-jp/library/2c8f766e.aspx</a><br>
+                Diagnostic Pragmas - Using the GNU Compiler Collection (GCC)<br>
+                <a href="https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Pragmas.html">https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Pragmas.html</a><br>
+                controlling diagnostics via pragmas | clang 3.7 documentation<br>
+                <a href="http://clang.llvm.org/docs/UsersManual.html#controlling-diagnostics-via-pragmas">http://clang.llvm.org/docs/UsersManual.html#controlling-diagnostics-via-pragmas</a>
+            </p>
+            <pre class="brush: cpp;" title="VC">#pragma warning (push)
+#pragma warning (disable: [警告番号])
+    //警告を無効にする部分のコード
+#pragma warning (pop)</pre>
+            <pre class="brush: cpp;" title="gcc">#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "[警告の種類]"
+    //警告を無効にする部分のコード
+#pragma GCC diagnostic pop</pre>
+            <pre class="brush: cpp;" title="clang">#pragma clang diagnostic push
+#pragma clang diagnostic ignored "[警告の種類]"
+    //警告を無効にする部分のコード
+#pragma clang diagnostic pop</pre>
+            <p>
+                大事なことを言います。本来警告が出たら出ないようなコードを書くべきなのです。このように警告を消したり、キャストして警告を消すのはやってはいけません。<br>
+                なんどでもいいますが、本来は「警告を出していただき、コンパイラー様、ありがとうございます」なのです。<br>
+                明確に問題ない、と言える警告を除き、警告を消すことのないようにしましょう。
+            </p>
+        </section>
+    </section>
+</body>
+</html>
