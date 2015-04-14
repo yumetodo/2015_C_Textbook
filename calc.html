@@ -14,18 +14,6 @@
 </head>
 <body>
     <section>
-        <h2>C++11の型推論機能</h2>
-        <p>ちょっとC言語を離れてC++を見ていきます。今は型が短いのでいいですが、今に</p>
-        <pre class="brush: cpp;">vector&lt;string&gt;::iterator it;
-map&lt;int,list&lt;string&gt;&gt;::iterator i</pre>
-        <p>とか使い出します。こんなに長ったらく書くのはめんdいですし、タイピングミスしやすかったり、コードが見づらくなったりと、3拍子揃って書きたくないです。</p>
-        <p>そこでauto型の出番です。</p>
-        <pre class="brush: cpp;">unsigned int x = 10;
-auto l = x;</pre>
-        <p>とかすると変数lの型はint型になります。便利だね。なお、C++03まではautoは別の意味で使われていたので注意です。</p>
-    </section>
-
-    <section>
         <h2>四則演算</h2>
         <p>やっぱり計算出来ないとプログラミングは始まりません。というわけでまずは四則演算。</p>
         <pre class="brush: cpp;">int i = 0, delay_time;

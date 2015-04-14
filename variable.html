@@ -218,6 +218,17 @@ unsigned char temp = 6</pre>
         <p>1行目と2行目は同値。4行目と5行目が同値である保証はないし、だからといって4行目と6行目が同値である保証もない（処理系定義）</p>
     </section>
     <section>
+        <h2>C++11の型推論機能</h2>
+        <p>ちょっとC言語を離れてC++を見ていきます。今は型が短いのでいいですが、今に</p>
+        <pre class="brush: cpp;">vector&lt;string&gt;::iterator it;
+map&lt;int,list&lt;string&gt;&gt;::iterator i</pre>
+        <p>とか使い出します。こんなに長ったらく書くのはめんdいですし、タイピングミスしやすかったり、コードが見づらくなったりと、3拍子揃って書きたくないです。</p>
+        <p>そこでauto型の出番です。</p>
+        <pre class="brush: cpp;">unsigned int x = 10;
+auto l = x;</pre>
+        <p>とかすると変数lの型はint型になります。便利だね。なお、C++03まではautoは別の意味で使われていたので注意です。</p>
+    </section>
+    <section>
         <h2>typedef</h2>
         <p>C/C++にはtypedefという便利な機能があります。さっそく使ってみましょう。</p>
         <pre class="brush: cpp;">typedef unsigned long DWORD;
@@ -259,6 +270,15 @@ int64_t sum = sum1 + sum2;</pre>
         <p>よく使うのはこの2つかな？あるって知ってると何かと便利。</p>
     </section>
     <section>
+        <h2>const</h2>
+        <p>ある変数をその後で変更する予定がないときはconstをつけるようにするべきです。constは変数を「Read-Only」にします。</p>
+        <pre class="brush: cpp;">const unsigned int len = 20;
+len = 21;//エラー</pre>
+        <p>constをつけるときは定義と初期化は同時である必要があります。だって「Read-Only」だもん、後から変更できないんだから初期化も一緒にやらないとダメだよね。</p>
+        <p>逆に言うと定義と初期化を同時に行うときは殆どの場合constをつけるべき場面です。</p>
+        <p>注意になりますが、constは「定数」を作るものではありません、あくまで「Read-Only」にするものです。その違いはポインタのところで解説します。</p>
+    </section>
+    <section>
         <h2>整数リテラル</h2>
         <pre class="brush: cpp;">unsigned int len = 20;</pre>
         <p>のように、何気なく数値を書いていますが、この数値は「リテラル」と呼ばれます。どう見ても小数ではないのでこれは「整数リテラル」ですね。</p>
@@ -289,15 +309,6 @@ int d = 0B1011 ;// 10進数では、11</pre>
             </dd>
         </dl>
         <p>なにが言いたいかというと、<b>うっかりして0から数字を書くな</b>よ！ということです。</p>
-    </section>
-    <section>
-        <h2>const</h2>
-        <p>ある変数をその後で変更する予定がないときはconstをつけるようにするべきです。constは変数を「Read-Only」にします。</p>
-        <pre class="brush: cpp;">const unsigned int len = 20;
-len = 21;//エラー</pre>
-        <p>constをつけるときは定義と初期化は同時である必要があります。だって「Read-Only」だもん、後から変更できないんだから初期化も一緒にやらないとダメだよね。</p>
-        <p>逆に言うと定義と初期化を同時に行うときは殆どの場合constをつけるべき場面です。</p>
-        <p>注意になりますが、constは「定数」を作るものではありません、あくまで「Read-Only」にするものです。その違いはポインタのところで解説します。</p>
     </section>
     <section>
         <h2>自動変数の生存期間とスコープ</h2>

@@ -8,10 +8,11 @@
 - 変数と代入
 - 変数の型
 - signed unsigned
+- C++11の型推論機能
 - typedef
 - stdint.h/cstdint
-- 整数リテラル
 - const
+- 整数リテラル
 - 自動変数の生存期間とスコープ
 
 ##ビット(bit.html)
@@ -42,7 +43,6 @@
 - do-while文
 
 ##四則演算(calc.html)
-- C++11の型推論機能
 - 四則演算
 - 暗黙の型変換とキャスト
 - promotionsとconversions
