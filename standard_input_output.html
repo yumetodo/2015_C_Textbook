@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>01はじめの一歩</title>
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <section>
+        <h2>標準出力(stdout)</h2>
+        <p>
+            すでにputs関数やprintf関数を何気なく使っていますが、標準出力について説明していませんでした。<br>
+            標準出力とは、プログラムが書き出すデータのストリームのことで、とくに指定しない限りコンソール画面に出力されます。<br>
+            と、書けば察しがつくと思いますが、標準出力は変えられます。リダイレクトでググってください。<br>
+            それ故、puts, printf関数などは「コンソール画面に文字を表示する関数」としばしば誤解されます。<br>
+            なお、stdoutとはSTanDard OUTputの略です。C++は違いますが、他の言語でもこの言葉が使われることがおおいです。
+        </p>
+        <section>
+            <h3>よく使う標準出力関係の関数</h3>
+            <pre class="brush: cpp;">int puts(const char *str );
+int printf(const char *format [,argument]...);
+int fprintf(FILE *stream, const char *format [,argument ]...);
+int fputc(int c, FILE *stream);
+int putchar(int c );</pre>
+        </section>
+        <p>C言語の標準出力関数、とくにprintf関数はとても優秀で、正直C++の出力方法よりよほど使いやすいです。ちなみにC++では</p>
+        <pre class="brush: cpp;">std::cout << "arikitari na world!" << std::endl;</pre>
+        <p>のようにします・・・が、はっきり言って使いにくいです。C++はたしかに使いやすいですが、標準出力の使いにくさだけはいただけません。</p>
+    </section>
+    <section>
+        <h2>標準エラー出力(stderr)</h2>
+        <p>はっきりいって出番は少ないです。が、標準出力をたとえばファイルにリダイレクトした時、エラーはコンソールに出す、みたいなときには便利ですし、習慣的にエラーは標準エラー出力に出力することになっています。</p>
+        <section>
+            <h3>よく使う標準出力関係の関数</h3>
+            <pre class="brush: cpp;">int fprintf(FILE *stream, const char *format [,argument ]...);</pre>
+        </section>
+    </section>
+    <section>
+        <h2>標準入力(stdin)</h2>
+        <p>
+            C言語の標準入力ははっきり言ってクソです。どれくらいクソかというと、標準ライブラリーにまともに数値を受ける関数がありません。<br>
+            数値入力を受けたいだけなのに一度文字列として受け取りそれを数値に変換する処理を自前で書かないといけないなんてアホでしょ。<br>
+            また、入力ストリームへの攻撃対策が弱かったり、しばしば改行文字を入力ストリームに置き去りにしたりと、文字すら安全に読み込むのは難しいのです。<br>
+            その代表格がgets関数です。文字列を受け取る関数なのですが、あまりの危険性から、C99では非推奨、そしてついにC11では使用禁止になりました。<br>
+            この背景には、後述しますがC言語にはそもそも「文字列」という概念がない、ということがあります。文字の実態はただの数字で、文字列はその集合でしかないのです。<br>
+            そんなC言語でどうにかこうにか安全に標準入力を扱おう、というのが今回の目標です。
+        </p>
+        <p>
+            まさかの愚痴スタートです、すみませんでした。標準入力とは、プログラムに入ってくるテキストデータのストリームです。<br>
+            殆どの場合、キーボードから文字入力を受けます。言語を問わず数値入力を受けるためには一度文字列として読み込み、数値に変換する、という作業を行いますが、他の言語ではその作業を意識することはありません。
+            先程から、C言語の標準入力は糞だ、と言っていますが、少なくとも文字列の入力を受けることに関しては改善されてきています。<br>
+            MSVCではVisual Studio 2005の頃から、C標準ライブラリーを置き換える関数群を提供しています。scanf_sなどのように末尾に「_s」が付きます。<br>
+            またC11でこれに追従する(というよりほぼパクリ・・・)ように同名の関数を提供しています。これはgcc4.9.1くらいからつかえます。<br>
+            まあ、実例を見て行きましょうか。
+        </p>
+        <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/stdin/stdin/Source.c"></script>
+        <p>
+            2通り目と3通り目の文字列読み込みでは、文字入力で大概の参考書で真っ先に使うscanf関数を紹介しましたが、個人的にはscanf関数は使いにくいなぁという印象です。<br>
+            私はfgetsで改行文字ごと読み込んで改行文字をNULL文字に置き換えるほうが好きです。理屈が単純ということはそれだけバグを減らせるので。<br>
+            もちろんscanfにはそれなりの良さがあるわけですが、だとしても3番目のように一度読み込んでからsscanfしますね。
+        </p>
+        <p>get_integer_num関数については簡単に説明すると、まず、fgets関数で文字列を受け、文字列をstrtol関数で数値に変換しています。</p>
+        <p>というわけでポインターと文字列について何一つ説明していないのにばんばん使っていますが、すみません。すぐに解説します。</p>
+        <article>
+            <h3>練習問題</h3>
+            <p>以下のソースコードは標準入力から数値を受け取り、指定範囲内でない数値に対しては再度入力を促すプログラムである。</p>
+            <p>しかし、これは意図した動作をしない。問題点を可能な限り多くあげよ(getnum関数はget_integer_num関数のもとになった関数でエラー対策に難がありますが、そこはスルーしてください)</p>
+            <pre class="brush: cpp;">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+int getnum(void){
+	char s[100];
+	long t;
+	char *endptr;
+	fgets(s, 100, stdin);
+	errno = 0;
+	t = strtol(s, &endptr, 10);
+	if (errno != 0 || *endptr != '\n' || (t < INT_MIN || INT_MAX < t))
+		return -1;
+	return t;
+}
+int getnum_customized(const int max, const int min){
+	if (max < min)	return -1;
+	int flag0;
+	do{
+		flag0 = getnum();
+		if (flag0 < min || flag0 > max)
+			system("cls");
+			printf("再入力してください。\n");
+	} while (flag0 < min || flag0 > max + 1);
+	return flag0;
+}
+int main(void){
+	printf("値を入力してください。\n");
+	const int flag = getnum_customized(100, 0);
+	printf("取得した値は%dです。\n", flag);
+
+	return 0;
+}</pre>
+            <section>
+                <h4>回答</h4>
+                <ol>
+                    <li>
+                        <div>
+                            <p>19-21行目は19行目の時の条件を満たした場合に20,21行目を実行することを意図していると思われるが、この書き方では21行目は条件判定にかかわらず実行される。</p>
+                            <pre class="brush: cpp; first-line: 19">		if (flag0 < min || flag0 > max){
+			system("cls");
+			printf("再入力してください。\n");
+        }</pre>
+                            <p>が正しい。前に「エラー処理等、明確に実行文が1行しかない、と言える時を除き、原則{}はつけましょう。」と言った理由はこれ。もともと20行目はなく、このコードを書いた人曰く後から追加したらしい。</p>
+                        </div>
+                    </li>
+                    <li>
+                        19行目と22行目に注目すると、条件判定がおかしいことに気がつく。つまり、先の修正を踏まえると、flag0がmaxと同値の時、再入力を求める文章が出るのにもかかわらず、実際には再入力することなdo-while文を抜けてしまう。
+                    </li>
+                    <li>
+                        18行目に注目すると、getnum関数の戻り値チェックをしていないことに気がつく。このgetnum関数は11行目にあるようにエラー時は-1を返すので、その判定をする必要がある。つまり
+                        <pre class="brush: cpp;">if (-1 == flag0 || flag0 < min || flag0 > max){</pre>
+                        とするべきである。
+                    </li>
+                </ol>
+                <p>これらを踏まえ、また無駄な条件判定を減らし、getnum関数を上に上げたget_integer_num関数に置き換えると</p>
+                <pre class="brush: cpp;">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;limits.h&gt;//in gcc
+#include&lt;errno.h&gt;//in gcc
+#ifndef _cplusplus
+#define nullptr NULL
+#endif
+int get_integer_num(const int max, const int min){
+	//機能：標準入力を数字に変換する。
+	//引数：戻り値の最大値,戻り値の最小値
+	//戻り値：入力した数字、エラー時は-1,EOFのときはEOF
+	char s[100];
+	char *endptr;
+	if (nullptr == fgets(s, 100, stdin)){
+		if (feof(stdin)){//エラーの原因がEOFか切り分け
+			return EOF;
+		}
+		return INT_MIN;
+	}
+	if ('\n' == s[0]) return INT_MIN;
+	errno = 0;
+	const long t = strtol(s, &endptr, 10);
+	if (0 != errno || '\n' != *endptr || t < min || max < t)
+		return INT_MIN;
+	return (int)t;
+}
+int getnum_customized(const int max, const int min){
+	if (max < min)	return -1;
+	int flag0;
+	bool temp_judge;
+	do{
+		flag0 = get_integer_num(max, min);
+		temp_judge = (INT_MIN == flag0);
+		if (temp_judge){
+			system("cls");
+			puts("再入力してください。");
+		}
+	} while (temp_judge);
+	return flag0;
+}
+int main(void){
+	puts("値を入力してください。");
+	const int flag = getnum_customized(100, 0);
+	if(EOF == flag){
+		puts("ファイル終端です");
+	}
+	else{
+		printf("取得した値は%dです。\n", flag);
+	}
+	return 0;
+}</pre>
+            </section>
+        </article>
+    </section>
+</body>
+</html>
