@@ -36,7 +36,7 @@
 - 3項演算子
 - switch文
 
-##ループ
+##ループ(分割済み)
 - while文
 - for文
 - do-while文
