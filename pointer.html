@@ -935,8 +935,8 @@ int main(void){
         <pre class="brush: cpp;">for(size_t i = 0; i < _countof(in_arr); i++)</pre>
         <p>と書くのは非常にめんdいですよね？めんdいことをすればするほどコーディングミスが増えます。C++11ではこれに対処するべく「Range-base for」という機能が追加されました。つまり</p>
         <pre class="brush: cpp; first-line: 19;" title="Range-base for使用">for(auto i : arr){
-        re = (re < i)? i : re;
-    }</pre>
+    re = (re < i)? i : re;
+}</pre>
         <p>と書けます。言うまでもないですが、iの型はint型になりますね、この場合。</p>
         <p>もちろんC++のコンテナにも使えます(というよりこっちがメイン)</p>
         <pre class="brush: cpp;" title="Range-base for無使用">std::vector&lt;int&gt; data{ 0, 1, 2, 3, 4 };//This usage is a thing of C++11.
