@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>第12章 ～多次元配列～</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <section>
+        <h2>多次元配列・・・という名の幻想</h2>
+        <p>
+            結論から言うとほとんど使いません。ほとんど後述する構造体配列、もしくはポインタ型の配列で代替が効き、またそのほうが扱いやすいです。<br>
+            私なんかプログラミング講習会で習って以降、1回くらいしか使ったことがない気がします。<br>
+            多次元配列を使おうと思う前にまず、本当に構造体配列ではダメなのかを考えましょう。どうしても、って場合でもC++のvectorのvectorとか、C99の可変長配列を使いましょう。
+        </p>
+        <p>
+            そうはいってもこれを説明しないわけにはいかないので、無理やり例を考えました。この例の場合、私なら迷うことなく後述するmallocとか使ってポインタ型の配列にしてしまいますが。
+        </p>
+        <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/Multidimensional_array/Multidimensional_array/Multidimensional_array.cpp"></script>
+        <p>まずはmain関数から見て行きましょう。22行目を見てください。</p>
+        <pre class="brush: cpp; first-line: 21; highlight:[22];">int main(void){
+	int working_time[12][31] = { { 0 } };
+	const int64_t time_sum = calc_annual_working_time(working_time, 12);</pre>
+        <p>2次元配列も宣言・定義の仕方や初期化の仕方は普通の配列と大差ありません。</p>
+        <p>
+            sum_array関数は1次元配列(普通の配列)を合計するごくごくありきたりな関数です。問題はcalc_annual_working_time関数です。<br>
+            2つの関数のプロトタイプ宣言を見比べてみましょう。
+        </p>
+        <pre class="brush: cpp; first-line: 13;">int sum_array(int const* in_array, const size_t array_num);</pre>
+        <pre class="brush: cpp; first-line: 13;">int64_t calc_annual_working_time(const int working_time[][31], const int month_per_year);</pre>
+        <p>
+            1次元配列を受け取るsum_array関数はint const* in_arrayのように受け取っていますが、<br>
+            2次元配列を受け取るcalc_annual_working_time関数はconst int working_time[][31]のようにややこしくなっています。<br>
+            なぜint** working_timeのように書けないのでしょうか？
+        </p>
+        <p>
+            その理由はタイトルでネタバレしている通り、多次元配列という存在が幻想にすぎないことに由来します。例えば2次元配列は、配列の配列として存在しています。<br>
+            上記の例の場合、例えばworking_time[6][7]にアクセスしたい場合、内部ではsizeof(working_time[0])*6 + 7のようにポインタ演算しています。<br>
+            この演算をコンパイラーにしてもらうためには、sizeof(working_time[0])がコンパイラーに分かる必要が有ります。ここで大事なのが「型」です。
+        </p>
+        <p>
+            そもそも変数hanako_worked_timeの型は何でしょうか？<br>
+            答えはint[12][31]型です。ところで、配列は式の中では4つの例外を除きポインタに読み替えられるのでした。<br>
+            １次元配列を渡しているsum_array関数でint in_array[31]と書かず、int const* in_arrayと書いた理由がこれでした。どうせ[31]の部分は失われるので。
+            ２次元配列を渡しているcalc_annual_working_time関数に渡すときも同様に[12]の部分は情報が失われます。しかし、[31]の部分は失われません。<br>
+            つまり、calc_annual_working_time関数内では変数working_timeの型はint(*)[31]となっているわけです。<br>
+            このおかげでcalc_annual_working_time関数内でworking_time[2][0]とかworking_time[i]みたいにアクセス出来るわけです。<br>
+            もしint** working_timeのように書いた場合こういうことはできませんね。
+        </p>
+        <p>
+            で、やっと「結論から言うとほとんど使いません」と最初に言った理由が説明できます。<br>
+            もし、hanako_worked_timeの配列の要素数、たとえば宣言がint hanako_worked_time[12][33]とかなった場合、calc_annual_working_time関数の引数も変更しなければなりません。<br>
+            ・・・めんdいし、忘れそうですよね？だいいち、いちいち要素数を関数の引数に書くなんてめんdいじゃないですか。<br>
+            殆どの場合構造体配列か構造体にポインタを入れるか、ポインタ型の配列にするか、1次元配列を2次元配列っぽく使うかの4択で解決します。
+        </p>
+        <pre class="brush: cpp;">typedef struct RGB{
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+}rgb_t;
+void do_something(rgb_t* color);
+int64_t calc_annual_working_time(int const* const* working_time, const int month_per_year);
+int main(void){
+    int* hanako_worked_time[12];
+    for(auto i : hanako_worked_time){
+        i = new int[31];
+    }
+    rgb_t color[720 * 408];
+    
+    do_something(color);
+    const int64_t time_sum = calc_annual_working_time(hanako_worked_time, 12);
+    for(auto i : hanako_worked_time){
+        delete[] i;
+    }
+    return 0;
+}
+</pre>
+        <p>こんな感じ。え？何やってるかわかんねー？いいんだよ、今はわかんなくても。</p>
+    </section>
+
+</body>
+</html>

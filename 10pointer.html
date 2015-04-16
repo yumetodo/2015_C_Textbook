@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>第10章 ～ポインタ導入～</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <h1>第10章 ～ポインタ導入～</h1>
+    <section>
+        <h2>変数の住所</h2>
+        <p>
+            いままで変数はメモリー上に確保されると言ってきました。ところでメモリーと言っても実際にはCPUのキャッシュ領域(L1,L2,L3キャッシュ)、物理メモリー、HDDやSSDに置く仮想メモリーなどがあり、<br>
+            これらをOSが管理してくれているお陰で、プログラマーは(高速化を意識しない限り)これらを1つのメモリーとして扱えているわけです。<br>
+            GPGPUとかやるとOS管理領域のメモリーとGPU側のメモリーを別個に管理しないといけないのでものすご～く面倒なのです。一回一回メモリー転送するコードを書いたり。<br>
+            で、そのひとまとめの空間には仮想的に住所が割り振られます。<br>
+            言い換えるとすべての変数には住所があるわけです(関数だって住所がある)。<br>
+            では早速その住所(アドレス)を取得してみましょう。
+        </p>
+        <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+int main(void){
+    int p = 20,;
+    printf(
+        "変数p: %d\n"
+        "変数pのアドレス: %p\n",
+        p, &amp;p
+    );
+}</pre>
+        <p>
+            変数に入っている数値と変数のアドレスは無関係です、念のため。<br>
+            変数のアドレス(住所)は「&amp;」を変数名の前につけると取得できます。便利。<br>
+            なお、printfで表示するときは%pを使います。いや、たいていの処理系なら%xとか%dでもちゃんと表示してくれるだろうけどさ。<br>
+            実行例はこんなかんじかな。
+        </p>
+        <pre class="brush: plain">変数p: 20
+変数pのアドレス: 0038FBA4</pre>
+        <p>
+            このアドレスは実行するごとに変わっていると思います(まともなOSなら)。<br>
+            もしこれが変化しないor予測可能な場合を考えてみましょう。プログラムAで使っている変数やら関数やらのデータを、プログラムBから書き換えることが容易になります。<br>
+            これを利用したウィルスとかが一時期流行ったらしく、まともなOSならこれを防ぐためにスタック領域をランダムに配置する機能がついています。<br>
+            このおかげで毎回変数のアドレスが変化するわけです。OSに感謝。え？MS-DOS?知らない子ですね。<br>
+            なお、ほぼ同時に2回起動すると結果が同じになるかもしれません。これは、OSがプログラムを立ち上げるたびに適切に各プロセスにメモリーを割り当てた仮想的な空間の住所をポインタが表しているからです、まともなOSならね。
+        </p>
+    </section>
+    <section>
+        <h2>ポインタ</h2>
+        <p>
+            みなさま、大変ながらくお待たせいたしました。ようやくポインタのお話です。まあ既に何回もチラチラ出てきてるわけですが。<br>
+            ポインタとは、矢印のことで、矢印であるからには、根本と指示す先が有ります。以上です。<br>
+            ・・・うそです。まあ大体今の説明でいいんだけど、例とか上げつつ実際に見てみましょう。でも今の矢印に例えるのは、C言語のポインタの理解にはものすごく役立つので覚えておいてください。<br>
+            どのくらい大事かていうと、冷蔵庫の卵を入れるとこくらいには重要です。
+        </p>
+        <pre class="brush: cpp;">int a = 20;
+int *p;
+p = &amp;a;
+printf("%d, %p, %d", a, p, *p);</pre>
+        <p>3行目はさっきの変数のアドレスを取得するやつですね。こうすることでint*型の変数、pはaを指します。図を書いたほうがわかりやすいかな。</p>
+        <div style="background-color: white;"><img alt="スタック領域" src="./pic/de_pointer_01.png"></div>
+        <p>ポインタが指し示す先を取得するには変数名の前に「*」をつけます。「int *p;」の「*」とは意味が違います。なお</p>
+        <pre class="brush: cpp;">int *p;
+int* p;</pre>
+        <p>は同値ですが、</p>
+        <pre class="brush: cpp;">int* p1, p2;</pre>
+        <p>とした時、p2の型は「int型」です。もっとも</p>
+        <pre class="brush: cpp;">typedef int* int_ptr;
+int_ptr pi, p2;</pre>
+        <p>とすればどちらともint*型になりますが。C言語ってよぐわがんね。</p>
+        <p>
+            ポインタは、なにかを指すことで初めて意味を持つから派生型、とかいう言い方をするのですが、<br>
+            ポインタと言っても、他の型から派生するという違いこそあるものの、所詮ただの型であり、型なんだからポインタ型の変数もポインタ型の値もあるわけです。<br>
+            int型から派生したからint*型だったわけで、char型から派生すればchar*型になりますし、その他も以下略です。派生型ですから派生元の型しか差せません。
+        </p>
+        <p>
+            なお、どんな型でもさせるポインタ型というのもあり、void*型がそれです。ただし、使用時はキャストして元の型をコンパイラーに教える必要があります。<br>
+            といったように内部的にchar*やint*があるわけではなく、単にコンパイラーが何から派生したか覚えてくれている、というだけのことなのです。
+        </p>
+        <pre class="brush: cpp;">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;limits.h&gt;//in gcc
+#include&lt;errno.h&gt;//in gcc
+#ifndef __cplusplus
+#define nullptr NULL
+#endif
+int get_integer_num(const int max, const int min){
+	//機能：標準入力を数字に変換する。
+	//引数：戻り値の最大値,戻り値の最小値
+	//戻り値：入力した数字、エラー時は-1,EOFのときはEOF
+	char s[100];
+	char *endptr;
+	if (nullptr == fgets(s, 100, stdin)){
+		if (feof(stdin)){//エラーの原因がEOFか切り分け
+			return EOF;
+		}
+		return INT_MIN;
+	}
+	if ('\n' == s[0]) return INT_MIN;
+	errno = 0;
+	const long t = strtol(s, &endptr, 10);
+	if (0 != errno || '\n' != *endptr || t < min || max < t)
+		return INT_MIN;
+	return (int)t;
+}
+int compare_int(const void *a, const void *b){
+    return *static_cast&lt;int*&gt;(a) - *static_cast&lt;int*&gt;(b);
+}
+int main(void){
+    const int num1 = get_integer_num(INT_MAX, INT_MIN);
+    if(num1 == INT_MIN) return -1;
+    const int num1 = get_integer_num(INT_MAX, INT_MIN);
+    if(num2 == INT_MIN) return -1;
+    const int result = compare_int(&amp;num1, &amp;num2);
+    if(result > 0){
+        puts("num1のほうが大きい");
+    }
+    else if(0 == result){
+        puts("num1とnum2は等しい");
+    }
+    else{
+        puts("num2のほうが大きい");
+    }
+}</pre>
+        <section>
+            <h3>NULLポインタ</h3>
+            <p>
+                さて、ポインタは宣言した時は普通の変数がそうであるように、変数の値に何が入っているかわかりません。つまり、どこを指しているかわからないポインタ、というわけです。<br>
+                それで、どこも指していないことが保証されているポインタというのがあり、NULLポインタと呼ばれます。<br>
+                詳細は省きますが、C言語的にはNULLがNULLポインタなのですが、みなさんC言語といいつつC++なので、<b>nullptrを使って</b>ください。<br>
+                上のプログラムでもちゃっかり使っています。というかC言語でもnullptrって書きたいがためにむりくりdefineしてますが。<br>
+                下を見てください。C++11以降のC++と思ってください。
+            </p>
+            <pre class="brush: cpp;">bool hoge1 = (NULL == nullptr);//false
+void* hoge_ptr1 = NULL;
+void* hoge_ptr2 = nullptr;
+bool hoge2 = (hoge_ptr1 == hoge_ptr2);//true</pre>
+            <p>
+                とくに理由のない限り皆さんはC++としてコンパイルするわけで、標準規格への準拠がとっても遅いことで有名なVCもさすがにnullptrには対応しているので、こちらを使いましょう。<br>
+                え？なんでNULL使っちゃダメかって？・・・ええっとそれを説明するにはC++の関数のオーバーロードのお話をしないといけないので、自分で調べてください。<br>
+                C++ - NULL と nullptr って何が違う？ - Qiita<br>
+                <a href="http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1">http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1</a><br>
+                nullptrキーワード - yohhoyの日記<br>
+                <a href="http://d.hatena.ne.jp/yohhoy/20120503/p1">http://d.hatena.ne.jp/yohhoy/20120503/p1</a><br>
+                らへんが参考になると思います。ちなみにnullptrの型はstd::nullptr_t型です。javascriptだとnullポインタはnullです。・・・まあ、細けーことはいいんだよ、<b>nullptr使え</b>。
+            </p>
+        </section>
+    </section>
+    <section>
+        <h2>ポインタと初期化</h2>
+        <p>
+            改めて、初期化です。<br>
+            プログラマがその変数に何が入っているかわかるようにすることを初期化といいます。<br>
+            ポインタは矢印に例えられますが、矢印の根本と、指示す先があるわけです。<br>
+            したがって、矢印の根本(どこを指すか、というアドレス)と矢印の先(さされている確保されたメモリー空間)の双方がプログラマーにとって既知である必要があります。<br>
+            断じて矢印の先を0埋めしたり、根本にnullptrを代入することではありません。<br>
+            0やnullptrを代入する処理は他の値を代入する処理に比べて処理速度が早いというだけで、デバッグのしやすさを考えたら0xccとかを入れたほうがいいことも有ります。<br>
+            ようはケース・バイ・ケース。
+        </p>
+    </section>
+
+</body>
+</html>
