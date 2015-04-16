@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>C言語の文字列</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <h1>C言語の文字列</h1>
+    <p>
+        C言語には文字列という概念がありません。NULL文字で終わるバイト集合があるだけです。<br>
+        ・・・と書いても何が何やらさっぱりだと思うので、順番に解説します。<br>
+        配列についでの理解があやふやな場合、ポインターを矢印に例えて誰かに説明できそうにない場合は引き返してください。
+    </p>
+    <section>
+        <h2>文字というけれど</h2>
+        <p>
+            アルファベットの「a」やひらがなの「あ」はどう考えても文字です。で、内部でどういうふうに管理しているかというと、整数型で管理しています。つまり文字を順番にナンバーリングしています。<br>
+            この表を文字コード表といいます。<br>
+            C言語で扱えるのはASCII文字やUNICODE文字となります。
+        </p>
+    </section>
+    <section>
+        <h2>文字集合と符号化方式</h2>
+        <p>まずここが理解できないとすべてが宙ぶらりんでその場しのぎの理解になってしまいます。なのでプログラミングから一旦離れて解説しようと思います。</p>
+        <!--http://equj65.net/tech/charcode/-->
+    </section>
+    <section>
+        <h2>文字列リテラル</h2>
+        <p>整数リテラルや小数リテラルがあるんだから、当然文字列リテラルもあります。</p>
+        <!--http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.string-->
+    </section>
+</body>
+</html>
