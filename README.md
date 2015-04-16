@@ -23,10 +23,40 @@
 
 のように。
 # 暫定作成済みHTMLリスト
-- http://yumetodo.github.io/2015_C_Textbook/index.html
-- http://yumetodo.github.io/2015_C_Textbook/01arikitarinaworld.html
-- http://yumetodo.github.io/2015_C_Textbook/pointer.html
-- http://yumetodo.github.io/2015_C_Textbook/The_First_Step.html
+- [http://yumetodo.github.io/2015_C_Textbook/index.html](http://yumetodo.github.io/2015_C_Textbook/index.html)
+- [http://yumetodo.github.io/2015_C_Textbook/arikitarinaworld.html](http://yumetodo.github.io/2015_C_Textbook/arikitarinaworld.html)
+- [http://yumetodo.github.io/2015_C_Textbook/pointer.html](http://yumetodo.github.io/2015_C_Textbook/pointer.html)
+
+# split済
+0.はじめの一歩(00the_first_step.html)  
+[http://yumetodo.github.io/2015_C_Textbook/00the_first_step.html](http://yumetodo.github.io/2015_C_Textbook/00the_first_step.html)
+
+----
+
+1. 基本事項(01arikitarina_basic.html)  
+[http://yumetodo.github.io/2015_C_Textbook/01arikitarina_basic.html](http://yumetodo.github.io/2015_C_Textbook/01arikitarina_basic.html)  
+2. 変数(02variable.html)  
+[http://yumetodo.github.io/2015_C_Textbook/02variable.html](http://yumetodo.github.io/2015_C_Textbook/02variable.html)
+3. 四則演算(03calc.html)  
+[http://yumetodo.github.io/2015_C_Textbook/03calc.html](http://yumetodo.github.io/2015_C_Textbook/03calc.html)
+4. ビット(04bit.html)  
+[http://yumetodo.github.io/2015_C_Textbook/04bit.html](http://yumetodo.github.io/2015_C_Textbook/04bit.html)
+5. 関数(05function.html)  
+[http://yumetodo.github.io/2015_C_Textbook/05function.html](http://yumetodo.github.io/2015_C_Textbook/05function.html)
+6. 条件文(06conditional_state.html)  
+[http://yumetodo.github.io/2015_C_Textbook/06conditional_state.html](http://yumetodo.github.io/2015_C_Textbook/06conditional_state.html)
+7. ループ(07roop.html)  
+[http://yumetodo.github.io/2015_C_Textbook/07roop.html](http://yumetodo.github.io/2015_C_Textbook/07roop.html)
+8. ファイル分割(08split_to_file.html)  
+[http://yumetodo.github.io/2015_C_Textbook/08split_to_file.html](http://yumetodo.github.io/2015_C_Textbook/08split_to_file.html)
+9. 標準入出力(09standard_input_output.html)  
+[http://yumetodo.github.io/2015_C_Textbook/09standard_input_output.html](http://yumetodo.github.io/2015_C_Textbook/09standard_input_output.html)
+10. ポインターの導入(10introduction_of_pointer.html)  
+[http://yumetodo.github.io/2015_C_Textbook/10introduction_of_pointer.html](http://yumetodo.github.io/2015_C_Textbook/10introduction_of_pointer.html)
+11. 配列(11c_array.html)  
+[http://yumetodo.github.io/2015_C_Textbook/11c_array.html](http://yumetodo.github.io/2015_C_Textbook/11c_array.html)
+12. 多次元配列(12m.d.c_array.html)  
+[http://yumetodo.github.io/2015_C_Textbook/12m.d.c_array.html](http://yumetodo.github.io/2015_C_Textbook/12m.d.c_array.html)
 
 # ポインター以外
 ## 書き終えた項目
