@@ -2,14 +2,49 @@
 html{
 	font-family: "IPAex明朝","IPA明朝", "Times New Roman", "游明朝" , YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "ヒラギノ明朝 ProN W6","HiraMinProN-W6", "HG明朝E", "メイリオ", Meiryo, serif;
 }
+body{
+	background-color: #d3cfd9;
+	padding: 0.5em;
+}
 h1, h2, h3, h4, h5{
 	font-weight: bold;
 	font-family: "IPAexゴシック", "IPAゴシック", "Lucida Grande", YuGothic, '游ゴシック', "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, メイリオ, sans-serif;
 	text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
+	color: #0d0015;
 }
 p, li, q, b, a, dd{
 	font-size: 14px;
 }
 .monospace{
 	font-family: Inconsolata, Ricty, Consolas, "Source Code Pro", "Anonymous Pro", "Ubuntu Mono", "Dejavu Sans Mono", "Liberation Mono", Menlo, Courier, monospace;
+}
+blockquote, dl{
+	background-color: #e5e4e6;
+	margin: 1em 2em;
+	padding: 0.5em;
+	border-color: #a6a5c4 #a6a5c4 #e7e7eb #e7e7eb;
+}
+q{
+	background-color: #e5e4e6;
+}
+dt{
+	font-family: "IPAexゴシック", "IPAゴシック", "Lucida Grande", YuGothic, '游ゴシック', "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, メイリオ, sans-serif;
+	font-weight: bold;
+}
+table{
+	margin: 20px;
+}
+td{
+	border: solid 1px #000000;
+	vertical-align: middle;
+	text-align: left;
+	padding: 2px;
+}
+th{
+	border: solid 1px #000000;
+	vertical-align: middle;
+	text-align: center;
+}
+ul, ol{
+	padding-left: 1.6em;
 }
