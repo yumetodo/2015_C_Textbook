@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>第14章 ～ポインタと動的確保～</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <h1>第14章 ～ポインタと動的確保～</h1>
+    <section>
+        <h2>ポインタと動的確保</h2>
+        <p>
+            配列では要素数が固定でした。やっぱり途中で要素数を変更したいことは有りますよね。そして多くの場合要素数は可変でなければならない局面が多いです。<br>
+            しかし、純粋な動的確保はほとんどやりません。なぜなら、自分で要素数を増やしたり減らしたりするコード書くのは面倒だからです。<br>
+            C++のSTLにはこういうことをやってくれるコンテナ型がたくさんあり、それぞれ様々な特徴があります。<br>
+        </p>
+        <blockquote>
+            vector, list, forward_list#, deque, priority_queue,<br>
+            set, multiset, unordered_set#, unordered_multiset#,<br>
+            map, multimap, unordered_map#, unordered_multimap#,<br>
+            array#, bitset, stack, queue<br>
+            #：C++11で規格化
+        </blockquote>
+        <p>
+            よく使うのはvector, unordered_map, deque, forward_list, listくらいかな。詳細は<br>
+            [C++] STLの型の使い分け - Qiita<br>
+            <a href="http://qiita.com/h_hiro_/items/a83a8fd2391d4a3f0e1c">http://qiita.com/h_hiro_/items/a83a8fd2391d4a3f0e1c</a>
+        </p>
+        <p>
+            しかし裏でどんなことやってるかわかっておく必要はあるので解説していきます。まあさっきさらっと使ったんですけどね。
+        </p>
+        <p>これまで、変数はすべてスタック領域に確保してきました。今回はヒープ領域に確保していきます。違いとしては</p>
+        <ul>
+            <li>速度が気持ち落ちる</li>
+            <li>確保したら開放しなければならない</li>
+        </ul>
+        <p>
+            というところでしょうか。まあ、"動的"確保というだけあって、確保するサイズを実行中に決められたり、途中で大きさを変えられるわけです。<br>
+            まあ使ってみましょう。とりあえず連結リストと呼ばれる物を作ってみましょう。目指すは蔵書管理システム。
+        </p>
+        <script src="http://ideone.com/e.js/MJn3Un" type="text/javascript"></script>
+        <p>なんか50行くらいで終わるはずだったんだけどちょっと長くなったな・・・。Cで文字列扱う気にはならなかったのでC++のstd::string、splitする都合上std::vectorを利用しています。説明？するする、そのうち。</p>
+        <p>自分でライブラリーでも作んない限りC++を使えばお世話になることはまず無いです。あとはC++のクラスのコンストラクタの中くらいか・・・？</p>
+    </section>
+</body>
+</html>

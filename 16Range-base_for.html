@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>第16章 ～Range-base for～</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <h1>第16章 ～Range-base for～</h1>
+    <section>
+        <h2>改めましてfor文～Range-base for～</h2>
+        <p>for文なら前にやっただろ、と思ったあなた、あれで説明が終わりだとほんとに思っていたのですか？</p>
+        <p>復習ですがfor文とはこんなやつでした。</p>
+        <pre class="brush: cpp;" title="Range-base for無使用1">#include &lt;stdio.h&gt;
+#if !defined (_countof)
+#if !defined (__cplusplus)
+#define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
+#else  /* !defined (__cplusplus) */
+extern "C++"
+{
+	template&lt;typename TYPE,	std::size_t SIZE&gt;
+	std::size_t array_length(const TYPE(&)[SIZE]){
+		return SIZE;
+	}
+#define _countof(_Array) array_length(_Array)
+}
+#endif  /* !defined (__cplusplus) */
+#endif  /* !defined (_countof) */
+template&lt;size_t SIZE&gt;
+int max_of_arr(int (&amp;in_arr)[SIZE]){
+    int re = 0;
+    for(size_t i = 0; i < _countof(in_arr); i++){
+        re = (re < in_arr[i])? in_arr[i] : re;
+    }
+    return re;
+}
+int main(void){
+    static const int arr[] = {5, 7, 2, -6, 27463, -24724, 387472, 392};
+    const int max = max_of_arr(arr);
+    printf("max:%d\n");
+    return 0;
+}</pre>
+        <p>ちなみに19行目はこれと同値です。</p>
+        <pre class="brush: cpp; first-line: 19;" title="Range-base for無使用2">   {
+        size_t i;
+        for(i = 0; i < _countof(in_arr); i++){
+            re = (re < in_arr[i])? in_arr[i] : re;
+        }
+    }</pre>
+        <p>ですが配列の全要素に何かするたびに</p>
+        <pre class="brush: cpp;">for(size_t i = 0; i < _countof(in_arr); i++)</pre>
+        <p>と書くのは非常にめんdいですよね？めんdいことをすればするほどコーディングミスが増えます。C++11ではこれに対処するべく「Range-base for」という機能が追加されました。つまり</p>
+        <pre class="brush: cpp; first-line: 19;" title="Range-base for使用">for(auto i : arr){
+    re = (re < i)? i : re;
+}</pre>
+        <p>と書けます。言うまでもないですが、iの型はint型になりますね、この場合。</p>
+        <p>もちろんC++のコンテナにも使えます(というよりこっちがメイン)</p>
+        <pre class="brush: cpp;" title="Range-base for無使用">std::vector&lt;int&gt; data{ 0, 1, 2, 3, 4 };//This usage is a thing of C++11.
+int total = 0;
+for(data_it = data.begin(); data_it != data.end(); data_it++) {
+    total += *data_it; 
+}</pre>
+        <pre class="brush: cpp;" title="Range-base for使用">std::vector&lt;int&gt; data{ 0, 1, 2, 3, 4 };//This usage is a thing of C++11.
+int total = 0;
+for(auto i : data) {
+    total += i; 
+}</pre>
+        <p>
+            スッキリ。言うまでもなくiの型はint型です。なのでautoの代わりにintと書くこともできますが、いちいち型がなにか考えるのはめんdいですね。<br>
+            ちなみにTarse Range-Based forというこの進化版がC++17に提案されていたんですが、採用されなかったっぽい。<br>
+            Tarse Range-Based forがClangから取り除かれていた | 本の虫<br>
+            <a href="http://cpplover.blogspot.jp/2014/12/tarse-range-based-forclang.html">http://cpplover.blogspot.jp/2014/12/tarse-range-based-forclang.html</a>
+        </p>
+        <p>Range-base forは内部的には上のRange-base for未使用の例と同様に読み替えられています。ということが分かるようにちょっと引用させてもらいましょう</p>
+        <blockquote cite="http://cpplover.blogspot.jp/2009/08/n2930-range-based-for-loop.html">
+            <p>
+                n2930: Range-based for loopについて | 本の虫<br>
+                <a href="http://cpplover.blogspot.jp/2009/08/n2930-range-based-for-loop.html">http://cpplover.blogspot.jp/2009/08/n2930-range-based-for-loop.html</a>
+            </p>
+            <p>Range-based forは以下のような構文になっている。 </p>
+            <pre class="brush: cpp;">for ( for-range-declaration : expression ) statement</pre>
+            <p>これは、コンパイラによって、以下のように変換される。</p>
+            <pre class="brush: cpp;">{
+    auto && __range = ( expression );
+    for (auto __begin = begin-expr, __end = end-expr; __begin != __end; ++__begin ) {
+       for-range-declaration = *__begin;
+       statement
+    }
+}</pre>
+        </blockquote>
+        <p>
+            実はこのRange-base forはconceptとADL(argument-dependent lookup)とunqualified lookup周りをめぐってそこそこ議論が有り、<br>
+            解説サイトによって詳細が違ったりしますが、結局unqualified lookupは行われないことになったので、下記参考サイトを見るときは注意してください。
+        </p>
+        <ol>
+            <li>
+                <b>range-based forとstd名前空間 - にゃははー</b><br>
+                <a href="http://flast.hateblo.jp/entry/2014/08/28/235657">http://flast.hateblo.jp/entry/2014/08/28/235657</a>
+            </li>
+            <li>
+                <b>1442. Argument-dependent lookup in the range-based for | C++ Standard Core Language Defect Reports and Accepted Issues</b><br>
+                <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#1442">http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#1442</a>
+            </li>
+            <li>
+                Range-based for loop  (since C++11) - cppreference.com<br>
+                <a href="http://en.cppreference.com/w/cpp/language/range-for">http://en.cppreference.com/w/cpp/language/range-for</a>
+            </li>
+            <li>
+                Range-based for Statement (C++) | MSDN<br>
+                <a href="https://msdn.microsoft.com/en-US/library/jj203382.aspx">https://msdn.microsoft.com/en-US/library/jj203382.aspx</a>
+            </li>
+            <li>
+                range-based forで固定回ループ | 本の虫<br>
+                <a href="http://cpplover.blogspot.jp/2015/02/range-based-for.html">http://cpplover.blogspot.jp/2015/02/range-based-for.html</a>
+            </li>
+            <li>
+                <b>Learning C++: range based for</b><br>
+                <a href="http://cxx11.blogspot.jp/2012/01/range-based-for.html">http://cxx11.blogspot.jp/2012/01/range-based-for.html</a>
+            </li>
+            <li>
+                C++ - 任意のメンバ関数でrange-based-forをする - Qiita<br>
+                <a href="http://qiita.com/ikaro1192/items/c212bc258bcc729b4a17">http://qiita.com/ikaro1192/items/c212bc258bcc729b4a17</a>
+            </li>
+            <li>
+                <b>range-based forに対する意見求む | 本の虫</b><br>
+                <a href="http://cpplover.blogspot.jp/2011/02/range-based-for.html">http://cpplover.blogspot.jp/2011/02/range-based-for.html</a>
+            </li>
+            <li>
+                <b>2011-02-27 これはC++ですか？ 第２話「いえ、まだドラフトです」 | range-based for - 野良C++erの雑記帳</b><br>
+                <a href="http://d.hatena.ne.jp/gintenlabo/20110227/1298816842">http://d.hatena.ne.jp/gintenlabo/20110227/1298816842</a>
+            </li>
+            <li>
+                n2930: Range-based for loopについて | 本の虫<br>
+                <a href="http://cpplover.blogspot.jp/2009/08/n2930-range-based-for-loop.html">http://cpplover.blogspot.jp/2009/08/n2930-range-based-for-loop.html</a>
+            </li>
+            <li>
+                n2930: Range-Based For Loop Wording (Without Concepts)<br>
+                <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2930.html">http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2930.html</a>
+            </li>
+        </ol>
+        <p>
+            まとめると、Range-base forが使えるのは<b>配列(sizeof等で配列の要素数を求められるもの)かメンバー関数begin,endを持つクラスに</b>のいずれかということになります。<br>
+            (実はADLが絡むからもっと複雑だがADLなんて覚えないほうがいい、参考サイト参照のこと)
+        </p>
+        <article>
+            <h3>問題</h3>
+            <p>下記のコードは2次元配列の総和を求めるコードだが(オーバーフロー対策は省略)、誤りがある。誤りを指摘せよ。</p>
+            <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+int main(void){
+    uint16_t arr[][7] = { {5, 7, 34, 6535, 332, 4, 8}, {3, 56, 23, 756, 76, 103, 5}, {34, 2, 44, 4, 7, 9, 10} };
+    uint32_t sum = 0;
+    for(auto j : arr){
+        for(auto i : j){
+            sum += i;
+        }
+    }
+    return 0;
+}</pre>
+            <section>
+                <h4>回答</h4>
+                <p>
+                    何度でも言いますが、<br>
+                    <b>「配列はsizeof演算子と&演算子(アドレス演算子)のオペランドと配列初期化時の文字列リテラルと(lvalue)参照に代入するときを除き常にポインタに読み替えられる」</b><br>
+                    のでした。つまり変数jの型はuint16_t*型です。もう一度言います、uint16_t*型です。断じてuint16_t[7]型ではありません<br>
+                    Range-base forは配列(sizeof等で配列の要素数を求められるもの)かメンバー関数begin,endを持つクラスに適応できるのでした。<br>
+                    そうです、ポインタ型じゃなくて配列に適応出来るのです。ところが変数jの型はuint16_t*型。<b>あなた、それ配列じゃないですよ？</b><br>
+                    対処策ですが、参照で一度受ければ配列として認識できます（配列の参照も、配列も、sizeof等で配列の要素数を求められるのでこの場合同じこと）。<br>
+                    つまり5行目はこう書き換える必要があります。
+                </p>
+                <pre class="brush: cpp; first-line: 5;">    for(auto&amp; j : arr){</pre>
+                <p>念のため確認しますが、この時のjの型はuint16_t(&)[7]型となっています。ほら、_countofマクロで配列の要素数を求められるでしょ？</p>
+            </section>
+        </article>
+    </section>
+
+</body>
+</html>

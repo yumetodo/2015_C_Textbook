@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>>第15章 ～lValueとrValue～</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <h1>第15章 ～Valueおよびtemplete～</h1>
+    <section>
+        <h2>lValueとrvalue</h2>
+        <p>一度ポインタから話が離れます。lValueとrValueです。左辺値と右辺値という風に訳されることが多いですが(JISのC++規格書日本語訳版がそう訳してる)、誤解を招くのでlValueとrValueと呼ぶことにします。</p>
+        <p>でこれらが何者か？ですが、ちょっと幾つか引用したいと思います(書くのが面倒だったわけじゃないんだからねっ！)。</p>
+        <blockquote cite="http://cpplover.blogspot.jp/2009/11/rvalue-reference_23.html">
+            <p>
+                rvalue reference 完全解説 | 本の虫<br>
+                <a href="http://cpplover.blogspot.jp/2009/11/rvalue-reference_23.html">http://cpplover.blogspot.jp/2009/11/rvalue-reference_23.html</a>
+            </p>
+            <p>
+                Cの時代では、lvalueとrvalueの違いは、代入演算子の左側か右側かという違いだけであった。つまり、left hand value, right hand valueの略である。<br>
+                従って、訳語も、左辺値、右辺値であった。C++においては、これはもはや正しくはない。従って、右辺値、左辺値というのも、誤訳である。<br>
+                それ故に、ここでは、これ以上、左辺値、右辺値という名称を使用しない。
+            </p>
+            <p><b>誤解を恐れずにいえば、lvalueとは、明示的に実体のある、名前付きのオブジェクトであり、rvalueとは、一時的に生成される無名のオブジェクトである。</b></p>
+            <pre class="brush: cpp;">struct X{} ;
+int f() { return 0 ; }
+int main()
+{
+　　int i = 0 ;
+　　i ;　　 // lvalue
+　　0 ;　　 // rvalue
+　　X x ;
+　　x ;　　 // lvalue
+　　X() ;　 // rvalue
+　　f() ;　 // rvalue
+}</pre>
+            <p>上記のコードを読めば、lvalueとrvalueの違いが、なんとなく分かってくれる事と思う。lvalueはrvalueに変換できるが、その逆、rvalueをlvalueに変換することは出来ない。 </p>
+        </blockquote>
+        <blockquote cite="https://msdn.microsoft.com/ja-jp/library/f90831hc.aspx">
+            <p>
+                左辺値と右辺値 | MSDN<br>
+                <a href="https://msdn.microsoft.com/ja-jp/library/f90831hc.aspx">https://msdn.microsoft.com/ja-jp/library/f90831hc.aspx</a>
+            </p>
+            <p>
+                すべての C++ の式は左辺値または右辺値です。 左辺値は、1 つの式を超えて保持するオブジェクトを参照します。 <br>
+                lvalue は、名前を持つオブジェクトと考えることができます。 変更不可能な (const) 変数を含めて、すべての変数は左辺値です。 <br>
+                右辺値は、それを使用する式を超えて保持されない一時的な値です。 lvalues と rvalues の相違点をより詳しく理解するために、次の例について考えてみましょう。
+            </p>
+            <pre class="brush: cpp;">#include &lt;iostream&gt;
+using namespace std;
+int main()
+{
+   int x = 3 + 4;
+   cout << x << endl;
+}</pre>
+            <p>この例では、x は、これを定義する式の外側で保持されるので、左辺値です。 式 3 + 4 は右辺値です。定義した式を超えては存在しない一時的な値と評価されるためです。 </p>
+            <p>次の例は、左辺値と右辺値の正しい使用方法と間違った使用方法のいくつかを示しています。</p>
+            <pre class="brush: cpp;">int main()
+{
+   int i, j, *p;
+   // Correct usage: the variable i is an lvalue.
+   i = 7;
+   // Incorrect usage: The left operand must be an lvalue (C2106).
+   7 = i; // C2106
+   j * 4 = 7; // C2106
+   // Correct usage: the dereferenced pointer is an lvalue.
+   *p = i; 
+   const int ci = 7;
+   // Incorrect usage: the variable is a non-modifiable lvalue (C3892).
+   ci = 9; // C3892
+   // Correct usage: the conditional operator returns an lvalue.
+   ((i < 3) ? i : j) = 7;
+}</pre>
+        </blockquote>
+        <p>もう説明やめていいかな・・・(なにも説明してないけど)？ようはlvalueは明確に実体があって、rvalueは一時的なものなんだよ。</p>
+        <p>
+            もっと詳しく知りたい人は<br>
+            何が lvalue で何が rvalue なのか - iorateの日記<br>
+            <a href="http://d.hatena.ne.jp/iorate/20111207/1323280542">http://d.hatena.ne.jp/iorate/20111207/1323280542</a><br>
+            を見てください。
+        </p>
+    </section>
+    <section>
+        <h2>template入門</h2>
+        <p>はい、入門です。こんなのまじめに解説したら本が一冊書けます。まあすでに出てきましたが。</p>
+        <pre class="brush: cpp;">template&lt;typename T_&gt;
+inline T_ max(T_ a, T_ b){
+    return (a > b)? a : b;
+}</pre>
+        <p>みれば分かるように最大値を返す関数ですが、型が「T_」になってます。どういうことだってばよ？</p>
+        <p>これまで最大値を求める関数を作ろうと思ったら全部の型ごとに関数を書く必要が有りました。事実C言語のmath.hを見ると同じような機能の型が違う関数が乱造されています。んなもんいちいち覚えてらんないですよね？</p>
+        <p>そういった背景からC++では関数をオーバーロード出来るようになりました。つまり、<b>引数の型が異なれば</b>同名の関数をいくつでも作れるようになりました。</p>
+        <p>関数のオーバーロードをするのにもっとも楽なのはtemplateを使って上のように書く方法です。コンパイラーはコンパイル時にどの型の関数が必要かわかるのでコンパイラーが型だけ違えた関数を勝手に作ってくれます。便利。</p>
+        <p>まあ関数のオーバーロードよりは、クラスのオーバーロードで使うことのほうが多いんですけどね・・・、まいっか。</p>
+        <p>ちなみにこの関数、もしchar*型の変数が引数になったらどうなるでしょうか？多分意図した動作では無いですよね？気をつけないと後述するスタックオーバーフローとかが起きかねないので注意です。</p>
+    </section>
+    <section>
+        <h2>C++のlValue参照</h2>
+        <p>すでに何回か登場していますが、今説明しないとあとで説明できなさそうなので。</p>
+        <p>"lValue"参照って言うんだから当然"rValue"参照があるのですが、解説しません。</p>
+        <blockquote>
+            <p>
+                C++マニアック,リファレンス＝参照の使い方,how to use reference,C++入門,C++言語講座<br>
+                <a href="http://homepage2.nifty.com/well/Reference.html">http://homepage2.nifty.com/well/Reference.html</a>
+            </p>
+            <p>リファレンスとは何かということを解説するために、まず、最も簡単な例をあげましょう。次のコードを見てください。int 型の変数 iABitComplex のリファレンス riSimple を定義しています。</p>
+            <pre class="brush: cpp;">int main() {
+    int iABitComplex;               // ちょっと複雑な名前の変数
+    int& riSimple = iABitComplex;   // 変数のリファレンスを定義する。
+    riSimple = 1;                   // リファレンスを使って iABitComplex にアクセスする。
+    return 0;
+}</pre>
+        </blockquote>
+        <p>
+            <b>参照とはあくまで元からあるlValue(変数とか)に別名をつける機能です。</b><br>
+            たしかにポインタに似ていますが、<b>参照とポインタの関連性について意識してはいけません</b>。
+        </p>
+        <p>当面クラスとか使わないわけで、役に立つシーンは配列を関数に渡す場合です。例を見ましょう。</p>
+        <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+#if !defined (_countof)
+#if !defined (__cplusplus)
+#define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
+#else  /* !defined (__cplusplus) */
+extern "C++"
+{
+	template&lt;typename TYPE,	std::size_t SIZE&gt;
+	std::size_t array_length(const TYPE(&)[SIZE]){
+		return SIZE;
+	}
+#define _countof(_Array) array_length(_Array)
+}
+#endif  /* !defined (__cplusplus) */
+#endif  /* !defined (_countof) */
+void func(const int (&amp;in_arr)[4]) {
+	printf("in_arr[0]:%d, sizeof(in_arr):%d, _countof(in_arr):%d\b", in_arr[0], sizeof(in_arr), _countof(in_arr));
+}
+int main () {
+    int arr[] = {3,4,5,6};
+    func(arr);
+    return 0;
+}</pre>
+        <p>思い出してください、ここで変数arrの型はint[4]型でした。なので引数の型もint(&amp;)[4]にします。どういうことかというと、下の例はエラーになるということです。</p>
+        <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+#if !defined (_countof)
+#if !defined (__cplusplus)
+#define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
+#else  /* !defined (__cplusplus) */
+extern "C++"
+{
+	template&lt;typename TYPE,	std::size_t SIZE&gt;
+	std::size_t array_length(const TYPE(&)[SIZE]){
+		return SIZE;
+	}
+#define _countof(_Array) array_length(_Array)
+}
+#endif  /* !defined (__cplusplus) */
+#endif  /* !defined (_countof) */
+void func(const int (&amp;in_arr)[4]) {
+	printf("in_arr[0]:%d, sizeof(in_arr):%d, _countof(in_arr):%d\b", in_arr[0], sizeof(in_arr), _countof(in_arr));
+}
+int main () {
+    int arr[] = {3, 4, 5, 6, 7};
+    int arr2[] = {3, 4, 5, 6};
+    func(arr);//エラー。arrの型はint[5]型
+    auto arr3 = arr2;
+    func(arr3);//エラー。arr3の型はint*型であってint[4]型ではない。配列は4つの例外を除きポインタに読み替えられる。
+    return 0;
+}</pre>
+        <p>まあ当たり前ですよね？ただ、<b>参照にポインタ配列は渡せない、というのは忘れがちなので注意</b>ですね。</p>
+        <p>配列の要素数が変わったぐらいで関数をいくつも作るなんであまりにもめんd過ぎます。そこでtemplate先生の出番です。先生、任せた！</p>
+        <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+#if !defined (_countof)
+#if !defined (__cplusplus)
+#define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
+#else  /* !defined (__cplusplus) */
+extern "C++"
+{
+	template&lt;typename TYPE,	std::size_t SIZE&gt;
+	std::size_t array_length(const TYPE(&)[SIZE]){
+		return SIZE;
+	}
+#define _countof(_Array) array_length(_Array)
+}
+#endif  /* !defined (__cplusplus) */
+#endif  /* !defined (_countof) */
+template&lt;size_t SIZE&gt;
+void func(const int(&in_arr)[SIZE]){
+	printf("in_arr[0]:%d, sizeof(in_arr):%d, _countof(in_arr):%d\b", in_arr[0], sizeof(in_arr), _countof(in_arr));
+}
+int main(){
+    int arr[] = {3, 4, 5, 6, 7};
+    int arr2[] = {3, 4, 5, 6};
+    func(arr);//OK
+    func(arr2);//OK
+    auto arr3 = arr2;
+    func(arr3);//エラー。arr3の型はint*型。配列は4つの例外を除きポインタに読み替えられる。
+    return 0;
+}</pre>
+        <p>注意ですが、SIZEはコンパイル時に置き換えられるrValueです。変数ではないので要注意です。</p>
+        <p>いい忘れましたが、関数funcで変数in_arrの型はint(&amp;)[SIZE]なので、当然sizeof演算子で配列の大きさを求められます。あたりまえだよね、参照って所詮別名だもん。</p>
+        <pre class="brush: cpp; first-line: 16;">void func(const int* in_arr){
+	printf("in_arr[0]:%d, sizeof(in_arr):%d, _countof(in_arr)", in_arr[0], sizeof(in_arr), _countof(in_arr));
+    //sizeof(in_arr)はint*型の大きさを表し、ポインタ型は要素数1の配列と同じなので_countof(in_arr)は1になる
+}</pre>
+        <p>
+            ちなみに参照渡しでなくてポインタ渡しで書くとこんな感じ。<br>
+            配列の参照渡しとポインタ渡しの違いをまとめておきます。ポインタ配列ってのはmallocみたいに動的確保したやつね。
+        </p>
+        <table>
+            <tr>
+                <th>ポインタ渡し</th>
+                <th>参照渡し</th>
+            </tr>
+            <tr>
+                <td>ポインタ配列を渡せる</td>
+                <td>ポインタ配列を渡せない</td>
+            </tr>
+            <tr>
+                <td>ポインタ演算出来る</td>
+                <td>ポインタ演算出来ない</td>
+            </tr>
+            <tr>
+                <td>
+                    渡された関数側で配列の要素数を<br>
+                    知るには別途変数を渡す必要がある
+                </td>
+                <td>
+                    渡された関数側で配列の要素数を<br>
+                    知るにはsizeofや_countofを用いて分かる
+                </td>
+            </tr>
+        </table>
+        <p>
+            まあなにが一番楽って、配列の要素数を別変数で渡さなくていいことですね。<br>
+            多くの場合はポインタ渡しと参照渡し両方を想定して関数をオーバーロードします。<br>
+            引数が違えば同名の関数を複数作れるのがC++のオーバーロード機能だもんね。
+        </p>
+        <p>というわけで_countofが何をしているかもわかったはず。やったね。</p>
+    </section>
+
+</body>
+</html>
