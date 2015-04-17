@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>第13章 ～構造体～</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <h1>第13章 ～構造体～</h1>
+    <section>
+        <h2>構造体</h2>
+        <p>
+            お待たせしました。構造体です。無茶めちゃ使います。え？C++にはクラスあるから使わないだろって？<br>
+            いやいや、こいつにはこいつの良さがあるんですよ、そこの奥さん。<br><!--そこの奥さんって何だよｗｗｗ-->
+            上で既にさらっと使っています。幾つか特徴とか用途とか利点とかグチャグチャに書くと
+        </p>
+        <ul>
+            <li>幾つかセットで必ず扱うデータは必ずこれを使う。配列？そんなもの知らないなぁ</li>
+            <li>宣言順にメモリー上に並ぶ</li>
+            <li>型の大きさが異なるデータだってまとめられる。ただしたいていはアラインメント(詰め物して全部同じ大きさに)される</li>
+            <li>関数ポインタと組み合わせればクラスっぽく使うこともできなくはない(めんどいけど)</li>
+            <li>Cでリストや木構造を実現するにはこれを使うしかない</li>
+        </ul>
+        <p>な感じ？使い方を改めて書きましょう。</p>
+        <pre class="brush: cpp;">struct{
+    unsigned int high_num;
+    unsigned int low_num;
+} big_num;</pre>
+        <p>ここでhigh_numとかlow_numをメンバー変数と言います。なお変数名であるbig_numまでが型名です。はい、むちゃんこ長いです。こんな長い型名いちいち書いていられません。そこで</p>
+        <pre class="brush: cpp;">struct BIGNUM{
+    unsigned int high_num;
+    unsigned int low_num;
+};
+struct BIGNUM big_num;</pre>
+        <p>
+            とすると幾分かましになります。「BIGNUM」の部分はタグ名、と言います。<br>
+            1～3行目は普通関数の外に書きます。しかし変数宣言時にいちいち「struct」と書くのはめんdいです。なので
+        </p>
+        <pre class="brush: cpp;">struct BIGNUM{
+    unsigned int high_num;
+    unsigned int low_num;
+};
+typedef struct BIGNUM bignum_t;
+bignum_t big_num;</pre>
+        <p>とか構造体定義とtypedefも一緒にやるようにして</p>
+        <pre class="brush: cpp;">typedef struct BIGNUM{
+    unsigned int high_num;
+    unsigned int low_num;
+}bignum_t;
+bignum_t big_num;</pre>
+        <p>
+            のように、これら最後の２つの書き方のどちらかで普通書きます。<br>
+            注意として、構造体定義の中で今目下つくろうとしている型名を使うにはtypedefと構造体定義は別々にやるかtypedef前に型名を書く必要が有ります。
+        </p>
+        <p>
+            実際にどう使うかを見るにはやはり世の中で使われているソフトのソースコードが一番です。今回はL-SMASH WorksというAviUtlとかとかのプラグインから。
+        </p>
+        <pre class="brush: cpp;" title="./common/libavsmash.hと./common/libavsmash.cより">typedef struct
+{
+    int                   error;
+    int                   update_pending;
+    int                   dequeue_packet;
+    uint32_t              count;
+    uint32_t              index;    /* index of the current decoder configuration */
+    uint32_t              delay_count;
+    uint8_t              *input_buffer;
+    AVCodecContext       *ctx;
+    libavsmash_summary_t *entries;
+    extended_summary_t    prefer;
+    lw_log_handler_t      lh;
+    int  (*get_buffer)( struct AVCodecContext *, AVFrame *, int );
+    struct
+    {
+        uint32_t       index;       /* index of the queued decoder configuration */
+        uint32_t       delay_count;
+        uint32_t       sample_number;
+        AVPacket       packet;
+        enum AVCodecID codec_id;
+        uint8_t       *extradata;
+        int            extradata_size;
+        /* Parameters stored in audio summary doesn't always tell appropriate info.
+         * The followings are imported from CODEC specific extensions. */
+        int sample_rate;
+        int bits_per_sample;
+        int channels;
+    } queue;
+} codec_configuration_t;
+AVCodec *libavsmash_find_decoder
+(
+    codec_configuration_t *config
+)
+{
+    assert( config->ctx );
+    enum AVCodecID codec_id = config->ctx->codec_id;
+    if( codec_id == AV_CODEC_ID_NONE )
+    {
+        /* Try to get any valid codec_id from summaries. */
+        for( uint32_t i = 0; i < config->count && codec_id == AV_CODEC_ID_NONE; i++ )
+            codec_id = get_codec_id_from_description( config->entries[i].summary );
+        config->ctx->codec_id = codec_id;
+    }
+    return avcodec_find_decoder( codec_id );
+}
+</pre>
+        <p>この様にtypedefと同時ならタグ名は省略できます(無名構造体)。</p>
+        <p>構造体のメンバー変数にアクセスするには変数名の後に「.」をつけます</p>
+        <pre class="brush: cpp;">codec_configuration_t conf;
+const uint32_t max = conf.count;</pre>
+        <p>配列同様初期化リストも使えます。また、配列と違い、「=」でコピーができます。</p>
+        <pre class="brush: cpp;">typedef struct BIGNUM{
+    unsigned int high_num;
+    unsigned int low_num;
+}bignum_t;
+const bignum_t big_num = { 327, 2268 };
+const bignum_t big_num2 = big_num;</pre>
+        <p>
+            ところでこれでは困ることが有ります。関数に構造体を渡す時です。<br>
+            配列の場合は勝手にポインタに読み替えられたので、配列がまるまるコピーされる、なんて自体にはならなかったのですが、構造体の場合はコピーされます。<br>
+            構造体はさっきの実例のように大きなデータになりやすいのでコピーにも時間がかかります。例えば構造体の一部を書き換えるだけの関数だったら2回もコピーする必要が有ります。
+        </p>
+        <pre class="brush: cpp;">typedef struct RGB{
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+}rgb_t;
+rgb_t toGrayscale_stupid(rgb_t color){
+    const uint8_t y = ((4918 * (uint32_t)color.r + 354) >> 10)
+                        + ((9655 * (uint32_t)color.g + 585) >> 10)
+                        + ((1875 * (uint32_t)color.b + 523) >> 10);
+    const rgb_t re = {y, y, y};
+    return re;
+}
+int main(void){
+    rgb_t pic[720 * 408];
+    //picに値をセット
+    for(auto i : pic){
+        i = toGrayscale_stupid(i);
+    }
+    return 0;
+}</pre>
+        <p>いくらなんでも無駄すぎます。そこで</p>
+        <pre class="brush: cpp; first-line: 7;">rgb_t* toGrayscale_stupid2(rgb_t* color){
+    const uint8_t y = ((4918 * (uint32_t)(color->r) + 354) >> 10)
+                        + ((9655 * (uint32_t)(color->g) + 585) >> 10)
+                        + ((1875 * (uint32_t)(color->b) + 523) >> 10);
+    color->r = y;
+    color->g = y;
+    color->b = y;
+    return color;
+}
+int main(void){
+    rgb_t pic[720 * 408];
+    //picに値をセット
+    for(size_t i = 0; i < 720 * 408; i++){
+        color[i] = toGrayscale_stupid(color[i]);
+    }
+    return 0;
+}</pre>
+        <p>
+            としましょう。最も、for文はこの場合toGrayscale関数内に書いたほうがいいです。関数がinline展開されなかった場合、無茶めちゃ遅いコードになります。<br>
+            第一配列を受け取るように改造するのはとっても楽ですからね。<br>
+            なお「->」はアロー演算子とかいう大層な名前がついていますが、「(*).」の略記です。つまり、
+        </p>
+        <pre class="brush: cpp;">color->r
+(*color).r</pre>
+        <p>が同値になる、という意味です。さて、グレースケール化関数を使いやすくしましょう。</p>
+        <pre class="brush: cpp; first-line: 7;">void toGrayscale(rgb_t* color, size_t pixel_num){
+    for(size_t i = 0; i < pixel_num; i++){
+        const uint8_t y = ((4918 * static_cast&lt;uint32_t&gt;(color[i].r) + 354) >> 10)
+                            + ((9655 * static_cast&lt;uint32_t&gt;(color[i].g) + 585) >> 10)
+                            + ((1875 * static_cast&lt;uint32_t&gt;(color[i].b) + 523) >> 10);
+        color[i].r = y;
+        color[i].g = y;
+        color[i].b = y;
+    }
+}
+int main(void){
+    rgb_t pic[720 * 408];
+    //picに値をセット
+    toGrayscale(pic, _countof(pic));
+    return 0;
+}</pre>
+        <p>
+            こんな感じかな？すごいね、なんと写真のグレースケール化ができちゃったよ(SIMD化など、高速化の余地は有り)。<br>
+            ちなみに変換式はITU-R BT.601-7のRGB-YCbCr変換の式を利用しています。<br>
+            ほかにITU-R BT.709-5の式があります。<br>
+            AviUtlの内部形式について-【copied】MakKi's SoftWare<br>
+            <a href="https://e182bb01e8864f37f9ce365b879822eb6da3f1f1.googledrive.com/host/0B-PAN4aatmy1ZGctNFU0YlFJc2c/doc/aviutlyc.html">https://e182bb01e8864f37f9ce365b879822eb6da3f1f1.googledrive.com/host/0B-PAN4aatmy1ZGctNFU0YlFJc2c/doc/aviutlyc.html</a><br>
+            ITU-R BT.601 について|まるも<br>
+            <a href="http://www.marumo.ne.jp/bt601/">http://www.marumo.ne.jp/bt601/</a><br>
+            Aviutl の内部形式と x264guiEx の色空間変換について | rigaya<br>
+            <a href="https://onedrive.live.com/view.aspx?cid=6BDD4375AC8933C6&resid=6BDD4375AC8933C6!755">https://onedrive.live.com/view.aspx?cid=6BDD4375AC8933C6&resid=6BDD4375AC8933C6!755</a><br>
+            この辺を参考にしてみてください。
+        </p>
+        <p>
+            話がそれています。配列の時は各要素へのアクセスは内部的にポインタ演算をしていました。構造体はどうなのでしょうか？<br>
+            実は同じです。ただし構造体は配列と違って異なる型も格納できます。なので内部的に詰め物をしていることが多いです。<br>
+            そのほうが楽だもんね。
+        </p>
+    </section>
+</body>
+</html>
