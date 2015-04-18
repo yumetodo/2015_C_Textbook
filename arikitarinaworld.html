@@ -1419,62 +1419,6 @@ int main(void){
             </section>
         </article>
     </section>
-    <section>
-        <h3>enum型</h3>
-        <p>enum型とは列挙型と呼ばれており、switch文と相性がいいように思える。実際に例を見ていきましょう(ソースコード間違ってたら修正しといて♡ゆめちゃんごめん♡)</p>
-        <pre class="brush:cpp">#include&lt;stdio.h&gt;
-#include&lt;dxlib.h&gt;
-//  ゲーム状態
-enum {
-	STATE_TITLE,//タイトル1
-	STATE_MAIN,//メイン
-	STATE_END,//リザルト
-};
-int function_status = STATE_TITLE;
-//タイトル1処理
-int title(){
-	//タイトル1を描画
-	//クリック押されたら
-	return STATE_END;
-}
-//ゲームのメイン処理
-int gameMain(){
-	//ゲーム処理
-	//ゲーム終了したら
-	return STATE_END;
-}
-//リザルト画面など
-int ending(){
-	//リザルト画面描画
-	//クリック押されたら
-	return STATE_MAIN;
-}
-void status_translation(){
-	switch (function_status){
-	case STATE_TITLE:
-		function_status = title();
-		break;
-	case STATE_MAIN:
-		function_status = gameMain();
-		break;
-	case STATE_END:
-		function_status = ending();
-		break;
-	default:
-		DxLib_End();// ＤＸライブラリ使用の終了処理
-		return;
-		break;
-	}
-}
-int main(){
-	while (1){
-		status_translation();
-        if( CheckHitKey( KEY_INPUT_ESCAPE ) == 1 ) break ;
-	}
-	return 0;
-}
-</pre>
-        <p>このようにゲームなど状態を管理するときに非常に便利です。</p>
-    </section>
+   
 </body>
 </html>
