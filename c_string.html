@@ -88,6 +88,64 @@
         <p>で、毎度のことですが、VCは規格を準拠する気がないので、さっぱり実装が進みませんでした。2015年夏に正式release予定のVisual Studio 2015でようやっと実装されます(Preview版でも実装されている)。遅っそいわ！</p>
     </section>
     <section>
+        <h2>文字リテラル(Character literals)</h2>
+        <p>整数リテラルや小数リテラルがあるんだから、当然文字リテラルも有ります。が、これまた揉めたんだ。</p>
+        <pre class="brush: cpp;">/* 以前からある記法 */
+// 型はchar、値は実装依存。
+auto ordinary_c = 'x' ;
+// 型はwchar_t、値は実装依存。
+auto wide_c = L'x' ;
+
+/* C11/C++11 以降で追加されている記法 */
+// 型はchar16_t、符号化方式はUTF-16、値は、0x3042。
+auto u16_c = u'あ' ;
+// 型はchar32_t、符号化方式はUTF-32、値は、0x00003042。
+auto u32_c = U'あ' ;
+
+/* C++17以降の記法 */
+//型はchar、符号化方式はUTF-8、 値はOx78
+auto u8_c = u8'x';</pre>
+        <p>LとかuとかUとかu8とかをprefixといいます。</p>
+        <p>u8-prefixをつけるときは必ずその文字がsingle UTF-8 code unit、つまり8bitに収まる必要があります。ようは</p>
+        <pre class="brush: cpp;">auto u8_c = u8'あ';//ill-formed</pre>
+        <p>はダメです。同様にu-prefixをつけるときは必ずその文字が16bitに収まる必要があります。ようは</p>
+        <pre class="brush: cpp;">autp u16_c = u16'𠮷';//ill-formed</pre>
+        <p>
+            はダメです。なおこのように文字型に収まりきらない文字は2つで一つだったり3つで１つの文字を表すわけですが(文字列リテラルを参照)、こういうのをサロゲートペアといいます。<br>
+            今のところ、UTF-32なら32bitですべての世界中の文字を表せる、ということになっています。
+        </p>
+        <p>
+            で、なぜかu8のCharacter literalsのprefixとしての機能だけつまはじきにあってC++17に追いやられています(<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4296.pdf">n4296</a>)<br>
+            uとUはC11/C++11で採用されました(<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf">n3337</a>,<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3797.pdf">n3797</a> )。<br>
+            でVisualStudioはuとUにVisualStudio2015でようやく対応しました。u8は・・・・？
+        </p>
+    </section>
+    <section>
+        <h2>エスケープシーケンス</h2>
+        <p>いくつかの特殊な文字を表すために、\(バックスラッシュ)から始まるエスケープシーケンスが存在します。なお\(バックスラッシュ)自体が表せなくなるため、それ自体のエスケープもあります。</p>
+        <table>
+            <tr><th>エスケープシーケンス</th><th>文字名(日本語)</th><th>文字名(英語)</th><th>文字</th></tr>
+            <tr><td>\n</td><td>改行</td><td>new-line</td><td>NL(LF)</td></tr>
+            <tr><td>\t</td><td>水平タブ</td><td>horizontal tab</td><td>HT</td></tr>
+            <tr><td>\v</td><td>垂直タブ</td><td>vertical tab</td><td>VT</td></tr>
+            <tr><td>\b</td><td>バックスペース</td><td>backspace</td><td>BS</td></tr>
+            <tr><td>\r</td><td>キャリッジリターン</td><td>carriage return</td><td>CR</td></tr>
+            <tr><td>\f</td><td>フォームフィード</td><td>form feed</td><td>FF</td></tr>
+            <tr><td>\a</td><td>アラート文字、ベル文字</td><td>alert</td><td>BEL</td></tr>
+            <tr><td>\\</td><td>バックスラッシュ</td><td>backslash</td><td>\</td></tr>
+            <tr><td>\?</td><td>疑問符</td><td>question mark</td><td>?</td></tr>
+            <tr><td>\'</td><td>単一引用符</td><td>single quote</td><td>'</td></tr>
+            <tr><td>\"</td><td>二重引用符</td><td>double quote</td><td>"</td></tr>
+        </table>
+        <pre class="brush: cpp;">'\n';//OK
+'\\';//OK
+'\"';//OK
+'"';//OK
+'\?';//OK
+'?';//OK
+'\';//エラー</pre>
+    </section>
+    <section>
         <h2>文字列リテラル</h2>
         <p>整数リテラルや小数リテラルがあるんだから、当然文字列リテラルもあります。</p>
         <!--http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.string-->
