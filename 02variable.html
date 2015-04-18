@@ -17,7 +17,7 @@
 <body>
     <h1>第2章 ～変数～</h1>
     <section>
-        <h2>変数と代入</h2>
+        <h2 id="variable_substitution">変数と代入</h2>
         <p>プログラミング言語で必ずあるものといえば、真っ先に変数が上がるでしょう。変数とは処理途中のデータ（数字など）を保管しておく箱(オブジェクト)のようなものです。</p>
         <pre class="brush: cpp;">int a;
 a = 10;
@@ -51,7 +51,7 @@ char ch = getchar();</pre>
         <p>1行目と2行目をまとめて書いたのが3行目です。4行目のように関数の戻り値を代入することもできます（関数については後述）</p>
     </section>
     <section>
-        <h2>変数の型</h2>
+        <h2 id="variable_type">変数の型</h2>
         <p>C/C++言語はとくに型にうるさい言語として知られています。(JavaScriptやperlなど型を明示できない言語もある)。C++なんて型なしではやっていけません。</p>
         <p>じゃあその「型」ってなんでしょうか？「型」とはコンパイラに変数をどういう風にメモリー上に配置したらいいのか教えるものです。</p>
         <table>
@@ -199,7 +199,7 @@ char ch = getchar();</pre>
         </section>
     </section>
     <section>
-        <h2>signedとunsigned</h2>
+        <h2 id="signed_unsigned">signedとunsigned</h2>
         <p>
             既にちらっと書いてますが、整数型にはsignedとunsignedがあります（浮動小数点型にunsignedはない）。<br>
             御存知の通り、PCと言うのはすべてのデータを2進数で表しています。この2進数の一桁をbitと言うわけですが、<br>
@@ -221,7 +221,7 @@ unsigned char temp = 6</pre>
         <p>1行目と2行目は同値。4行目と5行目が同値である保証はないし、だからといって4行目と6行目が同値である保証もない（処理系定義）</p>
     </section>
     <section>
-        <h2>C++11の型推論機能</h2>
+        <h2 id="type_auto">C++11の型推論機能</h2>
         <p>ちょっとC言語を離れてC++を見ていきます。今は型が短いのでいいですが、今に</p>
         <pre class="brush: cpp;">vector&lt;string&gt;::iterator it;
 map&lt;int,list&lt;string&gt;&gt;::iterator i</pre>
@@ -232,7 +232,7 @@ auto l = x;</pre>
         <p>とかすると変数lの型はint型になります。便利だね。なお、C++03まではautoは別の意味で使われていたので注意です。</p>
     </section>
     <section>
-        <h2>typedef</h2>
+        <h2 id="typedef">typedef</h2>
         <p>C/C++にはtypedefという便利な機能があります。さっそく使ってみましょう。</p>
         <pre class="brush: cpp;">typedef unsigned long DWORD;
 typedef DWORD COLORREF;
@@ -260,7 +260,7 @@ typedef signed char myint8_t;</pre>
         </section>
     </section>
     <section>
-        <h2>stdint.h/cstdint</h2>
+        <h2 id="stdint">stdint.h/cstdint</h2>
         <p>先ほど「文字以外の目的でchar型を使うときはtypedefして使うようにしましょう」と言いましたが、毎回typedefするのはめんdいです。</p>
         <p>また、先程から散々言ってるように、C/C++では型の大きさについて、明確な規定はほぼありません。これでは厳密に何bitかを使いたいとき(HTTP通信など)に困ってしまいます。</p>
         <p>そこでstdint.h/cstdintの出番です。これはC99/C++11で追加された標準ライブラリで、主に以下の型が使えます。</p>
@@ -273,7 +273,7 @@ int64_t sum = sum1 + sum2;</pre>
         <p>よく使うのはこの2つかな？あるって知ってると何かと便利。</p>
     </section>
     <section>
-        <h2>const</h2>
+        <h2 id="const">const</h2>
         <p>ある変数をその後で変更する予定がないときはconstをつけるようにするべきです。constは変数を「Read-Only」にします。</p>
         <pre class="brush: cpp;">const unsigned int len = 20;
 len = 21;//エラー</pre>
@@ -282,7 +282,7 @@ len = 21;//エラー</pre>
         <p>注意になりますが、constは「定数」を作るものではありません、あくまで「Read-Only」にするものです。その違いはポインタのところで解説します。</p>
     </section>
     <section>
-        <h2>整数リテラル</h2>
+        <h2 id="int_literals">整数リテラル</h2>
         <pre class="brush: cpp;">unsigned int len = 20;</pre>
         <p>のように、何気なく数値を書いていますが、この数値は「リテラル」と呼ばれます。どう見ても小数ではないのでこれは「整数リテラル」ですね。</p>
         <p>
@@ -314,7 +314,7 @@ int d = 0B1011 ;// 10進数では、11</pre>
         <p>なにが言いたいかというと、<b>うっかりして0から数字を書くな</b>よ！ということです。</p>
     </section>
     <section>
-        <h2>自動変数の生存期間とスコープ</h2>
+        <h2 id="scope">自動変数の生存期間とスコープ</h2>
         <p>自動変数ってなんなんだってばよっ！となってると思いますが、「いままで出てきたような」変数です。ということはそうでない変数があることくらいは「お察しください」。</p>
         <p>スコープとはなにか、については見てもらったほうが速いと思います。</p>
         <pre class="brush: cpp;">{
