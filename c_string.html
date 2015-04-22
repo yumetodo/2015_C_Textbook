@@ -109,7 +109,7 @@ auto u8_c = u8'x';</pre>
         <p>u8-prefixをつけるときは必ずその文字がsingle UTF-8 code unit、つまり8bitに収まる必要があります。ようは</p>
         <pre class="brush: cpp;">auto u8_c = u8'あ';//ill-formed</pre>
         <p>はダメです。同様にu-prefixをつけるときは必ずその文字が16bitに収まる必要があります。ようは</p>
-        <pre class="brush: cpp;">autp u16_c = u16'𠮷';//ill-formed</pre>
+        <pre class="brush: cpp;">auto u16_c = u'𠮷';//ill-formed</pre>
         <p>
             はダメです。なおこのように文字型に収まりきらない文字は2つで一つだったり3つで１つの文字を表すわけですが(文字列リテラルを参照)、こういうのをサロゲートペアといいます。<br>
             今のところ、UTF-32なら32bitですべての世界中の文字を表せる、ということになっています。
@@ -117,7 +117,7 @@ auto u8_c = u8'x';</pre>
         <p>
             で、なぜかu8のCharacter literalsのprefixとしての機能だけつまはじきにあってC++17に追いやられています(<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4296.pdf">n4296</a>)<br>
             uとUはC11/C++11で採用されました(<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf">n3337</a>,<a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3797.pdf">n3797</a> )。<br>
-            でVisualStudioはuとUにVisualStudio2015でようやく対応しました。u8は・・・・？
+            でVisualStudioはuとUにVisualStudio2015でようやく対応しました。u8はVisual Studio 2015で対応予定となっていますが、今のところPreview版では実装されていません。
         </p>
     </section>
     <section>
@@ -147,8 +147,75 @@ auto u8_c = u8'x';</pre>
     </section>
     <section>
         <h2>文字列リテラル</h2>
-        <p>整数リテラルや小数リテラルがあるんだから、当然文字列リテラルもあります。</p>
-        <!--http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.string-->
+        <p>当然文字列リテラルもあります。文字列リテラルとは、<b>NULL文字で終端する</b>文字リテラルの集合です。例を見ましょう。</p>
+        <pre class="brush: cpp;">auto str = "arikitari";//型はconst char*
+auto w_str = L"arikitari";//型はconst wchar_t*
+auto u8_str = u8"arikitari";//型はconst char*
+auto u16_str = u"arikitari";//型はconst char16_t*
+auto u32_str = U"arikitari";//型はconst char32_t*</pre>
+        <p>まあ文字リテラルとあんま変わらないですね。注意点ですが文字リテラルはconstポインター型です。なのでこんなことはできません</p>
+        <pre class="brush: cpp; highlight: [6,10];">#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+void do_something(char* in_str);
+void do_something2(char const* in_str);
+int main(void){
+    char* str0 = "arikitari";//C++11以降ではエラー。constを暗黙のうちに消しさることは許されない
+    auto str = "arikitari";
+    "arikitari"[2] = 'a';//未定義動作。やるべきじゃない
+    str[2] = 'a';//エラー。strはread-only pointer
+    do_something(str);//C++11以降ではエラー。constを暗黙のうちに消しさることは許されない
+    do_something2(str);//OK
+    return 0;
+}
+void do_something(char* in_str){
+    puts(in_str);
+}
+void do_something2(char const* in_str){
+    puts(in_str);
+}</pre>
+        <p>10行目みたいなことは昔はできたらしいのですが(書いたことないから知らん)、するべきではありませんね。6行目は論外。</p>
+        <p>ここで改めてputs関数のプロトタイプ宣言を見てみましょう。</p>
+        <pre class="brush: cpp;">int puts(const char *str);</pre>
+        <p>もうなんで引数がchar*型でなくてchar const*型かわかりますね。もちろん引数を変更しませんよ、という意味もあるのですが、それ以上に</p>
+        <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+int main(void){
+    puts("arikitari na world!");//画面に表示
+    return 0;
+}</pre>
+        <p>のように文字リテラルを引数に指定できるようにするためです。</p>
+        
+        <p>ここまでで必然的に導き出される結論ですが、他のこれまで紹介したリテラルと異なり、<b>string literalsはread-only lValueである</b>、ということです。</p>
+        <p>
+            参考サイト<br>
+            文字列リテラル（String literals）| C++11の文法と機能(C++11: Syntax and Feature)<br>
+            <a href="http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.string">http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.string</a>
+        </p>
+    </section>
+    <section>
+        <h2>配列と文字列リテラル</h2>
+        <p>
+            さっきも述べたとおり文字列リテラルは変更不可能(読み取り専用)なlValueです。変更できません。<br>
+            これでは困ります。そこで登場するのが配列です。初期化リストの代わりに文字列を使えます。
+        </p>
+        <pre class="brush: cpp;">char str[] = "arikitari";
+char str2[10];
+str2 = "arikitari";//エラー</pre>
+        <p>なので定義と同時である必要があります。</p>
+        <p>ところでここまで書けばもう既にわかっていると思いますが、以下の2つは同値です。</p>
+        <pre class="brush: cpp;">// 以下の二行のコードは同じ意味である。
+char s[4] = { 'a', 'b', 'c', '\0' } ;
+char s[] = "abc" ;</pre>
+        <p>なんどでもいいますが、Cの文字列は必ずNULL文字(\0)で終端します。なので<b>文字列の長さ+1の大きさの領域が必要となります</b>。</p>
+        <pre class="brush: cpp;">char str1[9] = "arikitari";//conflicting declaration(矛盾する宣言)</pre>
+        <p>
+            ようはこれはダメってこと。
+            で、こうしてできた配列は変更可能なlValueなので<b>変更できます。</b>やったね。
+        </p>
+        <pre class="brush: cpp;">char str[] = "arakitari";
+puts(str);//arakitari
+str[2] = 'i';
+puts(str);//arikitari
+</pre>
     </section>
 </body>
 </html>
