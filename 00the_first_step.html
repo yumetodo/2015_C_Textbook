@@ -58,13 +58,13 @@
         <h2>4.どんな流れでコードが処理されているか</h2>
         <h4>原則として、コードは上から下にマシンは読み取ります。</h4>
         <p>例えば</p>
-        <pre class="bush.cpp">int a=10;
-        printf("a=%d",a);</pre>
+        <pre class="brush: cpp;">int a=10;
+printf("a=%d",a);</pre>
         <p>とすると</p>
-        <pre class="bush.cpp">a=10</pre>
+        <pre class="brush: cpp;">a=10</pre>
         <p>となるが</p>
-        <pre class="bush.cpp">printf("a=%d",a);
-            int a=10;</pre>
+        <pre class="brush: cpp;">printf("a=%d",a);
+int a=10;</pre>
         <p>という順番にすると、コンパイラに「printf内のaってなんすか？」って怒られます</p>
         <p>関数を宣言するときも同じです。</p>
         <p>大事なことなのでもう一度</p>

@@ -1,10 +1,131 @@
 ﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>目次</title>
+    <meta charset="utf-8" />
+    <title>目次とかとか</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
 </head>
 <body>
-    <p>arikitari na world</p>
+    <div class="container">
+        <div>
+            <article>
+                <h1>はじめに</h1>
+                <p>みなさま、<strong>ナマステ</strong>。</p>
+                <p>
+                    みなさま、はじめまして。このC言語テキストの執筆代表にいつの間にかなってしまった<a href="https://twitter.com/yumetodo">yumetodo</a>です。<br>
+                    ゆっくりとありきたりなC言語講習を受けていってください。
+                </p>
+                <p>・・・と某所の丸パクリのありきたりネタはさておき、このテキストについて説明していきます。</p>
+                <p>
+                    まず言いたいこととして、このテキストは一度読んだだけで理解できるようには作っていません。何周かして初めて理解できることもあるでしょう。<br>
+                    なので、一度に理解しようとせず、何回も読むといいと思います。<br>
+                    その他の注意事項もまとめましょうか。
+                </p>
+                <h1>注意事項</h1>
+                <ul>
+                    <li>一度読んでもきっと理解できません。</li>
+                    <li>C言語テキスト、と言いつつC++の機能はバリバリ使っています(あれ・・・)。</li>
+                    <li>printf関数は縛り</li>
+                    <li>Visual Studioでここで紹介した機能がすべて使えるわけではありません。おのれVS。</li>
+                    <li>
+                        掲載しているソースコードは特に記述のない限り、以下の環境でコンパイルし実行できることを確認しています。<ul>
+                            <li>Visual Studio 2013 Community</li>
+                            <li>msys2 mingw gcc4.9.2 -std=C++11</li>
+                        </ul>
+                    </li>
+                    <li>最低限四則演算が理解できていること、コマンドプロンプトの操作が分かること、が前提となります。</li>
+                    <li>C++への移行がスムーズに進むように心がけています(そういうテキストになっているとは言っていない)</li>
+                    <li>時間的制約から誤字脱字の修正が間に合っていません。</li>
+                    <li>少しでも疑問に思ったらまずググれ</li>
+                    <li>私はMinecraftの動画が好きだ</li>
+                </ul>
+                <h1>目次</h1>
+                <p>
+                    0.はじめの一歩(00the_first_step.html)<br>
+                    <a href="http://yumetodo.github.io/2015_C_Textbook/00the_first_step.html">http://yumetodo.github.io/2015_C_Textbook/00the_first_step.html</a>
+                </p>
+                <hr>
+                <ol>
+                    <li>
+                        基本事項(01arikitarina_basic.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/01arikitarina_basic.html">http://yumetodo.github.io/2015_C_Textbook/01arikitarina_basic.html</a>
+                    </li>
+                    <li>
+                        変数(02variable.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/02variable.html">http://yumetodo.github.io/2015_C_Textbook/02variable.html</a>
+                    </li>
+                    <li>
+                        四則演算(03calc.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/03calc.html">http://yumetodo.github.io/2015_C_Textbook/03calc.html</a>
+                    </li>
+                    <li>
+                        ビット(04bit.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/04bit.html">http://yumetodo.github.io/2015_C_Textbook/04bit.html</a>
+                    </li>
+                    <li>
+                        関数(05function.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/05function.html">http://yumetodo.github.io/2015_C_Textbook/05function.html</a>
+                    </li>
+                    <li>
+                        条件文(06conditional_state.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/06conditional_state.html">http://yumetodo.github.io/2015_C_Textbook/06conditional_state.html</a>
+                    </li>
+                    <li>
+                        ループ(07roop.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/07roop.html">http://yumetodo.github.io/2015_C_Textbook/07roop.html</a>
+                    </li>
+                    <li>
+                        ファイル分割(08split_to_file.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/08split_to_file.html">http://yumetodo.github.io/2015_C_Textbook/08split_to_file.html</a>
+                    </li>
+                    <li>
+                        標準入出力(09standard_input_output.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/09standard_input_output.html">http://yumetodo.github.io/2015_C_Textbook/09standard_input_output.html</a>
+                    </li>
+                    <li>
+                        ポインターの導入(10introduction_of_pointer.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/10introduction_of_pointer.html">http://yumetodo.github.io/2015_C_Textbook/10introduction_of_pointer.html</a>
+                    </li>
+                    <li>
+                        配列(11c_array.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/11c_array.html">http://yumetodo.github.io/2015_C_Textbook/11c_array.html</a>
+                    </li>
+                    <li>
+                        多次元配列(12m.d.c_array.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/12m.d.c_array.html">http://yumetodo.github.io/2015_C_Textbook/12m.d.c_array.html</a>
+                    </li>
+                    <li>
+                        構造体(13structure.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/13structure.html">http://yumetodo.github.io/2015_C_Textbook/13structure.html</a>
+                    </li>
+                    <li>
+                        ポインタと動的確保(14pointer.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/14pointer.html">http://yumetodo.github.io/2015_C_Textbook/14pointer.html</a>
+                    </li>
+                    <li>
+                        lValueとrValueおよびtemplete(15value.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/15value.html">http://yumetodo.github.io/2015_C_Textbook/15value.html</a>
+                    </li>
+                    <li>
+                        Range-base for(16Range-base_for.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/16Range-base_for.html">http://yumetodo.github.io/2015_C_Textbook/16Range-base_for.html</a>
+                    </li>
+                    <li>
+                        乱数(17rand-num.html)<br>
+                        <a href="http://yumetodo.github.io/2015_C_Textbook/17rand-num.html">http://yumetodo.github.io/2015_C_Textbook/17rand-num.html</a>
+                    </li>
+                </ol>
+            </article>
+        </div>
+    </div>
 </body>
 </html>
