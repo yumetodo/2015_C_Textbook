@@ -6,6 +6,7 @@
     <title>第14章 ～ポインタと動的確保～</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/img_canvas.css">
     <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
     <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
     <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
@@ -43,11 +44,27 @@
         <ul>
             <li>速度が気持ち落ちる</li>
             <li>確保したら開放しなければならない</li>
+            <li>配列ではないのでRange-base forは使えない</li>
         </ul>
         <p>
             というところでしょうか。まあ、"動的"確保というだけあって、確保するサイズを実行中に決められたり、途中で大きさを変えられるわけです。<br>
-            まあ使ってみましょう。とりあえず連結リストと呼ばれる物を作ってみましょう。目指すは蔵書管理システム。
+            まあ使ってみましょう。
         </p>
+        <script src="http://ideone.com/e.js/Tj3sW8" type="text/javascript"></script>
+        <pre class="brush: plain;" title="実行例 (msys2 mingw32 clang++ 3.5.1)">$ ./d_array.exe
+d_arrayのアドレス:00911878
+3, 7, 4, 9,
+d_arrayのアドレス:00911878
+3, 7, 4, 9, -571263656, 54275, 9519592,
+</pre>
+        <p>12行目のmalloc関数のイメージはこんなかんじです。</p>
+        <img src="./pic/malloc_realloc1.png" class="canbas_white">
+        <p>20行目のrealloc関数のイメージはこんな感じです。必ずしも別空間に再確保するわけではないようです。実行例の場合もそうだね。</p>
+        <img src="./pic/malloc_realloc2.png" class="canbas_white">
+        <img src="./pic/malloc_realloc3.png" class="canbas_white">
+        <img src="./pic/malloc_realloc4.png" class="canbas_white">
+        <img src="./pic/malloc_realloc5.png" class="canbas_white">
+        <p>続いてもうちょい実用的な例を。とりあえず連結リストと呼ばれる物を作ってみましょう。目指すは蔵書管理システム。</p>
         <script src="http://ideone.com/e.js/MJn3Un" type="text/javascript"></script>
         <p>なんか50行くらいで終わるはずだったんだけどちょっと長くなったな・・・。Cで文字列扱う気にはならなかったのでC++のstd::string、splitする都合上std::vectorを利用しています。説明？するする、そのうち。</p>
         <p>自分でライブラリーでも作んない限りC++を使えばお世話になることはまず無いです。あとはC++のクラスのコンストラクタの中くらいか・・・？</p>
