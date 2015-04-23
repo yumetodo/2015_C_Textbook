@@ -67,6 +67,8 @@
 [http://yumetodo.github.io/2015_C_Textbook/16Range-base_for.html](http://yumetodo.github.io/2015_C_Textbook/16Range-base_for.html)
 17. 乱数(17rand-num.html)  
 [http://yumetodo.github.io/2015_C_Textbook/17rand-num.html](http://yumetodo.github.io/2015_C_Textbook/17rand-num.html)
+18. C言語の文字と文字列(18c_char_str_base.html)  
+[http://yumetodo.github.io/2015_C_Textbook/18c_char_str_base.html](http://yumetodo.github.io/2015_C_Textbook/18c_char_str_base.html)
 
 # ポインター以外
 ## 書き終えた項目
