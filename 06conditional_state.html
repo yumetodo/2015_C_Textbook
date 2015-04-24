@@ -229,5 +229,71 @@ default:
             <p>なんていう、わけわかめなプログラム(<a href="http://ja.wikipedia.org/wiki/Duff%27s_device">Duff's device</a>というプログラム高速化のための最適化技法)を書いた人が居ますが、やめましょう。</p>
             <p>このswitch文、あとで出てくる列挙型(enum)とものすごく相性がいいです。#defineをわんさか書こうとしているそこのアナタ、enumを使いましょう。</p>
         </section>
+        <section>
+            <h3>enum型(列挙型)</h3>
+            <p>enum型とは列挙型と呼ばれており、switch文と相性がいいんです（気づくまでに時間がかかった人）。</p>
+            <pre class="brush: cpp;">enum status{
+    STATE_TITLE,//タイトル
+    STATE_MAIN,//メイン
+    STATE_END,//リザルト
+};</pre>
+            <p>ここでstatusはタグ名と言います。タグ名を除いた";"の前まで全体が型となります。enumはtypedefして初めて真価を発揮します。</p>
+            <pre class="brush: cpp;">typedef enum{
+    STATE_TITLE,//タイトル
+    STATE_MAIN,//メイン
+    STATE_END,//リザルト
+}status_t;</pre>
+            <p>typedefするときはタグ名は省略してもいいです。なお、「STATE_ENDのあとになんで","が置けるんだ？」と思ったあなた、よく勉強しています。enumに関しては書けるんです(C89からだっけ・・・？)</p>
+            <p>実際に例を見ていきましょう</p>
+            <pre class="brush: cpp;">#include&lt;stdio.h&gt;
+#include&lt;dxlib.h&gt;
+//  ゲーム状態
+typedef enum{
+    STATE_TITLE,//タイトル
+    STATE_MAIN,//メイン
+    STATE_END,//リザルト
+}status_t;
+//タイトル処理
+status_t title(){
+    //タイトルを描画
+    //クリック押されたら
+    return STATE_END;
+}
+//ゲームのメイン処理
+status_t gameMain(){
+    //ゲーム処理
+    //ゲーム終了したら
+    return STATE_END;
+}
+//リザルト画面など
+status_t ending(){
+    //リザルト画面描画
+    //クリック押されたら
+    return STATE_MAIN;
+}
+int main(){
+    status_t function_status = STATE_TITLE;
+    switch (function_status){
+        case STATE_TITLE:
+            function_status = title();
+            break;
+        case STATE_MAIN:
+            function_status = gameMain();
+            break;
+        case STATE_END:
+            function_status = ending();
+            break;
+        default:
+            return -1;//エラー
+    } 
+   return 0;
+}
+</pre>
+            <p>
+                このようにゲームなど状態を管理するときに非常に便利です。<br>
+                まあ、戻り値にするよりポインターか参照(いずれも後述)を使って引数経由でやったほうがいい気もするけど、ケース・バイ・ケースなので。<br>
+                ていうか教えてないし。
+            </p>
+        </section>
 </body>
 </html>
