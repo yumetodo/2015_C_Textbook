@@ -26,7 +26,7 @@
         </p>
         <pre class="brush: cpp;" title="arikitari.h">#ifndef INC_ARIKITARI_H
 #define INC_ARIKITARI_H
-#if (defined(_MSC_VER) && _MSC_VER > 1000) || defined (__GNUC__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
+#if (defined(_MSC_VER) && _MSC_VER > 1000) || (defined(__clang__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ > 2))) ||(defined(__ICC) && __ICC > 1000) ||defined (__GNUC__) && !defined(__ICC) && !defined(__clang__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
 #pragma once
 #endif
 int get_integer_num(const int max, const int min);
@@ -109,7 +109,7 @@ inline T_ max(T_ a, T_ b){
                 最初に話したとおり、コンパイラーには何種類か有りますが、その中でも人口が多いVisual Studio C Compiler(以降VC)とGNU C Compiler(以降gcc)の２つだけ見ても、その差異は大きいです。<br>
                 例えばfloat型とdouble型の計算速度のところで出したサンプルコードを見てみましょう。
             </p>
-            <pre class="brush: cpp; first-line: 4">#ifndef __GNUC__
+            <pre class="brush: cpp; first-line: 4">#if !defined (__GNUC__) || defined(__ICC) || defined(__clang__)
 #pragma comment(lib, "setupapi.lib")
 #pragma comment(lib, "hid.lib")
 #pragma comment(lib, "winmm.lib")
@@ -121,12 +121,18 @@ inline T_ max(T_ a, T_ b){
             <pre class="brush: plain">-lsetupapi -lhid -lwinmm</pre>
             <p>つけるわけですが・・・ってそんな話はよくって、対応してない機能をコンパイラーに渡すと当然コンパイルエラーになるのでこのようにgccコンパイラーでコンパイルする時を考えてこのように書いています。</p>
             <p>すでに察しているかもしれませんが何も書かなくてもいくつかのマクロがdefineされています。例えばVCなら_MSC_VER、gccなら__GNUC__,__GNUC_MINOR__などがその代表的なものになります。</p>
-            <pre class="brush: cpp; first-line: 3;" title="arikitari.h">#if (defined(_MSC_VER) && _MSC_VER > 1000) || defined (__GNUC__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
+            <pre class="brush: cpp; first-line: 3;" title="arikitari.h">#if (defined(_MSC_VER) && _MSC_VER > 1000) || (defined(__clang__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ > 2))) ||(defined(__ICC) && __ICC > 1000) ||defined (__GNUC__) && !defined(__ICC) && !defined(__clang__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
 #pragma once
 #endif</pre>
             <p>
                 ヘッダーファイルに分ける、のところで書いたこの文の意味も今なら分かるでしょう。<br>
-                #pragma onceという書き方に対応したのがVisual Studio.NET 2003以降、gcc3.4以降だからです。
+                #pragma onceという書き方に対応したのがVisual Studio.NET 2003以降、gcc3.4以降、clang3.3(3.2でバグが有ったっぽい)以降、Intel C Compiler10.00以降だからです。
+            </p>
+            <p>
+                どのコンパイラーで何が定義されているかは<br>
+                C/C++ tip: How to detect the compiler name and version using compiler predefined macros | Nadeau Software<br>
+                <a href="http://nadeausoftware.com/articles/2012/10/c_c_tip_how_detect_compiler_name_and_version_using_compiler_predefined_macros">http://nadeausoftware.com/articles/2012/10/c_c_tip_how_detect_compiler_name_and_version_using_compiler_predefined_macros</a><br>
+                の解説が非常に詳しくわかりやすいです。
             </p>
         </section>
         <section>

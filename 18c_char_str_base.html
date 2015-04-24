@@ -154,6 +154,9 @@ auto u8_c = u8'x';</pre>
         <p>当然文字列リテラルもあります。文字列リテラルとは、<b>NULL文字で終端する</b>文字リテラルの集合です。例を見ましょう。</p>
         <pre class="brush: cpp;">auto str = "arikitari";//型はconst char*
 auto w_str = L"arikitari";//型はconst wchar_t*
+
+/* C11/C++11 以降で追加されている記法 */
+//u8も文字列リテラルのprefixとしてはC++11の範疇でVisualStudio2015で対応
 auto u8_str = u8"arikitari";//型はconst char*
 auto u16_str = u"arikitari";//型はconst char16_t*
 auto u32_str = U"arikitari";//型はconst char32_t*</pre>
@@ -220,6 +223,54 @@ puts(str);//arakitari
 str[2] = 'i';
 puts(str);//arikitari
 </pre>
+    </section>
+    <section>
+        <h2>Shift-JISなんて捨ててしまえ(Windowsの呪縛から逃げられない人の無駄なあがき)</h2>
+        <p>
+            何も考えずにShift-JISを普段使いがちですが(あるいは意識すらしていない？)、これは誤った選択です。<br>
+            例えば、Win32APIの文字周りはUNICODE(UTF-16, UTF-32)とShift-JISの2つが選択できますが、後者は<b>下位互換性(バイナリ互換性)のためだけに存在する馬鹿げた機能なので使うべきではないのです</b><br>
+            つまり以下の3箇所で文字コードに注意する必要があります。
+        </p>
+        <ul>
+            <li>ソースコードの文字コード　→　問答無用でUTF-8 BOM付き、ただし最後の行は空行(EOFのみ)に</li>
+            <li>文字・文字列リテラルの文字コード　→　u8prefixをつければいい</li>
+            <li>コンパイラーの文字コード変換機能　→　本来はいじらなくていいんだけど(後述)</li>
+        </ul>
+        <p>
+            ところがWindowsは日本語対応という点でLinuxに比べて非常に遅れています。<br>
+            GNU/Linuxの方がWindowsより日本語サポートが優れている | 本の虫<br>
+            <a href="http://cpplover.blogspot.jp/2012/04/gnulinuxwindows.html">http://cpplover.blogspot.jp/2012/04/gnulinuxwindows.html</a><br>
+            コマンドラインを強化せよ! - Windows 7のコマンドプロンプトをカスタマイズする (3) コマンドプロンプトのフォントとウィンドウサイズを変更する.1 | マイナビニュース<br>
+            <a href="http://news.mynavi.jp/articles/2011/07/05/commandline/002.html">http://news.mynavi.jp/articles/2011/07/05/commandline/002.html</a><br>
+            コマンドラインを強化せよ! - windows 7のコマンドプロンプトをカスタマイズする (3) コマンドプロンプトのフォントとウィンドウサイズを変更する.1 | マイナビニュース<br>
+            <a href="http://news.mynavi.jp/articles/2011/07/05/commandline/003.html">http://news.mynavi.jp/articles/2011/07/05/commandline/003.html</a><br>
+            だれがレジストリいじったりフォント変えたりしてまでコマンドプロンプトでUTF-8を使うんですかねぇ。<br>
+            というわけでもうしばらくコンパイラー側でShift-JISに変える日々が続きそうです。Windows10のコマンドプロンプトは改善されたのかな・・・？<br>
+            なお、Unicode文字を一時的に表示させるにはコマンドプロンプトのtypeコマンドを使うのが手っ取り早いという奇妙な事態になっています。
+        </p>
+        <p>コンパイラーで出力文字列の文字コード変換をする方法ですが</p>
+        <dl>
+            <dt>Visual Studio</dt>
+            <dd>デフォルトで</dd>
+            <dt>gcc</dt>
+            <dd>
+                コンパイルオプションに<br>
+                <pre class="brush: plain;">-fexec-charset=CP932</pre>
+                但しutf-8なソースを読ませるために
+                <pre class="brush: cpp;">--input-charset=utf-8</pre>
+                も必要
+            </dd>
+            <dt>clang</dt>
+            <dd>
+                uft-8なソースはデフォルトで読めるから気にしなくていいけど出力は変換できないっぽい。コマンドプロンプトなんてクソや！
+            </dd>
+        </dl>
+        <p>
+            というわけで主にWindowsのせいで話がややこしくなっています。なので、<b>コンソールアプリケーションに限っては</b>コンパイラー側でShift-JISを使う日々になりそうです。<br>
+            従ってprefixも<b>コンソールアプリケーションに限っては</b>なくていいや、という結論に至ります。おのれWindows！
+        </p>
+        <p>なお、言うまでもなくWin32APIを使ったGUIの文字はUNICODE対応ですから、<b>迷うことなくwchar_t型とLprefixを</b>使いましょう</p>
+        <p>またGUI開発で有名なQTは事実上UTF-8 BOM付きを要求しますので、u8prefixの活躍の機会です(Visual Studio2015から使えるようになる)</p>
     </section>
 </body>
 </html>
