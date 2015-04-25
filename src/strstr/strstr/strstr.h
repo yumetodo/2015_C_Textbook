@@ -3,5 +3,14 @@
 #endif
 #ifndef _INC_MY_STRSTR_H
 #define _INC_MY_STRSTR_H
-const char *my_strstr(const char *str, const char *strSearch);
+#include <cstddef>//To use _CONST_RETURN
+#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.
+#ifdef __cplusplus
+#define _CONST_RETURN  const
+#define _CRT_CONST_CORRECT_OVERLOADS
+#else  /* __cplusplus */
+#define _CONST_RETURN
+#endif  /* __cplusplus */
+#endif  /* _CONST_RETURN */
+_CONST_RETURN char *my_strstr(const char *str, const char *strSearch);
 #endif

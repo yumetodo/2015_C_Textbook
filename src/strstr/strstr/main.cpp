@@ -1,7 +1,15 @@
 ﻿#include <cstdio>
 #include <cstring>
 #include "strstr.h"
-void strstr_and_do(const char* str, const char* search_key, auto (*strsearch)(const char*, const char*) -> const char*){
+#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.
+#ifdef __cplusplus
+#define _CONST_RETURN  const
+#define _CRT_CONST_CORRECT_OVERLOADS
+#else  /* __cplusplus */
+#define _CONST_RETURN
+#endif  /* __cplusplus */
+#endif  /* _CONST_RETURN */
+void strstr_and_do(const char* str, const char* search_key, auto (*strsearch)(const char*, const char*) -> _CONST_RETURN char*){
 	auto re = strsearch(str, search_key);
 	if (nullptr == re){
 		puts("見つからなかったんだぜ");

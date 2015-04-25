@@ -2,8 +2,8 @@
 #include <iostream>
 #include <cstring>
 #include "strlen.h"
-void strstr_and_do(const char* str, auto (*strsearch)(const char*) -> size_t){
-	const auto re = strsearch(str);
+void strstr_and_do(const char* str, auto (*getstrlen)(const char*) -> size_t){
+	const auto re = getstrlen(str);
 	if (0 == re){
 		puts("ƒGƒ‰[‚È‚ñ‚¾‚º");
 	}
