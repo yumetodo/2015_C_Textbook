@@ -57,6 +57,18 @@
 [http://yumetodo.github.io/2015_C_Textbook/11c_array.html](http://yumetodo.github.io/2015_C_Textbook/11c_array.html)
 12. 多次元配列(12m.d.c_array.html)  
 [http://yumetodo.github.io/2015_C_Textbook/12m.d.c_array.html](http://yumetodo.github.io/2015_C_Textbook/12m.d.c_array.html)
+13. 構造体(13structure.html)  
+[http://yumetodo.github.io/2015_C_Textbook/13structure.html](http://yumetodo.github.io/2015_C_Textbook/13structure.html)
+14. ポインタと動的確保(14pointer.html)  
+[http://yumetodo.github.io/2015_C_Textbook/14pointer.html](http://yumetodo.github.io/2015_C_Textbook/14pointer.html)
+15. lValueとrValueおよびtemplete(15value.html)  
+[http://yumetodo.github.io/2015_C_Textbook/15value.html](http://yumetodo.github.io/2015_C_Textbook/15value.html)
+16. Range-base for(16Range-base_for.html)  
+[http://yumetodo.github.io/2015_C_Textbook/16Range-base_for.html](http://yumetodo.github.io/2015_C_Textbook/16Range-base_for.html)
+17. 乱数(17rand-num.html)  
+[http://yumetodo.github.io/2015_C_Textbook/17rand-num.html](http://yumetodo.github.io/2015_C_Textbook/17rand-num.html)
+18. C言語の文字と文字列(18c_char_str_base.html)  
+[http://yumetodo.github.io/2015_C_Textbook/18c_char_str_base.html](http://yumetodo.github.io/2015_C_Textbook/18c_char_str_base.html)
 
 # ポインター以外
 ## 書き終えた項目

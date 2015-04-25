@@ -38,55 +38,5 @@
 }while(継続条件)</pre>
         <p>これまた多くの場合、ポインターや標準入力とともに使うので実例はその時に。</p>
     </section>
-    <section>
-        <h3>enum型</h3>
-        <p>enum型とは列挙型と呼ばれており、switch文と相性がいいように思える。実際に例を見ていきましょう(ソースコード間違ってたら修正しといて♡ゆめちゃんごめん♡)</p>
-        <pre class="brush:cpp">#include&lt;stdio.h&gt;
-#include&lt;dxlib.h&gt;
-//  ゲーム状態
-typedef enum{
-    STATE_TITLE,//タイトル
-    STATE_MAIN,//メイン
-    STATE_END,//リザルト
-}status;
-int function_status = STATE_TITLE;
-//タイトル処理
-int title(){
-    //タイトルを描画
-    //クリック押されたら
-    return STATE_END;
-}
-//ゲームのメイン処理
-int gameMain(){
-    //ゲーム処理
-    //ゲーム終了したら
-    return STATE_END;
-}
-//リザルト画面など
-int ending(){
-    //リザルト画面描画
-    //クリック押されたら
-    return STATE_MAIN;
-}
-int main(){
-    switch (function_status){
-        case STATE_TITLE:
-            function_status = title();
-            break;
-        case STATE_MAIN:
-            function_status = gameMain();
-            break;
-        case STATE_END:
-            function_status = ending();
-            break;
-        default:
-            return -1;//エラー
-    } 
-   return 0;
-}
-</pre>
-        <p>このようにゲームなど状態を管理するときに非常に便利です。</p>
-
-    </section>
 </body>
 </html>
