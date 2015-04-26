@@ -3,6 +3,7 @@
 #include "strcmp.h"
 void strstr_and_do(const char* str1, const char* str2, auto (*strcomare)(const char*, const char*) -> int){
 	const auto re = strcomare(str1, str2);
+	printf("%d = ", re);
 	if (0 == re){
 		printf("\"%s\", \"%s\" は一致しました\n", str1, str2);
 	}
@@ -12,10 +13,7 @@ void strstr_and_do(const char* str1, const char* str2, auto (*strcomare)(const c
 }
 int main(void){
 	auto str1 = "arikitari_na_world!";
-	char* str2[] = { "arikitarina_world!", "arikitari_na_world", "arikitari_na_world!", "arikitari_na_world!!" };
-
-	printf("str1 : %s\n", str1);
-	printf("str2 : %s\n", str2);
+	const char* str2[] = { "arikitarina_world!", "arikitari_na_world", "arikitari_na_world!", "arikitari_na_world!!" };
 
 	for (auto i : str2){
 		puts("string.hのstrcmp関数を呼び出します");
