@@ -1,15 +1,14 @@
-#include <cstdio>
+ï»¿#include <cstdio>
 #include <iostream>
 #include <cstring>
 #include "strlen.h"
 void strstr_and_do(const char* str, auto (*getstrlen)(const char*) -> size_t){
 	const auto re = getstrlen(str);
 	if (0 == re){
-		puts("ƒGƒ‰[‚È‚ñ‚¾‚º");
+		puts("ã‚¨ãƒ©ãƒ¼ãªã‚“ã ãœ");
 	}
 	else{
-		std::cout << re << "•¶š‚¾‚æ" << std::endl;
-		printf("%d•¶š‚¾‚æ\n", re);
+		std::cout << re << "æ–‡å­—ã ã‚ˆ" << std::endl;
 	}
 }
 int main(void){
@@ -17,9 +16,9 @@ int main(void){
 
 	printf("base_str : %s\n", str);
 
-	puts("string.h‚ÌstrstrŠÖ”‚ğŒÄ‚Ño‚µ‚Ü‚·");
+	puts("string.hã®strlené–¢æ•°ã‚’å‘¼ã³å‡ºã—ã¾ã™");
 	strstr_and_do(str, strlen);
-	puts("strstr.h‚Ìmy_strstrŠÖ”‚ğŒÄ‚Ño‚µ‚Ü‚·");
+	puts("strlen.hã®my_strlené–¢æ•°ã‚’å‘¼ã³å‡ºã—ã¾ã™");
 	strstr_and_do(str, my_strlen);
 	return 0;
 }
