@@ -23,6 +23,9 @@ h1, h2, h3, h4, h5{
 	text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
 	color: #0d0015;
 }
+code{
+	font-family: Inconsolata, Ricty, Consolas, "Source Code Pro", "Anonymous Pro", "Ubuntu Mono", "Dejavu Sans Mono", "Liberation Mono", Menlo, Courier, monospace;
+}
 div.syntaxhighlighter table caption{
 	font-family: "IPAexゴシック", "IPAゴシック", "Lucida Grande", YuGothic, '游ゴシック', "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, メイリオ, sans-serif !important;
 }
