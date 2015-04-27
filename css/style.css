@@ -96,6 +96,7 @@ nav ul li{
 	display: inline-block;
 	list-style-type: none;
 	background-color: #eaf4fc;
+	font-family: Inconsolata, Ricty, Consolas, "Source Code Pro", "Anonymous Pro", "Ubuntu Mono", "Dejavu Sans Mono", "Liberation Mono", Menlo, Courier, monospace;
 }
 nav ul li a{
 	color: #000000;
@@ -104,5 +105,9 @@ nav ul li a{
 	display: block;
 	padding: 3px 15px;
 	text-align: center;
-	font-family: Inconsolata, Ricty, Consolas, "Source Code Pro", "Anonymous Pro", "Ubuntu Mono", "Dejavu Sans Mono", "Liberation Mono", Menlo, Courier, monospace;
+}
+nav ul li.disable{
+	text-decoration: line-through;
+	background-color: #9790a4;
+	border: 2px #9790a4 solid;
 }

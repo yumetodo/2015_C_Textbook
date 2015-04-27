@@ -16,11 +16,21 @@
 </head>
 <body>
     <h1>第18章 ～C言語の文字と文字列～</h1>
-    <p>
-        C言語には文字列という概念がありません。NULL文字で終わるバイト集合があるだけです。<br>
-        ・・・と書いても何が何やらさっぱりだと思うので、順番に解説します。<br>
-        配列についでの理解があやふやな場合、ポインターを矢印に例えて誰かに説明できそうにない場合は引き返してください。
-    </p>
+    <nav class="top">
+        <ul>
+            <li><a href="./17rand-num.html" title="前頁">prev</a></li>
+            <li><a href="index.html" title="目次">main</a></li>
+            <li><a href="./" title="次頁">next</a></li>
+        </ul>
+    </nav>
+    <section>
+        <h2>はじめに</h2>
+        <p>
+            C言語には文字列という概念がありません。NULL文字で終わるバイト集合があるだけです。<br>
+            ・・・と書いても何が何やらさっぱりだと思うので、順番に解説します。<br>
+            配列についでの理解があやふやな場合、ポインターを矢印に例えて誰かに説明できそうにない場合は引き返してください。
+        </p>
+    </section>
     <section>
         <h2>符号化文字集合と符号化方式</h2>
         <p>まずここが理解できないとすべてが宙ぶらりんでその場しのぎの理解になってしまいます。なのでプログラミングから一旦離れて解説しようと思います。</p>
@@ -272,5 +282,12 @@ puts(str);//arikitari
         <p>なお、言うまでもなくWin32APIを使ったGUIの文字はUNICODE対応ですから、<b>迷うことなくwchar_t型とLprefixを</b>使いましょう</p>
         <p>またGUI開発で有名なQTは事実上UTF-8 BOM付きを要求しますので、u8prefixの活躍の機会です(Visual Studio2015から使えるようになる)</p>
     </section>
+    <nav class="bottom">
+        <ul>
+            <li><a href="./17rand-num.html" title="前頁">prev</a></li>
+            <li><a href="index.html" title="目次">main</a></li>
+            <li><a href="./" title="次頁">next</a></li>
+        </ul>
+    </nav>
 </body>
 </html>
