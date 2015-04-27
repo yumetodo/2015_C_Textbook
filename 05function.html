@@ -52,148 +52,147 @@ int do_something2(void){
         </p>
         <p>このcalc_volume関数が定義されるのは、10～13行目の部分だ。ここで関数の実際の処理を書く。</p>
         <p>この関数が呼び出される7行目だ。ここで初めて実際に定義に基づいて処理を行う。calc_volume関数内のreturn文にかいたものが変数resultに代入されている。</p>
-        <section>
-            <h3>C標準ライブラリ</h3>
-            <p>C標準ライブラリとは、プログラマーがよく使う機能をひとまとめにしてC言語自体が提供している関数群のことです。</p>
-            <p>
-                代表的なものとしては、puts, getcahr, fgets, time, clock, printf, sprintf, scanf, strcomp, memcpy, malloc, callocなどの関数でしょうか。<br>
-                これらはいくつかのヘッダーファイルをincludeすることで使えます。<br>
-                例えば、printf関数はstdio.h, calloc関数はstdlib.h, clock関数はtime.hをincludeすることで使えます。<br>
-                includeし忘れると、コンパイラーに「そんな関数知らねーよ」と怒られます。
-            </p>
-            <p>ここで改めてはじめて書いたコードを見て欲しい。</p>
-            <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/001_arikitari_na_world.c"></script>
-            <p>
-                puts関数が出てくると思う。これはどういう関数なのだろうか？この関数はC標準ライブラリの関数なので関数名でググってみょう。大概は「関数名 MSDN」で適当な情報がでる。<br>
-                <a href="https://msdn.microsoft.com/ja-jp/library/tf52y4t1.aspx">https://msdn.microsoft.com/ja-jp/library/tf52y4t1.aspx</a>
-                以下の様な点に着目して見るといい。
-            </p>
-            <ul>
-                <li>
-                    プロトタイプ宣言は？<br>
-                    →<pre class="brush: cpp;">int puts(const char *str);</pre>
-                </li>
-                <li>
-                    戻り値の型は？<br>
-                    →int型
-                </li>
-                <li>
-                    どんな戻り値が帰ってくるの？<br>
-                    →エラー時はEOF(-1にdefineされています)、正常なときは0より大きい数
-                </li>
-                <li>
-                    errnoには何かセットされるの？<br>
-                    →エラー時にセットされる
-                </li>
-                <li>
-                    引数の型は？<br>
-                    →char*型(すみません、ポインタについては後ほど。ここでは文字の集合を要求しています)
-                </li>
-                <li>
-                    引数に指定するものは？<br>
-                    →標準出力に出力したい文字列（標準出力についても後ほど。コンソール画面と思っていてとりあえずは構いません。）
-                </li>
-                <li>
-                    includeしないといけないヘッダーファイルは？<br>
-                    →stdio.h
-                </li>
-            </ul>
-        </section>
-        <section>
-            <h2>関数の型</h2>
-            <p>宣言、とか定義とかさっきから言ってるところからもう察しているかも知れませんが、関数も変数と同じくオブジェクトなので、メモリー上に実体があり、型も存在します。</p>
-            <p>「型」がなにかについては変数のところで説明しましたが、「型」とはコンパイラにオブジェクトをどういう風にメモリー上に配置したらいいのか教えるものなのでした。</p>
-            <p>関数になってもなにも変わりません。コンパイラーに</p>
-            <ul>
-                <li>戻り値の型</li>
-                <li>(呼び出し規約)</li>
-                <li>仮引数の型</li>
-            </ul>
-            <p>
-                を教えます。だからcalc_volume関数の型は、「double(double, double, double)」型です。これが分かれば、コンパイラは関数を呼び出すアセンブリコードを書いてくれます。<br>
-                このことは関数ポインタのところで大事になるので、覚えておいてくだい。
-            </p>
-        </section>
-        <section>
-            <h2>関数を作って使ってみよう</h2>
-            <p>細かい理屈はひとまず置いておいて、まあ関数を作ってみましょう。オーバーフロー対策はif文を教えてないのでまだいいです。</p>
-            <article>
-                <h3>練習問題</h3>
-                <ol>
-                    <li>
-                        <div>
-                            <p>main関数の他に以下の機能を持つ関数を書き、main関数から呼び出せ。</p>
-                            <dl>
-                                <dt>機能</dt>
-                                <dd>puts関数を呼び出し、「関数arikitari_na_kannsuuが実行されました」と表示する</dd>
-                                <dt>プロトタイプ</dt>
-                                <dd><pre class="brush: cpp; gutter:false;">void arikitari_na_kannsuu(void);</pre></dd>
-                            </dl>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <p>以下の機能を持つ関数を作成し、main関数から呼び出し、戻り値をpriintf関数で表示せよ。</p>
-                            <dl>
-                                <dt>機能</dt>
-                                <dd>2つの引数を受け取り、その和を返す。</dd>
-                                <dt>プロトタイプ</dt>
-                                <dd><pre class="brush: cpp; gutter:false;">uint64_t add(uint64_t a, uint64_t b);</pre></dd>
-                                <dt>ヒント</dt>
-                                <dd>
-                                    main関数側はこう書けばいい。
-                                    <pre class="brush: cpp; gutter:false;">printf("%ld", add(7, 2));</pre>
-                                    当たり前だが、stdint.hをincludeしなければならない。
-                                </dd>
-                            </dl>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <p>以下の機能を持つ関数を作成し、main関数から呼び出し、戻り値をpriintf関数で表示せよ。</p>
-                            <dl>
-                                <dt>機能</dt>
-                                <dd>COLORREF型の引数を受け取り、G(緑色)の値を返す。</dd>
-                                <dt>プロトタイプ</dt>
-                                <dd><pre class="brush: cpp; gutter:false;">uint8_t myGetGValue(COLORREF color);</pre></dd>
-                                <dt>ヒント</dt>
-                                <dd>
-                                    COLORREF型を使うにはwindows.hを<b>一番先に</b>includeする必要がある。<br>
-                                    main関数側はこう書けばいい。
-                                    <pre class="brush: cpp;">COLORREF color = RGB(137, 195, 235);//RGBマクロでCOLORREF型の値を作製
-printf("%d", myGetRValue(color));</pre>
-                                    当たり前だが、stdint.hをincludeしなければならない。<br>
-                                    内部の演算は右シフトとAND演算をすれば求められるはず。<br>
-                                    COLORREF型については既に説明した。windows.hをincludeすればあそこで書いたtypedefが既にされている。<br>
-                                    マクロ GetGValue を用いてはならない。
-                                </dd>
-                            </dl>
-                        </div>
-                    </li>
-                </ol>
-                <p></p>
-            </article>
-        </section>
-        <section>
-            <h2>スタック領域</h2>
-            <p>
-                Ｃで扱うメモリ領域は一般に、プログラム領域、静的領域、スタック領域、ヒープ領域の 4つに大別されます。<br>
-                main関数が呼び出される時にある程度広い範囲のメモリーを確保します。この領域をスタック領域、といいます。<br>
-                変数をメモリー上に確保して～とか、関数はメモリー上に実体があり～とか言ってましたが、ここのことです。<br>
-                自動変数(これまで見てきた変数)や関数の引数、戻り値、リターンアドレスなどはここに記録されます。<br>
-                ではどういう風に記録されていくのでしょうか？
-            </p>
+    </section>
+    <section>
+        <h2>C標準ライブラリ</h2>
+        <p>C標準ライブラリとは、プログラマーがよく使う機能をひとまとめにしてC言語自体が提供している関数群のことです。</p>
+        <p>
+            代表的なものとしては、puts, getcahr, fgets, time, clock, printf, sprintf, scanf, strcomp, memcpy, malloc, callocなどの関数でしょうか。<br>
+            これらはいくつかのヘッダーファイルをincludeすることで使えます。<br>
+            例えば、printf関数はstdio.h, calloc関数はstdlib.h, clock関数はtime.hをincludeすることで使えます。<br>
+            includeし忘れると、コンパイラーに「そんな関数知らねーよ」と怒られます。
+        </p>
+        <p>ここで改めてはじめて書いたコードを見て欲しい。</p>
+        <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/001_arikitari_na_world.c"></script>
+        <p>
+            puts関数が出てくると思う。これはどういう関数なのだろうか？この関数はC標準ライブラリの関数なので関数名でググってみょう。大概は「関数名 MSDN」で適当な情報がでる。<br>
+            <a href="https://msdn.microsoft.com/ja-jp/library/tf52y4t1.aspx">https://msdn.microsoft.com/ja-jp/library/tf52y4t1.aspx</a><br>
+            以下の様な点に着目して見るといい。
+        </p>
+        <ul>
+            <li>
+                プロトタイプ宣言は？<br>
+                →<pre class="brush: cpp;">int puts(const char *str);</pre>
+            </li>
+            <li>
+                戻り値の型は？<br>
+                →int型
+            </li>
+            <li>
+                どんな戻り値が帰ってくるの？<br>
+                →エラー時はEOF(-1にdefineされています)、正常なときは0より大きい数
+            </li>
+            <li>
+                errnoには何かセットされるの？<br>
+                →エラー時にセットされる
+            </li>
+            <li>
+                引数の型は？<br>
+                →char*型(すみません、ポインタについては後ほど。ここでは文字の集合を要求しています)
+            </li>
+            <li>
+                引数に指定するものは？<br>
+                →標準出力に出力したい文字列（標準出力についても後ほど。コンソール画面と思っていてとりあえずは構いません。）
+            </li>
+            <li>
+                includeしないといけないヘッダーファイルは？<br>
+                →stdio.h
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>関数の型</h2>
+        <p>宣言、とか定義とかさっきから言ってるところからもう察しているかも知れませんが、関数も変数と同じくオブジェクトなので、メモリー上に実体があり、型も存在します。</p>
+        <p>「型」がなにかについては変数のところで説明しましたが、「型」とはコンパイラにオブジェクトをどういう風にメモリー上に配置したらいいのか教えるものなのでした。</p>
+        <p>関数になってもなにも変わりません。コンパイラーに</p>
+        <ul>
+            <li>戻り値の型</li>
+            <li>(呼び出し規約)</li>
+            <li>仮引数の型</li>
+        </ul>
+        <p>
+            を教えます。だからcalc_volume関数の型は、「double(double, double, double)」型です。これが分かれば、コンパイラは関数を呼び出すアセンブリコードを書いてくれます。<br>
+            このことは関数ポインタのところで大事になるので、覚えておいてくだい。
+        </p>
+    </section>
+    <section>
+        <h2>関数を作って使ってみよう</h2>
+        <p>細かい理屈はひとまず置いておいて、まあ関数を作ってみましょう。オーバーフロー対策はif文を教えてないのでまだいいです。</p>
+        <article>
+            <h2>練習問題</h2>
             <ol>
-                <li>main関数が呼ばれるとき、スタック領域を確保する</li>
-                <li>引数を後ろから順に書き込む</li>
-                <li>復帰情報(リターンアドレスなど)を書き込む</li>
-                <li>関数の処理が始まって、変数が確保されたりする</li>
+                <li>
+                    <div>
+                        <p>main関数の他に以下の機能を持つ関数を書き、main関数から呼び出せ。</p>
+                        <dl>
+                            <dt>機能</dt>
+                            <dd>puts関数を呼び出し、「関数arikitari_na_kannsuuが実行されました」と表示する</dd>
+                            <dt>プロトタイプ</dt>
+                            <dd><pre class="brush: cpp; gutter:false;">void arikitari_na_kannsuu(void);</pre></dd>
+                        </dl>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p>以下の機能を持つ関数を作成し、main関数から呼び出し、戻り値をpriintf関数で表示せよ。</p>
+                        <dl>
+                            <dt>機能</dt>
+                            <dd>2つの引数を受け取り、その和を返す。</dd>
+                            <dt>プロトタイプ</dt>
+                            <dd><pre class="brush: cpp; gutter:false;">uint64_t add(uint64_t a, uint64_t b);</pre></dd>
+                            <dt>ヒント</dt>
+                            <dd>
+                                main関数側はこう書けばいい。
+                                <pre class="brush: cpp; gutter:false;">printf("%ld", add(7, 2));</pre>
+                                当たり前だが、stdint.hをincludeしなければならない。
+                            </dd>
+                        </dl>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p>以下の機能を持つ関数を作成し、main関数から呼び出し、戻り値をpriintf関数で表示せよ。</p>
+                        <dl>
+                            <dt>機能</dt>
+                            <dd>COLORREF型の引数を受け取り、G(緑色)の値を返す。</dd>
+                            <dt>プロトタイプ</dt>
+                            <dd><pre class="brush: cpp; gutter:false;">uint8_t myGetGValue(COLORREF color);</pre></dd>
+                            <dt>ヒント</dt>
+                            <dd>
+                                COLORREF型を使うにはwindows.hを<b>一番先に</b>includeする必要がある。<br>
+                                main関数側はこう書けばいい。
+                                <pre class="brush: cpp;">COLORREF color = RGB(137, 195, 235);//RGBマクロでCOLORREF型の値を作製
+printf("%d", myGetRValue(color));</pre>
+                                当たり前だが、stdint.hをincludeしなければならない。<br>
+                                内部の演算は右シフトとAND演算をすれば求められるはず。<br>
+                                COLORREF型については既に説明した。windows.hをincludeすればあそこで書いたtypedefが既にされている。<br>
+                                マクロ GetGValue を用いてはならない。
+                            </dd>
+                        </dl>
+                    </div>
+                </li>
             </ol>
-            <p>わかりにくいので図で説明します。</p>
-            <img alt="スタック領域" src="./pic/stack_area.png">
-            <p>プログラムが呼ばれると(特に定めない限り)main関数が呼ばれます。この時スタック領域が確保されるわけです。そのあとにmain関数の引数やら戻り値の領域やらリターンアドレスが書き込まれます。(図の一番左)</p>
-            <p>何が言いたかったか、ですが、単純。関数も変数となんら変わりません！・・・てことです。いやね、これがわからんと関数ポインタが説明できんのよ。</p>
-        </section>
+        </article>
+    </section>
+    <section>
+        <h2>スタック領域</h2>
+        <p>
+            Ｃで扱うメモリ領域は一般に、プログラム領域、静的領域、スタック領域、ヒープ領域の 4つに大別されます。<br>
+            main関数が呼び出される時にある程度広い範囲のメモリーを確保します。この領域をスタック領域、といいます。<br>
+            変数をメモリー上に確保して～とか、関数はメモリー上に実体があり～とか言ってましたが、ここのことです。<br>
+            自動変数(これまで見てきた変数)や関数の引数、戻り値、リターンアドレスなどはここに記録されます。<br>
+            ではどういう風に記録されていくのでしょうか？
+        </p>
+        <ol>
+            <li>main関数が呼ばれるとき、スタック領域を確保する</li>
+            <li>引数を後ろから順に書き込む</li>
+            <li>復帰情報(リターンアドレスなど)を書き込む</li>
+            <li>関数の処理が始まって、変数が確保されたりする</li>
+        </ol>
+        <p>わかりにくいので図で説明します。</p>
+        <img alt="スタック領域" src="./pic/stack_area.png">
+        <p>プログラムが呼ばれると(特に定めない限り)main関数が呼ばれます。この時スタック領域が確保されるわけです。そのあとにmain関数の引数やら戻り値の領域やらリターンアドレスが書き込まれます。(図の一番左)</p>
+        <p>何が言いたかったか、ですが、単純。関数も変数となんら変わりません！・・・てことです。いやね、これがわからんと関数ポインタが説明できんのよ。</p>
     </section>
     <section>
         <h2>main関数の引数って何？</h2>
@@ -327,7 +326,6 @@ int main(void){
             大事なことなのでもう一度言います。<br>
             プログラムは<b>見やすく・短く・少なく</b>です。
         </p>
-
     </section>
     <nav class="bottom">
         <ul>

@@ -74,7 +74,7 @@ int main(void){
         <p>もちろんC++のコンテナにも使えます(というよりこっちがメイン)</p>
         <pre class="brush: cpp;" title="Range-base for無使用">std::vector&lt;int&gt; data{ 0, 1, 2, 3, 4 };//This usage is a thing of C++11.
 int total = 0;
-for(data_it = data.begin(); data_it != data.end(); data_it++) {
+for(auto data_it = data.begin(); data_it != data.end(); data_it++) {
     total += *data_it; 
 }</pre>
         <pre class="brush: cpp;" title="Range-base for使用">std::vector&lt;int&gt; data{ 0, 1, 2, 3, 4 };//This usage is a thing of C++11.

@@ -27,131 +27,131 @@
         <h2>ビット演算</h2>
         <p>ビッド演算とは、各bitに対して論理演算を行うことを指します。なお、特にシフト演算では、<b>変数はunsigned、または正の整数である必要があり</b>ます。負の数の場合動作は実装定義となります。</p>
         <p>まあ、そもそもsignedな整数にビット演算をするべきではありません。</p>
-        <section>
-            <h3>左シフト</h3>
-            <pre class="brush: cpp;">uint32_t si_a = 5;//101
+    </section>
+    <section>
+        <h2>左シフト</h2>
+        <pre class="brush: cpp;">uint32_t si_a = 5;//101
 const uint32_t si_b = 4;
 const uint32_t re_si = si_a &lt;&lt; si_b;//80:1010000</pre>
-            <p>1つ左シフトするごとに、2をかけているのと同じ効果が得られる。この場合は2<sup>4</sup> = 16倍していることになる。</p>
-            <p>かならず以下の点をコーディング時に確認して行うこと。</p>
-            <ul>
-                <li>
-                    オーバーフローしないか<br>
-                    左シフトの結果がその型の最大値を超えるようなことがあったらだめ、ということ。だからこれはだめ<br>
-                    <pre class="brush: cpp; gutter:false;">unsigned int re = UINT_MAX << 1;</pre>
-                </li>
-                <li>
-                    右オペランドが格上げ後の左オペランドの精度以下<br>
-                    具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしmath.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
-                    <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b < __popcnt(UINT_MAX))? si_a &lt;&lt; si_b : 0;</pre>
-                </li>
-            </ul>
-            <p>
-                まあ、私の説明より参考サイトのほうがきっとわかりやすいです。<br>
-                INT34-C. 負のビット数のシフトやオペランドのビット数以上のシフトを行わない | JPCERT<br>
-                <a href="https://www.jpcert.or.jp/sc-rules/c-int34-c.html">https://www.jpcert.or.jp/sc-rules/c-int34-c.html</a>
-            </p>
-        </section>
-        <section>
-            <h3>右シフト</h3>
-            <pre class="brush: cpp;">uint32_t si_a = 37;//100101
+        <p>1つ左シフトするごとに、2をかけているのと同じ効果が得られる。この場合は2<sup>4</sup> = 16倍していることになる。</p>
+        <p>かならず以下の点をコーディング時に確認して行うこと。</p>
+        <ul>
+            <li>
+                オーバーフローしないか<br>
+                左シフトの結果がその型の最大値を超えるようなことがあったらだめ、ということ。だからこれはだめ<br>
+                <pre class="brush: cpp; gutter:false;">unsigned int re = UINT_MAX << 1;</pre>
+            </li>
+            <li>
+                右オペランドが格上げ後の左オペランドの精度以下<br>
+                具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしmath.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
+                <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b < __popcnt(UINT_MAX))? si_a &lt;&lt; si_b : 0;</pre>
+            </li>
+        </ul>
+        <p>
+            まあ、私の説明より参考サイトのほうがきっとわかりやすいです。<br>
+            INT34-C. 負のビット数のシフトやオペランドのビット数以上のシフトを行わない | JPCERT<br>
+            <a href="https://www.jpcert.or.jp/sc-rules/c-int34-c.html">https://www.jpcert.or.jp/sc-rules/c-int34-c.html</a>
+        </p>
+    </section>
+    <section>
+        <h2>右シフト</h2>
+        <pre class="brush: cpp;">uint32_t si_a = 37;//100101
 const uint32_t si_b = 4;
 const uint32_t re_si = si_a &gt;&gt; si_b;//2:10</pre>
-            <p>左シフトと逆の効果が得られる。</p>
-            <p>かならず以下の点をコーディング時に確認して行うこと。</p>
-            <ul>
-                <li>
-                    右オペランドが格上げ後の左オペランドの精度以下<br>
-                    「オーバーフローしないか」ともつながるが、例えば32bit変数を32回以上左シフトしたら必ずオーバーフローする。<br>
-                    具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしmath.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
-                    <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b < __popcnt(UINT_MAX))? si_a &gt;&gt; si_b : 0;</pre>
-                </li>
-            </ul>
-        </section>
-        <section>
-            <h2>ビットの論理積</h2>
-            <pre class="brush: cpp;">const uint32_t a = 0b10110;//22
+        <p>左シフトと逆の効果が得られる。</p>
+        <p>かならず以下の点をコーディング時に確認して行うこと。</p>
+        <ul>
+            <li>
+                右オペランドが格上げ後の左オペランドの精度以下<br>
+                「オーバーフローしないか」ともつながるが、例えば32bit変数を32回以上左シフトしたら必ずオーバーフローする。<br>
+                具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしmath.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
+                <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b < __popcnt(UINT_MAX))? si_a &gt;&gt; si_b : 0;</pre>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>ビットの論理積</h2>
+        <pre class="brush: cpp;">const uint32_t a = 0b10110;//22
 const uint32_t b = 0b11010;//26
 const uint32_t re = a &amp; b;//18:0b10010</pre>
-            <p>各bitにAND演算をします。</p>
-            <img alt="AND" src="http://upload.wikimedia.org/wikipedia/ja/7/7b/Venn-Diagram-AND.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
-            <table>
-                <tr>
-                    <th>AND(&amp;)</th>
-                    <th>1</th>
-                    <th>0</th>
-                </tr>
-                <tr>
-                    <th>1</th>
-                    <td>1</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <th>0</th>
-                    <td>0</td>
-                    <td>0</td>
-                </tr>
-            </table>
-            <p>結果はこの表に従います。</p>
-        </section>
-        <section>
-            <h2>ビットの論理和</h2>
-            <pre class="brush: cpp;">const uint32_t a = 0b10110;//22
+        <p>各bitにAND演算をします。</p>
+        <img alt="AND" src="http://upload.wikimedia.org/wikipedia/ja/7/7b/Venn-Diagram-AND.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
+        <table>
+            <tr>
+                <th>AND(&amp;)</th>
+                <th>1</th>
+                <th>0</th>
+            </tr>
+            <tr>
+                <th>1</th>
+                <td>1</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <th>0</th>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+        </table>
+        <p>結果はこの表に従います。</p>
+    </section>
+    <section>
+        <h2>ビットの論理和</h2>
+        <pre class="brush: cpp;">const uint32_t a = 0b10110;//22
 const uint32_t b = 0b11010;//26
 const uint32_t re = a | b;//30:0b11110</pre>
-            <p>各bitにOR演算をします。</p>
-            <img alt="OR" src="http://upload.wikimedia.org/wikipedia/ja/5/5e/Venn-Diagram-OR.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
-            <table>
-                <tr>
-                    <th>OR(|)</th>
-                    <th>1</th>
-                    <th>0</th>
-                </tr>
-                <tr>
-                    <th>1</th>
-                    <td>1</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <th>0</th>
-                    <td>1</td>
-                    <td>0</td>
-                </tr>
-            </table>
-            <p>結果はこの表に従います。</p>
-        </section>
-        <section>
-            <h2>ビットの排他論理和</h2>
-            <pre class="brush: cpp;">const uint32_t a = 0b10110;//22
+        <p>各bitにOR演算をします。</p>
+        <img alt="OR" src="http://upload.wikimedia.org/wikipedia/ja/5/5e/Venn-Diagram-OR.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
+        <table>
+            <tr>
+                <th>OR(|)</th>
+                <th>1</th>
+                <th>0</th>
+            </tr>
+            <tr>
+                <th>1</th>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <th>0</th>
+                <td>1</td>
+                <td>0</td>
+            </tr>
+        </table>
+        <p>結果はこの表に従います。</p>
+    </section>
+    <section>
+        <h2>ビットの排他論理和</h2>
+        <pre class="brush: cpp;">const uint32_t a = 0b10110;//22
 const uint32_t b = 0b11010;//26
 const uint32_t re = a ^ b;//12:0b1100</pre>
-            <p>各bitにXOR演算をします。</p>
-            <img alt="XOR" src="http:////upload.wikimedia.org/wikipedia/ja/6/6b/Venn-Diagram-XOR.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
-            <table>
-                <tr>
-                    <th>XOR(|)</th>
-                    <th>1</th>
-                    <th>0</th>
-                </tr>
-                <tr>
-                    <th>1</th>
-                    <td>0</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <th>0</th>
-                    <td>1</td>
-                    <td>0</td>
-                </tr>
-            </table>
-            <p>結果はこの表に従います。</p>
-        </section>
-        <section>
-            <h2>ビットの反転</h2>
-            <pre class="brush: cpp;">const uint8_t a = 0b10110;//22
+        <p>各bitにXOR演算をします。</p>
+        <img alt="XOR" src="http:////upload.wikimedia.org/wikipedia/ja/6/6b/Venn-Diagram-XOR.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
+        <table>
+            <tr>
+                <th>XOR(|)</th>
+                <th>1</th>
+                <th>0</th>
+            </tr>
+            <tr>
+                <th>1</th>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <th>0</th>
+                <td>1</td>
+                <td>0</td>
+            </tr>
+        </table>
+        <p>結果はこの表に従います。</p>
+    </section>
+    <section>
+        <h2>ビットの反転</h2>
+        <pre class="brush: cpp;">const uint8_t a = 0b10110;//22
 const uint8_t re = ~a;//233:0b11101001</pre>
-            <p>各ビットにNOT演算をします。1の補数をとる、ともいいます。</p>
-        </section>
+        <p>各ビットにNOT演算をします。1の補数をとる、ともいいます。</p>
     </section>
     <nav class="bottom">
         <ul>

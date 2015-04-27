@@ -32,27 +32,28 @@
             しかし、SFMTは変数名や型名の競合があり、かと言ってC++の乱数生成はやや煩雑な手順を必要とし、C標準ライブラリ―の乱数生成法のような手軽さはC++17を待つ必要があります。<br>
             というわけで乱数生成をやっていきましょう。
         </p>
-        <section>
-            <h3>コンピューター乱数概論</h3>
-            <p>一口に「乱数」といっても2種類が有ります。</p>
-            <dl>
-                <dt>真の乱数</dt>
-                <dd>
-                    予測が困難な乱雑性のある数字。一般に生成には時間がかかったり、別途ハードウェアが必要になったりします。<br>
-                    ex.)時刻、CPUの温度、GPUの温度、マウスポインタの座標、プロセスID、main関数の引数のアドレス、起動中のプロセス数、環境光の照度、CPU周辺のノイズ量、ユーザーが入力する任意の数、ラジウムの崩壊数
-                </dd>
-                <dt>擬似乱数</dt>
-                <dd>
-                    ある種のアルゴリズム(計算式)にseed値を与えることにより、高速に数字をつくりだす。<br>
-                    一般に擬似乱数の評価基準は、生成速度、生成の分布の一様性、周期、全数探索可能性などになります。
-                </dd>
-            </dl>
-            <p>どんな方法を使うにせよ、必ず真の乱数をseed値として擬似乱数生成アルゴリズムを使い擬似乱数を作ることになります。よって以下、seed値を作るということと、擬似乱数を生成することを明確に区別して読み進めてください</p>
-        </section>
-        <section>
-            <h3>ありきたりなC言語的乱数生成</h3>
-            <p>まずは大抵の参考書に乗っているごくごくありきたりなソースコードを載せます。さして精度を求めなかったり、同じ数が連続して出ても良い場合はこれで十分だったりします。</p>
-            <pre class="brush: cpp;">#include &lt;stdlib.h&gt;
+</section>
+    <section>
+        <h3>コンピューター乱数概論</h3>
+        <p>一口に「乱数」といっても2種類が有ります。</p>
+        <dl>
+            <dt>真の乱数</dt>
+            <dd>
+                予測が困難な乱雑性のある数字。一般に生成には時間がかかったり、別途ハードウェアが必要になったりします。<br>
+                ex.)時刻、CPUの温度、GPUの温度、マウスポインタの座標、プロセスID、main関数の引数のアドレス、起動中のプロセス数、環境光の照度、CPU周辺のノイズ量、ユーザーが入力する任意の数、ラジウムの崩壊数
+            </dd>
+            <dt>擬似乱数</dt>
+            <dd>
+                ある種のアルゴリズム(計算式)にseed値を与えることにより、高速に数字をつくりだす。<br>
+                一般に擬似乱数の評価基準は、生成速度、生成の分布の一様性、周期、全数探索可能性などになります。
+            </dd>
+        </dl>
+        <p>どんな方法を使うにせよ、必ず真の乱数をseed値として擬似乱数生成アルゴリズムを使い擬似乱数を作ることになります。よって以下、seed値を作るということと、擬似乱数を生成することを明確に区別して読み進めてください</p>
+    </section>
+    <section>
+        <h3>ありきたりなC言語的乱数生成</h3>
+        <p>まずは大抵の参考書に乗っているごくごくありきたりなソースコードを載せます。さして精度を求めなかったり、同じ数が連続して出ても良い場合はこれで十分だったりします。</p>
+        <pre class="brush: cpp;">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;time.h&gt;
 int main(void){
@@ -68,9 +69,9 @@ int main(void){
 	}
 	return 0;
 }</pre>
-            <p>seed値は現在時刻を求めるtime関数を利用し、擬似乱数生成にはC標準ライブラリ―のrand関数を利用しています。rand関数にseedを渡すにはsrand関数を使用します。</p>
-            <p>上記の例では、乱数を任意の範囲に加工するのに余りを求める計算を利用していますが、これは余り賢いやり方ではありません。なのでこんな風にすれば使いやすい・・・のかな？</p>
-            <pre class="brush: cpp;">#include &lt;stdlib.h&gt;
+        <p>seed値は現在時刻を求めるtime関数を利用し、擬似乱数生成にはC標準ライブラリ―のrand関数を利用しています。rand関数にseedを渡すにはsrand関数を使用します。</p>
+        <p>上記の例では、乱数を任意の範囲に加工するのに余りを求める計算を利用していますが、これは余り賢いやり方ではありません。なのでこんな風にすれば使いやすい・・・のかな？</p>
+        <pre class="brush: cpp;">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;time.h&gt;
 unsigned int gen_uirand(unsigned int max, unsigned int min){
@@ -89,19 +90,19 @@ int main(void){
 	}
 	return 0;
 }</pre>
-        </section>
-        <section>
-            <h3>擬似乱数の生成を改善する</h3>
-            <p>
-                ところでC標準ライブラリーのrand関数はとても便利なのですが、あまりまともな擬似乱数を作ってくれません。<br>
-                擬似乱数はちょうど大きなリング上の数字が順に吐き出されるように周期が有りますが、この周期もあまり良くありません。<br>
-                さらにMSVCみたいにいまだにRAND_MAX(生成される乱数の最大値)が15bit変数と同じ、なんていう処理系も有ります。<br>
-                そこでもう少し頭のいい方法を使ってみましょう。<br>
-                ３月１４日（水）　疑似乱数の話 | Diary 2012-3 | まるも<br>
-                <a href="http://www.marumo.ne.jp/db2012_3.htm#14">http://www.marumo.ne.jp/db2012_3.htm#14</a><br>
-                よりパク・・・げふんげふん、引用します。
-            </p>
-            <pre class="brush: cpp;">unsigned int libc_rand_32_normal()
+    </section>
+    <section>
+        <h3>擬似乱数の生成を改善する</h3>
+        <p>
+            ところでC標準ライブラリーのrand関数はとても便利なのですが、あまりまともな擬似乱数を作ってくれません。<br>
+            擬似乱数はちょうど大きなリング上の数字が順に吐き出されるように周期が有りますが、この周期もあまり良くありません。<br>
+            さらにMSVCみたいにいまだにRAND_MAX(生成される乱数の最大値)が15bit変数と同じ、なんていう処理系も有ります。<br>
+            そこでもう少し頭のいい方法を使ってみましょう。<br>
+            ３月１４日（水）　疑似乱数の話 | Diary 2012-3 | まるも<br>
+            <a href="http://www.marumo.ne.jp/db2012_3.htm#14">http://www.marumo.ne.jp/db2012_3.htm#14</a><br>
+            よりパク・・・げふんげふん、引用します。
+        </p>
+        <pre class="brush: cpp;">unsigned int libc_rand_32_normal()
 {
 	unsigned int r = 0;
 	r  = ((rand() >> 3) & 0x0fff)      ; // 12 bit
@@ -109,39 +110,39 @@ int main(void){
 	r |= ((rand() >> 6) & 0x01ff) << 23; // 12+11+9 : 32 bit
 	return r;
 }</pre>
-            <p>参考サイトの記述によれば周期は 0x80000000 (2,147,483,648)なのだそうです(どうやっても参考サイトのコードが動かないorz)。</p>
-            <p>まあこれの場合seedを変えても開始点が変わるだけで同じ所をグルグル回るというおまけ付きなんですが。</p>
-        </section>
-        <section>
-            <h3>seed値の生成を改善する(OS非依存)</h3>
-            <p>先の関数ではseed値に、time関数の戻り値を利用しましたが、こいつ1秒に1回しか変わりません。また、時刻はある程度予測可能なため真の乱数とは言いがたいです。</p>
-            <p>まずはOS非依存な範囲で何とかしてみましょう。こんな感じ・・・？</p>
-            <pre class="brush: cpp;">unsigned int create_seed(int argc, char* argv[], uint32_t num){
+        <p>参考サイトの記述によれば周期は 0x80000000 (2,147,483,648)なのだそうです(どうやっても参考サイトのコードが動かないorz)。</p>
+        <p>まあこれの場合seedを変えても開始点が変わるだけで同じ所をグルグル回るというおまけ付きなんですが。</p>
+    </section>
+    <section>
+        <h3>seed値の生成を改善する(OS非依存)</h3>
+        <p>先の関数ではseed値に、time関数の戻り値を利用しましたが、こいつ1秒に1回しか変わりません。また、時刻はある程度予測可能なため真の乱数とは言いがたいです。</p>
+        <p>まずはOS非依存な範囲で何とかしてみましょう。こんな感じ・・・？</p>
+        <pre class="brush: cpp;">unsigned int create_seed(int argc, char* argv[], uint32_t num){
 	char* dst = (char*)malloc(sizeof(char) * 2);
 	unsigned int seed = ((uint64_t)argv + (uint64_t)&argc + (uint32_t)time(NULL) + clock() + libc_rand_32_normal() + ((uint32_t)dst * (uint32_t)((rand() & 0xff) << 16) * (uint32_t)&dst)) % UINT_MAX;
 	free(dst);
 	return seed;
 }</pre>
-            <p>
-                main関数の引数のアドレスは最近のOSなら大体ランダムになるようなので十分使えます。また、ヒープ領域にメモリーを確保するmalloc関数もそのアドレスはある程度ランダムに選ばれると言っていいでしょう。<br>
-                擬似乱数生成器自身もseed値を予測しにくくするのに役立つでしょう。初回呼び出し前になんでもいいのでsrandしないといけなくなりますが。<br>
-                PC起動時からの経過tick数を返すclock関数はほぼ必ず呼び出しごとに値が変わると言えるのでseedには持ってこいです。
-            </p>
-        </section>
-        <section>
-            <h3>seed値の生成を改善する(WindowsとLinux)</h3>
-            <p>
-                実行ファイルを実行するとたいていはOSが管理するためにそれぞれにプロセスID(pid)が割り当てられます。こいつもseedに使えそうです。<br>
-                Windowsではwin32apiのGetCurrentProcessId関数を使用します。Linuxでは・・・きっとあるでしょう。
-            </p>
-            <p>
-                また、マウスポインタの位置は完全に予測不能ですのでseedにもってこいです。<br>
-                WindowsではGetCursorPos関数を使用します。Linuxは、そもそもGUIの作り方がわからん。まあQtとかXWindowとか大抵のGUIフレームワークでそれっぽい関数があるでしょう。<br>
-                <a href="http://doc.qt.io/qt-5/qcontextmenuevent.html#globalPos">http://doc.qt.io/qt-5/qcontextmenuevent.html#globalPos</a><br>
-                Qtではこれ使うっぽい。さっぱり使い方がわからんけど。
-            </p>
-            <p>とまぁ、こういう感じになる・・・のかな？</p>
-            <pre class="brush: cpp;">unsigned int create_seed(int argc, char* argv[], uint32_t num){
+        <p>
+            main関数の引数のアドレスは最近のOSなら大体ランダムになるようなので十分使えます。また、ヒープ領域にメモリーを確保するmalloc関数もそのアドレスはある程度ランダムに選ばれると言っていいでしょう。<br>
+            擬似乱数生成器自身もseed値を予測しにくくするのに役立つでしょう。初回呼び出し前になんでもいいのでsrandしないといけなくなりますが。<br>
+            PC起動時からの経過tick数を返すclock関数はほぼ必ず呼び出しごとに値が変わると言えるのでseedには持ってこいです。
+        </p>
+    </section>
+    <section>
+        <h3>seed値の生成を改善する(WindowsとLinux)</h3>
+        <p>
+            実行ファイルを実行するとたいていはOSが管理するためにそれぞれにプロセスID(pid)が割り当てられます。こいつもseedに使えそうです。<br>
+            Windowsではwin32apiのGetCurrentProcessId関数を使用します。Linuxでは・・・きっとあるでしょう。
+        </p>
+        <p>
+            また、マウスポインタの位置は完全に予測不能ですのでseedにもってこいです。<br>
+            WindowsではGetCursorPos関数を使用します。Linuxは、そもそもGUIの作り方がわからん。まあQtとかXWindowとか大抵のGUIフレームワークでそれっぽい関数があるでしょう。<br>
+            <a href="http://doc.qt.io/qt-5/qcontextmenuevent.html#globalPos">http://doc.qt.io/qt-5/qcontextmenuevent.html#globalPos</a><br>
+            Qtではこれ使うっぽい。さっぱり使い方がわからんけど。
+        </p>
+        <p>とまぁ、こういう感じになる・・・のかな？</p>
+        <pre class="brush: cpp;">unsigned int create_seed(int argc, char* argv[], uint32_t num){
 	POINT point;
 	GetCursorPos(&point);
 	char* dst = (char*)malloc(sizeof(char) * 2);
@@ -150,41 +151,40 @@ int main(void){
 	free(dst);
 	return seed;
 }</pre>
-            <p>せっかくなのでこれを利用してなんか動くものを作る。</p>
-            <script src="http://ideone.com/e.js/1wxKrF" type="text/javascript"></script>
-        </section>
-        <section>
-            <h3>そもそも乱数のseed作成にはIntelCPUのRDRAND命令やRDSEED命令が使える</h3>
-            <p>
-                さきほどseedを作る方法を紹介しましたが、Intel Core i シリーズ第3世代からはRDRAND命令、第5世代からはRDSEED命令という乱数生成命令が追加されました。<br>
-                こいつはハードウェア乱数生成器で擬似乱数生成程ではないにしろ、比較的高速にほとんど真の乱数と呼べる数値を作ってくれます。<br>
-                なのでこいつをseedに使ってやればいいです。またさほど生成が遅くないので(200tick程度？)これ自体を乱数として採用するのもありです。
-            </p>
-            <p>
-                実際にRDRAND命令を乱数として採用したのがこちらのプロジェクトです。DLして試してみてください。<br>
-                Using Intel’s Secure Key (RDRAND) in MS Visual C++ 2013 | GiuHub<br>
-                <a href="https://github.com/yumetodo/rdrand_msvc_2010">https://github.com/yumetodo/rdrand_msvc_2010</a><br>
-            </p>
-            <pre class="brush: plain;">git clone https://github.com/yumetodo/rdrand_msvc_2010.git</pre>
-            <p><a href="https://github.com/yumetodo/rdrand_msvc_2010/blob/master/README.md">readme</a>に書いているように、わざわざアセンブリを書かなくても</p>
-            <pre class="brush: cpp;">static bool RDRAND(void) { return CPU_Rep.f_1_ECX_[30]; }
+        <p>せっかくなのでこれを利用してなんか動くものを作る。</p>
+        <script src="http://ideone.com/e.js/1wxKrF" type="text/javascript"></script>
+    </section>
+    <section>
+        <h3>そもそも乱数のseed作成にはIntelCPUのRDRAND命令やRDSEED命令が使える</h3>
+        <p>
+            さきほどseedを作る方法を紹介しましたが、Intel Core i シリーズ第3世代からはRDRAND命令、第5世代からはRDSEED命令という乱数生成命令が追加されました。<br>
+            こいつはハードウェア乱数生成器で擬似乱数生成程ではないにしろ、比較的高速にほとんど真の乱数と呼べる数値を作ってくれます。<br>
+            なのでこいつをseedに使ってやればいいです。またさほど生成が遅くないので(200tick程度？)これ自体を乱数として採用するのもありです。
+        </p>
+        <p>
+            実際にRDRAND命令を乱数として採用したのがこちらのプロジェクトです。DLして試してみてください。<br>
+            Using Intel’s Secure Key (RDRAND) in MS Visual C++ 2013 | GiuHub<br>
+            <a href="https://github.com/yumetodo/rdrand_msvc_2010">https://github.com/yumetodo/rdrand_msvc_2010</a><br>
+        </p>
+        <pre class="brush: plain;">git clone https://github.com/yumetodo/rdrand_msvc_2010.git</pre>
+        <p><a href="https://github.com/yumetodo/rdrand_msvc_2010/blob/master/README.md">readme</a>に書いているように、わざわざアセンブリを書かなくても</p>
+        <pre class="brush: cpp;">static bool RDRAND(void) { return CPU_Rep.f_1_ECX_[30]; }
 extern int __cdecl _rdrand16_step(unsigned short *);
 extern int __cdecl _rdrand32_step(unsigned int *);
 #if defined (_M_X64)
 extern int __cdecl _rdrand64_step(unsigned __int64 *);
 #endif  /* defined (_M_X64) */</pre>
-            <p>これらの関数群が使えるんですけどね。</p>
-        </section>
-        <section>
-            <h3>そもそもwin32apiに乱数生成関数がある</h3>
-            <p>
-                MSVCにはrand_sという関数が有り、勝手に適当なseedを与えて擬似乱数を作ってくれる関数があります。<br>
-                こいつは内部で「RtlGenRandom API」というWindowsXP以降に対応しているAPIを叩いています。
-            </p>
-            <pre class="brush: cpp;">errno_t rand_s(unsigned int* randomValue);</pre>
-            <p><a href="https://msdn.microsoft.com/ja-jp/library/sxtz2fa8.aspx">rand_s | MSDN</a></p>
-            <p>乱数の精度にさほどこだわらない時はこれを使うといいです。少なくともrand関数よりはずっと優秀です。</p>
-        </section>
+        <p>これらの関数群が使えるんですけどね。</p>
+    </section>
+    <section>
+        <h3>そもそもwin32apiに乱数生成関数がある</h3>
+        <p>
+            MSVCにはrand_sという関数が有り、勝手に適当なseedを与えて擬似乱数を作ってくれる関数があります。<br>
+            こいつは内部で「RtlGenRandom API」というWindowsXP以降に対応しているAPIを叩いています。
+        </p>
+        <pre class="brush: cpp;">errno_t rand_s(unsigned int* randomValue);</pre>
+        <p><a href="https://msdn.microsoft.com/ja-jp/library/sxtz2fa8.aspx">rand_s | MSDN</a></p>
+        <p>乱数の精度にさほどこだわらない時はこれを使うといいです。少なくともrand関数よりはずっと優秀です。</p>
     </section>
     <section>
         <h2>C++11 or laterで乱数生成</h2>

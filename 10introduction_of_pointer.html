@@ -72,7 +72,7 @@ int *p;
 p = &amp;a;
 printf("%d, %p, %d", a, p, *p);</pre>
         <p>3行目はさっきの変数のアドレスを取得するやつですね。こうすることでint*型の変数、pはaを指します。図を書いたほうがわかりやすいかな。</p>
-        <div style="background-color: white;"><img alt="スタック領域" src="./pic/de_pointer_01.png"></div>
+        <img alt="スタック領域" src="./pic/de_pointer_01.png">
         <p>ポインタが指し示す先を取得するには変数名の前に「*」をつけます。「int *p;」の「*」とは意味が違います。なお</p>
         <pre class="brush: cpp;">int *p;
 int* p;</pre>
@@ -136,29 +136,29 @@ int main(void){
         puts("num2のほうが大きい");
     }
 }</pre>
-        <section>
-            <h3>NULLポインタ</h3>
-            <p>
-                さて、ポインタは宣言した時は普通の変数がそうであるように、変数の値に何が入っているかわかりません。つまり、どこを指しているかわからないポインタ、というわけです。<br>
-                それで、どこも指していないことが保証されているポインタというのがあり、NULLポインタと呼ばれます。<br>
-                詳細は省きますが、C言語的にはNULLがNULLポインタなのですが、みなさんC言語といいつつC++なので、<b>nullptrを使って</b>ください。<br>
-                上のプログラムでもちゃっかり使っています。というかC言語でもnullptrって書きたいがためにむりくりdefineしてますが。<br>
-                下を見てください。C++11以降のC++と思ってください。
-            </p>
-            <pre class="brush: cpp;">bool hoge1 = (NULL == nullptr);//false
+    </section>
+    <section>
+        <h3>NULLポインタ</h3>
+        <p>
+            さて、ポインタは宣言した時は普通の変数がそうであるように、変数の値に何が入っているかわかりません。つまり、どこを指しているかわからないポインタ、というわけです。<br>
+            それで、どこも指していないことが保証されているポインタというのがあり、NULLポインタと呼ばれます。<br>
+            詳細は省きますが、C言語的にはNULLがNULLポインタなのですが、みなさんC言語といいつつC++なので、<b>nullptrを使って</b>ください。<br>
+            上のプログラムでもちゃっかり使っています。というかC言語でもnullptrって書きたいがためにむりくりdefineしてますが。<br>
+            下を見てください。C++11以降のC++と思ってください。
+        </p>
+        <pre class="brush: cpp;">bool hoge1 = (NULL == nullptr);//false
 void* hoge_ptr1 = NULL;
 void* hoge_ptr2 = nullptr;
 bool hoge2 = (hoge_ptr1 == hoge_ptr2);//true</pre>
-            <p>
-                とくに理由のない限り皆さんはC++としてコンパイルするわけで、標準規格への準拠がとっても遅いことで有名なVCもさすがにnullptrには対応しているので、こちらを使いましょう。<br>
-                え？なんでNULL使っちゃダメかって？・・・ええっとそれを説明するにはC++の関数のオーバーロードのお話をしないといけないので、自分で調べてください。<br>
-                C++ - NULL と nullptr って何が違う？ - Qiita<br>
-                <a href="http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1">http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1</a><br>
-                nullptrキーワード - yohhoyの日記<br>
-                <a href="http://d.hatena.ne.jp/yohhoy/20120503/p1">http://d.hatena.ne.jp/yohhoy/20120503/p1</a><br>
-                らへんが参考になると思います。ちなみにnullptrの型はstd::nullptr_t型です。javascriptだとnullポインタはnullです。・・・まあ、細けーことはいいんだよ、<b>nullptr使え</b>。
-            </p>
-        </section>
+        <p>
+            とくに理由のない限り皆さんはC++としてコンパイルするわけで、標準規格への準拠がとっても遅いことで有名なVCもさすがにnullptrには対応しているので、こちらを使いましょう。<br>
+            え？なんでNULL使っちゃダメかって？・・・ええっとそれを説明するにはC++の関数のオーバーロードのお話をしないといけないので、自分で調べてください。<br>
+            C++ - NULL と nullptr って何が違う？ - Qiita<br>
+            <a href="http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1">http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1</a><br>
+            nullptrキーワード - yohhoyの日記<br>
+            <a href="http://d.hatena.ne.jp/yohhoy/20120503/p1">http://d.hatena.ne.jp/yohhoy/20120503/p1</a><br>
+            らへんが参考になると思います。ちなみにnullptrの型はstd::nullptr_t型です。javascriptだとnullポインタはnullです。・・・まあ、細けーことはいいんだよ、<b>nullptr使え</b>。
+        </p>
     </section>
     <section>
         <h2>ポインタと初期化</h2>
