@@ -41,9 +41,11 @@
             <li>printf関数は縛り</li>
             <li>Visual Studioでここで紹介した機能がすべて使えるわけではありません。おのれVS。</li>
             <li>
-                掲載しているソースコードは特に記述のない限り、以下の環境でコンパイルし実行できることを確認しています。<ul>
+                掲載しているソースコードは特に記述のない限り、以下の環境でコンパイルし実行できることを確認しています。
+                <ul>
                     <li>Visual Studio 2013 Community</li>
-                    <li>msys2 mingw gcc4.9.2 -std=C++11</li>
+                    <li>msys2 mingw gcc4.9.2 -std=C++14</li>
+                    <li>msys2 mingw clang3.5.1 -std=c++14</li>
                 </ul>
             </li>
             <li>最低限四則演算が理解できていること、コマンドプロンプトの操作が分かること、が前提となります。</li>
@@ -55,85 +57,71 @@
     </section>
     <section>
         <h2>目次</h2>
-        <p>
-            0.はじめの一歩(00the_first_step.html)<br>
-            <a href="http://yumetodo.github.io/2015_C_Textbook/00the_first_step.html">http://yumetodo.github.io/2015_C_Textbook/00the_first_step.html</a>
-        </p>
-        <hr>
+        <p>0.<a href="http://yumetodo.github.io/2015_C_Textbook/00the_first_step.html">はじめの一歩(00the_first_step.html)</a></p>
         <ol>
-            <li>
-                基本事項(01arikitarina_basic.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/01arikitarina_basic.html">http://yumetodo.github.io/2015_C_Textbook/01arikitarina_basic.html</a>
-            </li>
-            <li>
-                変数(02variable.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/02variable.html">http://yumetodo.github.io/2015_C_Textbook/02variable.html</a>
-            </li>
-            <li>
-                四則演算(03calc.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/03calc.html">http://yumetodo.github.io/2015_C_Textbook/03calc.html</a>
-            </li>
-            <li>
-                ビット(04bit.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/04bit.html">http://yumetodo.github.io/2015_C_Textbook/04bit.html</a>
-            </li>
-            <li>
-                関数(05function.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/05function.html">http://yumetodo.github.io/2015_C_Textbook/05function.html</a>
-            </li>
-            <li>
-                条件文(06conditional_state.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/06conditional_state.html">http://yumetodo.github.io/2015_C_Textbook/06conditional_state.html</a>
-            </li>
-            <li>
-                ループ(07roop.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/07roop.html">http://yumetodo.github.io/2015_C_Textbook/07roop.html</a>
-            </li>
-            <li>
-                ファイル分割(08split_to_file.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/08split_to_file.html">http://yumetodo.github.io/2015_C_Textbook/08split_to_file.html</a>
-            </li>
-            <li>
-                標準入出力(09standard_input_output.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/09standard_input_output.html">http://yumetodo.github.io/2015_C_Textbook/09standard_input_output.html</a>
-            </li>
-            <li>
-                ポインターの導入(10introduction_of_pointer.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/10introduction_of_pointer.html">http://yumetodo.github.io/2015_C_Textbook/10introduction_of_pointer.html</a>
-            </li>
-            <li>
-                配列(11c_array.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/11c_array.html">http://yumetodo.github.io/2015_C_Textbook/11c_array.html</a>
-            </li>
-            <li>
-                多次元配列(12m.d.c_array.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/12m.d.c_array.html">http://yumetodo.github.io/2015_C_Textbook/12m.d.c_array.html</a>
-            </li>
-            <li>
-                構造体(13structure.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/13structure.html">http://yumetodo.github.io/2015_C_Textbook/13structure.html</a>
-            </li>
-            <li>
-                ポインタと動的確保(14pointer.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/14pointer.html">http://yumetodo.github.io/2015_C_Textbook/14pointer.html</a>
-            </li>
-            <li>
-                lValueとrValueおよびtemplete(15value.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/15value.html">http://yumetodo.github.io/2015_C_Textbook/15value.html</a>
-            </li>
-            <li>
-                Range-base for(16Range-base_for.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/16Range-base_for.html">http://yumetodo.github.io/2015_C_Textbook/16Range-base_for.html</a>
-            </li>
-            <li>
-                乱数(17rand-num.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/17rand-num.html">http://yumetodo.github.io/2015_C_Textbook/17rand-num.html</a>
-            </li>
-            <li>
-                C言語の文字と文字列(18c_char_str_base.html)<br>
-                <a href="http://yumetodo.github.io/2015_C_Textbook/18c_char_str_base.html">http://yumetodo.github.io/2015_C_Textbook/18c_char_str_base.html</a>
-            </li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/01arikitarina_basic.html">基本事項(01arikitarina_basic.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/02variable.html">変数(02variable.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/03calc.html">四則演算(03calc.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/04bit.html">ビット(04bit.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/05function.html">関数(05function.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/06conditional_state.html">条件文(06conditional_state.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/07roop.html">ループ(07roop.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/08split_to_file.html">ファイル分割(08split_to_file.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/09standard_input_output.html">標準入出力(09standard_input_output.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/10introduction_of_pointer.html">ポインターの導入(10introduction_of_pointer.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/11c_array.html">配列(11c_array.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/12m.d.c_array.html">多次元配列(12m.d.c_array.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/13structure.html">構造体(13structure.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/14pointer.html">ポインタと動的確保(14pointer.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/15value.html">lValueとrValueおよびtemplete(15value.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/16Range-base_for.html">Range-base for(16Range-base_for.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/17rand-num.html">乱数(17rand-num.html)</a></li>
+            <li><a href="http://yumetodo.github.io/2015_C_Textbook/18c_char_str_base.html">C言語の文字と文字列(18c_char_str_base.html)</a></li>
         </ol>
+    </section>
+    <section>
+        <h2>コンパイラー及び開発環境導入</h2>
+        <section>
+            <h3>Visual Studio 2013</h3>
+            <ol>
+                <li>
+                    まずは普通にVisual Studio 2013をインストールする。私はCommunity版で十分に満足しているが、どうしてもというならProfessional版でもいいだろう。<br>
+                    <a href="http://rigaya34589.blog135.fc2.com/blog-entry-539.html">rigayaの日記兼メモ帳  Visual Studio Community 2013</a><br>
+                    大事なのは可能な限り最新版を使うということだ。ただでさえ規格準拠の遅いVCの古いバージョンを使うとかプロのどM以外の何物でもない。
+                </li>
+                <li>
+                    Visual C++ Compiler November 2013 CTPを入れる<br>
+                    <a href="http://nekko1119.hatenablog.com/entry/2013/11/19/062321">Visual C++ Compiler November 2013 CTPがやってきた！ - C++と色々</a><br>
+                    <a href="http://blog.livedoor.jp/haruka_sao/archives/52056922.html">遥佐保の技術メモ:[C++]VisualStudio2013NovCTP：C++17(予定)resumable/await紹介 - livedoor Blog（ブログ）</a><br>
+                    <a href="http://blogs.msdn.com/b/vcblog/archive/2013/11/18/announcing-the-visual-c-compiler-november-2013-ctp.aspx">Announcing the Visual C++ Compiler November 2013 CTP - Visual C++ Team Blog - Site Home - MSDN Blogs</a><br>
+                    を参考に。これによりC++11や14の機能への対応が増える。constexprとかconstexprとか戻り値の型推論とかdecltype(auto)とか。
+                </li>
+            </ol>
+        </section>
+        <section>
+            <h3>gcc, clang</h3>
+            <ol>
+                <li>
+                    <a href="https://github.com/MaverickTse/lsw-build2/blob/master/readme_jp.md">lsw-build2/readme_jp.md at master · MaverickTse/lsw-build2</a><br>
+                    の「初回のビルド方法 (半自動版)」の項の手順7まで実行する。ただし MSYS2のコンソールを閉じないこと。
+                </li>
+                <li>
+                    <pre class="brush: plain">pacman -S mingw-w64-x86_64-gdb
+pacman -S libxml2-devel
+pacman -S mingw-w64-i686-clang
+pacman -S mingw-w64-x86_64-clang </pre>
+                    と実行する。最後の2行はclangも入れる人のみ
+                </li>
+                <li>コンソールを閉じる</li>
+                <li>
+                    ビルドするときは、<br>
+                    32bit向けにはmingw32_shell.bat を、64bit向けにはmingw64_shell.batを実行し、その上でコンパイラーを走らせる。
+                </li>
+                <li>
+                    コンパイラーとかとかを更新するときは上記リンクの手順5～7を繰り返す。
+                </li>
+            </ol>
+        </section>
     </section>
 </body>
 </html>
