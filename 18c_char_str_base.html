@@ -117,7 +117,7 @@ auto u16_c = u'あ' ;
 auto u32_c = U'あ' ;
 
 /* C++17以降の記法 */
-//型はchar、符号化方式はUTF-8、 値はOx78
+//型はchar、符号化方式はUTF-8、 値は0x78
 auto u8_c = u8'x';</pre>
         <p>LとかuとかUとかu8とかをprefixといいます。</p>
         <p>u8-prefixをつけるときは必ずその文字がsingle UTF-8 code unit、つまり8bitに収まる必要があります。ようは</p>

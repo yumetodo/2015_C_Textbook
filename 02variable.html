@@ -206,6 +206,30 @@ char ch = getchar();</pre>
         </section>
     </section>
     <section>
+        <h2>型の表せる範囲</h2>
+        <p>先ほどの表で<code>INT_MAX</code>とか<code>INT_MIN</code>とかいろいろ有りましたが、要するにその型に入れられる最大値とか最小値です。</p>
+        <p>これらは後に説明するプリプロセッサマクロですが、C++ではこういうのを使うのは余り好ましくない、とされています。なので</p>
+        <pre class="brush: cpp;">#include&lt;limits&gt;
+//中略
+std::numeric_limits&lt;int&gt;::max()</pre>
+        <p>とかで求めます。戻り値はconstexpr(後述)なのでプリプロセッサマクロ同様コンパイル時定数です。</p>
+        <p>
+            numeric_limits - cpprefjp C++日本語リファレンス<br>
+            <a href="http://cpprefjp.github.io/reference/limits/numeric_limits.html">http://cpprefjp.github.io/reference/limits/numeric_limits.html</a><br>
+            numeric_limitsはデフォルトで意味無い値を提供する - ::Eldesh a b = LEFT a | RIGHT b<br>
+            <a href="http://d.hatena.ne.jp/eldesh/20110120/1295497346">http://d.hatena.ne.jp/eldesh/20110120/1295497346</a>
+        </p>
+    </section>
+    <section>
+        <h2>型の大きさ</h2>
+        <p>
+            型の大きさが処理系によって異なることが日常のC言語ですが、時には求められないと困ることが有ります。メモリーの動的確保をするときなんかですが。<br>
+            そこで<code>sizeof</code>演算子です。使ってみましょう。
+        </p>
+        <pre class="brush: cpp;">printf("%d\n", sizeof(int));</pre>
+        <p>sizeof演算子には必ずしも<code>()</code>は必要ありませんが、あったほうがはるかに見やすいのでつけましょう。</p>
+    </section>
+    <section>
         <h2 id="signed_unsigned">signedとunsigned</h2>
         <p>
             既にちらっと書いてますが、整数型にはsignedとunsignedがあります（浮動小数点型にunsignedはない）。<br>
@@ -236,7 +260,7 @@ map&lt;int,list&lt;string&gt;&gt;::iterator i</pre>
         <p>そこでauto型の出番です。</p>
         <pre class="brush: cpp;">unsigned int x = 10;
 auto l = x;</pre>
-        <p>とかすると変数lの型はint型になります。便利だね。なお、C++03まではautoは別の意味で使われていたので注意です。</p>
+        <p>とかすると変数lの型はint型になります。便利だね。なお、C++03まではautoは別の意味で使われていたので注意です。<b>言うまでもなくコンパイラーが型を推測できないとダメです。</b></p>
     </section>
     <section>
         <h2 id="typedef">typedef</h2>
@@ -285,8 +309,10 @@ int64_t sum = sum1 + sum2;</pre>
         <pre class="brush: cpp;">const unsigned int len = 20;
 len = 21;//エラー</pre>
         <p>constをつけるときは定義と初期化は同時である必要があります。だって「Read-Only」だもん、後から変更できないんだから初期化も一緒にやらないとダメだよね。</p>
-        <p>逆に言うと定義と初期化を同時に行うときは殆どの場合constをつけるべき場面です。</p>
+        <p class="strong">逆に言うと定義と初期化を同時に行うときは殆どの場合constをつけるべき場面です。</p>
         <p>注意になりますが、constは「定数」を作るものではありません、あくまで「Read-Only」にするものです。その違いはポインタのところで解説します。</p>
+        <p class="strong">変数をなるべくconstにするようにプログラミングすると多くの場合見やすくわかりやすいものになりやすいです。</p>
+        <p>必然的に関数に分けたりラムダ式を使ったりするようになりますからね。</p>
     </section>
     <section>
         <h2 id="int_literals">整数リテラル</h2>
@@ -323,6 +349,7 @@ int d = 0B1011 ;// 10進数では、11</pre>
     <section>
         <h2 id="scope">自動変数の生存期間とスコープ</h2>
         <p>自動変数ってなんなんだってばよっ！となってると思いますが、「いままで出てきたような」変数です。ということはそうでない変数があることくらいは「お察しください」。</p>
+        <p>まあグローバル変数とstatic変数なんですが、グローバル変数をつかうくらいならクラスなり、constexprつかえ、という話ですし、static変数はマルチスレッド化の時やポインターが絡むとややこしくなるので余り使いたくないです。</p>
         <p>スコープとはなにか、については見てもらったほうが速いと思います。</p>
         <pre class="brush: cpp;">{
     int a = 10;

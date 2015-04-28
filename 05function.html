@@ -139,7 +139,7 @@ int do_something2(void){
                             <dt>機能</dt>
                             <dd>2つの引数を受け取り、その和を返す。</dd>
                             <dt>プロトタイプ</dt>
-                            <dd><pre class="brush: cpp; gutter:false;">uint64_t add(uint64_t a, uint64_t b);</pre></dd>
+                            <dd><pre class="brush: cpp; gutter:false;">uint32_t add(uint16_t a, uint16_t b);</pre></dd>
                             <dt>ヒント</dt>
                             <dd>
                                 main関数側はこう書けばいい。
@@ -220,9 +220,9 @@ argv[3]:world!
             いいえ、そんなことはありません、下のサンプルを見てください。
         </p>
         <pre class="brush: cpp;">#include&amp;lt;stdio.h&amp;gt;
-#include&amp;lt;stdlib.h&amp;gt;
-#include&amp;lt;limits.h&amp;gt;//in gcc
-#include&amp;lt;errno.h&amp;gt;//in gcc
+#include&lt;stdlib.h&gt;
+#include&lt;limits.h&gt;//in gcc
+#include&lt;errno.h&gt;//in gcc
 #ifndef _cplusplus
 #define nullptr NULL
 #endif
@@ -280,7 +280,13 @@ int main(void){
         <p>まずはこれを見てください。</p>
         <script src="http://ideone.com/e.js/JoSm1E" type="text/javascript"></script>
         <p>
-            このプログラムの問題点は
+            なんと330行！まあ世の中には<a href="http://ideone.com/kNwsrx">ひとつの関数で2458行になる超絶関数(通称never ending function)</a>もあるにはあるのですが、さすがに紹介したくない。<br>
+            Ｃプログラミング診断室／最長不倒関数／プログラムの紹介<br>
+            <a href="http://www.pro.or.jp/~fuji/mybooks/cdiag/cdiag.10.2.html">http://www.pro.or.jp/~fuji/mybooks/cdiag/cdiag.10.2.html</a><br>
+            このプログラムの出典は<br>
+            Ｃプログラミング診断室／上司が問題／はじめに<br>
+            <a href="http://www.pro.or.jp/~fuji/mybooks/cdiag/cdiag.3.1.html">http://www.pro.or.jp/~fuji/mybooks/cdiag/cdiag.3.1.html</a><br>
+            で、そのサイトにこのプログラムの問題点が詳しく書いてありますが、見て行きましょう。
         </p>
         <ul>
             <li>

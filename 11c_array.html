@@ -36,8 +36,13 @@
         <pre class="brush: cpp;">int cell[10];</pre>
         <p>
             みたいに書きます。[]の中に要素数を指定するのですが、この要素数はコンパイル時にきまっている必要が有ります(C99/C11以外)。<br>
-            なのでC99/C11以外ではこんな書き方はできません。C99/C11ではこの場合は厳密には配列ではないらしいです。
+            なのでC99/C11以外ではこんな書き方はできません。
         </p>
+        <pre class="brush: cpp;">const unsigned int tmp1 = 5;
+int cell1[tmp1];//NG without C99/C11
+constexpr unsigned int tmp2 = 5;
+int cell2[tmp2];//OK. However, it's able to use VC November 2013 CTP or later.</pre>
+        <p>constexprはコンパイル時定数ですから使えます。が、constexprが使えるのはVCだとNovember 2013 CTPからみたいですね。さすが実装は最遅。C99/C11では2行目の場合は厳密には配列ではないらしいです。</p>
         <p>
             で、この記法はC++では使えません。<code>std::array</code>がある以上必要ないと思いますが。C++14(N3639)で導入されかけて廃止され、n3820で再提案されているそうです。<br>
             <a href="http://isocpp.org/files/papers/N3639.html">N3639 Runtime-sized arrays with automatic storage duration (revision 5)</a><br>

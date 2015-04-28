@@ -107,8 +107,9 @@ const double surplus = input - (divisor * temp);</pre>
                 詳細な説明は<br>
                 キャスト | プログラマーズ雑記帳<br>
                 <a href="http://yohshiy.blog.fc2.com/blog-category-9.html">http://yohshiy.blog.fc2.com/blog-category-9.html</a><br>
-                に譲りますが、Cのキャストは理由がない限り使わず、C++のstatic_castを使用しましょう。
+                に譲りますが、Cのキャストは理由がない限り使わず、C++のstatic_castを使用しましょう。キャストしないに越したことはありませんが、
             </p>
+            <p class="strong">static_castならかなり安全に使用できます。Cのキャストは使うな。</p>
             <pre class="brush: cpp;">const int temp = static_cast&lt;int&gt;(input) / divisor;</pre>
             <p>
                 もっとも、まともなコーディングをしていれば、malloc,calloc,realloc関数以外でキャストを使う場面はないはずです。<br>
