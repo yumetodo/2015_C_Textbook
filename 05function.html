@@ -43,12 +43,14 @@ int do_something2(void){
     //do something
     return 0;
 }</pre>
-        <p>関数の呼び出し規約は省略することが多いが(その場合__cdeclになる)、Win32APIを使うならお世話になるだろう。後述する。</p>
+        <p>関数の呼び出し規約は省略することが多いが(その場合__cdeclになる)、Win32APIを使うならお世話になるだろし、C++のクラスのメンバー関数は呼び出し規約が更に異なります。後述する。</p>
         <p>実際に関数を作るときには「プロトタイプ宣言」という物を書くことになる。書き方を立方体の体積を求める関数を例に説明する。</p>
         <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/call_function.cpp"></script>
+        <pre class="brush: cpp;">double calc_volume(double si, double s2, double s3);
+//[戻り値の型] ([関数呼び出し規約]) [関数名](仮引数リスト);</pre>
         <p>
             2行目が関数のプロトタイプ宣言と呼ばれるものだ。戻り値の型、(呼び出し規約)、関数名、仮引数リストを書く。<br>
-            なお、その関数を使用するまでに関数が宣言されている必要があるため、原則として#define文やtypedefや定数宣言のあとにまとめて書いておくこと。
+            なお、その関数を使用するまでに関数が宣言されている必要があるため、原則として#define文やtypedefや定数宣言の直後にまとめて書いておくこと。
         </p>
         <p>このcalc_volume関数が定義されるのは、10～13行目の部分だ。ここで関数の実際の処理を書く。</p>
         <p>この関数が呼び出される7行目だ。ここで初めて実際に定義に基づいて処理を行う。calc_volume関数内のreturn文にかいたものが変数resultに代入されている。</p>
