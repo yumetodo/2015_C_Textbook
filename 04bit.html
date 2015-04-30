@@ -13,6 +13,33 @@
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
+    <style type="text/css">
+        .bit_04 {
+            width: 50%;
+            border-collapse: separate;
+            border-spacing: 0px;
+            border-top: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+        }
+            .bit_04 th {
+                width: 25%;
+                padding: 4px;
+                text-align: left;
+                vertical-align: top;
+                color: #444;
+                background-color: #ccc;
+                border-top: 1px solid #fff;
+                border-left: 1px solid #fff;
+                border-right: 1px solid #ccc;
+                border-bottom: 1px solid #ccc;
+            }
+            .bit_04 td{
+                padding: 4px;
+                background-color: #fafafa;
+                border-right: 1px solid #ccc;
+                border-bottom: 1px solid #ccc;
+            }
+    </style>
 </head>
 <body>
     <h1>第4章 ～ビット～</h1>
@@ -76,21 +103,31 @@ const uint32_t b = 0b11010;//26
 const uint32_t re = a &amp; b;//18:0b10010</pre>
         <p>各bitにAND演算をします。</p>
         <img alt="AND" src="http://upload.wikimedia.org/wikipedia/ja/7/7b/Venn-Diagram-AND.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
-        <table>
+        <table class="bit_04">
             <tr>
-                <th>AND(&amp;)</th>
-                <th>1</th>
-                <th>0</th>
+                <th>A</th>
+                <th>B</th>
+                <th>A & B</th>
             </tr>
             <tr>
-                <th>1</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>0</td>
                 <td>1</td>
                 <td>0</td>
             </tr>
             <tr>
-                <th>0</th>
+                <td>1</td>
                 <td>0</td>
                 <td>0</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
             </tr>
         </table>
         <p>結果はこの表に従います。</p>
@@ -102,21 +139,31 @@ const uint32_t b = 0b11010;//26
 const uint32_t re = a | b;//30:0b11110</pre>
         <p>各bitにOR演算をします。</p>
         <img alt="OR" src="http://upload.wikimedia.org/wikipedia/ja/5/5e/Venn-Diagram-OR.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
-        <table>
+        <table class="bit_04">
             <tr>
-                <th>OR(|)</th>
-                <th>1</th>
-                <th>0</th>
+                <th>A</th>
+                <th>B</th>
+                <th>A | B</th>
             </tr>
             <tr>
-                <th>1</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>0</td>
                 <td>1</td>
                 <td>1</td>
             </tr>
             <tr>
-                <th>0</th>
                 <td>1</td>
                 <td>0</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
             </tr>
         </table>
         <p>結果はこの表に従います。</p>
@@ -128,19 +175,29 @@ const uint32_t b = 0b11010;//26
 const uint32_t re = a ^ b;//12:0b1100</pre>
         <p>各bitにXOR演算をします。</p>
         <img alt="XOR" src="http:////upload.wikimedia.org/wikipedia/ja/6/6b/Venn-Diagram-XOR.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
-        <table>
+        <table class="bit_04">
             <tr>
-                <th>XOR(|)</th>
-                <th>1</th>
-                <th>0</th>
+                <th>A</th>
+                <th>B</th>
+                <th>A ^ B</th>
             </tr>
             <tr>
-                <th>1</th>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>1</td>
                 <td>0</td>
                 <td>1</td>
             </tr>
             <tr>
-                <th>0</th>
+                <td>1</td>
                 <td>1</td>
                 <td>0</td>
             </tr>

@@ -29,6 +29,34 @@
         <pre class="brush: cpp;">while(継続条件) 実行文;</pre>
         <p>if文と同様、実行文は{}を使って複数行書くことができます。例を見てみましょう。</p>
         <pre class="brush: cpp;">while('\n' != getchar());</pre>
+        <p>例えば、</p>
+        <pre class="brush: cpp;">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+int getnum(void){
+	char s[100];
+	long t;
+	char *endptr;
+	fgets(s, 100, stdin);
+	errno = 0;
+	t = strtol(s, &endptr, 10);
+	if (errno != 0 || *endptr != '\n' || (t < INT_MIN || INT_MAX < t))
+		return -1;
+	return t;
+}
+int main(){
+	int num;
+	int sum = 0;
+	while (1){
+		printf("数値を入力してください(-1で終了):");
+		num = getnum();
+		if (num == -1)
+			break;
+		sum += num;
+	}
+	printf("入力した数値の合計は%dです。\n", sum);
+	return 0;
+}
+</pre>
     </section>
     <section>
         <h2>for文</h2>
@@ -44,6 +72,30 @@
     //実行文
 }while(継続条件)</pre>
         <p>これまた多くの場合、ポインターや標準入力とともに使うので実例はその時に。</p>
+    </section>
+    <section>
+        <h2>練習問題</h2>
+        <p>unsigned intのビット数を求めてみよう！</p>
+        <pre class="brush: cpp;">
+#include&lt;stdio.h&gt;
+/*--- unsigned型のビット数を返却 ---*/
+int int_bits(void)
+{
+	int count = 0;
+	unsigned x = ~0U;
+	while (x) {
+		if (x & 1U) count++;
+		x >>= 1;
+	}
+	return count;
+}
+int main(){
+	int int_no_bits;
+	int_no_bits = int_bits();
+	printf("unsigned_int型のビット数は%dで、%dバイトです。\n",int_no_bits,int_no_bits/8);
+	return 0;
+}
+</pre>
     </section>
     <nav class="bottom">
         <ul>
