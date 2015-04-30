@@ -132,6 +132,14 @@ int do_something2(void){
                             <dt>プロトタイプ</dt>
                             <dd><pre class="brush: cpp; gutter:false;">void arikitari_na_kannsuu(void);</pre></dd>
                         </dl>
+                        <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-1')"></form>
+                        <section id="answer1-1" style="display: none;">
+                            <p>こんな感じかな？</p>
+                            <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+void arikitari_na_kannsuu(void){
+    puts("関数arikitari_na_kannsuuが実行されました");
+}</pre>
+                        </section>
                     </div>
                 </li>
                 <li>
@@ -149,6 +157,14 @@ int do_something2(void){
                                 当たり前だが、stdint.hをincludeしなければならない。
                             </dd>
                         </dl>
+                        <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-2')"></form>
+                        <section id="answer1-2" style="display: none;">
+                            <pre class="brush: cpp;">#include &lt;stdio.h%gt;
+#include &lt;stdint.h&gt;
+uint32_t add(uint16_t a, uint16_t b){
+    return a + b;
+}</pre>
+                        </section>
                     </div>
                 </li>
                 <li>
@@ -171,6 +187,14 @@ printf("%d", myGetRValue(color));</pre>
                                 マクロ GetGValue を用いてはならない。
                             </dd>
                         </dl>
+                        <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-3')"></form>
+                        <section id="answer1-3" style="display: none;">
+                            <pre class="brush: cpp;">#include &lt;windows.h%gt;
+#include &lt;stdio.h&gt;
+uint8_t add(COLORREF color){
+    return (uint8_t)(((((((DWORD_PTR)(((WORD)(rgb)) >> 8))) >> 16) &amp; 0xffff));
+}</pre>
+                        </section>
                     </div>
                 </li>
             </ol>
