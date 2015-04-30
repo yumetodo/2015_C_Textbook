@@ -10,6 +10,7 @@
     <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
     <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
     <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script src="./scripts/common.js" type="text/javascript"></script>
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
@@ -94,7 +95,8 @@ int main(void){
     printf("R:%d G:%d B:%d -> Y':%d\n", r, g, b, y);
     return 0;
 }</pre>
-            <section>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1')"></form>
+            <section id="answer1" style="display: none;">
                 <h4>回答</h4>
                 <pre class="brush: cpp;">#include &lt;cstdio&gt;
 #include &lt;cstdint&gt;
@@ -157,7 +159,8 @@ int main(void){
     printf("%d\n", isEvenOrOdd);
     return 0;
 }</pre>
-            <section>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer2')"></form>
+            <section id="answer2" style="display: none;">
                 <h4>回答</h4>
                 <p>5行目のみ。</p>
                 <pre class="brush: cpp;">const bool isEvenOrOdd = target &amp; 1;</pre>

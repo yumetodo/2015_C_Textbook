@@ -8,8 +8,9 @@
     <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
     <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
     <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
-    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css"></script>
     <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script src="./scripts/common.js" type="text/javascript"></script>
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
@@ -249,7 +250,8 @@ int main(void){
     )
     return 0;
 }</pre>
-            <section>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1')"></form>
+            <section id="answer1" style="display: none;">
                 <h4>回答</h4>
                 <p>3～7行目のみ示す。</p>
                 <pre class="brush: cpp;">    constexpr unsigned int s_char =  sizeof(char);//C++11 Usage
