@@ -300,6 +300,98 @@ int main(){
             ていうか教えてないし。
         </p>
     </section>
+    <section>
+        <h2>enum class</h2>
+        <p>
+            C言語のenumはグローバル空間で宣言されるため、名前衝突の危険が有りました。
+            enum classはscoped enumerationとかStrongly Typed Enumsとも呼ばれ、その名の通りスコープの概念があるenumとなっています。<br>
+            N2347 | Strongly Typed Enums (revision 3)<br>
+            <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2347.pdf">http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2347.pdf</a><br>
+            規格準拠の遅いVisual Studioでもかなり昔から使えたC++11の機能です。
+        </p>
+        <pre class="brush: cpp;">enum class PrimitiveType: std::size_t
+{
+    TriangleList = 0,
+    TriangleStrip,
+    LineList,
+    LineStrip,
+};
+//中略
+PrimitiveType primitiveType = PrimitiveType::TriangleStrip;</pre>
+        <p>
+            Cのenumと違い、いちいちtypedefする必要はありません。<br>
+            「PrimitiveType」はidentifierと呼ばれ、この列挙型の型名となります。<br>
+            「TriangleList」とか「TriangleStrip」とかは列挙子と呼ばれます。<br>
+            identifierの後に「: [型名]」のように続いていますが、これらは列挙子の内部的な型を指定します。省略するとint型になります。
+        </p>
+        <p>enum classでは厳密に型が判定されるので以下の例はすべてダメです。</p>
+        <pre class="brush: cpp;" title="ダメな例">int           primitiveType1 = PrimitiveType::TriangleList; // error
+unsigned char primitiveType2 = PrimitiveType::TriangleList; // error
+std::size_t   primitiveType3 = PrimitiveType::TriangleList; // error</pre>
+        <p>このように書き換える必要があります。</p>
+        <pre class="brush: cpp;" title="正しい例">PrimitiveType primitiveType4 = PrimitiveType::TriangleList;
+std::size_t primitiveType5 = static_cast&lt;std::size_t&gt;(PrimitiveType::TriangleList);</pre>
+        <p>もちろんこれもダメです。どうやって<code>size_t</code>型で負の値を表すのさ、unsignedなのに。</p>
+        <pre class="brush: cpp;" title="enum classの中だって型がチェックされる">enum class PrimitiveType: std::size_t
+{
+    TriangleList = -1, // error, Enumerator value evaluates to -1, which cannot be narrowed to type 'std::size_t'
+};</pre>
+        <p>早速例を見ましょう。</p>
+        <pre class="brush: cpp;">#include&lt;stdio.h&gt;
+//#include&lt;dxlib.h&gt;
+//  ゲーム状態
+enum class status_t{
+	STATE_TITLE,//タイトル
+	STATE_MAIN,//メイン
+	STATE_END,//リザルト
+};
+//タイトル処理
+status_t title(){
+	//タイトルを描画
+	//クリック押されたら
+	return status_t::STATE_END;
+}
+//ゲームのメイン処理
+status_t gameMain(){
+	//ゲーム処理
+	//ゲーム終了したら
+	return status_t::STATE_END;
+}
+//リザルト画面など
+status_t ending(){
+	//リザルト画面描画
+	//クリック押されたら
+	return status_t::STATE_MAIN;
+}
+int main(){
+	status_t function_status = status_t::STATE_TITLE;
+	switch (function_status){
+	case status_t::STATE_TITLE:
+		function_status = title();
+		break;
+	case status_t::STATE_MAIN:
+		function_status = gameMain();
+		break;
+	case status_t::STATE_END:
+		function_status = ending();
+		break;
+	default:
+		return -1;//エラー
+	}
+	return 0;
+}</pre>
+        <p>
+            参考サイト<br>
+            C3(Composite Computer Club)  »  5月22日は enum class の話。（1日目 #毎日3分 C++11。）<br>
+            <a href="http://www.c3.club.kyutech.ac.jp/archives/1614">http://www.c3.club.kyutech.ac.jp/archives/1614</a><br>
+            C++11 における enum のまとめ - spinorの日記<br>
+            <a href="http://d.hatena.ne.jp/spinor/20110918/1316321563">http://d.hatena.ne.jp/spinor/20110918/1316321563</a><br>
+            enumのスコープを指定する方法 - CREST’S WEBLOG <br>
+            <a href="http://d.hatena.ne.jp/Crest/20111020/1319113048">http://d.hatena.ne.jp/Crest/20111020/1319113048</a><br>
+            C++ 列挙体の宣言 | MSDN<br>
+            <a href="https://msdn.microsoft.com/ja-jp/library/2dzy4k6e.aspx">https://msdn.microsoft.com/ja-jp/library/2dzy4k6e.aspx</a>
+        </p>
+    </section>
     <nav class="bottom">
         <ul>
             <li><a href="./05function.html" title="前頁">prev</a></li>
