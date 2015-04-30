@@ -10,6 +10,7 @@
     <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
     <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
     <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script src="./scripts/common.js" type="text/javascript"></script>
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
@@ -92,9 +93,61 @@ const uint32_t re_si = si_a &gt;&gt; si_b;//2:10</pre>
                 右オペランドが格上げ後の左オペランドの精度以下<br>
                 「オーバーフローしないか」ともつながるが、例えば32bit変数を32回以上左シフトしたら必ずオーバーフローする。<br>
                 具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしmath.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
-                <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b < __popcnt(UINT_MAX))? si_a &gt;&gt; si_b : 0;</pre>
+                <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b &lt; __popcnt(UINT_MAX))? si_a &gt;&gt; si_b : 0;</pre>
             </li>
         </ul>
+        <article>
+            <h3>問題</h3>
+            <img src="./pic/bt601_bt709.png">
+            <p>
+                下記はRGBの値をBT.601の式に従いRGB(0-255)->YC8(0-4095)->YUV2(16-235)のように変換してYを求めるプログラムである。割り算を使わずシフト演算するものに書き換えよ。</p>
+            <pre class="brush: cpp;">#include &lt;cstdio&gt;
+#include &lt;cstdint&gt;
+typedef uint8_t color_e_t;
+int main(void){
+    const color_e_t r = 137;
+    const color_e_t g = 195;
+    const color_e_t b = 235;
+
+    const color_e_t y = (
+        (
+            (
+                (( 4918*static_cast&lt;uint64_t&gt;(r)+354)/1024)
+                + (( 9655*static_cast&lt;uint64_t&gt;(g)+585)/1024)
+                + (( 1875*static_cast&lt;uint64_t&gt;(b)+523)/1024)
+            )*219 + 383
+        ) / 4096
+    ) + 16;
+
+    printf("R:%d G:%d B:%d -> Y':%d\n", r, g, b, y);
+    return 0;
+}</pre>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1')"></form>
+            <section id="answer1" style="display: none;">
+                <h4>回答</h4>
+                <pre class="brush: cpp;">#include &lt;cstdio&gt;
+#include &lt;cstdint&gt;
+typedef uint8_t color_e_t;
+int main(void){
+    const color_e_t r = 137;
+    const color_e_t g = 195;
+    const color_e_t b = 235;
+
+    const color_e_t y = (
+        (
+            (
+                (( 4918*static_cast&lt;uint64_t&gt;(r)+354)>>10)
+                + (( 9655*static_cast&lt;uint64_t&gt;(g)+585)>>10)
+                + (( 1875*static_cast&lt;uint64_t&gt;(b)+523)>>10)
+            )*219 + 383
+        )>>12
+    ) + 16;
+
+    printf("R:%d G:%d B:%d -> Y':%d\n", r, g, b, y);
+    return 0;
+}</pre>
+            </section>
+        </article>
     </section>
     <section>
         <h2>ビットの論理積</h2>
@@ -131,6 +184,26 @@ const uint32_t re = a &amp; b;//18:0b10010</pre>
             </tr>
         </table>
         <p>結果はこの表に従います。</p>
+        <article>
+            <h3>問題</h3>
+            <p>下記は、AND演算を用いて整数型が偶数か奇数かを判断し、偶数なら0,奇数なら1を表示するプログラムである。完成させよ。</p>
+            <pre class="brush: cpp;">#include &lt;cstdio&gt;
+int main(void){
+    const unsigned int target = 11235;
+
+    const bool isEvenOrOdd = ;
+
+    printf("%d\n", isEvenOrOdd);
+    return 0;
+}</pre>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer2')"></form>
+            <section id="answer2" style="display: none;">
+                <h4>回答</h4>
+                <p>5行目のみ。</p>
+                <pre class="brush: cpp;">const bool isEvenOrOdd = target &amp; 1;</pre>
+                <p>2進数で考えた時、奇数は必ず下位1bitが1になるので1とAND演算すれば答えは求まる。</p>
+            </section>
+        </article>
     </section>
     <section>
         <h2>ビットの論理和</h2>

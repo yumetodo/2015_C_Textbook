@@ -43,12 +43,14 @@ int do_something2(void){
     //do something
     return 0;
 }</pre>
-        <p>関数の呼び出し規約は省略することが多いが(その場合__cdeclになる)、Win32APIを使うならお世話になるだろう。後述する。</p>
+        <p>関数の呼び出し規約は省略することが多いが(その場合__cdeclになる)、Win32APIを使うならお世話になるだろし、C++のクラスのメンバー関数は呼び出し規約が更に異なります。後述する。</p>
         <p>実際に関数を作るときには「プロトタイプ宣言」という物を書くことになる。書き方を立方体の体積を求める関数を例に説明する。</p>
         <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/call_function.cpp"></script>
+        <pre class="brush: cpp;">double calc_volume(double si, double s2, double s3);
+//[戻り値の型] ([関数呼び出し規約]) [関数名](仮引数リスト);</pre>
         <p>
             2行目が関数のプロトタイプ宣言と呼ばれるものだ。戻り値の型、(呼び出し規約)、関数名、仮引数リストを書く。<br>
-            なお、その関数を使用するまでに関数が宣言されている必要があるため、原則として#define文やtypedefや定数宣言のあとにまとめて書いておくこと。
+            なお、その関数を使用するまでに関数が宣言されている必要があるため、原則として#define文やtypedefや定数宣言の直後にまとめて書いておくこと。
         </p>
         <p>このcalc_volume関数が定義されるのは、10～13行目の部分だ。ここで関数の実際の処理を書く。</p>
         <p>この関数が呼び出される7行目だ。ここで初めて実際に定義に基づいて処理を行う。calc_volume関数内のreturn文にかいたものが変数resultに代入されている。</p>
@@ -130,6 +132,14 @@ int do_something2(void){
                             <dt>プロトタイプ</dt>
                             <dd><pre class="brush: cpp; gutter:false;">void arikitari_na_kannsuu(void);</pre></dd>
                         </dl>
+                        <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-1')"></form>
+                        <section id="answer1-1" style="display: none;">
+                            <p>こんな感じかな？</p>
+                            <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+void arikitari_na_kannsuu(void){
+    puts("関数arikitari_na_kannsuuが実行されました");
+}</pre>
+                        </section>
                     </div>
                 </li>
                 <li>
@@ -147,6 +157,14 @@ int do_something2(void){
                                 当たり前だが、stdint.hをincludeしなければならない。
                             </dd>
                         </dl>
+                        <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-2')"></form>
+                        <section id="answer1-2" style="display: none;">
+                            <pre class="brush: cpp;">#include &lt;stdio.h%gt;
+#include &lt;stdint.h&gt;
+uint32_t add(uint16_t a, uint16_t b){
+    return a + b;
+}</pre>
+                        </section>
                     </div>
                 </li>
                 <li>
@@ -169,6 +187,14 @@ printf("%d", myGetRValue(color));</pre>
                                 マクロ GetGValue を用いてはならない。
                             </dd>
                         </dl>
+                        <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-3')"></form>
+                        <section id="answer1-3" style="display: none;">
+                            <pre class="brush: cpp;">#include &lt;windows.h%gt;
+#include &lt;stdio.h&gt;
+uint8_t add(COLORREF color){
+    return (uint8_t)(((((((DWORD_PTR)(((WORD)(rgb)) >> 8))) >> 16) &amp; 0xffff));
+}</pre>
+                        </section>
                     </div>
                 </li>
             </ol>
@@ -219,10 +245,10 @@ argv[3]:world!
             今までのサンプルコードを見てきた人は、｢main関数は必ず0を返さなければいけないんですか？｣と思ったのではないでしょうか？(むしろ思っててほしいです)<br>
             いいえ、そんなことはありません、下のサンプルを見てください。
         </p>
-        <pre class="brush: cpp;">#include&amp;lt;stdio.h&amp;gt;
-#include&lt;stdlib.h&gt;
-#include&lt;limits.h&gt;//in gcc
-#include&lt;errno.h&gt;//in gcc
+        <pre class="brush: cpp;">#include&lt;cstdio&gt;
+#include&lt;cstdlib&gt;
+#include&lt;climits&gt;//in gcc
+#include&lt;cerrno&gt;//in gcc
 #ifndef _cplusplus
 #define nullptr NULL
 #endif
@@ -240,7 +266,7 @@ int get_integer_num(const int max, const int min){
 	const long t = strtol(s, &amp;endptr, 10);
 	if (0 != errno || '\n' != *endptr || t &amp;lt; min || max &amp;lt; t)
 		return INT_MIN;
-	return (int)t;
+	return static_cast&lt;int&gt;(t);
 }
 int main(void){
 	printf("今の時間帯は？\n1.朝　2.昼　3.夜(まだ寝ない)　4.夜(もう寝る)\n");

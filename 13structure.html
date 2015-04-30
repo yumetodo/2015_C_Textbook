@@ -140,9 +140,15 @@ const bignum_t big_num2 = big_num;</pre>
     uint8_t b;
 }rgb_t;
 rgb_t toGrayscale_stupid(rgb_t color){
-    const uint8_t y = ((4918 * (uint32_t)color.r + 354) >> 10)
-                        + ((9655 * (uint32_t)color.g + 585) >> 10)
-                        + ((1875 * (uint32_t)color.b + 523) >> 10);
+    const uint8_t y = (
+        (
+            (
+                (( 4918*static_cast&lt;uint64_t&gt;(color.r)+354)>>10)
+                + (( 9655*static_cast&lt;uint64_t&gt;(color.g)+585)>>10)
+                + (( 1875*static_cast&lt;uint64_t&gt;(color.b)+523)>>10)
+            )*219 + 383
+        )>>12
+    ) + 16;
     const rgb_t re = {y, y, y};
     return re;
 }
@@ -156,9 +162,15 @@ int main(void){
 }</pre>
         <p>いくらなんでも無駄すぎます。そこで</p>
         <pre class="brush: cpp; first-line: 7;">rgb_t* toGrayscale_stupid2(rgb_t* color){
-    const uint8_t y = ((4918 * (uint32_t)(color->r) + 354) >> 10)
-                        + ((9655 * (uint32_t)(color->g) + 585) >> 10)
-                        + ((1875 * (uint32_t)(color->b) + 523) >> 10);
+    const uint8_t y = (
+        (
+            (
+                (( 4918*static_cast&lt;uint64_t&gt;(color->r)+354)>>10)
+                + (( 9655*static_cast&lt;uint64_t&gt;(color->g)+585)>>10)
+                + (( 1875*static_cast&lt;uint64_t&gt;(color->b)+523)>>10)
+            )*219 + 383
+        )>>12
+    ) + 16;
     color->r = y;
     color->g = y;
     color->b = y;
@@ -167,7 +179,7 @@ int main(void){
 int main(void){
     rgb_t pic[720 * 408];
     //picに値をセット
-    for(size_t i = 0; i < 720 * 408; i++){
+    for(size_t i = 0; i &lt; 720 * 408; i++){
         color[i] = toGrayscale_stupid(color[i]);
     }
     return 0;
@@ -181,10 +193,16 @@ int main(void){
 (*color).r</pre>
         <p>が同値になる、という意味です。さて、グレースケール化関数を使いやすくしましょう。</p>
         <pre class="brush: cpp; first-line: 7;">void toGrayscale(rgb_t* color, size_t pixel_num){
-    for(size_t i = 0; i < pixel_num; i++){
-        const uint8_t y = ((4918 * static_cast&lt;uint32_t&gt;(color[i].r) + 354) >> 10)
-                            + ((9655 * static_cast&lt;uint32_t&gt;(color[i].g) + 585) >> 10)
-                            + ((1875 * static_cast&lt;uint32_t&gt;(color[i].b) + 523) >> 10);
+    for(size_t i = 0; i &lt; pixel_num; i++){
+        const uint8_t y = (
+            (
+                (
+                    (( 4918*static_cast&lt;uint64_t&gt;(color[i].r)+354)>>10)
+                    + (( 9655*static_cast&lt;uint64_t&gt;(color[i].g)+585)>>10)
+                    + (( 1875*static_cast&lt;uint64_t&gt;(color[i].b)+523)>>10)
+                )*219 + 383
+            )>>12
+        ) + 16;
         color[i].r = y;
         color[i].g = y;
         color[i].b = y;

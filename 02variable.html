@@ -8,8 +8,9 @@
     <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
     <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
     <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
-    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css"></script>
     <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script src="./scripts/common.js" type="text/javascript"></script>
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
@@ -228,6 +229,39 @@ std::numeric_limits&lt;int&gt;::max()</pre>
         </p>
         <pre class="brush: cpp;">printf("%d\n", sizeof(int));</pre>
         <p>sizeof演算子には必ずしも<code>()</code>は必要ありませんが、あったほうがはるかに見やすいのでつけましょう。</p>
+        <article>
+            <h3>問題</h3>
+            <p>下記は<code>void, bool</code>型を除く全ての基本型の大きさを表示するプログラムである。完成させよ。</p>
+            <pre class="brush: cpp;">#include &lt;cstdio&gt;
+int main(void){
+    constexpr unsigned int s_char =  ;//C++11 Usage
+    constexpr unsigned int s_short =  ;
+    constexpr unsigned int s_int =  ;
+    constexpr unsigned int s_long =  ;
+    constexpr unsigned int s_long_long =  ;
+
+    printf(
+        "char型の大きさ:%d byte\n"
+        "short型の大きさ:%d byte\n"
+        "int型の大きさ:%d byte\n"
+        "long型の大きさ:%d byte\n"
+        "long long型の大きさ:%d byte\n",
+        s_char, s_short, s_int, s_long, s_long_long
+    )
+    return 0;
+}</pre>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1')"></form>
+            <section id="answer1" style="display: none;">
+                <h4>回答</h4>
+                <p>3～7行目のみ示す。</p>
+                <pre class="brush: cpp;">    constexpr unsigned int s_char =  sizeof(char);//C++11 Usage
+    constexpr unsigned int s_short =  sizeof(short);
+    constexpr unsigned int s_int =  sizeof(int);
+    constexpr unsigned int s_long =  sizeof(long);
+    constexpr unsigned int s_long_long =  sizeof(long long);
+</pre>
+            </section>
+        </article>
     </section>
     <section>
         <h2 id="signed_unsigned">signedとunsigned</h2>
@@ -237,6 +271,7 @@ std::numeric_limits&lt;int&gt;::max()</pre>
             1bitを使って正の数か負の数かわかるようにしているのがsigned、すべて正の数とみなすのがunsignedになります。<br>
             正の数か負の数かのフラグを使わない分、unsignedの最大値はsignedの最大値のほぼ2倍になります。
         </p>
+        <img src="./pic/signed_unsigned.png">
         <p>
             例：1byte=8bit,int型の大きさ(sizeof(int))を4byteと仮定すると、<br>
             INT_MAX:    2147483647<br>
@@ -248,7 +283,7 @@ signed int tmp = 5;
 unsigned int tmp = 5;
 char temp = 6;
 signed char temp = 6;
-unsigned char temp = 6</pre>
+unsigned char temp = 6;</pre>
         <p>1行目と2行目は同値。4行目と5行目が同値である保証はないし、だからといって4行目と6行目が同値である保証もない（処理系定義）</p>
     </section>
     <section>
@@ -361,6 +396,7 @@ printf("%d\n", a);//エラー
         <p>スコープの中で確保された変数はスコープの外にでるときに開放されます。消えてなくなるわけです。よって5行目はエラーになります。</p>
         <p>printf関数を使うのは初めてなので補足します、とりあえず今はこうすると整数を表示できるんだな、と思っておいてくだい。浮動小数点型だと%dじゃなくて%fだったりlong型だと%ldだったりするわけですが。</p>
     </section>
+
     <nav class="bottom">
         <ul>
             <li><a href="./01arikitarina_basic.html" title="前頁">prev</a></li>
