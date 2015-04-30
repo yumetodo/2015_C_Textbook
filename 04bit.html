@@ -71,7 +71,8 @@ const uint32_t re_si = si_a &lt;&lt; si_b;//80:1010000</pre>
             </li>
             <li>
                 右オペランドが格上げ後の左オペランドの精度以下<br>
-                具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしmath.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
+                具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしgcc/clang独自拡張の__builtin_popcount関数を用いるか、<br>
+                math.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
                 <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b < __popcnt(UINT_MAX))? si_a &lt;&lt; si_b : 0;</pre>
             </li>
         </ul>
@@ -92,7 +93,8 @@ const uint32_t re_si = si_a &gt;&gt; si_b;//2:10</pre>
             <li>
                 右オペランドが格上げ後の左オペランドの精度以下<br>
                 「オーバーフローしないか」ともつながるが、例えば32bit変数を32回以上左シフトしたら必ずオーバーフローする。<br>
-                具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしmath.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
+                具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしgcc/clang独自拡張の__builtin_popcount関数を用いるか、<br>
+                math.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
                 <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b &lt; __popcnt(UINT_MAX))? si_a &gt;&gt; si_b : 0;</pre>
             </li>
         </ul>
