@@ -30,7 +30,7 @@
 						'explicit export extern __finally false for friend goto if inline ' +
 						'mutable naked namespace new noinline noreturn not nothrow not_eq nullptr ' +
 						'operator or or_eq private protected public register reinterpret_cast return selectany ' +
-						'sizeof static static_cast struct switch template this thread throw true ' +
+						'sizeof static static_cast struct switch template this thread throw true constexpr ' +
 						'try __try typedef typeid typename union using uuid virtual volatile ' +
 						'while xor xor_eq signed unsigned bool char __int8 short __int16 ' + 
 						'__wchar_t wchar_t int __int32 long __int64 void float double ';
