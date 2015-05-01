@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="utf-8" />
-    <title>第8章 ～ファイル分割～</title>
+    <title>第8章 ～プロプロセッサと定数まとめ～</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
     <link rel="stylesheet" href="./css/style.css">
     <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
@@ -10,56 +10,20 @@
     <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
     <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
     <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script src="./scripts/common.js" type="text/javascript"></script>
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
 </head>
 <body>
-    <h1>第8章 ～ファイル分割～</h1>
+    <h1>第8章 ～プロプロセッサと定数まとめ～</h1>
      <nav class="top">
         <ul>
-            <li><a href="./07roop.html" title="前頁">prev</a></li>
+            <li><a href="./07roop_and_split_Sourcecode.html" title="前頁">prev</a></li>
             <li><a href="index.html" title="目次">main</a></li>
             <li><a href="./09standard_input_output.html" title="次頁">next</a></li>
         </ul>
     </nav>
-   <section>
-        <h2>ソースファイルを分ける</h2>
-        <p>一つのファイルですべてのソースコードを書くと、コンパイル時間が増加する要因となり、また見通しの悪いプログラムになりやすい(はい、私です。いっつもファイルを分けるのをめんdいからやらないのは)です。</p>
-        <p>
-            先に、プロトタイプ宣言はソースコードの冒頭に、と言いましたが、この内外部公開するものはヘッダーファイルに書きます。この他にヘッダーファイルに書くものとしては、共通してincludeするファイルや、公開する構造体定義や列挙型定義などです。<br>
-            通常変数やinline関数のプロトタイプ宣言を書くのはいろいろ面倒なので(externすればいいが)、あまりしません。とくに変数を共有しなければならないことは極めて稀だと思います。
-            例を見ましょう。
-        </p>
-        <pre class="brush: cpp;" title="arikitari.h">#ifndef INC_ARIKITARI_H
-#define INC_ARIKITARI_H
-#if (defined(_MSC_VER) && _MSC_VER > 1000) || (defined(__clang__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ > 2))) ||(defined(__ICC) && __ICC > 1000) ||defined (__GNUC__) && !defined(__ICC) && !defined(__clang__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
-#pragma once
-#endif
-int get_integer_num(const int max, const int min);
-#endif INC_ARIKITARI_H</pre>
-        <pre class="brush: cpp;" title="arikitari.c">#include "arikitari.h"
-#include&lt;stdio.h&gt;
-#include&lt;stdlib.h&gt;
-#include&lt;limits.h&gt;//in gcc
-#include&lt;errno.h&gt;//in gcc
-int get_integer_num(const int max, const int min){
-    //中略
-}</pre>
-        <pre class="brush: cpp;" title="main.c">#include "arikitari.h"
-#include&lt;stdio.h&gt;
-#include&lt;limits.h&gt;
-int main(void){
-    const int input = get_integer_num(INT_MAX, INT_MIN);
-    printf("input=%d", input);
-    return 0;
-}</pre>
-        <p>ヘッダーファイルは必ず関数定義があるファイルと関数使用箇所両方でincludeするようにします。また、ヘッダーファイルの名前は普通関数定義があるファイル名と同じにします。</p>
-        <p>何度も言いますが、すべての関数を公開する、ヘッダーファイルで宣言する必要はありません。あくまで他のファイルからも使いたい関数等を公開するわけです。</p>
-        <pre class="brush: cpp; first-line: 3;">#if (defined(_MSC_VER) && _MSC_VER > 1000) || defined (__GNUC__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))</pre>
-        <p>は、#pragma onceに対応していないコンパイラー(というよりプリプロセッサか)に対応するものです。詳細はプリプロセッサの項目で。</p>
-    </section>
-
     <section>
         <h2>プリプロセッサー</h2>
         <p>
@@ -214,9 +178,186 @@ static BOOL create_adj_exdata(FILTER *fp, LOGO_HEADER *adjdata, const LOGO_HEADE
             </p>
         </section>
     </section>
+    <section>
+        <h2>定数</h2>
+        <p>C/C++における定数はC++11まで含めると5つあります。ただ、定数と一口にいっても3つに大きく分かれます。</p>
+        <dl>
+            <dt>実行時定数</dt>
+            <dd>プログラムの実行中に変数を読み取り専用にすることで、書き換えができなくなるようにするもの</dd>
+            <dd>ex.)const</dd>
+            <dt>コンパイル時定数</dt>
+            <dd>コンパイル時に値を決定できるので計算してしまい単なる数値などのリテラルにするもの</dd>
+            <dd>ex.)enum X { ver = 0}, constexpr, enum class</dd>
+            <dt>プリプロセス時定数</dt>
+            <dd>プリプロセス時に値を決定できるのでソースコードを置換してしまうもの</dd>
+            <dd>ex.)#define</dd>
+        </dl>
+        <p>ではそれぞれ見て行きましょう。</p>
+        <section>
+            <h3>const</h3>
+            <p>constは例えばこんなふうに書けるのでした。</p>
+<pre class="brush: cpp;">const int x = 7;
+</pre>
+            <p>
+                ところで変数は関数のスタック上に確保されるのでした。<br>
+                <code>int</code>型のように小さい型ならいいのですが、この後出てくる構造体や大きな配列は大きいサイズなので、(まずないと思いますが)スタックを使い尽くすことがあるかもしれません。<br>
+                そこで
+            </p>
+<pre class="brush: cpp;">static const int x = 7;</pre>
+            <p>
+                のように<code>static</code>をつけるといいです。<code>static</code>変数の生存期間はスコープに左右されず(だってスタックに積まれないもん)プログラムの開始から終了までとなります。<br>
+                中には<code>const</code>をつけるなら<code>static const</code>にするべきだ、という宗教も存在しますが、マルチスレッドや、非同期処理やポインタがからむと話が厄介になるのでおすすめしません。
+            </p>
+            <p class="strong">第一いちいち<code>static</code>って書くなんてめんdじゃないですか。</p>
+            <p>
+                一方で<b>関数の外に書く場合は</b>、グローバル変数(どこからでもアクセスできる変数)になるのを防ぐために<b>必ず<code>static</code>をつけるべき</b>です。<br>
+                こうすることで有効範囲がそのファイルに限定されます。includeしても使えません。<br>
+                <code>constexpr</code>あるんだからそんな場面ないと思いますが。
+            </p>
+        </section>
+        <section>
+            <h3> #define</h3>
+            <p>これはプリプロセッサマクロで、例えばこんなふうに書けるのでした。</p>
+<pre class="brush: cpp;">#define var 5 </pre>
+            <p>ところで<code>#define</code>マクロにはいくつかの問題点があり、コンパイラー間の差異やターゲット環境の差異を吸収する時を除き使うことはありません。当然定数として使うこともありません。では問題点を見て行きましょう。</p>
+            <section>
+                <h4>型がないことに起因する冗長さ</h4>
+                <p>verに型はありません。C言語ではそれでもいいかもしれませんが、C++ではオーバーロードという、変数の型によって同名の関数とかとかを呼び分ける機能があるのでこれでは困ります。</p>
+                <pre class="brush: cpp;">//int16_t型はshort型、int32_t はint型、int64_t型はlong long型と仮定する
+int64_t add(int32_t a, int32_t b);
+int32_t add(int16_t a, int16_t b);
+#define ver1 5
+#define ver2 10
+int main(void){
+    auto x = add(ver1, ver2);
+    return 0;
+}</pre>
+                <p>ここでxの型は何でしょうか？正解はlong long型です。つまり関数addは上のほうが呼ばれています。では下の方を呼ぶには？</p>
+                <pre class="brush: cpp; first-line: 7;">auto x = add(static_cast&lt;int16_t>(ver1), static_cast&lt;int16_t&gt;(ver2));</pre>
+                <p>冗長でしょ。<code>constexpr</code>使えば</p>
+                <pre class="brush: cpp;">int64_t add(int32_t a, int32_t b);
+int32_t add(int16_t a, int16_t b);
+constexpr int16_t ver1 = 5;
+constexpr int16_t ver2 = 10;
+int main(void){
+    auto x = add(ver1, ver2);
+    return 0;
+}</pre>
+                <p>すっきり。</p>
+            </section>
+            <section>
+                <h4>単なるソースコード置換であることに起因する問題</h4>
+                <p>早速例を見ましょう。</p>
+                <pre class="brush: cpp;">#define BASE_SIZE 1 &lt;&lt; 8
+int main(void){
+    auto tmp = BASE_SIZE + 4;
+    return 0;
+}</pre>
+                <p>tmpの型はいうまでもなく<code>int</code>ですね。で、tmpには何が入るでしょうか？260？いえいえ、4096です。なぜならばこれは以下のように置換されるからです。</p>
+                <pre class="brush: cpp;">auto tmp = 1 &lt;&lt; 8 + 4;</pre>
+                <p>つまり</p>
+                <pre class="brush: cpp;">auto tmp = 1 &lt;&lt; 12;</pre>
+                <p>となっています。まあ、この場合は</p>
+                <pre class="brush: cpp;">#define BASE_SIZE (1 &lt;&lt; 8)</pre>
+                <p>とすればいいんですけどね。めんdでしょ。きっと忘れるし。今回の例の場合は回避方法は2通りですかね</p>
+                <pre class="brush: cpp;">static const unsigned int BASE_SIZE = 1 &lt;&lt; 8;
+constexpr unsigned int BASE_SIZE = 1 &lt;&lt; 8;</pre>
+            </section>
+            <section>
+                <h4>置換がプロプロセス時であることに起因する問題</h4>
+                <p>#defineの値はコンパイルより前、プリプロセス時に置換されます。なのでコンパイラーには変数名がわからないのです。これによりコンパイルエラーなどで原因究明が著しく困難になります。</p>
+            </section>
+            <section>
+                <h4>スコープがないことに起因する問題</h4>
+                <p>
+                    #defineとenum以外はすべてスコープの概念があります。<br>
+                    スコープの概念がないと何が問題かというと、#defineに関して言えば書いたファイルとそれをincludeしているファイルでその名前が消費されるので、変数名の衝突が起こしやすくなります。
+                </p>
+            </section>
+        </section>
+        <section>
+            <h3>enum</h3>
+            <p>enumを使った定数っぽい書き方はこんな感じでした。</p>
+            <pre class="brush: cpp;">enum { var = 5 };
+int main(void){
+    int tmp1 = var;
+}</pre>
+            <p>しかしこれにも問題点が有ります。</p>
+            <section>
+                <h4>冗長</h4>
+                <p>定数を使いたいだけなのに書く量がおおく、普通の変数宣言と書き方が少し違う。そもそも幾つもの関連のある定数もどきを列挙して宣言するためのものなんだから、なにか間違っている</p>
+            </section>
+            <section>
+                <h4>スコープがない</h4>
+                <p>#defineと同じ理由なので以下略。</p>
+            </section>
+        </section>
+        <section>
+            <h3>enum class(scoped enumeration)</h3>
+            <p>enum　classを使った定数っぽい書き方はこんな感じでした。</p>
+            <pre class="brush: cpp;">enum class tag{ var = 5 };
+int main(void){
+    int tmp1 = static_cast&lt;int&gt;(tag::var);
+}</pre>
+            <p>しかしこれにも問題が有ります。</p>
+            <section>
+                <h3>冗長</h3>
+                <p>キャストを無駄に強いる。それが便利なこともあるだろうけど、なんか間違っている気がする。あとはenumと同様。</p>
+            </section>
+        </section>
+        <section>
+            <h3>constexpr</h3>
+            <p>これはC++11で導入された記法でコンパイル時定数を作るために導入されました。既に何度か使用していますが改めて。書き方は</p>
+            <pre class="brush: cpp;">constexpr unsigned long tmp = 32;
+static_assert(2147483647L &lt;= std::numeric_limits&lt;int&gt;::max(), “”); 
+</pre>
+            <p>
+                です。すっきり。コンパイル時定数なのでこの後習う配列や、template、static_assartにも使用できます。
+                が、C++で定数を返す関数もこれに対応しているはずなんですけど、Visual Studio 2013 Novenber 2013 CTPでは対応しない。VC2015使えってことね。
+            </p>
+
+<pre class="brush: cpp;">
+constexpr size_t tmp = 32;
+int tmp[tmp];
+static_assert(2147483647L &lt;= std::numeric_limits&lt;int&gt;::max(), “”);//VC2015以降
+</pre>
+            <p>
+                <code>constexpr</code>に関する非常にわかりやすく、詳しい解説はこちら<br>
+                <a href="http://www.slideshare.net/GenyaMurakami/onstexprcpu">constexpr関数はコンパイル時処理。これはいい。実行時が霞んで見える。cpuの嬌声が聞こえてきそうだ</a>
+            </p>
+            <section>
+                <h4>constexprとrVarue reference</h4>
+                <p>
+                    クラスを作るまでお世話になることはありませんが、C++にはrVarue Referenceという物があります。<br>
+                    こいつとこの<code>constexpr</code>を組み合わせるとC++11の範囲だと正常に<code>std::move</code>できないそうです。<br>
+                    この辺についてはこのテキストではほとんど解説しないので、<a href="./15value.html">rvarueの解説</a>の参考リンクを参照してください。<br>
+                    constexprとrvalue参照問題 - とくにあぶなくないRiSKのブログ<br>
+                    <a href="http://sscrisk.hatenablog.com/entry/2014/05/31/constexpr%E3%81%A8rvalue%E5%8F%82%E7%85%A7%E5%95%8F%E9%A1%8C">http://sscrisk.hatenablog.com/entry/2014/05/31/constexprとrvalue参照問題</a>
+                </p>
+            </section>
+        </section>
+        <section>
+            <h3>まとめ</h3>
+            <ul>
+                <li>実行中に定数に(Read-Only)にしたいならconst</li>
+                <li>コンパイル時定数が作りたいなら<code>constexpr</code></li>
+                <li>ポインターを取る必要があるならconst</li>
+            </ul>
+            <p>を使う。実にスッキリした結論。C++最高！</p>
+        </section>
+        <p>
+            参考サイト<br>
+            定数の定義は，const intか，#defineか，それとも - わさっき<br>
+            <a href="http://d.hatena.ne.jp/takehikom/20140807/1407420548">http://d.hatena.ne.jp/takehikom/20140807/1407420548</a><br>
+            #defineの罠<br>
+            <a href="http://www.geocities.co.jp/bleis_tift/cpp/baddefine.html">http://www.geocities.co.jp/bleis_tift/cpp/baddefine.html</a><br>
+            C言語のマクロの注意点<br>
+            <a href="http://www.c-lang.org/detail/macro_caution.html">http://www.c-lang.org/detail/macro_caution.html</a>
+        </p>
+    </section>
     <nav class="bottom">
         <ul>
-            <li><a href="./07roop.html" title="前頁">prev</a></li>
+            <li><a href="./07roop_and_split_Sourcecode.html" title="前頁">prev</a></li>
             <li><a href="index.html" title="目次">main</a></li>
             <li><a href="./09standard_input_output.html" title="次頁">next</a></li>
         </ul>
