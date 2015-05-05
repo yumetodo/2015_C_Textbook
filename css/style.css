@@ -73,6 +73,9 @@ ul, ol{
 	font-weight:bold;
 	font-family: "IPAexゴシック", "IPAゴシック", "Lucida Grande", YuGothic, '游ゴシック', "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, メイリオ, sans-serif;
 }
+tr.strong td{
+	font-size: medium;
+}
 
 /* nav */
 nav.top{
