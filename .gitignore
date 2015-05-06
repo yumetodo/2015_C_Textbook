@@ -50,6 +50,7 @@ dlldata.c
 *.tmp
 *.tmp_proj
 *.log
+*.exe
 *.vspscc
 *.vssscc
 .builds
