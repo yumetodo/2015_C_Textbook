@@ -190,10 +190,10 @@ printf("%d", myGetRValue(color));</pre>
                         </dl>
                         <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-3')"></form>
                         <section id="answer1-3" style="display: none;">
-                            <pre class="brush: cpp;">#include &lt;windows.h%gt;
+                            <pre class="brush: cpp;">#include &lt;windows.h&gt;
 #include &lt;stdio.h&gt;
-uint8_t add(COLORREF color){
-    return static_cast&lt;uint8_t&gt;(static_cast&lt;DWORD_PTR&gt;(static_cast&lt;WORD&gt;(color >> 8) >> 16) &amp; 0xffff);
+uint8_t myGetRValue(COLORREF color){
+    return static_cast<uint8_t>((static_cast<DWORD_PTR>(color)) &amp; 0xff);
 }</pre>
                         </section>
                     </div>

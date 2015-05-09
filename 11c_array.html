@@ -44,7 +44,8 @@ constexpr unsigned int tmp2 = 5;
 int cell2[tmp2];//OK. However, it's able to use VC November 2013 CTP or later.</pre>
         <p>constexprはコンパイル時定数ですから使えます。が、constexprが使えるのはVCだとNovember 2013 CTPからみたいですね。さすが実装は最遅。C99/C11では2行目の場合は厳密には配列ではないらしいです。</p>
         <p>
-            で、この配列宣言時の要素数指定に非コンパイル時定数を使う記法はC++では使えません。<code>std::array</code>がある以上必要ないと思いますが。C++14(N3639)で導入されかけて廃止され、n3820で再提案されているそうです。<br>
+            で、この配列宣言時の要素数指定に非コンパイル時定数を使う記法はC++では使えません。<code>std::array</code>がある以上必要ないと思いますが。allocaを書かずに済む以外メリットあんの？<br>
+            C++14(N3639)で導入されかけて廃止され、n3820で再提案されているそうです。<br>
             <a href="http://isocpp.org/files/papers/N3639.html">N3639 Runtime-sized arrays with automatic storage duration (revision 5)</a><br>
             <a href="http://faithandbrave.hateblo.jp/entry/20130507/1367916341"> C++14 実行時サイズの配列(コア言語版) - Faith and Brave - C++で遊ぼう</a><br>
             <a href="http://qiita.com/raccy/items/bfcb62086c5f027d57b6">C言語(C11)で可変長の配列を使う方法 - Qiita</a>
