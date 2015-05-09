@@ -67,20 +67,19 @@ int main(){
                 <pre class="brush: cpp;">
 #include&lt;stdio.h&gt;
 /*--- unsigned型のビット数を返却 ---*/
-int int_bits(void)
+unsigned int uint_bits(void)
 {
-	int count = 0;
-	unsigned x = ~0U;
+	unsigned int count = 0;
+	unsigned int x = ~0U;
 	while (x) {
-		if (x & 1U) count++;
+		if (x &amp; 1U) count++;
 		x >>= 1;
 	}
 	return count;
 }
 int main(){
-	int int_no_bits;
-	int_no_bits = int_bits();
-	printf("unsigned_int型のビット数は%dで、%dバイトです。\n",int_no_bits,int_no_bits/8);
+	const auto int_no_bits = uint_bits();
+	printf("unsigned_int型のビット数は%dで、%dバイトです。\n",int_no_bits,　static_cast&lt;int&gt;(sizeof(int)));
 	return 0;
 }</pre>
             </section>

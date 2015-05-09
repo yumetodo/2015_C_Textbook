@@ -44,7 +44,7 @@ constexpr unsigned int tmp2 = 5;
 int cell2[tmp2];//OK. However, it's able to use VC November 2013 CTP or later.</pre>
         <p>constexprはコンパイル時定数ですから使えます。が、constexprが使えるのはVCだとNovember 2013 CTPからみたいですね。さすが実装は最遅。C99/C11では2行目の場合は厳密には配列ではないらしいです。</p>
         <p>
-            で、この記法はC++では使えません。<code>std::array</code>がある以上必要ないと思いますが。C++14(N3639)で導入されかけて廃止され、n3820で再提案されているそうです。<br>
+            で、この配列宣言時の要素数指定に非コンパイル時定数を使う記法はC++では使えません。<code>std::array</code>がある以上必要ないと思いますが。C++14(N3639)で導入されかけて廃止され、n3820で再提案されているそうです。<br>
             <a href="http://isocpp.org/files/papers/N3639.html">N3639 Runtime-sized arrays with automatic storage duration (revision 5)</a><br>
             <a href="http://faithandbrave.hateblo.jp/entry/20130507/1367916341"> C++14 実行時サイズの配列(コア言語版) - Faith and Brave - C++で遊ぼう</a><br>
             <a href="http://qiita.com/raccy/items/bfcb62086c5f027d57b6">C言語(C11)で可変長の配列を使う方法 - Qiita</a>
@@ -129,7 +129,7 @@ i[num]</pre>
 
 
         <p>
-            ただし、sizeof演算子と&amp;演算子(アドレス演算子)のオペランドと配列初期化時の文字列リテラルと(lvalue)参照に代入するときは配列として扱われ、読み替えはされません。詳細はおいおい。
+            ただし、sizeof演算子と&amp;演算子(アドレス演算子)のオペランドと配列初期化時の文字列リテラルと(lvalue)参照に代入するときは以外は常にポインタ型に読み替えられます。詳細はおいおい。
         </p>
         <p>
             15行目を見てください。ここでnum代入したことでnum_pは配列numの先頭要素をさしています。だから配列と同じく*(num_p + i)とかnum_p[i]のように書けるわけです。<br>
@@ -235,6 +235,44 @@ int total = 0;
 for(auto data_it = data.begin(); data_it != data.end(); data_it++) {
     total += *data_it; 
 }</pre>
+    </section>
+    <section>
+        <h2>配列とメモリー空間とオーバーフローとバッファオーバーラン</h2>
+        <p>なんどでもいいますが配列は単に大きく確保したメモリー空間を指定型に区切っているだけです。では確保していない領域に書き込もうとすると？</p>
+        <pre class="brush: cpp;">int arr[5];
+for(size_t i = 0; i <= __countof(arr); i++){
+    arr[i] = i;//配列の範囲をこえて値を書き込んでいる
+}</pre>
+        <p>
+            i=__countof(arr)の時、つまりi=5の時、書き込む位置は確保されていない領域です。<br>
+            <b>確保していない領域まで書き込んでしまうことをバッファオーバーランとかバッファオーバーフローといいます</b>。でこれの何が問題なのでしょうか？
+        </p>
+        <p>以前も関数のところで紹介した図を再度掲示します。よく見てください。</p>
+        <img alt="スタック領域" src="./pic/stack_area.png">
+        <p>
+            配列も自動変数なのでスタック領域に確保されます。で注意するべきなのが、配列の要素番号が大きい物のほうがebpレジスタ(スタックの底を示すもの)に近い方に確保されるということです。<br>配列のアドレスを要素数の小さい方から表示させた時にちゃんと値が増えていたことを思い出してください。
+        </p>
+        <p>
+            つまりなにが問題なのかというと、配列よりebpレジスタに近い方に確保された(配列より先に確保された)自動変数やebpレジスタ自身、はたまた関数のリターンアドレスがバッファオーバーランによって書き換えられることを意味しています。<br>
+            なので<code>return 0;</code>すらできなくなるわけです。<br>それだけならともかく、配列にファイルなどから何かを読み込む場合、バッファオーバーランを起こすプログラムに悪意のあるバイト列を読み込ませることでリターンアドレスを書き換え、悪意のあるプログラムを呼び出すことができます<br>
+            このように、バッファオーバーランとは実に恐ろしい問題なのです。<br>
+            それ故C言語では<b>確保していない領域にポインターを指すことすら認めていません</b>。
+        </p>
+        <p>なので<b>配列に何かを書き込むときは、必ず配列の要素数を確認するように</b>しましょう。まあ、C++のvectorやarray、stringを使えばほとんど気を使わずに済むんですが。</p>
+        <p>ただし、割とどうでもいいことですが、配列の要素数番目にポインターを指すことは認められています。書き込んだらダメですが。</p>
+        <p>
+            参考サイト<br>
+            6-1. バッファオーバーラン　その１「こうして起こる」 | IPA ISEC セキュアプログラミング講座<br>
+            <a href="http://www.ipa.go.jp/security/awareness/vendor/programmingv1/b06_01.html">http://www.ipa.go.jp/security/awareness/vendor/programmingv1/b06_01.html</a><br>
+            スタック領域の構成 | 分かりやす～いコンピュータ技術情報<br>
+            <a href="http://hack.ninja-web.net/academy003-060.htm">http://hack.ninja-web.net/academy003-060.htm</a>
+        </p>
+    </section>
+    <section>
+        <h2>argvについて補足</h2>
+        <p>今更言うまでもありませんがmain関数で引数を受け取る場合は</p>
+        <pre class="brush: cpp;">int main(int argc, char* argv[]);</pre>
+        <p>のように書きますが、argvはchar**型です。多分char*型の配列が渡されているんでしょう。で、argv[argc]はNULLポインタであることが保証されています。たま～に必要になる知識ですので覚えていてください。</p>
     </section>
     <nav class="bottom">
         <ul>

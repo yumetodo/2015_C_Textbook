@@ -192,7 +192,7 @@ printf("%d", myGetRValue(color));</pre>
                             <pre class="brush: cpp;">#include &lt;windows.h%gt;
 #include &lt;stdio.h&gt;
 uint8_t add(COLORREF color){
-    return (uint8_t)(((((((DWORD_PTR)(((WORD)(rgb)) >> 8))) >> 16) &amp; 0xffff));
+    return static_cast&lt;uint8_t&gt;(static_cast&lt;DWORD_PTR&gt;(static_cast&lt;WORD&gt;(color >> 8) >> 16) &amp; 0xffff);
 }</pre>
                         </section>
                     </div>

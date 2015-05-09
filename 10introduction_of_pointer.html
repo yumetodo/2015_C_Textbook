@@ -11,6 +11,7 @@
     <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
     <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
     <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script src="./scripts/common.js" type="text/javascript"></script>
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
@@ -149,7 +150,11 @@ int main(void){
         <pre class="brush: cpp;">bool hoge1 = (NULL == nullptr);//false
 void* hoge_ptr1 = NULL;
 void* hoge_ptr2 = nullptr;
-bool hoge2 = (hoge_ptr1 == hoge_ptr2);//true</pre>
+bool hoge2 = (hoge_ptr1 == hoge_ptr2);//true
+
+//#define NULL 0 となっている場合(C++コンパイラーならほぼ例外なく)
+auto tmp1 = NULL;//int
+auto tmp2 = nullptr;//std::nullptr_t</pre>
         <p>
             とくに理由のない限り皆さんはC++としてコンパイルするわけで、標準規格への準拠がとっても遅いことで有名なVCもさすがにnullptrには対応しているので、こちらを使いましょう。<br>
             え？なんでNULL使っちゃダメかって？・・・ええっとそれを説明するにはC++の関数のオーバーロードのお話をしないといけないので、自分で調べてください。<br>
@@ -210,6 +215,28 @@ hoge1_p6 = &amp;hoge2;//error</pre>
             C言語の const とポインタについて調べてみた | ふにょいサイト<br>
             <a href="http://hunyoi.com/?p=215">http://hunyoi.com/?p=215</a>
         </p>
+        <article>
+            <h3>問題</h3>
+            <p>以下の3つの関数のうち、コンパイルエラーにならないものはどれか、また理由を述べよ</p>
+            <pre class="brush: cpp;">char* do_something1(char* dest, char const* src){
+    src = nullptr;
+}
+char* do_something2(char* dest, char const* src){
+    *src = 'a';
+}
+char* do_something1(char* dest, char* const src){
+    src = nullptr;
+}</pre>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1')"></form>
+            <section id="answer1" style="display: none;">
+                <h4>回答</h4>
+                <p>
+                    do_something1関数はコンパイルエラーにならない。なぜならば、変数srcの宣言を英語っぽく読むと<br>
+                    'src' is pointer to read-only char.<br>
+                    となり、read-onlyなのはsrcが指し示す先であって根本ではないから。nullptrを代入してもエラーにならないのは当然。
+                </p>
+            </section>
+        </article>
     </section>
     <nav class="bottom">
         <ul>
