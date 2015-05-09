@@ -172,6 +172,45 @@ bool hoge2 = (hoge_ptr1 == hoge_ptr2);//true</pre>
             ようはケース・バイ・ケース。
         </p>
     </section>
+    <section>
+        <h2>ポインタとconst</h2>
+        <p>
+            以前constとはread-onlyにするものだと言いました。これがポインターを絡めるとどうなるか見て行きましょう。<br>
+            ポインタには矢印にたとえるならば根本と指し示す先、つまりポインター型変数と実体領域があるのでした。つまりconstはその双方につけることができます。<br>
+            ここがややこしいところなのです。以下「根本」、「先」と略します。
+        </p>
+        <pre class="brush: cpp;" title="前提コード">int main(void){
+    int hoge1 = 0;
+    int hoge2 = 1;
+}</pre>
+        <pre class="brush: cpp;" title="根本○　先○">int *hoge1_p1 = &amp;hoge1;//'hoge_p1' is pointer to int.
+*hoge1_p1 = 2;//OK
+hoge1_p1 = &amp;hoge2;//OK</pre>
+        <pre class="brush: cpp;" title="根本○ 先×">const int *hoge1_p2 = &amp;hoge1;//'hoge_p2' is pointer to read-only int.
+int const *hoge1_p3 = &amp;hoge1;//'hoge_p3' is pointer to read-only int.
+*hoge1_p2 = 3;//error
+*hoge1_p3 = 4;//error
+hoge1_p2 = &amp;hoge2;//OK
+hoge1_p3 = &amp;hoge2;//OK</pre>
+        <pre class="brush: cpp;" title="根本× 先○">int * const hoge1_p4 = &amp;hoge1;//'hoge1_p4' is read-only pointer to int.
+*hoge1_p4 = 5;//OK
+hoge1_p4 = &amp;hoge2;//error</pre>
+        <pre class="brush: cpp;" title="根本× 先×">const int * const hoge1_p5 = &amp;hoge1;//'hoge1_p5' is read-only pointer to read-only int.
+int const * const hoge1_p6 = &amp;hoge1;//'hoge1_p6' is read-only pointer to read-only int.
+*hoge1_p5 = 3;//error
+*hoge1_p6 = 4;//error
+hoge1_p5 = &amp;hoge2;//error
+hoge1_p6 = &amp;hoge2;//error</pre>
+        <p>基本型の前にconstを書こうがあとに書こうが意味は変わりませんし型も変わりません。横に英語訳をつけておきましたが、おなじになってるでしょ？</p>
+        <p>ポインタとconstを考えるときは上記のように<b>常に英語訳しましょう</b>。そうすれば混乱することはありません。</p>
+        <p>
+            参考サイト<br>
+            POINTER | 「配列とポインタの完全制覇」<br>
+            <a href="http://kmaebashi.com/programmer/pointer.html">http://kmaebashi.com/programmer/pointer.html</a><br>
+            C言語の const とポインタについて調べてみた | ふにょいサイト<br>
+            <a href="http://hunyoi.com/?p=215">http://hunyoi.com/?p=215</a>
+        </p>
+    </section>
     <nav class="bottom">
         <ul>
             <li><a href="./09standard_input_output.html" title="前頁">prev</a></li>
