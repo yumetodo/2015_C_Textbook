@@ -135,7 +135,7 @@
 						'is_rvalue_reference is_same is_scalar is_signed is_standard_layout is_union is_unsigned is_void is_volatile make_signed ' +
 						'make_unsigned rank remove_all_extents remove_const remove_cv remove_extent remove_pointer remove_reference remove_volatile integral_constant ' +
 						'false_type true_type unordered_map unordered_multimap unordered_multiset unordered_set tuple_element tuple_size identity pair ' +
-					    'gslice gslice_array indirect_array mask_array slice valarray vector ' +
+					    'gslice gslice_array indirect_array mask_array slice valarray vector bitset ' +
 					    'rgb_t bignum_t';
 
 		var preprocessor_word = 'alloc_text auto_inline bss_seg check_stack code_seg comment component conform const_seg data_seg deprecated detect_mismatch ' +

@@ -275,6 +275,105 @@ for(size_t i = 0; i <= __countof(arr); i++){
         <pre class="brush: cpp;">int main(int argc, char* argv[]);</pre>
         <p>のように書きますが、argvはchar**型です。多分char*型の配列が渡されているんでしょう。で、argv[argc]はNULLポインタであることが保証されています。たま～に必要になる知識ですので覚えていてください。</p>
     </section>
+    <section>
+        <h2>std::bitsetとstd::vector&lt;bool&gt;</h2>
+        <p>
+            以前bool型についてやったのを覚えているでしょうか？(C++の)bool型とはtrue/falseの2値を格納できる型でした。故に実質1bitしかないこともあります。<br>
+            ところでポインタ演算はsizeof([対象の型])分ポインタを進めるものでした。で、sizeof(bool)は1、つまり1byte使われます。<br>
+            もう一度言いますよ？bool型は1bitではなく1byte消費します。<br>
+            なんか勿体無いでしょ？普通の配列にするにはもったいないでしょ？<br>
+            そこでstd::bitsetとstd::vector&lt;bool&gt;の出番です。
+        </p>
+        <section>
+            <h3>std::vector&lt;bool&gt;</h3>
+            <p>
+                まさか他の型のvectorより先に紹介するとは思わなかった。<br>
+                std::vector&lt;bool&gt;は配列と異なりぎちぎちに詰めて、つまり1bit=1要素になります。<br>
+                どういうことかというと、<code>&amp;v[0]+i != &amp;v[i]</code>ということです。なので扱いはすこし注意が必要になります。
+            </p>
+            <pre class="brush: cpp;">#include &lt;vector&gt;
+//void Func(bool&amp; x)//これは誤り
+void Func(vector&lt;bool&gt;::reference x)
+{
+  x= false;
+}
+int main(int argc, char**argv)
+{
+  std::vector&lt;bool&gt; vec;
+  vec.push_back(true);
+  Func(vec.back());
+  return 0;
+}</pre>
+            <p>
+                <code>&amp;v[0]+i != &amp;v[i]</code>ということは、のちに説明する参照は特殊なものになります。通常のbool&amp;型には変換でいないのでvector&lt;bool&gt;::referenceに変換する必要があります。<br>
+                そういった都合上以下のコードはすべて違法です
+            </p>
+            <pre class="brush: cpp;" title="違法なコード">std::vector&lt;bool&gt; bb;
+bb.push_bask(true);
+bool* bb_p = &amp;bb[0];//"std::_Vb_reference&lt;std::_Wrap_alloc&lt;std::allocator&lt;std::_Vbase&gt;&gt;&gt; *" の値を使用して型 "bool *" のエンティティを初期化することはできません
+bool&amp; bb_r = bb[0];//非 const への参照の初期値は左辺値である必要があります
+std::vector&lt;bool&gt;::pointer bb_p2 = &amp;bb[0];
+//"std::_Vb_reference&lt;std::_Wrap_alloc&lt;std::allocator&lt;std::_Vbase&gt;&gt;&gt; *" から "std::_Vb_iterator&lt;std::_Wrap_alloc&lt;std::allocator&lt;std::_Vbase&gt;&gt;&gt;" に変換するための適切なコンストラクターが存在しません</pre>
+            <p>
+                関数などに渡すときはポインタ渡しは諦めて参照渡しにするか、<b>コンテナごと参照渡しして、書き込む位置を別途変数で渡す</b>のが楽でしょう。<br>
+                ちなみに型推論はちゃんと働きます。
+            </p>
+            <pre class="brush: cpp;">std::vector&lt;bool&gt; bb;
+bb.push_bask(true);
+auto&amp; bb_r = bb[0];//vector&lt;bool&gt;::reference型</pre>
+            <blockquote title="Effective STL p77 第18項" cite="http://www.amazon.co.jp/dp/4894714108">
+                <p>vector&lt;bool&gt;がSTLのコンテナとして悪い点は2つしかない。第1に、STLのコンテナではない。第2に、bool型の値が格納されない。この2つを除けば、異議を唱える理由はない。</p>
+                <cite><a href="http://www.amazon.co.jp/dp/4894714108">Effective STL p77 第18項</a></cite>
+            </blockquote>
+            <p>
+                参考サイト<br>
+                vector&lt;bool&gt; の話 - melpon日記 - HaskellもC++もまともに扱えないへたれのページ<br>
+                <a href="http://d.hatena.ne.jp/melpon/20111114/1321297053">http://d.hatena.ne.jp/melpon/20111114/1321297053</a><br>
+                std::vector&lt;bool&gt;の要素の参照型はbool&amp;ではない（場合がある） - akihiko’s tech note <br>
+                <a href="http://d.hatena.ne.jp/aki-yam/20120307/1331117485">http://d.hatena.ne.jp/aki-yam/20120307/1331117485</a><br>
+                vector&lt;bool&gt; クラス | MSDN <br>
+                <a href="https://msdn.microsoft.com/ja-jp/library/t0723a54.aspx">https://msdn.microsoft.com/ja-jp/library/t0723a54.aspx</a>
+            </p>
+        </section>
+        <section>
+            <h3>std::bitset&lt;N&gt;</h3>
+            <p>そのうち紹介するstd::arrayのbool特化型超すごい版と思えばいいです。std::vector&lt;bool&gt;よりは使いやすいはず。</p>
+            <pre class="brush: cpp;">#include &lt;iostream&gt;
+#include &lt;bitset&gt;
+constexpr std::size_t thread_num = 4;//コンパイル時定数でなければならない
+void thread(std::bitset&lt;thread_num&gt;&amp; isHDMs, const std::size_t thread_id){
+    isHDMs.set(thread_id);//thread_id番目のbitを立てる(trueにする)
+}
+int main(){
+    std::bitset&lt;thread_num&gt; isHDMs(0ul);
+    isHDMs.reset();//全bitを0に
+    for(std::size_t i = 0; i < thread_num; ++i){
+        thread(isHDMs, i);
+    }
+    if(isHDMs.any()){//一つでもbitが立っていたら
+        for(std::size_t i = 0; i < thread_num; ++i){
+            if(isHDMs.test(i)) std::cout << i << "番目のbitが立っています"　<< std::endl;
+        }
+    }
+}</pre>
+            <p>個人的に残念なのは、beginとendメンバー関数がないのでrange-base for(後述)が使えないことですかね。</p>
+            <p>
+                参考サイト<br>
+                bitsetクラス - (void*)Pないと<br>
+                <a href="http://d.hatena.ne.jp/pknight/20090813/1250140616">http://d.hatena.ne.jp/pknight/20090813/1250140616</a><br>
+                ぐだぐだ std::bitsetの使い方サンプル<br>
+                <a href="http://ututel.blog121.fc2.com/blog-entry-138.html">http://ututel.blog121.fc2.com/blog-entry-138.html</a><br>
+                bitset クラス | MSDN <br>
+                <a href="https://msdn.microsoft.com/ja-jp/library/2f93c55z.aspx">https://msdn.microsoft.com/ja-jp/library/2f93c55z.aspx</a><br>
+                C++ ビット集合(std::bitset) | cppreference <br>
+                <a href="http://www.cppll.jp/cppreference/cppbitset_details.html">http://www.cppll.jp/cppreference/cppbitset_details.html</a><br>
+                C++編（標準ライブラリ）　第８章　bitset | Programing Place <br>
+                <a href="http://ppp-lab.sakura.ne.jp/cpp/library/008.html">http://ppp-lab.sakura.ne.jp/cpp/library/008.html</a><br>
+                8.4 bitset の抽象化 | Rogue Wave Software <br>
+                <a href="https://docs.oracle.com/cd/E19205-01/820-2985/general/8_4.htm">https://docs.oracle.com/cd/E19205-01/820-2985/general/8_4.htm</a>
+            </p>
+        </section>
+    </section>
     <nav class="bottom">
         <ul>
             <li><a href="10introduction_of_pointer.html" title="前頁">prev</a></li>

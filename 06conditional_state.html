@@ -27,9 +27,38 @@
     <section>
         <h2>bool型と_BOOL型とBOOL型と</h2>
         <p>
-            C++では当初から真と偽を表すbool型が導入され、C言語でもC99でbool型が使えるようになりました。<br>
+            C++では当初から真と偽を表すbool型が導入され、C言語でもC99で<code>stdbool.h</code>をincldueすることによりbool型が使えるようになりました。
+        </p>
+        <pre class="brush: cpp; first-line: 24;" title="stdbol.h (mingw32)">/*
+ * ISO C Standard:  7.16  Boolean type and values  &lt;stdbool.h&gt;
+ */
+
+#ifndef _STDBOOL_H
+#define _STDBOOL_H
+
+#ifndef __cplusplus
+
+#define bool    _Bool
+#define true    1
+#define false   0
+
+#else /* __cplusplus */
+
+/* Supporting &lt;stdbool.h&gt; in C++ is a GCC extension.  */
+#define _Bool   bool
+#define bool    bool
+#define false   false
+#define true    true
+
+#endif /* __cplusplus */
+
+/* Signal that all the definitions are present.  */
+#define __bool_true_false_are_defined   1
+
+#endif  /* stdbool.h */</pre>
+        <p>
             C99のbool型は_BOOL型をマクロを使って実装しています（マクロが何かは後ほど）。<br>
-            実際に使い方を見ましょう。C++ではstdbool.hのincludeは不要です(無理にincludeしても勝手にincldueを外されます)。
+            実際に使い方を見ましょう。C++ではstdbool.hのincludeは不要です(無理にincludeしても勝手にincldueを外されます)。だってC++の基本型だし。
         </p>
         <pre class="brush: cpp;">#include &lt;stdbool.h&gt;
 int main(void){
