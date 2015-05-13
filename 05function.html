@@ -57,6 +57,14 @@ int do_something2(void){
         <p>この関数が呼び出される7行目だ。ここで初めて実際に定義に基づいて処理を行う。calc_volume関数内のreturn文にかいたものが変数resultに代入されている。</p>
     </section>
     <section>
+        <h2>C++11の戻り値の型を後置する記法</h2>
+        <p>なにも難しくないです。ようは先のcalc_volue関数が</p>
+        <pre class="brush: cpp;">auto calc_volume(const double s1, const double s2, const double s3) -> double {
+    return s1 * s2 * s3;
+}</pre>
+        <p>とも書ける、という話です。これのありがたみはもうしばらくわからないでしょう。</p>
+    </section>
+    <section>
         <h2>C標準ライブラリ</h2>
         <p>C標準ライブラリとは、プログラマーがよく使う機能をひとまとめにしてC言語自体が提供している関数群のことです。</p>
         <p>
@@ -368,6 +376,53 @@ int main(void){
 
             </p>
         </section>
+    </section>
+    <section>
+        <h2>C++11/14のlambda</h2>
+        <p>lambdaとかいて「ラムダ」と読みます。関数のページに書いてることから察せると思いますが一種の関数です。見て行きましょう。</p>
+        <pre class="brush: cpp;">#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+#include &lt;cstdlib&gt;
+#include &lt;cerrno&gt;
+typedef uint64_t num_store_t;
+constexpr num_store_t search_max_temp = 117800;
+int main(int argc, char* argv[]){
+    const auto search_max = (1 == argc) ? search_max_temp : [](const char* str) -> num_store_t {
+        errno = 0;
+        const auto tmp = strtoull(str, nullptr, 10);//引数があればそれを採用する
+        return (0 == errno) ? tmp : search_max_temp;//引数が異常な時は(仮)の値を使用
+    }(argv[1]);
+    std::cout << "search_max: " << search_max << std::endl;
+    return 0;
+}</pre>
+        <p>lambdaとか仰々しい名前がついてますがようは関数なので仮引数リストも戻り値の型も関数定義も関数呼び出しもあります。</p>
+        <p>
+            仮引数リストは<code>(const char* str)</code>の部分です。普通の関数となんら変わりませんね。<br>
+            戻り値は、<code> -> num_store_t</code>の部分です。C++11で追加された関数の戻り値を後置する記法そのものですね<br>
+            <code>(argv[1])</code>の部分はこれまで関数を呼び出すときに変数を渡していたところですね。
+        </p>
+        <p>このようにわざわざ関数名考えて関数を作るまでもないような、しかし関数を使った方がわかりやすくかける時、lambdaは重宝します。</p>
+        <p>ちなみに上の例はもう少しシンプルに書けます。</p>
+        <pre class="brush: cpp;">#include &lt;iostream&gt;
+#include &lt;cstdint&gt;
+#include &lt;cstdlib&gt;
+#include &lt;cerrno&gt;
+typedef uint64_t num_store_t;
+constexpr num_store_t search_max_temp = 117800;
+int main(int argc, char* argv[]){
+    const auto search_max = (1 == argc) ? search_max_temp : [&amp;]{
+        errno = 0;
+        const num_store_t tmp = strtoull(argv[1], nullptr, 10);//引数があればそれを採用する
+        return (0 == errno) ? tmp : search_max_temp;//引数が異常な時は(仮)の値を使用
+    };
+    std::cout << "search_max: " << search_max << std::endl;
+    return 0;
+}</pre>
+        <p>
+            が、ここまではまだ覚えないでいいです。詳しく知りたい方は<br>
+            lambda 完全解説 | 本の虫<br>
+            <a href="http://cpplover.blogspot.jp/2009/11/lambda.html">http://cpplover.blogspot.jp/2009/11/lambda.html</a>
+        </p>
     </section>
     <nav class="bottom">
         <ul>
