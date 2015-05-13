@@ -35,12 +35,11 @@
 #include&lt;stdlib.h&gt;
 int getnum(void){
 	char s[100];
-	long t;
 	char *endptr;
-	fgets(s, 100, stdin);
+	if(NULL == fgets(s, 100, stdin)) return -1;
 	errno = 0;
-	t = strtol(s, &endptr, 10);
-	if (errno != 0 || *endptr != '\n' || (t < INT_MIN || INT_MAX < t))
+	const long t = strtol(s, &amp;endptr, 10);
+	if (errno != 0 || *endptr != '\n' || t < INT_MIN || INT_MAX < t)
 		return -1;
 	return t;
 }
@@ -99,6 +98,93 @@ int main(){
     //実行文
 }while(継続条件)</pre>
         <p>これまた多くの場合、ポインターや標準入力とともに使うので実例はその時に。</p>
+    </section>
+    <section>
+        <h2>breakとcontinue</h2>
+        <p>
+            上記3つのループ構文にはいずれも条件判断文がありました。これのお陰でこれから紹介するbreakやcontinueはむしろ書くべきではないものになっています。<br>
+            しかしときにはこれが役に立つこともあります。breakはすでに使っている気もしますが、気にしない。例を見ましょう。
+        </p>
+        <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+int main(void){
+   while(1){//whileで無限ループ。
+      puts("ループ1起点");
+      while(1){//2個目の無限ループ
+         puts("ループ2起点");
+         switch(1){//switchまで置いてみます。
+         case 1://これは絶対成立。
+            puts("switch");
+            break;//switchを終了します。
+         }
+         puts("switch完了");
+         break;//ループ2を終了します。
+         puts("ループ2終点");
+      }
+      puts("ループ2完了");
+      break;//ループ1を終了します。
+      puts("ループ1終点");
+   }
+   puts("ループが終わりました。");
+   return 0;
+}</pre>
+        <pre class="brush: plain;" title="実行例">ループ1起点
+ループ2起点
+switch
+switch完了
+ループ2完了
+ループが終わりました。</pre>
+        <p>break文のイメージは湧いたでしょうか？よく勘違いするのが「break文は{}を抜ける」というものです。そうではなくあくまでも<b>ループ文とswitch文を抜ける</b>ものなので注意です。ではcontinue文です。</p>
+        <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+int main(void){
+   int i,j;
+   for(i = 1; i < 3; i++){
+      printf("%d回目のループA実行中\n",i);
+      for(j = 1; j < 3; j++){
+         printf("%d/%d回目のループB実行中\n",i,j);//ループA/ループBの現在値を表示
+         continue;//(1)無条件にループをcontinueします。
+         puts("ループBブロック終端です");//必ずcontinueされるのでここは実行されません。
+      }
+      puts("ループAブロック終端です");
+   }
+   puts("ループが終わりました。");
+   return 0;
+}</pre>
+        <pre class="brush: plain;">1回目のループA実行中
+1/1回目のループB実行中
+1/2回目のループB実行中
+ループAブロック終端です
+2回目のループA実行中
+2/1回目のループB実行中
+2/2回目のループB実行中
+ループAブロック終端です
+ループが終わりました。</pre>
+        <p>では組み合わせてみましょうかね～</p>
+        <pre class="brush: cpp;">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+int getnum(void){
+    char s[100];
+    char *endptr;
+    if(NULL == fgets(s, 100, stdin)) return -1;
+    errno = 0;
+    const long t = strtol(s, &amp;endptr, 10);
+    if (errno != 0 || *endptr != '\n' || t < INT_MIN || INT_MAX < t)
+        return -1;
+    return t;
+}
+int main(){
+    int num;
+    int sum = 0;
+    while (1){
+        printf("数値を入力してください(-1で終了):");
+        num = getnum();
+        if (num == -1) break;
+        if(num < 0) continue;
+        sum += num;
+    }
+    printf("入力した数値の合計は%dです。\n", sum);
+    return 0;
+}</pre>
+        <p>んな感じで冒頭のサンプルが正の数のみ加算するようになりました。もう一度言うけど<b>break,continueを書かないほうがすっきりすることが多いです</b></p>
     </section>
     <section>
         <h2>ソースファイルを分ける</h2>

@@ -91,7 +91,7 @@
 						'terminate_function time_t __time64_t _timeb __timeb64 tm uintptr_t _utimbuf va_list ' +
 						'wctrans_t wctype_t wint_t int8_t int16_t int32_t int64_t uint8_t uint16_t uint32_t uint64_t' +
 						'int_least8_t int_least16_t int_least32_t int_least64_t uint_least8_t uint_least16_t uint_least32_t uint_least64_t ' +
-						'int_fast8_t int_fast16_t int_fast32_t int_fast64_t uint_fast8_t uint_fast16_t uint_fast32_t typedef unsigned long long uint_fast64_t ' +
+						'int_fast8_t int_fast16_t int_fast32_t int_fast64_t uint_fast8_t uint_fast16_t uint_fast32_t uint_fast64_t ' +
 						'intmax_t uintmax_t ' +
 						'_BOOL AVFormatContext AVMediaType AVCodecID AVPacket AVCodecContext MyAVPacketList PacketQueue AudioParams ' +
 						'Clock Frame FrameQueue Decoder show_mode VideoState SDL_AudioSpec lsmash_file_parameters_t lsmash_movie_parameters_t lsmash_root_t ' +
