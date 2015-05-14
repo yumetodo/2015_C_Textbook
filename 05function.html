@@ -380,7 +380,7 @@ int main(void){
 #ifndef __cplusplus
 #define nullptr NULL
 #endif
-int get_integer_num(const int max, const int min){
+double get_integer_num(const double max, const double min){
 	//機能：標準入力を数字に変換する。
 	//引数：戻り値の最大値,戻り値の最小値
 	//戻り値：入力した数字、エラー時は-1,EOFのときはEOF
@@ -392,35 +392,35 @@ int get_integer_num(const int max, const int min){
 		}
 		return INT_MIN;
 	}
-	if ('\n' == s[0]) return INT_MIN;
+	if ('\n' == s[0]) return -1;
 	errno = 0;
 	const long t = strtol(s, &amp;endptr, 10);
 	if (0 != errno || '\n' != *endptr || t &lt; min || max &lt; t)
-		return INT_MIN;
-	return (int)t;
+		return -1;
+	return (double)t;
 }
-int getnum_customized(const int max, const int min){
+double getnum_customized(const double max, const double min){
 	if (max &lt; min)   return -1;
-	int flag0;
+	double flag0;
 	bool temp_judge;
 	do{
 		flag0 = get_integer_num(max, min);
-		temp_judge = (INT_MIN == flag0);
+		temp_judge = (-1 == flag0);
 		if (temp_judge){
 			puts("再入力してください。");
 		}
 	} while (temp_judge);
 	return flag0;
 }
-int person_num(void){
+double person_num(void){
 	puts("何人のテストの人数を入力しますか？(最大30人まで)");
-	const int getperson = getnum_customized(30, 0);
+	const double getperson = getnum_customized(30, 0);
 	return getperson;
 }
 double calculation(void){
-	int i;
-	int person = person_num();
-	int get_total_score = 0;
+	double i;
+	double person = person_num();
+	double get_total_score = 0;
 	for (i = 1; i &lt;= person; i++){
 		printf("%d人目テストの点数を入力してください。(0～100)\n", i);
 		get_total_score += getnum_customized(100, 0);
