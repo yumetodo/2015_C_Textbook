@@ -333,19 +333,21 @@ status_t ending(){
 }
 int main(){
     status_t function_status = STATE_TITLE;
-    switch (function_status){
-        case STATE_TITLE:
-            function_status = title();
-            break;
-        case STATE_MAIN:
-            function_status = gameMain();
-            break;
-        case STATE_END:
-            function_status = ending();
-            break;
-        default:
-            return -1;//エラー
-    } 
+    while(1){
+        switch (function_status){
+            case STATE_TITLE:
+                function_status = title();
+                break;
+            case STATE_MAIN:
+                function_status = gameMain();
+                break;
+            case STATE_END:
+                function_status = ending();
+                break;
+            default:
+                return -1;//エラー
+        }
+    }
    return 0;
 }
 </pre>
@@ -420,19 +422,21 @@ status_t ending(){
 }
 int main(){
 	status_t function_status = status_t::STATE_TITLE;
-	switch (function_status){
-	case status_t::STATE_TITLE:
-		function_status = title();
-		break;
-	case status_t::STATE_MAIN:
-		function_status = gameMain();
-		break;
-	case status_t::STATE_END:
-		function_status = ending();
-		break;
-	default:
-		return -1;//エラー
-	}
+    while(1){
+    	switch (function_status){
+    	case status_t::STATE_TITLE:
+    		function_status = title();
+    		break;
+    	case status_t::STATE_MAIN:
+    		function_status = gameMain();
+    		break;
+    	case status_t::STATE_END:
+    		function_status = ending();
+    		break;
+    	default:
+    		return -1;//エラー
+    	}
+    }
 	return 0;
 }</pre>
         <p>
