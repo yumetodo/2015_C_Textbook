@@ -49,7 +49,7 @@ int main(){
 	while (1){
 		printf("数値を入力してください(-1で終了):");
 		num = getnum();
-		if (num == -1)
+		if (-1 == num)
 			break;
 		sum += num;
 	}
@@ -177,7 +177,7 @@ int main(){
     while (1){
         printf("数値を入力してください(-1で終了):");
         num = getnum();
-        if (num == -1) break;
+        if (-1 == num) break;
         if(num < 0) continue;
         sum += num;
     }

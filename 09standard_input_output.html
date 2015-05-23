@@ -78,6 +78,28 @@ int putchar(int c );</pre>
             もちろんscanfにはそれなりの良さがあるわけですが、だとしても3番目のように一度読み込んでからsscanfしますね。
         </p>
         <p>get_integer_num関数については簡単に説明すると、まず、fgets関数で文字列を受け、文字列をstrtol関数で数値に変換しています。</p>
+        <p>ちなみにC++だともっとスマートです。</p>
+        <pre class="brush: cpp;">#include &lt;iostrem&gt;
+#include &lt;string&gt;
+int main(){
+    using std::cout;
+    //文字列読み込み
+    cout << "文字列を入力してください" << std::endl;
+    std::string in_str;
+    std::getline(std::cin, in_str);
+    cout << in_str << std::endl;
+
+    //数値読み込み
+    cout << "数値を入力してくだい" << std::endl;
+    const auto in_num = [](){
+        int tmp;
+        std::cin >> tmp;
+        return tmp;
+    }();
+    cout << in_num << std::endl;
+    
+    return 0;
+}</pre>
         <p>というわけでポインターと文字列について何一つ説明していないのにばんばん使っていますが、すみません。すぐに解説します。</p>
         <article>
             <h3>練習問題</h3>
