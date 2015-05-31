@@ -370,86 +370,43 @@ int main(void){
         <section>
             <h2>練習問題２</h2>
             <p>
+                このプログラムは、入力された４つの値を足す処理を行うものです。<br>
                 メイン関数を作成せよ。<br>
-                なお、最後に「平均点：〇点」と出るようにすること。<br>
-                関数名および関数の中身は編集しないこと。<br>
-                <pre class="brush: cpp;">#include&lt;stdio.h>
-#include&lt;stdlib.h>
-#include&lt;limits.h>//in gcc
-#include&lt;errno.h>//in gcc
-#ifndef __cplusplus
-#define nullptr NULL
-#endif
-double get_integer_num(const double max, const double min){
-	//機能：標準入力を数字に変換する。
-	//引数：戻り値の最大値,戻り値の最小値
-	//戻り値：入力した数字、エラー時は-1,EOFのときはEOF
-	char s[100];
-	char *endptr;
-	if (nullptr == fgets(s, 100, stdin)){
-		if (feof(stdin)){//エラーの原因がEOFか切り分け
-			return EOF;
-		}
-		return INT_MIN;
-	}
-	if ('\n' == s[0]) return -1;
-	errno = 0;
-	const long t = strtol(s, &amp;endptr, 10);
-	if (0 != errno || '\n' != *endptr || t &lt; min || max &lt; t)
-		return -1;
-	return (double)t;
+                ちなみにメイン関数は短くて２行で済みます。なのに４行以上になったら…分かってますよね？(プレッシャー)
+                <pre class="brush: cpp;">#include&lt;iostream&gt;
+
+int num1(void){
+	int a;
+	std::cout &lt;&lt; "１つ目の値を入力" &lt;&lt; std::endl;
+	std::cin &gt;&gt; a;
+	return a;
 }
-double getnum_customized(const double max, const double min){
-	if (max &lt; min)   return -1;
-	double flag0;
-	bool temp_judge;
-	do{
-		flag0 = get_integer_num(max, min);
-		temp_judge = (-1 == flag0);
-		if (temp_judge){
-			puts("再入力してください。");
-		}
-	} while (temp_judge);
-	return flag0;
+
+int num2(void){
+	int b;
+	std::cout &lt;&lt; "２つ目の値を入力" &lt;&lt; std::endl;
+	std::cin &gt;&gt; b;
+	return b;
 }
-double person_num(void){
-	puts("何人のテストの人数を入力しますか？(最大30人まで)");
-	const double getperson = getnum_customized(30, 0);
-	return getperson;
+
+int num3(void){
+	int c;
+	std::cout &lt;&lt; "３つ目の値を入力" &lt;&lt; std::endl;
+	std::cin &gt;&gt; c;
+	return c;
 }
-double calculation(void){
-	double i;
-	double person = person_num();
-	double get_total_score = 0;
-	for (i = 1; i &lt;= person; i++){
-		printf("%d人目テストの点数を入力してください。(0～100)\n", i);
-		get_total_score += getnum_customized(100, 0);
-	}
-	double score = get_total_score / person;
-	return score;
+
+int num4(void){
+	int d;
+	std::cout &lt;&lt; "４つ目の値を入力" &lt;&lt; std::endl;
+	std::cin &gt;&gt; d;
+	return d;
 }
 </pre>
-            </p>
-        </section>
-    </section>
-    <section>
-        <h2>C++11/14のlambda</h2>
-        <p>lambdaとかいて「ラムダ」と読みます。関数のページに書いてることから察せると思いますが一種の関数です。見て行きましょう。</p>
-        <pre class="brush: cpp;">#include &lt;iostream&gt;
-#include &lt;cstdint&gt;
-#include &lt;cstdlib&gt;
-#include &lt;cerrno&gt;
-typedef uint64_t num_store_t;
-constexpr num_store_t search_max_temp = 117800;
-int main(int argc, char* argv[]){
-    const auto search_max = (1 == argc) ? search_max_temp : [](const char* str) -> num_store_t {
-        errno = 0;
-        const auto tmp = strtoull(str, nullptr, 10);//引数があればそれを採用する
-        return (0 == errno) ? tmp : search_max_temp;//引数が異常な時は(仮)の値を使用
-    }(argv[1]);
-    std::cout << "search_max: " << search_max << std::endl;
-    return 0;
-}</pre>
+                <p>
+                    ※このプログラムはあくまで問題のために作成したものです。本当はこの後やるfor文を使ったほうがもっとスッキリします。<br>
+                    　皆さんはこんなの書かないでくださいね。
+                </p>
         <p>lambdaとか仰々しい名前がついてますがようは関数なので仮引数リストも戻り値の型も関数定義も関数呼び出しもあります。</p>
         <p>
             仮引数リストは<code>(const char* str)</code>の部分です。普通の関数となんら変わりませんね。<br>
