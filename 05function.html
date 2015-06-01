@@ -393,15 +393,15 @@ int getnum(const int max, const int min){
 	char *endptr;
 	if (nullptr == fgets(s, 100, stdin)){
 		if (feof(stdin)){//エラーの原因がEOFか切り分け
-			return EOF;
+			return 1;
 		}
-		return INT_MIN;
+		return 1;
 	}
-	if ('\n' == s[0]) return -1;
+	if ('\n' == s[0]) return 1;
 	errno = 0;
 	const long t = strtol(s, &amp;endptr, 10);
 	if (0 != errno || '\n' != *endptr || t &lt; min || max &lt; t)
-		return -1;
+		return 1;
 	return (int)t;
 }
 int main(void){
@@ -411,6 +411,7 @@ int main(void){
     return 0;
 }
 </pre>
+                ※コピペして使えるようにgetnum関数をカスタマイズしてあります。(デフォルトのgetnum関数を使うと入力ミスした時に調査書点が大変なことになるので)
             </p>
         </section>
     </section>
