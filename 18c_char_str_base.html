@@ -181,7 +181,7 @@ int main(void){
     char* str0 = "arikitari";//C++11以降ではエラー。constを暗黙のうちに消しさることは許されない
     auto str = "arikitari";
     "arikitari"[2] = 'a';//未定義動作。やるべきじゃない
-    str[2] = 'a';//エラー。strはread-only pointer
+    str[2] = 'a';//エラー。str is pointer to read-only char.
     do_something(str);//C++11以降ではエラー。constを暗黙のうちに消しさることは許されない
     do_something2(str);//OK
     return 0;
@@ -192,7 +192,7 @@ void do_something(char* in_str){
 void do_something2(char const* in_str){
     puts(in_str);
 }</pre>
-        <p>10行目みたいなことは昔はできたらしいのですが(書いたことないから知らん)、するべきではありませんね。6行目は論外。</p>
+        <p>6,10行目みたいなことは<a href="http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#encoding-scheme">昔はできたらしいのですが</a>(書いたことないから知らん)、するべきではありませんね。</p>
         <p>ここで改めてputs関数のプロトタイプ宣言を見てみましょう。</p>
         <pre class="brush: cpp;">int puts(const char *str);</pre>
         <p>もうなんで引数がchar*型でなくてchar const*型かわかりますね。もちろん引数を変更しませんよ、という意味もあるのですが、それ以上に</p>
