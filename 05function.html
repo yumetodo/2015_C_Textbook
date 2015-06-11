@@ -375,10 +375,10 @@ int main(void){
                 なお、値の取得については下のgetnum関数を用いること。<br>
                 メイン関数が５行を超えたら公開処刑です。<br>
                 アドバイス<br>
-                1.3倍する箇所を×1.3の部分まで全て(　)でくくって頭にstatic_cast&lt;int>をつけるとwarning回避できます。<br><br>
-                
-                数値入力には以下のget_score関数を利用する。エラー時は自動的にもう一度数値入力を求めるのでエラー処理は書かなくて良い。
-                <pre class="brush: cpp;">#include&lt;iostream>
+                1.3倍する箇所を×1.3の部分まで全て(　)でくくって頭にstatic_cast&lt;int>をつけるとwarning回避できます。
+            </p>
+            <p>数値入力には以下のget_score関数を利用する。エラー時は自動的にもう一度数値入力を求めるのでエラー処理は書かなくて良い。</p>
+            <pre class="brush: cpp;">#include&lt;iostream>
 #include &lt;exception>
 typedef unsigned int uint;
 uint get_score(const uint max, const uint min) {
@@ -398,7 +398,6 @@ int main(void){
     return 0;
 }
 </pre>
-            </p>
         </section>
     </section>
     <section>
