@@ -11,6 +11,7 @@
     <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
     <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
     <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script src="./scripts/common.js" type="text/javascript"></script>
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
@@ -176,7 +177,8 @@ int main(void){
     }
     return 0;
 }</pre>
-            <section>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-1')"></form>
+            <section id="answer1-1" style="display: none;">
                 <h4>回答</h4>
                 <p>
                     何度でも言いますが、<br>

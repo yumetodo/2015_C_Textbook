@@ -100,23 +100,27 @@ int_ptr pi, p2;</pre>
 #define nullptr NULL
 #endif
 int get_integer_num(const int max, const int min){
-	//機能：標準入力を数字に変換する。
-	//引数：戻り値の最大値,戻り値の最小値
-	//戻り値：入力した数字、エラー時は-1,EOFのときはEOF
-	char s[100];
-	char *endptr;
-	if (nullptr == fgets(s, 100, stdin)){
-		if (feof(stdin)){//エラーの原因がEOFか切り分け
-			return EOF;
-		}
-		return INT_MIN;
-	}
-	if ('\n' == s[0]) return INT_MIN;
-	errno = 0;
-	const long t = strtol(s, &endptr, 10);
-	if (0 != errno || '\n' != *endptr || t < min || max < t)
-		return INT_MIN;
-	return (int)t;
+    //機能：標準入力を数字に変換する。
+    //引数：戻り値の最大値,戻り値の最小値
+    //戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
+    char s[100];
+
+    if (NULL == fgets(s, 100, stdin)){
+        if (feof(stdin)){//エラーの原因がEOFか切り分け
+            return EOF;
+        }
+        //改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
+        size_t i;
+        for(i = 0; i &lt; 100 &amp;&amp; '\0' == s[i]; i++);//strlenもどき
+        if('\n' != s[i - 1]) while(getchar() != '\n');//入力ストリームを掃除
+        return INT_MIN;
+    }
+    if ('\n' == s[0]) return INT_MIN;
+    errno = 0;
+    const long t = strtol(s, NULL, 10);
+    if (0 != errno || t &lt; min || max &lt; t)
+        return INT_MIN;
+    return (int)t;
 }
 int compare_int(const void *a, const void *b){
     return *static_cast&lt;int*&gt;(a) - *static_cast&lt;int*&gt;(b);
@@ -233,7 +237,8 @@ char* do_something3(char* dest, char* const src){
                 <p>
                     do_something1関数はコンパイルエラーにならない。なぜならば、変数srcの宣言を英語っぽく読むと<br>
                     'src' is pointer to read-only char.<br>
-                    となり、read-onlyなのはsrcが指し示す先であって根本ではないから。nullptrを代入してもエラーにならないのは当然。
+                    となり、read-onlyなのはsrcが指し示す先であって根本ではないから。nullptrを代入してもエラーにならないのは当然。<br>
+                    なお、変数srcはdo_something1関数のスタックにある変数だから、do_something1関数の処理が終わり終了すれば開放される。なので、関数の呼び出し元に影響を与えることはない。
                 </p>
             </section>
         </article>

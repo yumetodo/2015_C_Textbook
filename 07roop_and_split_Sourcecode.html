@@ -33,23 +33,36 @@
         <p>例えば、</p>
         <pre class="brush: cpp;">#include&lt;stdio.h&gt;
 #include&lt;stdlib.h&gt;
-int getnum(void){
-	char s[100];
-	char *endptr;
-	if(NULL == fgets(s, 100, stdin)) return -1;
-	errno = 0;
-	const long t = strtol(s, &amp;endptr, 10);
-	if (errno != 0 || *endptr != '\n' || t < INT_MIN || INT_MAX < t)
-		return -1;
-	return t;
+int get_integer_num(const int max, const int min){
+    //機能：標準入力を数字に変換する。
+    //引数：戻り値の最大値,戻り値の最小値
+    //戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
+    char s[100];
+
+    if (NULL == fgets(s, 100, stdin)){
+        if (feof(stdin)){//エラーの原因がEOFか切り分け
+            return EOF;
+        }
+        //改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
+        size_t i;
+        for(i = 0; i &lt; 100 &amp;&amp; '\0' == s[i]; i++);//strlenもどき
+        if('\n' != s[i - 1]) while(getchar() != '\n');//入力ストリームを掃除
+        return INT_MIN;
+    }
+    if ('\n' == s[0]) return INT_MIN;
+    errno = 0;
+    const long t = strtol(s, NULL, 10);
+    if (0 != errno || t &lt; min || max &lt; t)
+        return INT_MIN;
+    return (int)t;
 }
 int main(){
 	int num;
 	int sum = 0;
 	while (1){
 		printf("数値を入力してください(-1で終了):");
-		num = getnum();
-		if (-1 == num)
+		num = get_integer_num();
+		if (-1 == num || INT_MIN == num || EOF == num)
 			break;
 		sum += num;
 	}
@@ -161,24 +174,37 @@ int main(void){
         <p>では組み合わせてみましょうかね～</p>
         <pre class="brush: cpp;">#include&lt;stdio.h&gt;
 #include&lt;stdlib.h&gt;
-int getnum(void){
+int get_integer_num(const int max, const int min){
+    //機能：標準入力を数字に変換する。
+    //引数：戻り値の最大値,戻り値の最小値
+    //戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
     char s[100];
-    char *endptr;
-    if(NULL == fgets(s, 100, stdin)) return -1;
+
+    if (NULL == fgets(s, 100, stdin)){
+        if (feof(stdin)){//エラーの原因がEOFか切り分け
+            return EOF;
+        }
+        //改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
+        size_t i;
+        for(i = 0; i &lt; 100 &amp;&amp; '\0' == s[i]; i++);//strlenもどき
+        if('\n' != s[i - 1]) while(getchar() != '\n');//入力ストリームを掃除
+        return INT_MIN;
+    }
+    if ('\n' == s[0]) return INT_MIN;
     errno = 0;
-    const long t = strtol(s, &amp;endptr, 10);
-    if (errno != 0 || *endptr != '\n' || t < INT_MIN || INT_MAX < t)
-        return -1;
-    return t;
+    const long t = strtol(s, NULL, 10);
+    if (0 != errno || t &lt; min || max &lt; t)
+        return INT_MIN;
+    return (int)t;
 }
 int main(){
     int num;
     int sum = 0;
     while (1){
         printf("数値を入力してください(-1で終了):");
-        num = getnum();
-        if (-1 == num) break;
-        if(num < 0) continue;
+        num = get_integer_num();
+        if (-1 == num || INT_MIN == num || EOF == num)
+                if(num < 0) continue;
         sum += num;
     }
     printf("入力した数値の合計は%dです。\n", sum);

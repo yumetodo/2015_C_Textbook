@@ -60,23 +60,26 @@ int main(void){
 
 	return 0;
 }
-int get_integer_num(const int max, const int min){
+int get_integer_num(const int max, const int min) {
 	//機能：標準入力を数字に変換する。
 	//引数：戻り値の最大値,戻り値の最小値
-	//戻り値：入力した数字、エラー時は-1,EOFのときはEOF
+	//戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
 	char s[100];
-	char *endptr;
 
-	if (nullptr == fgets(s, 100, stdin)){
-		if (feof(stdin)){//エラーの原因がEOFか切り分け
+	if (NULL == fgets(s, 100, stdin)) {
+		if (feof(stdin)) {//エラーの原因がEOFか切り分け
 			return EOF;
 		}
+		//改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
+		size_t i;
+		for (i = 0; i < 100 && '\0' == s[i]; i++);//strlenもどき
+		if ('\n' != s[i - 1]) while (getchar() != '\n');//入力ストリームを掃除
 		return INT_MIN;
 	}
 	if ('\n' == s[0]) return INT_MIN;
 	errno = 0;
-	const long t = strtol(s, &endptr, 10);
-	if (0 != errno || '\n' != *endptr || t < min || max < t)
+	const long t = strtol(s, NULL, 10);
+	if (0 != errno || t < min || max < t)
 		return INT_MIN;
 	return (int)t;
 }
