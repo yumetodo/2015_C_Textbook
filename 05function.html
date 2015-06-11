@@ -393,7 +393,7 @@ int getnum(const int max, const int min){
 	char *endptr;
 	if (nullptr == fgets(s, 100, stdin)){
 		if (feof(stdin)){//エラーの原因がEOFか切り分け
-			return INT_MIN;
+			return EOF;
 		}
 		return INT_MIN;
 	}
