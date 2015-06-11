@@ -203,14 +203,70 @@ if(a = 5)//これはコンパイルエラーにならない、aに代入した�
             <h2>練習問題１</h2>
             <p>
                 if文を使い、入力された点数が<br>
-                ９０点以上：Ｓ<br>
-                ８０～８９点：Ａ<br>
-                ７０～７９点：Ｂ<br>
-                ６０～６９点：Ｃ<br>
-                ５９点以下：Ｄ<br>
+                ９０点以上：S<br>
+                ８０～８９点：A<br>
+                ７０～７９点：B<br>
+                ６０～６９点：C<br>
+                ５９点以下：D<br>
                 と表示するプログラムを作れ。<br>
                 ただし、メイン関数は６行以内に留めること。<br>
+                また数値入力には下記のget_num関数を使用すること
             </p>
+            <pre class="brush: cpp;">#include &lt;iostream>
+#include &lt;exception>//in gcc
+int get_num(const uint max, const uint min) {
+    int re;
+    try {
+        std::cin >> re;
+    }
+    catch (std::exception& er) {
+        std::cerr << er.what() << std::endl;
+        re =  0;
+    }
+    return (re < min || max < re) ? get_score(max, min) : re;
+}</pre>
+            <pre class="brush: plain;" title="実行例">点数を入力してください
+78
+B</pre>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-1')"></form>
+            <section id="answer1-1" style="display: none;">
+                <p>こんな感じ。</p>
+                <pre class="brush: cpp;">#include &lt;iostream>
+#include &lt;exception>//in gcc
+#include &lt;cstdio>
+int get_num(const uint max, const uint min) {
+    int re;
+    try {
+        std::cin >> re;
+    }
+    catch (std::exception& er) {
+        std::cerr << er.what() << std::endl;
+        re =  0;
+    }
+    return (re < min || max < re) ? get_num(max, min) : re;
+}
+char detect_level(const int score){
+    char re;
+    if(score < 60){
+        re = 'D';
+    }
+    else if(score < 70){
+        re = 'C';
+    }
+    else if(score < 80){
+        re = 'B';
+    }
+    else{
+        re = 'A';
+    }
+    return re;
+}
+int main(void) {
+    puts("点数を入力してください");
+    putchar(detect_level(get_num(100, 0)));
+    return 0;
+}</pre>
+            </section>
         </section>
     </section>
 
@@ -279,15 +335,70 @@ default:
         <section>
             <h2>練習問題２</h2>
             <p>
-                東京理科大学のメインキャンパスはどこ？
-                1.神楽坂キャンパス
-                2.野田キャンパス
-                3.葛飾キャンパス
-                4.久喜キャンパス
-                5.長万部キャンパス
+                東京理科大学のメインキャンパスはどこ？<br>
+                1.神楽坂キャンパス<br>
+                2.野田キャンパス<br>
+                3.葛飾キャンパス<br>
+                4.久喜キャンパス<br>
+                5.長万部キャンパス<br>
                 この問題を表示させ、選択肢の値を入力したとき、１を選んだら「正解です」、２～５を選んだら「不正解です」、それ以外の値を選んだら「選択肢にはない番号が入力されました」と返すプログラムを書け。<br>
                 ただし、swich文を必ず使うこと。if文を使って書く量を少なくしても問題ありません。<br>
+                また数値入力には以下のget_num2関数を使用すること。
             </p>
+            <pre class="brush: cpp;">#include &lt;iostream>
+#include &lt;exception>//in gcc
+int get_num2(const uint max, const uint min) {
+    int re;
+    try {
+        std::cin >> re;
+    }
+    catch (std::exception& er) {
+        std::cerr << er.what() << std::endl;
+        re =  0;
+    }
+    return (re < min || max < re) ? 0 : re;
+}
+</pre>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-2')"></form>
+            <section id="answer1-2" style="display: none;">
+            <pre class="brush: cpp;">#include &lt;iostream>
+#include &lt;exception>//in gcc
+int get_num2(const uint max, const uint min) {
+    int re;
+    try {
+        std::cin >> re;
+    }
+    catch (std::exception& er) {
+        std::cerr << er.what() << std::endl;
+        re =  0;
+    }
+    return (re < min || max < re) ? 0 : re;
+}
+int main() {
+    printf("東京理科大学のメインキャンパスはどこ？\n"
+        "1.神楽坂キャンパス\n"
+        "2.野田キャンパス\n"
+        "3.葛飾キャンパス\n"
+        "4.久喜キャンパス\n"
+        "5.長万部キャンパス\n"
+    );
+    switch(get_num2(5, 1)){
+    case 1:
+        puts("正解です");
+        break;
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+        puts("不正解です");
+        break;
+    default:
+        puts("選択肢にはない番号が入力されました");
+        break;
+    }
+    return 0;
+}</pre>
+            </section>
         </section>
     </section>
     <section>

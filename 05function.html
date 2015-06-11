@@ -385,7 +385,7 @@ int main(void){
                 1.3倍する箇所を×1.3の部分まで全て(　)でくくって頭にstatic_cast&lt;int>をつけるとwarning回避できます。
             </p>
             <p>数値入力には以下のget_score関数を利用する。エラー時は自動的にもう一度数値入力を求めるのでエラー処理は書かなくて良い。</p>
-            <pre class="brush: cpp;">#include&lt;iostream>
+            <pre class="brush: cpp;">#include　&lt;iostream>
 #include &lt;exception>
 typedef unsigned int uint;
 uint get_score(const uint max, const uint min) {
@@ -394,6 +394,7 @@ uint get_score(const uint max, const uint min) {
         std::cin >> re;
     }
     catch (std::exception& er) {
+        std::cerr << er.what() << std::endl;
         re =  0;
     }
     return (re < min || max < re) ? get_score(max, min) : re;
@@ -405,6 +406,101 @@ int main(void){
     return 0;
 }
 </pre>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer2-1')"></form>
+            <section id="answer2-1" style="display: none;">
+                <p>こんなかんじかな。</p>
+                <pre class="brush: cpp;">#include &lt;iostream>
+#include &lt;exception>
+#include &lt;cstdio>
+typedef unsigned int uint;
+uint get_score(const uint max, const uint min) {
+    uint re;
+    try {
+        std::cerr << er.what() << std::endl;
+        std::cin >> re;
+    }
+    catch (std::exception& er) {
+        re =  0;
+    }
+    return (re < min || max < re) ? get_score(max, min) : re;
+}
+uint redundancy_calculater_of_the_point_of_a_school_report(void) {
+    uint five_subjects_sum = 0;
+    puts("国語の内申点を入力してください");
+    five_subjects_sum += get_score(5, 1);
+    puts("数学の内申点を入力してください");
+    five_subjects_sum += get_score(5, 1);
+    puts("英語の内申点を入力してください");
+    five_subjects_sum += get_score(5, 1);
+    puts("理科の内申点を入力してください");
+    five_subjects_sum += get_score(5, 1);
+    puts("社会の内申点を入力してください");
+    five_subjects_sum += get_score(5, 1);
+    uint four_subjects_sum = 0;
+    puts("美術の内申点を入力してください");
+    four_subjects_sum += get_score(5, 1);
+    puts("技術・家庭科の内申点を入力してください");
+    four_subjects_sum += get_score(5, 1);
+    puts("音楽の内申点を入力してください");
+    four_subjects_sum += get_score(5, 1);
+    puts("体育の内申点を入力してください");
+    four_subjects_sum += get_score(5, 1);
+    return four_subjects_sum + static_cast&lt;uint>(four_subjects_sum * 1.3);
+}
+int main(void){
+    printf("%d", redundancy_calculater_of_the_point_of_a_school_report());
+    return 0;
+}</pre>
+                <p>配列とかループとかstd::arrayとかつかってもそこまで綺麗には書けないですね。std::vector使うのはどうかと思うし。</p>
+                <pre class="brush: cpp;">#include &lt;iostream>
+#include &lt;type_traits>
+#include &lt;exception>
+#include &lt;array>
+typedef unsigned int uint;
+
+template&lt;class T>
+constexpr std::array&lt;T, 0> make_array(){
+    return std::array&lt;T, 0>{ {}};
+}
+
+template&lt;class... T>
+constexpr std::array&lt;typename std::common_type&lt;T...>::type, sizeof...(T)> make_array(T... args){
+    return std::array&lt;typename std::common_type&lt;T...>::type, sizeof...(T)>{ {args...}};
+}
+
+uint get_score(const uint max, const uint min) {
+    uint re;
+    try {
+        std::cin >> re;
+    }
+    catch (std::exception& er) {
+        std::cerr << er.what() << std::endl;
+        re =  0;
+    }
+    return (re < min || max < re) ? get_score(max, min) : re;
+}
+void ask_what_subject(const char* str) {
+    std::cout << str << "の内申点を入力してください" << std::endl;
+}
+uint arikitari_na_calculater_of_the_point_of_a_school_report(void) {
+    static const char* subject_name1[] = { "国語", "数学", "英語", "理科", "社会" };
+    static const char* subject_name2[] = { "美術", "技術・家庭科", "音楽", "体育" };
+    uint sum[2] = { 0 };
+    for (auto subject : subject_name1) {
+        ask_what_subject(subject);
+        sum[0] += get_score(5, 1);
+    }
+    for (auto subject : subject_name2) {
+        ask_what_subject(subject);
+        sum[1] += get_score(5, 1);
+    }
+    return sum[0] + static_cast&lt;uint>(sum[1] * 1.3);
+}
+int main(){
+    std::cout << arikitari_na_calculater_of_the_point_of_a_school_report() << std::endl;
+    return 0;
+}</pre>
+            </section>
         </section>
     </section>
     <section>
