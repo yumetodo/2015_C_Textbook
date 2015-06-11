@@ -375,8 +375,8 @@ int main(void){
                 なお、値の取得については下のgetnum関数を用いること。<br>
                 メイン関数が５行を超えたら公開処刑です。<br>
                 アドバイス<br>
-                １　std::stringを使うとgetnum関数とメイン関数を含めて３つの関数だけで作れます。<br>
-                ２　1.3倍する箇所を×1.3の部分まで全て(　)でくくって頭にstatic_cast&lt;int>をつけるとwarning回避できます。<br><br>
+                1.3倍する箇所を×1.3の部分まで全て(　)でくくって頭にstatic_cast&lt;int>をつけるとwarning回避できます。<br><br>
+                
                 getnum関数の使い方は下記参照
                 <pre class="brush: cpp;">#include&lt;stdio.h>
 #include&lt;stdlib.h>
@@ -393,15 +393,15 @@ int getnum(const int max, const int min){
 	char *endptr;
 	if (nullptr == fgets(s, 100, stdin)){
 		if (feof(stdin)){//エラーの原因がEOFか切り分け
-			return 1;
+			return INT_MIN;
 		}
-		return 1;
+		return INT_MIN;
 	}
-	if ('\n' == s[0]) return 1;
+	if ('\n' == s[0]) return INT_MIN;
 	errno = 0;
 	const long t = strtol(s, &amp;endptr, 10);
 	if (0 != errno || '\n' != *endptr || t &lt; min || max &lt; t)
-		return 1;
+		return INT_MIN;
 	return (int)t;
 }
 int main(void){
@@ -411,7 +411,6 @@ int main(void){
     return 0;
 }
 </pre>
-                ※コピペして使えるようにgetnum関数をカスタマイズしてあります。(デフォルトのgetnum関数を使うと入力ミスした時に調査書点が大変なことになるので)
             </p>
         </section>
     </section>
