@@ -201,7 +201,7 @@ printf("%d", myGetRValue(color));</pre>
                             <pre class="brush: cpp;">#include &lt;windows.h&gt;
 #include &lt;stdio.h&gt;
 uint8_t myGetRValue(COLORREF color){
-    return static_cast<uint8_t>((static_cast<DWORD_PTR>(color)) &amp; 0xff);
+    return static_cast&lt;uint8_t>((static_cast&lt;DWORD_PTR>(color)) &amp; 0xff);
 }</pre>
                         </section>
                     </div>
@@ -377,36 +377,23 @@ int main(void){
                 アドバイス<br>
                 1.3倍する箇所を×1.3の部分まで全て(　)でくくって頭にstatic_cast&lt;int>をつけるとwarning回避できます。<br><br>
                 
-                getnum関数の使い方は下記参照
-                <pre class="brush: cpp;">#include&lt;stdio.h>
-#include&lt;stdlib.h>
-#include&lt;limits.h>//in gcc
-#include&lt;errno.h>//in gcc
-#ifndef __cplusplus
-#define nullptr NULL
-#endif
-int getnum(const int max, const int min){
-	//機能：標準入力を数字に変換する。
-	//引数：戻り値の最大値,戻り値の最小値
-	//戻り値：入力した数字、エラー時は-1,EOFのときはEOF
-	char s[100];
-	char *endptr;
-	if (nullptr == fgets(s, 100, stdin)){
-		if (feof(stdin)){//エラーの原因がEOFか切り分け
-			return INT_MIN;
-		}
-		return INT_MIN;
-	}
-	if ('\n' == s[0]) return INT_MIN;
-	errno = 0;
-	const long t = strtol(s, &amp;endptr, 10);
-	if (0 != errno || '\n' != *endptr || t &lt; min || max &lt; t)
-		return INT_MIN;
-	return (int)t;
+                数値入力には以下のget_score関数を利用する。エラー時は自動的にもう一度数値入力を求めるのでエラー処理は書かなくて良い。
+                <pre class="brush: cpp;">#include&lt;iostream>
+#include &lt;exception>
+typedef unsigned int uint;
+uint get_score(const uint max, const uint min) {
+    uint re;
+    try {
+        std::cin >> re;
+    }
+    catch (std::exception& er) {
+        re =  0;
+    }
+    return (re < min || max < re) ? get_score(max, min) : re;
 }
 int main(void){
     puts("値を入力してください。\n");
-    const int num = getnum(9, 0);//カンマの左側の数字が入力できる値の最大値、右が最小値
+    const auto num = get_score(9, 0);//カンマの左側の数字が入力できる値の最大値、右が最小値
     printf("あなたが入力した値は%dです。", num);
     return 0;
 }
