@@ -453,21 +453,8 @@ int main(void){
 }</pre>
                 <p>配列とかループとかstd::arrayとかつかってもそこまで綺麗には書けないですね。std::vector使うのはどうかと思うし。</p>
                 <pre class="brush: cpp;">#include &lt;iostream>
-#include &lt;type_traits>
 #include &lt;exception>
-#include &lt;array>
 typedef unsigned int uint;
-
-template&lt;class T>
-constexpr std::array&lt;T, 0> make_array(){
-    return std::array&lt;T, 0>{ {}};
-}
-
-template&lt;class... T>
-constexpr std::array&lt;typename std::common_type&lt;T...>::type, sizeof...(T)> make_array(T... args){
-    return std::array&lt;typename std::common_type&lt;T...>::type, sizeof...(T)>{ {args...}};
-}
-
 uint get_score(const uint max, const uint min) {
     uint re;
     try {
