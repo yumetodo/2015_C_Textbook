@@ -417,8 +417,8 @@ int main() {
 }status_t;</pre>
         <p>typedefするときはタグ名は省略してもいいです。なお、「STATE_ENDのあとになんで","が置けるんだ？」と思ったあなた、よく勉強しています。enumに関しては書けるんです(C89からだっけ・・・？)</p>
         <p>実際に例を見ていきましょう</p>
-        <pre class="brush: cpp;">#include&lt;stdio.h&gt;
-#include&lt;dxlib.h&gt;
+        <pre class="brush: cpp;">#include "DxLib.h"
+#include &lt;stdio.h&gt;
 //  ゲーム状態
 typedef enum{
     STATE_TITLE,//タイトル
@@ -444,8 +444,9 @@ status_t ending(){
     return STATE_MAIN;
 }
 int main(){
+    if(-1 == DxLib_Init()) return -1;
     status_t function_status = STATE_TITLE;
-    while(1){
+    while(CheckHitKey(KEY_INPUT_ESCAPE)){//function 'CheckHitKey' is DxLibrary's function.
         switch (function_status){
             case STATE_TITLE:
                 function_status = title();
@@ -460,7 +461,8 @@ int main(){
                 return -1;//エラー
         }
     }
-   return 0;
+    DxLib_End();
+    return 0;
 }
 </pre>
         <p>
@@ -506,8 +508,8 @@ std::size_t primitiveType5 = static_cast&lt;std::size_t&gt;(PrimitiveType::Trian
     TriangleList = -1, // error, Enumerator value evaluates to -1, which cannot be narrowed to type 'std::size_t'
 };</pre>
         <p>早速例を見ましょう。</p>
-        <pre class="brush: cpp;">#include&lt;stdio.h&gt;
-//#include&lt;dxlib.h&gt;
+        <pre class="brush: cpp;">#include "DxLib.h"
+#include &lt;stdio.h&gt;
 //  ゲーム状態
 enum class status_t{
 	STATE_TITLE,//タイトル
@@ -533,8 +535,9 @@ status_t ending(){
 	return status_t::STATE_MAIN;
 }
 int main(){
+    if(-1 == DxLib_Init()) return -1;
 	status_t function_status = status_t::STATE_TITLE;
-    while(1){
+    while(CheckHitKey(KEY_INPUT_ESCAPE)){//function 'CheckHitKey' is DxLibrary's function.
     	switch (function_status){
     	case status_t::STATE_TITLE:
     		function_status = title();
@@ -549,6 +552,7 @@ int main(){
     		return -1;//エラー
     	}
     }
+    DxLib_End();
 	return 0;
 }</pre>
         <p>
