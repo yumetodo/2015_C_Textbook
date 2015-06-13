@@ -5,7 +5,7 @@
 #endif
 #include<random>
 #include <type_traits>
-extern inline void mtrand32_init(std::vector<std::uint_least32_t>& sed_v, std::random_device& rnd);
+void mtrand32_init(std::vector<std::uint_least32_t>& sed_v, std::random_device& rnd);//warning: inline function 'void mtrand32_init(std::vector<unsigned int>&, std::random_device&)' used but never defined
 
 template <bool Con, class Then, class Else>
 struct IF;
@@ -23,7 +23,7 @@ using my_uniform_distribution = IF<
 	std::is_integral<rand_type>::value_type, std::uniform_int_distribution<rand_type>, IF<
 		std::is_floating_point<rand_type>::value_type, std::uniform_real_distribution<rand_type>, rand_type
 	>
->::type;
+>::type;//need 'typename' before 'IF<std::is_integral<_Tp>::value_type, std::uniform_int_distribution<_IntType>, IF<std::is_floating_point<_Tp>::value_type, std::uniform_real_distribution<_IntType>, rand_type> >::type' because 'IF<std::is_integral<_Tp>::value_type, std::uniform_int_distribution<_IntType>, IF<std::is_floating_point<_Tp>::value_type, std::uniform_real_distribution<_IntType>, rand_type> >' is a dependent scope
 
 template<typename rand_type> class mtrand32
 {
@@ -35,13 +35,14 @@ public:
 		std::seed_seq seq(v.begin(), v.end());
 		this->engine = std::move(std::mt19937(seq));
 		static_assert(std::is_same<rand_type, IF<std::is_integral<rand_type>::value_type, std::uniform_int_distribution<rand_type>, IF<std::is_floating_point<rand_type>::value, std::uniform_real_distribution<rand_type>, rand_type>>>::value, "unkuown type");
-		this->distribution = std::move(std::uniform_real_distribution<rand_type>(min, max));
-	}
+		this->distribution = std::move(std::uniform_real_distribution<rand_type>(min, max));//note: say 'typename std::is_integral<_Tp>::value_type' if a type is meant
+	}/*error: dependent-name 'std::is_integral<_Tp>::value_type' is parsed as a non-type, but instantiation yields a type
+   this->distribution = std::move(std::uniform_real_distribution<rand_type>(min, max));//error: dependent-name 'std::is_integral<_Tp>::value_type' is parsed as a non-type, but instantiation yields a type//note: say 'typename std::is_integral<_Tp>::value_type' if a type is meant//error: 'class mtrand32<double>' has no member named 'distribution'*/
 	rand_type mtrand(void) {
-		return this->distribution(this->engine);
-	}
+		return this->distribution(this->engine);//error: 'class mtrand32<double>' has no member named 'distribution'
+	}//warning: control reaches end of non-void function [-Wreturn-type]
 private:
-	std::uniform_real_distribution distribution;
+	std::uniform_real_distribution<rand_type> distribution;//error: invalid use of template-name 'std::uniform_real_distribution' without an argument list
 	std::mt19937 engine;
 };
 #endif //INC_MTRAND32_H

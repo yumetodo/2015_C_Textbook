@@ -5,13 +5,11 @@
 // Twitter: @viathefalcon
 //
 #ifndef __INTEL_COMPILER
-# include <immintrin.h>
+#include <immintrin.h>
 #endif
-// Functions
-//
 
 // Returns true if the host CPU supports the RDRAND instruction
-extern inline bool IsRDRANDsupport();
+bool IsRDRANDsupport();
 
 // Invokes rdrand to generate a 32-bit unsigned random number
 // Returns true if a random value was available; false otherwise

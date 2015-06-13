@@ -1,6 +1,6 @@
 ﻿#if defined(_MSC_VER) && _MSC_VER >= 1400
 #define _CRT_RAND_S
-#include <stdlib.h>//rand_s
+#include <stdlib.h> //rand_s
 #endif
 #include "mtrand32.h"
 #include "ia_rdrand.h"//rdrand_supported(), rdrand()
@@ -9,7 +9,8 @@
 #include <vector>
 #include <algorithm>//std::generate
 #include <ctime>//clock(), time()
-inline void mtrand32_init(std::vector<std::uint_least32_t>& sed_v, std::random_device& rnd) {
+#include <functional>//std::ref in gcc
+extern inline void mtrand32_init(std::vector<std::uint_least32_t>& sed_v, std::random_device& rnd) {
 	std::generate(sed_v.begin(), sed_v.end(), std::ref(rnd));// ベクタの初期化
 	if (IsRDRANDsupport()) {//RDRAND命令の結果もベクターに追加
 		for (std::size_t i = 0; i < 2; i++) {
