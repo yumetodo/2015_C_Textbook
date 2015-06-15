@@ -105,6 +105,28 @@ inline T_ max(T_ a, T_ b){
                 <a href="http://nadeausoftware.com/articles/2012/10/c_c_tip_how_detect_compiler_name_and_version_using_compiler_predefined_macros">http://nadeausoftware.com/articles/2012/10/c_c_tip_how_detect_compiler_name_and_version_using_compiler_predefined_macros</a><br>
                 の解説が非常に詳しくわかりやすいです。
             </p>
+            <table>
+                <tbody>
+                    <tr><th>コンパイラ</th><th>_MSC_VER値</th><th>備考</th></tr>
+                    <tr><td>C Compiler 6.0</td><td style="text-align: center;">600</td><td></td></tr>
+                    <tr><td>C/C++ Compiler 7.0</td><td style="text-align: center;">700</td><td></td></tr>
+                    <tr><td>Visual C++ 1.0</td><td style="text-align: center;">800</td><td></td></tr>
+                    <tr><td>Visual C++ 2.0</td><td style="text-align: center;">900</td><td></td></tr>
+                    <tr><td>Visual C++ 4.0</td><td style="text-align: center;">1000</td><td></td></tr>
+                    <tr><td>Visual C++ 4.1</td><td style="text-align: center;">1010</td><td></td></tr>
+                    <tr><td>Visual C++ 4.2</td><td style="text-align: center;">1020</td><td></td></tr>
+                    <tr><td>Visual C++ 5.0 (Visual Studio 97)</td><td style="text-align: center;">1100</td><td></td></tr>
+                    <tr><td>Visual C++ 6.0 (Visual Studio 6.0)</td><td style="text-align: center;">1200</td><td></td></tr>
+                    <tr><td>Visual C++ 7.0 (Visual Studio.NET 2002)</td><td style="text-align: center;">1300</td><td></td></tr>
+                    <tr><td>Visual C++ 7.1 (Visual Studio.NET 2003)</td><td style="text-align: center;">1310</td><td></td></tr>
+                    <tr><td>Visual C++ 8.0 (Visual Studio 2005)</td><td style="text-align: center;">1400</td><td></td></tr>
+                    <tr><td>Visual C++ 9.0 (Visual Studio 2008)</td><td style="text-align: center;">1500</td><td></td></tr>
+                    <tr><td>Visual C++ 10.0 (Visual Studio 2010)</td><td style="text-align: center;">1600</td><td>stdint.h使用可</td></tr>
+                    <tr><td>Visual C++ 11.0 (Visual Studio 2012)</td><td style="text-align: center;">1700</td><td><a href="http://msdn.microsoft.com/ja-jp/library/vstudio/hh567368.aspx" target="_blank">出典</a></td></tr>
+                    <tr><td>Visual C++ 12.0 (Visual Studio 2013)</td><td style="text-align: center;">1800</td><td><a href="http://stackoverflow.com/questions/70013/how-to-detect-if-im-compiling-code-with-visual-studio-2008" target="_blank">出典</a></td></tr>
+                    <tr><td>Visual C++ 13.0 (Visual Studio 2015)</td><td style="text-align: center;">1900</td><td>RC版は1900だった<a href="http://www.reddit.com/r/cpp/comments/2786nw/visual_studio_14_ctp_visual_c_team_blog/" target="_blank">出典</a></td></tr>
+                </tbody>
+            </table>
         </section>
         <section>
             <h3>#pragma comment</h3>
