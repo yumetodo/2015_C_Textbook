@@ -21,7 +21,7 @@ struct IF<false, Then, Else> {
 template<typename rand_type>
 using my_uniform_distribution = typename IF<
 	std::is_integral<rand_type>::value, std::uniform_int_distribution<rand_type>, std::uniform_real_distribution<rand_type>
->::type;//need 'typename' before 'IF<std::is_integral<_Tp>::value_type, std::uniform_int_distribution<_IntType>, IF<std::is_floating_point<_Tp>::value_type, std::uniform_real_distribution<_IntType>, rand_type> >::type' because 'IF<std::is_integral<_Tp>::value_type, std::uniform_int_distribution<_IntType>, IF<std::is_floating_point<_Tp>::value_type, std::uniform_real_distribution<_IntType>, rand_type> >' is a dependent scope
+>::type;
 
 template<typename rand_type> class mtrand32
 {
@@ -32,15 +32,13 @@ public:
 		mtrand32_init(v, rnd);
 		std::seed_seq seq(v.begin(), v.end());
 		this->engine = std::move(std::mt19937(seq));
-		static_assert(std::is_arithmetic<rand_type>::value == false, "illegal type");
-		//this->distribution = std::move(my_uniform_distribution<rand_type>(min, max));//note: say 'typename std::is_integral<_Tp>::value_type' if a type is meant
-	}/*error: dependent-name 'std::is_integral<_Tp>::value_type' is parsed as a non-type, but instantiation yields a type
-   this->distribution = std::move(std::uniform_real_distribution<rand_type>(min, max));//error: dependent-name 'std::is_integral<_Tp>::value_type' is parsed as a non-type, but instantiation yields a type//note: say 'typename std::is_integral<_Tp>::value_type' if a type is meant//error: 'class mtrand32<double>' has no member named 'distribution'*/
+		static_assert(std::is_arithmetic<rand_type>::value == true, "'rand_type' is illegal type.");//非算術型にはコンパイルエラーを
+	}
 	rand_type mtrand(void) {
-		return this->distribution(this->engine);//error: 'class mtrand32<double>' has no member named 'distribution'
-	}//warning: control reaches end of non-void function [-Wreturn-type]
+		return this->distribution(this->engine);
+	}
 private:
-	my_uniform_distribution<rand_type> distribution;//error: invalid use of template-name 'std::uniform_real_distribution' without an argument list
+	my_uniform_distribution<rand_type> distribution;
 	std::mt19937 engine;
 };
 #endif //INC_MTRAND32_H

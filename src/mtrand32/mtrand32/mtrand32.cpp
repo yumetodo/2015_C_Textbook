@@ -4,20 +4,23 @@
 #endif
 #include "mtrand32.h"
 #include "ia_rdrand.h"//rdrand_supported(), rdrand()
-//#include "nth_loop.h"
 #include <cstdint>//uint_least32_t
 #include <vector>
 #include <algorithm>//std::generate
 #include <ctime>//clock(), time()
 #include <functional>//std::ref in gcc
-extern inline void mtrand32_init(std::vector<std::uint_least32_t>& sed_v, std::random_device& rnd) {
+void mtrand32_init(std::vector<std::uint_least32_t>& sed_v, std::random_device& rnd) {
 	std::generate(sed_v.begin(), sed_v.end(), std::ref(rnd));// ベクタの初期化
 	if (IsRDRANDsupport()) {//RDRAND命令の結果もベクターに追加
 		for (std::size_t i = 0; i < 2; i++) {
 			unsigned int rdrand_value = 0;
+#ifndef __GNUC__
 			_rdrand32_step(&rdrand_value);
+#else
+			__builtin_ia32_rdrand32_step(&rdrand_value);
+#endif
 			if (0 != rdrand_value) {
-				sed_v.push_back(rdrand_value);
+				sed_v.push_back(rdrand_value & i);
 			}
 		}
 	}
@@ -31,6 +34,6 @@ extern inline void mtrand32_init(std::vector<std::uint_least32_t>& sed_v, std::r
 	sed_v.push_back(clock());//clock関数の結果もベクターに追加
 	sed_v.push_back(static_cast<std::uint_least32_t>(time(nullptr)));//time関数の結果もベクターに追加
 	char* heap = static_cast<char*>(malloc(sizeof(char) * 2));//ヒープ領域のアドレスもベクターに追加
-	sed_v.push_back(reinterpret_cast<std::uint_least32_t>(heap));
+	sed_v.push_back(static_cast<std::uint_least32_t>(reinterpret_cast<std::uint_least64_t>(heap)));
 	free(heap);
 }

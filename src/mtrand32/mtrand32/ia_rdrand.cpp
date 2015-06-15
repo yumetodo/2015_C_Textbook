@@ -36,7 +36,7 @@ bool IsIntelCPU() {
 	uint32_t vender[4] = { id.EAX, id.ECX, id.EBX , 0 };
 	return (0 == strcmp(reinterpret_cast<char*>(vender), "GenuineIntel"));
 }
-extern inline bool IsRDRANDsupport() {
+bool IsRDRANDsupport() {
 	if (!IsIntelCPU()) return false;
 	const auto reg = get_cpuid(1);
 	return (RDRAND_MASK == (reg.ECX & RDRAND_MASK));
