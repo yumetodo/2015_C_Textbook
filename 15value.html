@@ -68,7 +68,7 @@ using namespace std;
 int main()
 {
    int x = 3 + 4;
-   cout << x << endl;
+   cout &lt;&lt; x &lt;&lt; endl;
 }</pre>
             <p>この例では、x は、これを定義する式の外側で保持されるので、左辺値です。 式 3 + 4 は右辺値です。定義した式を超えては存在しない一時的な値と評価されるためです。 </p>
             <p>次の例は、左辺値と右辺値の正しい使用方法と間違った使用方法のいくつかを示しています。</p>
@@ -81,12 +81,12 @@ int main()
    7 = i; // C2106
    j * 4 = 7; // C2106
    // Correct usage: the dereferenced pointer is an lvalue.
-   *p = i; 
+   *p = i;
    const int ci = 7;
    // Incorrect usage: the variable is a non-modifiable lvalue (C3892).
    ci = 9; // C3892
    // Correct usage: the conditional operator returns an lvalue.
-   ((i < 3) ? i : j) = 7;
+   ((i &lt; 3) ? i : j) = 7;
 }</pre>
         </blockquote>
         <p>もう説明やめていいかな・・・(なにも説明してないけど)？ようはlvalueは明確に実体があって、rvalueは一時的なものなんだよ。</p>
@@ -114,6 +114,11 @@ inline T_ max(T_ a, T_ b){
             で、templateですが、C++erになるなら必ず習得しないといけません、ああ、私の耳が痛い、なんでだろう。template使えないC++erなんて相手にされないですからね。<br>
             事実C++のBoostライブラリーなんてtemplateばっかです。さらにポリモーフィズム(動的/静的)とかも関わってくるのですが（以下略）
         </p>
+        <p>
+        	<a href="http://www.slideshare.net/faithandbrave/c-template-metaprogramming" title="C++ Template Metaprogramming">C++ Template Metaprogramming</a><br>
+        	from <a href="//www.slideshare.net/faithandbrave" target="_blank">Akira Takahashi</a>
+        </p>
+        <iframe src="http://www.slideshare.net/slideshow/embed_code/key/D94FOh5mptZIEK" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
     </section>
     <section>
         <h2>C++のlValue参照</h2>
@@ -127,7 +132,7 @@ inline T_ max(T_ a, T_ b){
             <p>リファレンスとは何かということを解説するために、まず、最も簡単な例をあげましょう。次のコードを見てください。int 型の変数 iABitComplex のリファレンス riSimple を定義しています。</p>
             <pre class="brush: cpp;">int main() {
     int iABitComplex;               // ちょっと複雑な名前の変数
-    int& riSimple = iABitComplex;   // 変数のリファレンスを定義する。
+    int&amp; riSimple = iABitComplex;   // 変数のリファレンスを定義する。
     riSimple = 1;                   // リファレンスを使って iABitComplex にアクセスする。
     return 0;
 }</pre>
@@ -145,7 +150,7 @@ inline T_ max(T_ a, T_ b){
 extern "C++"
 {
 	template&lt;typename TYPE,	std::size_t SIZE&gt;
-	std::size_t array_length(const TYPE(&)[SIZE]){
+	std::size_t array_length(const TYPE(&amp;)[SIZE]){
 		return SIZE;
 	}
 #define _countof(_Array) array_length(_Array)
@@ -169,7 +174,7 @@ int main () {
 extern "C++"
 {
 	template&lt;typename TYPE,	std::size_t SIZE&gt;
-	std::size_t array_length(const TYPE(&)[SIZE]){
+	std::size_t array_length(const TYPE(&amp;)[SIZE]){
 		return SIZE;
 	}
 #define _countof(_Array) array_length(_Array)
@@ -197,7 +202,7 @@ int main () {
 extern "C++"
 {
 	template&lt;typename TYPE,	std::size_t SIZE&gt;
-	std::size_t array_length(const TYPE(&)[SIZE]){
+	std::size_t array_length(const TYPE(&amp;)[SIZE]){
 		return SIZE;
 	}
 #define _countof(_Array) array_length(_Array)
@@ -205,14 +210,14 @@ extern "C++"
 #endif  /* !defined (__cplusplus) */
 #endif  /* !defined (_countof) */
 template&lt;size_t SIZE&gt;
-void func(const int(&in_arr)[SIZE]){
+void func(const int(&amp;in_arr)[SIZE]){
 	printf("in_arr[0]:%d, sizeof(in_arr):%d, _countof(in_arr):%d\b", in_arr[0], sizeof(in_arr), _countof(in_arr));
 }
 int main(){
     int arr[] = {3, 4, 5, 6, 7};
     int arr2[] = {3, 4, 5, 6};
-    func(arr);//OK, 'void func&lt;5U>(const int (&in_arr)[5])' were called.
-    func(arr2);//OK, 'void func&ly;4U>(const int (&in_arr)[4])' were called.
+    func(arr);//OK, 'void func&lt;5U>(const int (&amp;in_arr)[5])' were called.
+    func(arr2);//OK, 'void func&ly;4U>(const int (&amp;in_arr)[4])' were called.
     auto arr3 = arr2;
     func(arr3);//エラー。arr3の型はint*型。配列は4つの例外を除きポインタに読み替えられる。
     return 0;
