@@ -61,7 +61,7 @@ int main(){
 	int sum = 0;
 	while (1){
 		printf("数値を入力してください(-1で終了):");
-		num = get_integer_num();
+		num = get_integer_num(INT_MAX, INT_MIN);
 		if (-1 == num || INT_MIN == num || EOF == num)
 			break;
 		sum += num;
@@ -92,7 +92,7 @@ int main(){
 #include&lt;cstdio&gt;
 unsigned int uint_bits(void){
     unsigned int count = 0;
-    for (unsigned int x = ~0U; x; (x & 1U) ? count++ : count, x >>= 1);
+    for (unsigned int x = ~0U; x; (x &amp; 1U) ? count++ : count, x >>= 1);
     return count;
 }
 int main(){
@@ -115,7 +115,7 @@ unsigned int numofbits5(uint32_t bits){
 }
 typedef struct{ unsigned int EAX, EBX, ECX, EDX; } regs_t;
 constexpr unsigned int BIT(unsigned int n) {
-    return 1 << n;
+    return 1 &lt;&lt; n;
 }
 inline bool POPCNTenabled(){
     regs_t regs;
@@ -207,9 +207,9 @@ switch完了
         <pre class="brush: cpp;">#include &lt;stdio.h&gt;
 int main(void){
    int i,j;
-   for(i = 1; i < 3; i++){
+   for(i = 1; i &lt; 3; i++){
       printf("%d回目のループA実行中\n",i);
-      for(j = 1; j < 3; j++){
+      for(j = 1; j &lt; 3; j++){
          printf("%d/%d回目のループB実行中\n",i,j);//ループA/ループBの現在値を表示
          continue;//(1)無条件にループをcontinueします。
          puts("ループBブロック終端です");//必ずcontinueされるのでここは実行されません。
@@ -259,7 +259,7 @@ int main(){
     int sum = 0;
     while (1){
         printf("数値を入力してください(-1で終了):");
-        num = get_integer_num();
+        num = get_integer_num(INT_MAX, INT_MIN);
         if (-1 == num || INT_MIN == num || EOF == num)
         if(num < 0) continue;
             sum += num;
@@ -279,7 +279,7 @@ int main(){
         </p>
         <pre class="brush: cpp;" title="arikitari.h">#ifndef INC_ARIKITARI_H
 #define INC_ARIKITARI_H
-#if (defined(_MSC_VER) && _MSC_VER > 1000) || (defined(__clang__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ > 2))) ||(defined(__ICC) && __ICC > 1000) ||defined (__GNUC__) && !defined(__ICC) && !defined(__clang__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
+#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))
 #pragma once
 #endif
 int get_integer_num(const int max, const int min);
@@ -302,7 +302,7 @@ int main(void){
 }</pre>
         <p>ヘッダーファイルは必ず関数定義があるファイルと関数使用箇所両方でincludeするようにします。また、ヘッダーファイルの名前は普通関数定義があるファイル名と同じにします。</p>
         <p>何度も言いますが、すべての関数を公開する、ヘッダーファイルで宣言する必要はありません。あくまで他のファイルからも使いたい関数等を公開するわけです。</p>
-        <pre class="brush: cpp; first-line: 3;">#if (defined(_MSC_VER) && _MSC_VER > 1000) || (defined(__clang__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ > 2))) ||(defined(__ICC) && __ICC > 1000) ||defined (__GNUC__) && !defined(__ICC) && !defined(__clang__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))</pre>
+        <pre class="brush: cpp; first-line: 3;">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))</pre>
         <p>は、#pragma onceに対応していないコンパイラー(というよりプリプロセッサか)に対応するものです。詳細はプリプロセッサの項目で。</p>
     </section>
 
