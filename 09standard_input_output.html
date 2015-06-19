@@ -42,7 +42,7 @@ int fputc(int c, FILE *stream);
 int putchar(int c );</pre>
         </section>
         <p>C言語の標準出力関数、とくにprintf関数はとても優秀で、正直C++の出力方法よりよほど使いやすいです。ちなみにC++では</p>
-        <pre class="brush: cpp;">std::cout << "arikitari na world!" << std::endl;</pre>
+        <pre class="brush: cpp;">std::cout &lt;&lt; "arikitari na world!" &lt;&lt; std::endl;</pre>
         <p>のようにします・・・が、はっきり言って使いにくいです。C++はたしかに使いやすいですが、標準出力の使いにくさだけはいただけません。</p>
     </section>
     <section>
@@ -84,19 +84,19 @@ int putchar(int c );</pre>
 int main(){
     using std::cout;
     //文字列読み込み
-    cout << "文字列を入力してください" << std::endl;
+    cout &lt;&lt; "文字列を入力してください" &lt;&lt; std::endl;
     std::string in_str;
     std::getline(std::cin, in_str);
-    cout << in_str << std::endl;
+    cout &lt;&lt; in_str &lt;&lt; std::endl;
 
     //数値読み込み
-    cout << "数値を入力してくだい" << std::endl;
+    cout &lt;&lt; "数値を入力してくだい" &lt;&lt; std::endl;
     const auto in_num = [](){
         int tmp;
         std::cin >> tmp;
         return tmp;
     }();
-    cout << in_num << std::endl;
+    cout &lt;&lt; in_num &lt;&lt; std::endl;
     
     return 0;
 }</pre>
@@ -113,20 +113,20 @@ int getnum(void){
 	char *endptr;
 	fgets(s, 100, stdin);
 	errno = 0;
-	t = strtol(s, &endptr, 10);
-	if (errno != 0 || *endptr != '\n' || (t < INT_MIN || INT_MAX < t))
+	t = strtol(s, &amp;endptr, 10);
+	if (errno != 0 || *endptr != '\n' || (t &lt; INT_MIN || INT_MAX &lt; t))
 		return -1;
 	return t;
 }
 int getnum_customized(const int max, const int min){
-	if (max < min)	return -1;
+	if (max &lt; min)	return -1;
 	int flag0;
 	do{
 		flag0 = getnum();
-		if (flag0 < min || flag0 > max)
+		if (flag0 &lt; min || flag0 > max)
 			system("cls");
 			printf("再入力してください。\n");
-	} while (flag0 < min || flag0 > max + 1);
+	} while (flag0 &lt; min || flag0 > max + 1);
 	return flag0;
 }
 int main(void){
@@ -142,7 +142,7 @@ int main(void){
                     <li>
                         <div>
                             <p>19-21行目は19行目の時の条件を満たした場合に20,21行目を実行することを意図していると思われるが、この書き方では21行目は条件判定にかかわらず実行される。</p>
-                            <pre class="brush: cpp; first-line: 19">		if (flag0 < min || flag0 > max){
+                            <pre class="brush: cpp; first-line: 19">		if (flag0 &lt; min || flag0 > max){
 			system("cls");
 			printf("再入力してください。\n");
         }</pre>
@@ -154,7 +154,7 @@ int main(void){
                     </li>
                     <li>
                         18行目に注目すると、getnum関数の戻り値チェックをしていないことに気がつく。このgetnum関数は11行目にあるようにエラー時は-1を返すので、その判定をする必要がある。つまり
-                        <pre class="brush: cpp;">if (-1 == flag0 || flag0 < min || flag0 > max){</pre>
+                        <pre class="brush: cpp;">if (-1 == flag0 || flag0 &lt; min || flag0 > max){</pre>
                         とするべきである。
                     </li>
                 </ol>
@@ -190,7 +190,7 @@ int get_integer_num(const int max, const int min){
     return (int)t;
 }
 int getnum_customized(const int max, const int min){
-	if (max < min)	return -1;
+	if (max &lt; min)	return -1;
 	int flag0;
 	bool temp_judge;
 	do{

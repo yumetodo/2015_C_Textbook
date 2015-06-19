@@ -393,11 +393,11 @@ uint get_score(const uint max, const uint min) {
     try {
         std::cin >> re;
     }
-    catch (std::exception& er) {
-        std::cerr << er.what() << std::endl;
+    catch (std::exception&amp; er) {
+        std::cerr &lt;&lt; er.what() &lt;&lt; std::endl;
         re =  0;
     }
-    return (re < min || max < re) ? get_score(max, min) : re;
+    return (re &lt;min || max &lt; re) ? get_score(max, min) : re;
 }
 int main(void){
     puts("値を入力してください。\n");
@@ -416,13 +416,13 @@ typedef unsigned int uint;
 uint get_score(const uint max, const uint min) {
     uint re;
     try {
-        std::cerr << er.what() << std::endl;
+        std::cerr &lt;&lt; er.what() &lt;&lt; std::endl;
         std::cin >> re;
     }
-    catch (std::exception& er) {
+    catch (std::exception&amp; er) {
         re =  0;
     }
-    return (re < min || max < re) ? get_score(max, min) : re;
+    return (re &lt; min || max &lt; re) ? get_score(max, min) : re;
 }
 uint redundancy_calculater_of_the_point_of_a_school_report(void) {
     uint five_subjects_sum = 0;
@@ -460,14 +460,14 @@ uint get_score(const uint max, const uint min) {
     try {
         std::cin >> re;
     }
-    catch (std::exception& er) {
-        std::cerr << er.what() << std::endl;
+    catch (std::exception&amp; er) {
+        std::cerr &lt;&lt; er.what() &lt;&lt; std::endl;
         re =  0;
     }
-    return (re < min || max < re) ? get_score(max, min) : re;
+    return (re &lt; min || max &lt; re) ? get_score(max, min) : re;
 }
 void ask_what_subject(const char* str) {
-    std::cout << str << "の内申点を入力してください" << std::endl;
+    std::cout &lt;&lt; str &lt;&lt; "の内申点を入力してください" &lt;&lt; std::endl;
 }
 uint arikitari_na_calculater_of_the_point_of_a_school_report(void) {
     static const char* subject_name1[] = { "国語", "数学", "英語", "理科", "社会" };
@@ -484,7 +484,7 @@ uint arikitari_na_calculater_of_the_point_of_a_school_report(void) {
     return sum[0] + static_cast&lt;uint>(sum[1] * 1.3);
 }
 int main(){
-    std::cout << arikitari_na_calculater_of_the_point_of_a_school_report() << std::endl;
+    std::cout &lt;&lt; arikitari_na_calculater_of_the_point_of_a_school_report() &lt;&lt; std::endl;
     return 0;
 }</pre>
             </section>
@@ -505,7 +505,7 @@ int main(int argc, char* argv[]){
         const auto tmp = strtoull(str, nullptr, 10);//引数があればそれを採用する
         return (0 == errno) ? tmp : search_max_temp;//引数が異常な時は(仮)の値を使用
     }(argv[1]);
-    std::cout << "search_max: " << search_max << std::endl;
+    std::cout &lt;&lt; "search_max: " &lt;&lt; search_max &lt;&lt; std::endl;
     return 0;
 }</pre>
         <p>lambdaとか仰々しい名前がついてますがようは関数なので仮引数リストも戻り値の型も関数定義も関数呼び出しもあります。</p>
@@ -528,7 +528,7 @@ int main(int argc, char* argv[]){
         const num_store_t tmp = strtoull(argv[1], nullptr, 10);//引数があればそれを採用する
         return (0 == errno) ? tmp : search_max_temp;//引数が異常な時は(仮)の値を使用
     };
-    std::cout << "search_max: " << search_max << std::endl;
+    std::cout &lt;&lt; "search_max: " &lt;&lt; search_max &lt;&lt; std::endl;
     return 0;
 }</pre>
         <p>

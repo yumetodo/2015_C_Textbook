@@ -18,28 +18,28 @@
         .bit_04 {
             width: 50%;
             border-collapse: separate;
-            border-spacing: 0px;
+            border-spacing: 0;
             border-top: 1px solid #ccc;
             border-left: 1px solid #ccc;
         }
-            .bit_04 th {
-                width: 25%;
-                padding: 4px;
-                text-align: left;
-                vertical-align: top;
-                color: #444;
-                background-color: #ccc;
-                border-top: 1px solid #fff;
-                border-left: 1px solid #fff;
-                border-right: 1px solid #ccc;
-                border-bottom: 1px solid #ccc;
-            }
-            .bit_04 td{
-                padding: 4px;
-                background-color: #fafafa;
-                border-right: 1px solid #ccc;
-                border-bottom: 1px solid #ccc;
-            }
+        .bit_04 th {
+            width: 25%;
+            padding: 4px;
+            text-align: left;
+            vertical-align: top;
+            color: #444;
+            background-color: #ccc;
+            border-top: 1px solid #fff;
+            border-left: 1px solid #fff;
+            border-right: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+        .bit_04 td{
+            padding: 4px;
+            background-color: #fafafa;
+            border-right: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
     </style>
 </head>
 <body>
@@ -100,7 +100,7 @@ const uint32_t re_si = si_a &gt;&gt; si_b;//2:10</pre>
         </ul>
         <article>
             <h3>問題</h3>
-            <img src="./pic/bt601_bt709.png">
+            <img alt="picture of matrix to covert RGB into YCbCr" src="./pic/bt601_bt709.png">
             <p>
                 下記はRGBの値をBT.601の式に従いRGB(0-255)->YC8(0-4095)->YUV2(16-235)のように変換してYを求めるプログラムである。割り算を使わずシフト演算するものに書き換えよ。</p>
             <pre class="brush: cpp;">#include &lt;cstdio&gt;
@@ -162,7 +162,7 @@ const uint32_t re = a &amp; b;//18:0b10010</pre>
             <tr>
                 <th>A</th>
                 <th>B</th>
-                <th>A & B</th>
+                <th>A &amp; B</th>
             </tr>
             <tr>
                 <td>0</td>

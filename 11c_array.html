@@ -62,10 +62,10 @@ int tmp[i];</pre>
 #endif
 int main(void){
     int num[10] = { 0 };//(宣言時に指定される要素数)×(配列の要素の型の大きさ)分メモリーをスタック領域に確保
-    for(unsigned int i = 0; i < (sizeof(num) / sizeof(*num)); i++){
+    for(unsigned int i = 0; i &lt; (sizeof(num) / sizeof(*num)); i++){
         *(num + i) = clock();
     }
-    for(unsigned int i = 0; i < (sizeof(num) / sizeof(*num)); i++){
+    for(unsigned int i = 0; i &lt; (sizeof(num) / sizeof(*num)); i++){
         printf("%d,", *(num + i));
     }
     putchar('\n');
@@ -74,19 +74,19 @@ int main(void){
     	"_countof(num):%d,_countof(num_p):%d, sizeof(num_:%d, sizeof(num_p):%d\n",
     	_countof(num), _countof(num_p), sizeof(num), sizeof(num_p)
     );
-    for(unsigned int i = 0; i < _countof(num); i++){
+    for(unsigned int i = 0; i &lt; _countof(num); i++){
         printf("%d,", *(num_p + i));
     }
     putchar('\n');
-    for(unsigned int i = 0; i < _countof(num); i++){
+    for(unsigned int i = 0; i &lt; _countof(num); i++){
         printf("%d,", num[i]);
     }
     putchar('\n');
-    for(unsigned int i = 0; i < _countof(num); i++){
+    for(unsigned int i = 0; i &lt; _countof(num); i++){
         printf("%d,", num_p[i]);
     }
     putchar('\n');
-    for(unsigned int i = 0; i < _countof(num); i++){
+    for(unsigned int i = 0; i &lt; _countof(num); i++){
         printf("&amp;num[%d]:%p\n", i, &amp;num[i]);
     }
     return 0;
@@ -97,16 +97,16 @@ _countof(num):10,_countof(num_p):1, sizeof(num_:40, sizeof(num_p):4
 4859,4860,4860,4861,4861,4861,4862,4862,4862,4863,
 4859,4860,4860,4861,4861,4861,4862,4862,4862,4863,
 4859,4860,4860,4861,4861,4861,4862,4862,4862,4863,
-&num[0]:0xbfa4d84c
-&num[1]:0xbfa4d850
-&num[2]:0xbfa4d854
-&num[3]:0xbfa4d858
-&num[4]:0xbfa4d85c
-&num[5]:0xbfa4d860
-&num[6]:0xbfa4d864
-&num[7]:0xbfa4d868
-&num[8]:0xbfa4d86c
-&num[9]:0xbfa4d870</pre>
+&amp;num[0]:0xbfa4d84c
+&amp;num[1]:0xbfa4d850
+&amp;num[2]:0xbfa4d854
+&amp;num[3]:0xbfa4d858
+&amp;num[4]:0xbfa4d85c
+&amp;num[5]:0xbfa4d860
+&amp;num[6]:0xbfa4d864
+&amp;num[7]:0xbfa4d868
+&amp;num[8]:0xbfa4d86c
+&amp;num[9]:0xbfa4d870</pre>
         <p>
             7行目で「{}」という見慣れないものが有りますが、初期化子リストとかいうものです。この場合初期化する意味はないのですが、説明のために使っています。<br>
             リストに書いた値の個数が配列の要素数より小さい場合、残りの要素が0で埋められる、という性質を利用しています。<br>
@@ -156,7 +156,7 @@ i[num]</pre>
 extern "C++"
 {
 template &lt;typename _countoftype, size_t _sizeofarray&gt;
-char (*__countof_helper(_UNALIGNED _CountofType (&_Array)[_SizeOfArray]))[_SizeOfArray];
+char (*__countof_helper(_UNALIGNED _CountofType (&amp;_Array)[_SizeOfArray]))[_SizeOfArray];
 #define _countof(_Array) (sizeof(*__countof_helper(_Array)) + 0)
 }
 #endif  /* !defined (__cplusplus) */
@@ -208,20 +208,20 @@ int main(void){
 }
 </pre>
             <pre class="brush: cpp; first-line: 6;" title="プログラムB">p = &amp;array[0];
-for(i = 0; i < 5; i++){
+for(i = 0; i &lt; 5; i++){
     printf("%d," *(p + i));
 }</pre>
             <pre class="brush: cpp; first-line: 6;" title="プログラムC">p = array;
 //&amp;array[0] -&gt; &amp;*(array + 0) -&gt; array + 0 -&gt; array
 //みたいなイメージ。&amp;*(array + 0)なんて書き方はできないけど。
-for(i = 0; i < 5; i++){
+for(i = 0; i &lt; 5; i++){
     printf("%d," *(p + i));
 }</pre>
             <pre class="brush: cpp; first-line: 6;" title="プログラムD">p = array;
-for(i = 0; i < 5; i++){
+for(i = 0; i &lt; 5; i++){
     printf("%d," p[i]);
 }</pre>
-            <pre class="brush: cpp; first-line: 6;" title="プログラムE">for(i = 0; i < 5; i++){
+            <pre class="brush: cpp; first-line: 6;" title="プログラムE">for(i = 0; i &lt; 5; i++){
     printf("%d," array[i]);
 }</pre>
         </blockquote>
@@ -347,12 +347,12 @@ void thread(std::bitset&lt;thread_num&gt;&amp; isHDMs, const std::size_t thread_
 int main(){
     std::bitset&lt;thread_num&gt; isHDMs(0ul);
     isHDMs.reset();//全bitを0に
-    for(std::size_t i = 0; i < thread_num; ++i){
+    for(std::size_t i = 0; i &lt; thread_num; ++i){
         thread(isHDMs, i);
     }
     if(isHDMs.any()){//一つでもbitが立っていたら
-        for(std::size_t i = 0; i < thread_num; ++i){
-            if(isHDMs.test(i)) std::cout << i << "番目のbitが立っています"　<< std::endl;
+        for(std::size_t i = 0; i &lt; thread_num; ++i){
+            if(isHDMs.test(i)) std::cout &lt;&lt; i &lt;&lt; "番目のbitが立っています"　&lt;&lt; std::endl;
         }
     }
     return 0;

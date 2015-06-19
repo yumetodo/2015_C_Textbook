@@ -219,11 +219,11 @@ int get_num(const uint max, const uint min) {
     try {
         std::cin >> re;
     }
-    catch (std::exception& er) {
-        std::cerr << er.what() << std::endl;
+    catch (std::exception&amp; er) {
+        std::cerr &lt;&lt; er.what() &lt;&lt; std::endl;
         re =  0;
     }
-    return (re < min || max < re) ? get_score(max, min) : re;
+    return (re &lt; min || max &lt; re) ? get_score(max, min) : re;
 }</pre>
             <pre class="brush: plain;" title="実行例">点数を入力してください
 78
@@ -239,21 +239,21 @@ int get_num(const uint max, const uint min) {
     try {
         std::cin >> re;
     }
-    catch (std::exception& er) {
-        std::cerr << er.what() << std::endl;
+    catch (std::exception&amp; er) {
+        std::cerr &lt;&lt; er.what() &lt;&lt; std::endl;
         re =  0;
     }
-    return (re < min || max < re) ? get_num(max, min) : re;
+    return (re &lt; min || max &lt; re) ? get_num(max, min) : re;
 }
 char detect_level(const int score){
     char re;
-    if(score < 60){
+    if(score &lt; 60){
         re = 'D';
     }
-    else if(score < 70){
+    else if(score &lt; 70){
         re = 'C';
     }
-    else if(score < 80){
+    else if(score &lt; 80){
         re = 'B';
     }
     else{
@@ -352,11 +352,11 @@ int get_num2(const uint max, const uint min) {
     try {
         std::cin >> re;
     }
-    catch (std::exception& er) {
-        std::cerr << er.what() << std::endl;
+    catch (std::exception&amp; er) {
+        std::cerr &lt;&lt; er.what() &lt;&lt; std::endl;
         re =  0;
     }
-    return (re < min || max < re) ? 0 : re;
+    return (re &lt; min || max &lt; re) ? 0 : re;
 }
 </pre>
             <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-2')"></form>
@@ -368,11 +368,11 @@ int get_num2(const uint max, const uint min) {
     try {
         std::cin >> re;
     }
-    catch (std::exception& er) {
-        std::cerr << er.what() << std::endl;
+    catch (std::exception&amp; er) {
+        std::cerr &lt;&lt; er.what() &lt;&lt; std::endl;
         re =  0;
     }
-    return (re < min || max < re) ? 0 : re;
+    return (re &lt; min || max &lt; re) ? 0 : re;
 }
 int main() {
     printf("東京理科大学のメインキャンパスはどこ？\n"

@@ -217,7 +217,7 @@ int main(){
     int arr[] = {3, 4, 5, 6, 7};
     int arr2[] = {3, 4, 5, 6};
     func(arr);//OK, 'void func&lt;5U>(const int (&amp;in_arr)[5])' were called.
-    func(arr2);//OK, 'void func&ly;4U>(const int (&amp;in_arr)[4])' were called.
+    func(arr2);//OK, 'void func&lt;4U>(const int (&amp;in_arr)[4])' were called.
     auto arr3 = arr2;
     func(arr3);//エラー。arr3の型はint*型。配列は4つの例外を除きポインタに読み替えられる。
     return 0;

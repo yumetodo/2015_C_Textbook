@@ -37,7 +37,7 @@
 extern "C++"
 {
 	template&lt;typename TYPE,	std::size_t SIZE&gt;
-	std::size_t array_length(const TYPE(&)[SIZE]){
+	std::size_t array_length(const TYPE(&amp;)[SIZE]){
 		return SIZE;
 	}
 #define _countof(_Array) array_length(_Array)
@@ -47,8 +47,8 @@ extern "C++"
 template&lt;size_t SIZE&gt;
 int max_of_arr(int (&amp;in_arr)[SIZE]){
     int re = 0;
-    for(size_t i = 0; i < _countof(in_arr); i++){
-        re = (re < in_arr[i])? in_arr[i] : re;
+    for(size_t i = 0; i &lt; _countof(in_arr); i++){
+        re = (re &lt; in_arr[i])? in_arr[i] : re;
     }
     return re;
 }
@@ -61,15 +61,15 @@ int main(void){
         <p>ちなみに19行目はこれと同値です。</p>
         <pre class="brush: cpp; first-line: 19;" title="Range-base for無使用2">   {
         size_t i;
-        for(i = 0; i < _countof(in_arr); i++){
-            re = (re < in_arr[i])? in_arr[i] : re;
+        for(i = 0; i &lt; _countof(in_arr); i++){
+            re = (re &lt; in_arr[i])? in_arr[i] : re;
         }
     }</pre>
         <p>ですが配列の全要素に何かするたびに</p>
-        <pre class="brush: cpp;">for(size_t i = 0; i < _countof(in_arr); i++)</pre>
+        <pre class="brush: cpp;">for(size_t i = 0; i &lt; _countof(in_arr); i++)</pre>
         <p>と書くのは非常にめんdいですよね？めんdいことをすればするほどコーディングミスが増えます。C++11ではこれに対処するべく「Range-base for」という機能が追加されました。つまり</p>
         <pre class="brush: cpp; first-line: 19;" title="Range-base for使用">for(auto i : arr){
-    re = (re < i)? i : re;
+    re = (re &lt; i)? i : re;
 }</pre>
         <p>と書けます。言うまでもないですが、iの型はint型になりますね、この場合。</p>
         <p>もちろんC++のコンテナにも使えます(というよりこっちがメイン)</p>
@@ -102,7 +102,7 @@ for(auto i : data) {
             <pre class="brush: cpp;">for ( for-range-declaration : expression ) statement</pre>
             <p>これは、コンパイラによって、以下のように変換される。</p>
             <pre class="brush: cpp;">{
-    auto && __range = ( expression );
+    auto &amp;&amp; __range = ( expression );
     for (auto __begin = begin-expr, __end = end-expr; __begin != __end; ++__begin ) {
        for-range-declaration = *__begin;
        statement
@@ -182,7 +182,7 @@ int main(void){
                 <h4>回答</h4>
                 <p>
                     何度でも言いますが、<br>
-                    <b>「配列はsizeof演算子と&演算子(アドレス演算子)のオペランドと配列初期化時の文字列リテラルと(lvalue)参照に代入するときを除き常にポインタに読み替えられる」</b><br>
+                    <b>「配列はsizeof演算子と&amp;演算子(アドレス演算子)のオペランドと配列初期化時の文字列リテラルと(lvalue)参照に代入するときを除き常にポインタに読み替えられる」</b><br>
                     のでした。つまり変数jの型はuint16_t*型です。もう一度言います、uint16_t*型です。断じてuint16_t[7]型ではありません<br>
                     Range-base forは配列(sizeof等で配列の要素数を求められるもの)かメンバー関数begin,endを持つクラスに適応できるのでした。<br>
                     そうです、ポインタ型じゃなくて配列に適応出来るのです。ところが変数jの型はuint16_t*型。<b>あなた、それ配列じゃないですよ？</b><br>
@@ -190,7 +190,7 @@ int main(void){
                     つまり5行目はこう書き換える必要があります。
                 </p>
                 <pre class="brush: cpp; first-line: 5;">    for(auto&amp; j : arr){</pre>
-                <p>念のため確認しますが、この時のjの型はuint16_t(&)[7]型となっています。ほら、_countofマクロで配列の要素数を求められるでしょ？</p>
+                <p>念のため確認しますが、この時のjの型はuint16_t(&amp;)[7]型となっています。ほら、_countofマクロで配列の要素数を求められるでしょ？</p>
             </section>
         </article>
     </section>

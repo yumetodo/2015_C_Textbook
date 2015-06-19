@@ -105,9 +105,9 @@ int main(void){
         <pre class="brush: cpp;">unsigned int libc_rand_32_normal()
 {
 	unsigned int r = 0;
-	r  = ((rand() >> 3) & 0x0fff)      ; // 12 bit
-	r |= ((rand() >> 4) & 0x07ff) << 12; // 12+11 : 23 bit
-	r |= ((rand() >> 6) & 0x01ff) << 23; // 12+11+9 : 32 bit
+	r  = ((rand() >> 3) &amp; 0x0fff)      ; // 12 bit
+	r |= ((rand() >> 4) &amp; 0x07ff) &lt;&lt; 12; // 12+11 : 23 bit
+	r |= ((rand() >> 6) &amp; 0x01ff) &lt;&lt; 23; // 12+11+9 : 32 bit
 	return r;
 }</pre>
         <p>参考サイトの記述によれば周期は 0x80000000 (2,147,483,648)なのだそうです(どうやっても参考サイトのコードが動かないorz)。</p>
@@ -119,7 +119,7 @@ int main(void){
         <p>まずはOS非依存な範囲で何とかしてみましょう。こんな感じ・・・？</p>
         <pre class="brush: cpp;">unsigned int create_seed(int argc, char* argv[], uint32_t num){
 	char* dst = (char*)malloc(sizeof(char) * 2);
-	unsigned int seed = ((uint64_t)argv + (uint64_t)&argc + (uint32_t)time(NULL) + clock() + libc_rand_32_normal() + ((uint32_t)dst * (uint32_t)((rand() & 0xff) << 16) * (uint32_t)&dst)) % UINT_MAX;
+	unsigned int seed = ((uint64_t)argv + (uint64_t)&amp;argc + (uint32_t)time(NULL) + clock() + libc_rand_32_normal() + ((uint32_t)dst * (uint32_t)((rand() &amp; 0xff) &lt;&lt; 16) * (uint32_t)&amp;dst)) % UINT_MAX;
 	free(dst);
 	return seed;
 }</pre>
@@ -144,10 +144,10 @@ int main(void){
         <p>とまぁ、こういう感じになる・・・のかな？</p>
         <pre class="brush: cpp;">unsigned int create_seed(int argc, char* argv[], uint32_t num){
 	POINT point;
-	GetCursorPos(&point);
+	GetCursorPos(&amp;point);
 	char* dst = (char*)malloc(sizeof(char) * 2);
-	unsigned int seed = ((uint64_t)argv + (uint64_t)&argc + (num * (uint64_t)(point.x + point.y)) + (uint64_t)GetCurrentProcessId() 
-        + (uint32_t)time(NULL) + clock() + libc_rand_32_normal() + ((uint32_t)dst * (uint32_t)((rand() & 0xff) << 16) * (uint32_t)&dst) + 3457450835) % UINT_MAX;
+	unsigned int seed = ((uint64_t)argv + (uint64_t)&amp;argc + (num * (uint64_t)(point.x + point.y)) + (uint64_t)GetCurrentProcessId() 
+        + (uint32_t)time(NULL) + clock() + libc_rand_32_normal() + ((uint32_t)dst * (uint32_t)((rand() &amp; 0xff) &lt;&lt; 16) * (uint32_t)&amp;dst) + 3457450835) % UINT_MAX;
 	free(dst);
 	return seed;
 }</pre>
@@ -204,10 +204,10 @@ class counter_iterator {
 public:
     counter_iterator() : i(0) { }
     counter_iterator(std::size_t n) : i(n) { }
-    bool operator == (const counter_iterator & rhs) const { return i == rhs.i; }
-    bool operator != (const counter_iterator & rhs) const { return i != rhs.i; }
-    std::size_t & operator * () { return i; }
-    counter_iterator & operator ++ () { ++i; return *this; }
+    bool operator == (const counter_iterator &amp; rhs) const { return i == rhs.i; }
+    bool operator != (const counter_iterator &amp; rhs) const { return i != rhs.i; }
+    std::size_t &amp; operator * () { return i; }
+    counter_iterator &amp; operator ++ () { ++i; return *this; }
 };
 class nth_loop {
 private:
@@ -235,7 +235,7 @@ int main(){
 	std::uniform_real_distribution&amp;&lt;double&gt; distribution(0.0, 1.0) ;
 	
 	for (auto i : 10_)
-		std::cout << distribution(engine) << std::endl ;
+		std::cout &lt;&lt; distribution(engine) &lt;&lt; std::endl ;
 }</pre>
         <p>
             ちゃっかり前回のRange-base forと参考リンクに上げた固定回ループの書き方を使っています。だって「C++っぽく作りましょうか」って言ったでしょ。<br>

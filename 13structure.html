@@ -111,7 +111,7 @@ AVCodec *libavsmash_find_decoder
     if( codec_id == AV_CODEC_ID_NONE )
     {
         /* Try to get any valid codec_id from summaries. */
-        for( uint32_t i = 0; i < config->count && codec_id == AV_CODEC_ID_NONE; i++ )
+        for( uint32_t i = 0; i &lt; config->count &amp;&amp; codec_id == AV_CODEC_ID_NONE; i++ )
             codec_id = get_codec_id_from_description( config->entries[i].summary );
         config->ctx->codec_id = codec_id;
     }
@@ -223,7 +223,7 @@ int main(void){
             ITU-R BT.601 について|まるも<br>
             <a href="http://www.marumo.ne.jp/bt601/">http://www.marumo.ne.jp/bt601/</a><br>
             Aviutl の内部形式と x264guiEx の色空間変換について | rigaya<br>
-            <a href="https://onedrive.live.com/view.aspx?cid=6BDD4375AC8933C6&resid=6BDD4375AC8933C6!755">https://onedrive.live.com/view.aspx?cid=6BDD4375AC8933C6&resid=6BDD4375AC8933C6!755</a><br>
+            <a href="https://onedrive.live.com/view.aspx?cid=6BDD4375AC8933C6&amp;resid=6BDD4375AC8933C6!755">https://onedrive.live.com/view.aspx?cid=6BDD4375AC8933C6&amp;resid=6BDD4375AC8933C6!755</a><br>
             この辺を参考にしてみてください。
         </p>
         <p>
