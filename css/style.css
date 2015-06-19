@@ -15,7 +15,7 @@ section, article{
 h1{
 	text-align: center;
 	background-color: #f3f3f2;
-	padding: 7px 0px;
+	padding: 7px 0;
 }
 h1, h2, h3, h4, h5{
 	font-weight: bold;
@@ -88,10 +88,10 @@ nav.bottom{
 nav ul{
 	margin: 10px auto;
 	text-align: center;
-	padding: 0px;
+	padding: 0;
 }
 nav ul li{
-	margin: 0px 5px;
+	margin: 0 5px;
 	-moz-border-radius: 5px;    /* Firefox */
 	-webkit-border-radius: 5px; /* Safari,Chrome */
 	border: 2px #4f455c solid;
