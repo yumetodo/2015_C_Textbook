@@ -1,11 +1,11 @@
-﻿#include <cstdio>
-#include <iostream>
+﻿#include <iostream>
 #include <cstring>
 #include "strlen.h"
-void strstr_and_do(const char* str, auto (*getstrlen)(const char*) -> size_t){
+void strstr_and_do(const char* str, auto (*getstrlen)(const char*) -> size_t, const char* message){
+	std::cout << message << "を呼び出します" << std::endl;
 	const auto re = getstrlen(str);
 	if (0 == re){
-		puts("エラーなんだぜ");
+		std::cout << "エラーなんだぜ" << std::endl;
 	}
 	else{
 		std::cout << re << "文字だよ" << std::endl;
@@ -14,11 +14,9 @@ void strstr_and_do(const char* str, auto (*getstrlen)(const char*) -> size_t){
 int main(void){
 	auto str = "arikitari_na_world!";
 
-	printf("base_str : %s\n", str);
+	std::cout << "base_str : " << str << std::endl;
 
-	puts("string.hのstrlen関数を呼び出します");
-	strstr_and_do(str, strlen);
-	puts("strlen.hのmy_strlen関数を呼び出します");
-	strstr_and_do(str, my_strlen);
+	strstr_and_do(str, strlen, "string.hのstrlen関数");
+	strstr_and_do(str, my_strlen, "strlen.hのmy_strlen関数");
 	return 0;
 }

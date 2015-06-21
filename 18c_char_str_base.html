@@ -85,21 +85,36 @@
     </section>
     <section>
         <h2>C/C++言語では文字をどう扱うか</h2>
-        <p>でこれら文字符号化形式をC/C++でどう扱うかですが、実はいまだにごたついています(VCのせい)。あれれ～。</p>
+        <p>でこれら文字符号化形式をC/C++でどう扱うかですが、実はいまだにごたついています(VCのせい・・・ではなく、アルファベットしか使わない連中がパソコンを作ったせい)。あれれ～。</p>
+        <p>ちなみにうまく覆い隠してはいますが、他の言語でもこの文字コードの取り扱いは未だにごたついています。だってそれら、C/C++で書かれてますから！(一部除く)</p>
         <dl>
             <dt>char型</dt>
             <dd>実装定義ですが、char型が1byteなので普通Shift-JISかUTF-8を入れます。</dd>
             <dt>wchar_t型</dt>
             <dd>
                 これまた実装定義ですが、Unicodeには違いないです。今のところVCではUTF-16, mingw-gccではUTF-32のようです。<br>
-                どちらになるかはマクロ__STDC_UTF_16__、__STDC_UTF_32__が1になってるのがどちらか、で分かります。
+                wchar_t型のひとつのオブジェクトは、実装がサポートするロケールの文字セットの任意の一文字を表現できる。<br>
+                と規格ではなっています。といってることからわかるように、そんなことは現実には存在しません。
             </dd>
             <dt>char16_t型(C11/C++11 or later)</dt>
-            <dd>UTF-16になります</dd>
+            <dd>
+                マクロ__STDC_UTF_16__が1にdefineされている時はUTF-16になります。ただdefineされているだけ、またはdefineされていない場合は処理系定義です。<br>
+                <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2018.html">規格では</a>uchar.h/cucharでdefineされていることになっています。<br>
+                Visual Studio 2015 Previewではdefineされておらず<a href="http://web.archive.org/save/http://becpp.org/blog/wp-content/uploads/2015/01/Marc-Gregoire-Whats-new-in-Visual-C-2015.pptx">(参考資料(399KB, .pptx))</a>、Visual Studio 2015 RCではただdefineされているだけです。<a href="https://www.visualstudio.com/ja-jp/news/vs2015-vs.aspx#C++">多分UTF-16でエンコードされているとは思いますが</a>。しっかりしろ、MS。<br>
+                gcc/clangでは少なくとも私が持っているgcc4.8.2/clang3.5.1では1にdefineされています。
+            </dd>
             <dt>char32_t型(C11/C++11 or later)</dt>
-            <dd>UTF-32になります</dd>
+            <dd>
+                マクロ__STDC_UTF_32__が1にdefineされている時はUTF-32になります。ただdefineされているだけ、またはdefineされていない場合は処理系定義です。<br>
+                以下同文(ぇ)
+            </dd>
         </dl>
-        <p>で、毎度のことですが、VCは規格を準拠する気がないので、さっぱり実装が進みませんでした。2015年夏に正式release予定のVisual Studio 2015でようやっと実装されます(RC版でも実装されている)。遅っそいわ！</p>
+        <p>
+            で、毎度のことですが、VCは規格を準拠する気がないので、さっぱり実装が進みませんでした。2015年夏に正式release予定のVisual Studio 2015でようやっと実装されます(RC版でも実装されている)。遅っそいわ！
+        </p>
+        <p>
+            で、これは日本一C++に詳しい人も<a href="http://ask.fm/EzoeRyou/answer/128564272215">言っていた話なのですが</a>、なんでUTF-8専用の型が規格に入らなかったんでしょうね～。
+        </p>
     </section>
     <section>
         <h2>文字リテラル(Character literals)</h2>
