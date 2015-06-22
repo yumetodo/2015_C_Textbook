@@ -139,7 +139,7 @@ char ch = getchar();</pre>
                 <td>LLONG_MAX</td>
                 <td>LLONG_MIN</td>
                 <td>ULLONG_MAX</td>
-                <td><pre class="brush: cpp; gutter:false;">long long size = 217;</pre></td>
+                <td><pre class="brush: cpp; gutter:false;">long long size = 21740;</pre></td>
             </tr>
             <tr>
                 <td>float</td>
@@ -148,7 +148,7 @@ char ch = getchar();</pre>
                 <td>FLT_MAX</td>
                 <td>-FLT_MAX</td>
                 <td>そんなものはない</td>
-                <td><pre class="brush: cpp; gutter:false;">long long size = 217;</pre></td>
+                <td><pre class="brush: cpp; gutter:false;">float r = 312;</pre></td>
             </tr>
             <tr>
                 <td>double</td>
@@ -157,7 +157,7 @@ char ch = getchar();</pre>
                 <td>DBL_MAX</td>
                 <td>-DBL_MAX</td>
                 <td>そんなものはない</td>
-                <td><pre class="brush: cpp; gutter:false;">long long size = 217;</pre></td>
+                <td><pre class="brush: cpp; gutter:false;">double bmi = 6.41284;</pre></td>
             </tr>
         </table>
         <p>
@@ -170,7 +170,7 @@ char ch = getchar();</pre>
             <p>C言語で型の大きさについての規定はほとんどなく、</p>
             <ul>
                 <li>char型は1バイト(8ビットとは言っていない)</li>
-                <li>型の大きさは、short <= int <= long <= long long　である。</li>
+                <li>型の大きさは、short &lt;= int &lt;= long &lt;= long long　である。</li>
                 <li>int型は -32767～+32767 の範囲が扱える</li>
             </ul>
             <p>程度しかない。小数点型に関しては特に規定はないが、事実上IEEE 754に従うので、（今どき従わない非フリースタンディング環境なんてあるのかね？）浮動小数点型についてはIEEE 754を参照すると良い。</p>
