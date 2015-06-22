@@ -1,14 +1,16 @@
-﻿#include <cstdio>
+﻿#include <iostream>
+#include <cstdio>
 #include <cstring>
 #include "strcmp.h"
-void strstr_and_do(const char* str1, const char* str2, auto (*strcomare)(const char*, const char*) -> int){
+using strcmp_t = int (*)(const char*, const char*);
+void strstr_and_do(const char* str1, const char* str2, strcmp_t strcomare, const char* message){
+	std::cout << message << "を呼び出します" << std::endl;
 	const auto re = strcomare(str1, str2);
-	printf("%d = ", re);
 	if (0 == re){
-		printf("\"%s\", \"%s\" は一致しました\n", str1, str2);
+		std::cout << "\"" << str1 << "\", \"" << str2 << "\" は一致しました" << std::endl;
 	}
 	else{
-		printf("strcmp(\"%s\", \"%s\")の戻り値 %c 0\n", str1, str2, (re > 0)? '>':'<');
+		std::cout << re << " = strcmp(\"" << str1 << "\", \"" << str2 << "\")  戻り値 :" << ((re > 0) ? '>' : '<') << "0" << std::endl;
 	}
 }
 int main(void){
@@ -16,10 +18,9 @@ int main(void){
 	const char* str2[] = { "arikitarina_world!", "arikitari_na_world", "arikitari_na_world!", "arikitari_na_world!!" };
 
 	for (auto i : str2){
-		puts("string.hのstrcmp関数を呼び出します");
-		strstr_and_do(str1, i, strcmp);
-		puts("strcmp.hのmy_strcmp関数を呼び出します");
-		strstr_and_do(str1, i, my_strcmp);
+		strstr_and_do(str1, i, strcmp, "string.hのstrcmp関数");
+		strstr_and_do(str1, i, my_strcmp, "strcmp.hのmy_strcmp関数");
+		std::cout << std::endl;
 	}
 	return 0;
 }

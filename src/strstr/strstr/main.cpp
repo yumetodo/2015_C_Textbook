@@ -1,4 +1,4 @@
-﻿#include <cstdio>
+﻿#include <iostream>
 #include <cstring>
 #include "strstr.h"
 #ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.
@@ -9,26 +9,25 @@
 #define _CONST_RETURN
 #endif  /* __cplusplus */
 #endif  /* _CONST_RETURN */
-void strstr_and_do(const char* str, const char* search_key, auto (*strsearch)(const char*, const char*) -> _CONST_RETURN char*){
+using strstr_t = _CONST_RETURN char*(*)(const char*, const char*);
+void strstr_and_do(const char* str, const char* search_key, strstr_t strsearch, const char* message){
+	std::cout << message << "を呼び出します" << std::endl;
 	auto re = strsearch(str, search_key);
 	if (nullptr == re){
-		puts("見つからなかったんだぜ");
+		std::cout << "見つからなかったんだぜ" << std::endl;
 	}
 	else{
-		const auto found_place = static_cast<unsigned int>(re - str + 1);
-		printf("%d番目で見つかったよ\n", found_place);
+		std::cout << (re - str) + 1 << "番目で見つかったよ (" << re[0] << ")" << std::endl;
 	}
 }
 int main(void){
-	auto str = "arikitari_na_world!";
+	auto str = "arikitari_na_world";
 	auto search_key = "world";
 
-	printf("base_str : %s\n", str);
-	printf("search_key : %s\n", search_key);
+	std::cout << "base_str : " << str << std::endl;
+	std::cout << "search_key : " << search_key << std::endl;
 
-	puts("string.hのstrstr関数を呼び出します");
-	strstr_and_do(str, search_key, strstr);
-	puts("strstr.hのmy_strstr関数を呼び出します");
-	strstr_and_do(str, search_key, my_strstr);
+	strstr_and_do(str, search_key, strstr, "string.hのstrstr関数");
+	strstr_and_do(str, search_key, my_strstr, "strstr.hのmy_strstr関数");
 	return 0;
 }

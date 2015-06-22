@@ -10,46 +10,182 @@
     <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
     <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
     <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script src="./scripts/common.js" type="text/javascript"></script>
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
 </head>
 <body>
     <h1>第19章 ～文字列操作～</h1>
-    <p>
-        C言語最難関の文字列操作です。ひたすら気を使わないといけないことが多い、<b>心折設計</b>となっております。<br>
-        ここでは、Cでの文字列操作の難しさを苦しみつつ体感していただきつつ、C++のSTL、std::stringの便利さを痛感していただければ、と思います。
-    </p>
+    <section>
+        <h2>初めに</h2>
+        <p>
+            C言語最難関の文字列操作です。ひたすら気を使わないといけないことが多い、<b>心折設計</b>となっております。<br>
+            ここでは、Cでの文字列操作の難しさを苦しみつつ体感していただきつつ、C++のSTL、std::stringの便利さを痛感していただければ、と思います。
+        </p>
+    </section>
+    <section>
+        <h2>strlen</h2>
+        <p>文字列の長さを求める関数です。といってもマルチバイト文字は考慮しないのでNULL文字を除くbyte数を求めることになります。プロトタイプ宣言を見てみましょう。</p>
+        <pre class="brush: cpp;" title="プロトタイプ宣言">size_t strlen(const char *str);</pre>
+        <p>使用例を見ましょう。</p>
+        <pre class="brush: cpp;" title="main.cpp">#include &lt;iostream>
+#include &lt;cstring>
+void strlen_and_do(const char* str, auto (*getstrlen)(const char*) -> size_t, const char* message){
+    std::cout &lt;&lt; message &lt;&lt; "を呼び出します" &lt;&lt; std::endl;
+    const auto re = getstrlen(str);
+    if (0 == re){
+        std::cout &lt;&lt; "エラーなんだぜ" &lt;&lt; std::endl;
+    }
+    else{
+        std::cout &lt;&lt; re &lt;&lt; "文字だよ" &lt;&lt; std::endl;
+    }
+}
+int main(void){
+    auto str = "arikitari_na_world!";
+
+    std::cout &lt;&lt; "base_str : " &lt;&lt; str &lt;&lt; std::endl;
+
+    strlen_and_do(str, strlen, "string.hのstrlen関数");
+    return 0;
+}</pre>
+        <p>では、このstrlen関数を自作してみましょう。まあnull文字が出るまでfor回すだけだから楽勝だよね？</p>
+        <pre class="brush: cpp;" title="strlen.h">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))
+#pragma once
+#endif
+#ifndef _INC_MY_STRLEN_H
+#define _INC_MY_STRLEN_H
+#include &lt;cstddef>
+size_t my_strlen(const char *str);
+#endif
+</pre>
+        <p>これをstrlen.hとかしてさっきのmain関数のあるcppと自作する関数の定義を書くcppでincludeしてください。つまりmainのあるcppは</p>
+        <pre class="brush: cpp;" title="main.cpp">#include &lt;iostream>
+#include &lt;cstring>
+#include "strlen.h"</pre>
+        <p>中略</p>
+        <pre class="brush: cpp; first-line: 14">int main(void){
+    auto str = "arikitari_na_world!";
+
+    std::cout &lt;&lt; "base_str : " &lt;&lt; str &lt;&lt; std::endl;
+
+    strlen_and_do(str, strlen, "string.hのstrlen関数");
+    strlen_and_do(str, my_strlen, "strlen.hのmy_strlen関数");
+    return 0;
+}</pre>
+        <p>な感じ</p>
+        <form><input type="button" value="答えを 表示/非表示" onclick="change_answer_state('my_strlen')"></form>
+        <section id="my_strlen" style="display: none;">
+            <h4>回答</h4>
+            <pre class="brush: cpp;">#include "strlen.h"
+#include &lt;limits>
+size_t my_strlen(const char *str){
+    if (nullptr == str) return 0;
+    const auto search_limits = std::numeric_limits&lt;size_t>::max();//無限ループ防止
+    size_t len;
+    for (len = 0; search_limits > len &amp;&amp; '\0' != str[len]; len++);
+    return (search_limits == len) ? 0 : len;
+}
+</pre>
+        </section>
+    </section>
     <section>
         <h2>strstr</h2>
         <p>文字列を検索する関数です。見つかるとその先頭のポインターを返し、見つからない場合はNULLポインターを返します。プロトタイプ宣言を見てみましょう。</p>
-        <pre class="brush: cpp;">char *strstr(const char *str, const char *strSearch); // C only
+        <pre class="brush: cpp;" title="プロトタイプ宣言">char *strstr(const char *str, const char *strSearch); // C only
 char *strstr(char *str, const char *strSearch); // C++ only
 const char *strstr(const char *str, const char *strSearch); // C++ only</pre>
-        <p>CとC++で違うのはCとC++のconstの扱いのせいでしょうね。前に話したと思いますが。使用例を見ましょう。</p>
-        <pre class="brush: cpp;">#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-#ifndef __cplusplus
-#define nullptr NULL
-#endif
+        <p>
+            CとC++で違うのはCとC++のconstの扱いのせいでしょうね。前に話したと思いますが。使用例を見ましょう。<br>
+            _CONST_RETURNってのは上のプロトタイプ宣言で「C only」とか「C++ only」とか書いてありましたが、それです。<br>
+            my_strstrってのはこれから作ってもらう関数名なので作る時実験したい場合は3, 31行目のコメントアウトを外してみてください。
+        </p>
+        <pre class="brush: cpp;" title="main.cpp">#include &lt;iostream>
+#include &lt;cstring>
+//#include "strstr.h"
+#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.
+#ifdef __cplusplus
+#define _CONST_RETURN  const
+#define _CRT_CONST_CORRECT_OVERLOADS
+#else  /* __cplusplus */
+#define _CONST_RETURN
+#endif  /* __cplusplus */
+#endif  /* _CONST_RETURN */
+using strstr_t = _CONST_RETURN char*(*)(const char*, const char*);
+void strstr_and_do(const char* str, const char* search_key, strstr_t strsearch, const char* message){
+    std::cout &lt;&lt; message &lt;&lt; "を呼び出します" &lt;&lt; std::endl;
+    auto re = strsearch(str, search_key);
+    if (nullptr == re){
+        std::cout &lt;&lt; "見つからなかったんだぜ" &lt;&lt; std::endl;
+    }
+    else{
+        std::cout &lt;&lt; (re - str) + 1 &lt;&lt; "番目で見つかったよ" &lt;&lt; std::endl;
+    }
+}
 int main(void){
-	auto str = "arikitari_na_world!";
-	auto search_key = "world";
-	
-	printf("base_str : %s\n", str);
-	printf("search_key : %s\n", search_key);
-	
-	auto re = strstr(str, search_key);
-	if(nullptr == re){
-		puts("見つからなかったんだぜ");
-	}
-	else{
-		const unsigned int found_place = static_cast&lt;unsigned int&gt;(re - str);
-		printf("%d番目で見つかったよ\n", found_place);
-	}
-	return 0;
+    auto str = "arikitari_na_world!";
+    auto search_key = "world";
+
+    std::cout &lt;&lt; "base_str : " &lt;&lt; str &lt;&lt; std::endl;
+    std::cout &lt;&lt; "search_key : " &lt;&lt; search_key &lt;&lt; std::endl;
+
+    strstr_and_do(str, search_key, strstr, "string.hのstrstr関数");
+    //strstr_and_do(str, search_key, my_strstr, "strstr.hのmy_strstr関数");
+    return 0;
 }</pre>
-        <p>さて、この関数を作ってみましょう。</p>
+        <p>さて、この関数を作ってみましょう。forの2重ループを組むのが一番早いと思います。</p>
+        <blockquote cite="http://www.cplusplus.com/reference/cstring/strstr/">
+            <a href="http://www.cplusplus.com/reference/cstring/strstr/">strstr - C++ Reference</a><br>
+            A pointer to the first occurrence in str1 of the entire sequence of characters specified in str2, or a null pointer if the sequence is not present in str1.
+        </blockquote>
+        <blockquote cite="https://msdn.microsoft.com/ja-jp/library/z9da80kz.aspx">
+            <a href="https://msdn.microsoft.com/ja-jp/library/z9da80kz.aspx">strstr、wcsstr、_mbsstr、_mbsstr_l | MSDN</a><br>
+             Returns a pointer to the first occurrence of strSearch in str, or NULL if strSearch does not appear in str. If strSearch points to a string of zero length, the function returns str.
+        </blockquote>
+        <p>第2引数が空の文字列(=0番目の要素が'\0')のときは第1引数をそのまま帰す必要がある点に注意してください。また使用例の4-11行目、_CONST_RETURNについての部分も書かないとダメです。</p>
+        <form><input type="button" value="答えを 表示/非表示" onclick="change_answer_state('my_strstr')"></form>
+        <section id="my_strstr" style="display: none;">
+            <h4>回答</h4>
+            <pre class="brush: cpp; highlight:[19, 24, 28];" title="strstr.cpp">#include "strstr.h"
+#include &lt;limits>
+#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.
+#ifdef __cplusplus
+#define _CONST_RETURN  const
+#define _CRT_CONST_CORRECT_OVERLOADS
+#else  /* __cplusplus */
+#define _CONST_RETURN
+#endif  /* __cplusplus */
+#endif  /* _CONST_RETURN */
+_CONST_RETURN char *my_strstr(const char *str, const char *strSearch){
+    if (nullptr == str || nullptr == strSearch) return nullptr;
+    if ('\0' == strSearch[0]) return str;
+    size_t i, j;
+    bool str_is_not_terminate;
+    const auto search_limits = std::numeric_limits&lt;size_t>::max();//無限ループ防止
+    for (
+        str_is_not_terminate = true, i = 0, j= 0;
+        search_limits != i &amp;&amp; str_is_not_terminate &amp;&amp; '\0' != str[i] &amp;&amp; '\0' != strSearch[j];//正規のbreak条件は'\0' == strSearch[j]
+        i++
+    ){
+        for (
+            j = 0;
+            search_limits - 1 != i &amp;&amp; search_limits != j &amp;&amp; (str_is_not_terminate = ('\0' != str[i])) &amp;&amp; '\0' != strSearch[j] &amp;&amp; str[i] == strSearch[j];
+            i++, j++
+        );
+    }
+    return ('\0' != strSearch[j]) ? nullptr : &amp;str[i - j - 1];//この時必ずi > jとなる。さもなくばreturnはnullptr
+}</pre>
+            <p>
+                16, 19, 23行目に注目しながら読んでください。strの1文字目とstrSearchの1文字目が一致するかを調べ、しなければstrの2文字目とstrSearchの1文字目と言った具合に線形探索していきます。<br>
+                見つかるより先にstrが'\0'と24行目で判定されたら、変数str_is_not_terminateはfalseになるので19行目でループを抜けることになります。<br>
+                ただしこの時i++が実行されるので注意が必要です。<br>
+                見つかった場合23行目の段階で条件式「'\0' != strSearch[j]」はfalseになるので「&amp;str[i - j - 1]」を返します。-1はさっき言ったようにi++されるからです。<br>
+                変数str_is_not_terminateは24行目のループ継続条件「'\0' != str[i]」を満たさなくなり抜けた時falseになり、20行目でi++されても19行目で抜けられるようにします。<br>
+                str[i]とstr[j]が同時にNULL文字に遭遇した場合は変数str_is_not_terminateの作用で2つのループを抜けた後はstr[j]のみNULL文字に遭遇した場合と同じ扱いになります。
+            </p>
+            <p>12, 13行目についてですが、これを逆にしてはいけません。nullポインターの実体って、あなた、それどこですか？</p>
+        </section>
+
     </section>
 </body>
 </html>

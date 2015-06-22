@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <cstring>
 #include "strlen.h"
-void strstr_and_do(const char* str, auto (*getstrlen)(const char*) -> size_t, const char* message){
+void strlen_and_do(const char* str, auto (*getstrlen)(const char*) -> size_t, const char* message){
 	std::cout << message << "を呼び出します" << std::endl;
 	const auto re = getstrlen(str);
 	if (0 == re){
@@ -16,7 +16,7 @@ int main(void){
 
 	std::cout << "base_str : " << str << std::endl;
 
-	strstr_and_do(str, strlen, "string.hのstrlen関数");
-	strstr_and_do(str, my_strlen, "strlen.hのmy_strlen関数");
+	strlen_and_do(str, strlen, "string.hのstrlen関数");
+	strlen_and_do(str, my_strlen, "strlen.hのmy_strlen関数");
 	return 0;
 }
