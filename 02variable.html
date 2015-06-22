@@ -310,7 +310,7 @@ COLORREF window_head = 0x00FFCCFF;</pre>
             2行目ではDWORD型にCOLORREF型という別名をつけています。
         </p>
         <p>
-            こんな風に別名を付けて何がありがたいかというと、型名を調べるだけでそのデータの格納方法がわかるということです。<br>
+            こんな風に別名を付けて何がありがたいかというと、長い型名を短くかけるというのもそうですが、型名を調べるだけでそのデータの格納方法がわかるということです。<br>
             3行目では何をしているのかさっぱりですが、4行目を見るとなんか色が関係することをやってるんだな、と察せます。<br>
             さらに「COLORREF」でぐぐれば、その詳細もわかります。<br>
             <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd183449%28v=vs.85%29.aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/dd183449%28v=vs.85%29.aspx</a><br>
@@ -326,11 +326,26 @@ typedef signed char myint8_t;</pre>
         </section>
     </section>
     <section>
+        <h2>C++11の機能、alias declaration</h2>
+        <p>typedefは便利なのですが、別名が容易にわかりにくいという欠点があります。そこでalias declarationです。</p>
+        <pre class="brush: cpp;">using type1 = int;//typedef int type1;
+using type2 = int [10];//typedef int type2[10];
+using f = void (*)(int, char);//typedef void (*f)(int, char);
+template&lt;class Value> using dict = std::map&lt;std::string, Value>;//typedefでは書けない</pre>
+        <p>そのうち関数ポインタやりますけど、ほんとtypedefは意味不明な記法ですからね、助かります。</p>
+        <p>
+            参考リンク<br>
+            <a href="http://cpplover.blogspot.jp/2009/05/ctypedefaliasdeclaration.html">C++の新しいtypedef方法、alias　declaration | 本の虫</a><br>
+            <a href="http://faithandbrave.hateblo.jp/entry/20090507/1241685990"> 関数ポインタの型に名前を付ける - Faith and Brave - C++で遊ぼう</a><br>
+            <a href="http://qiita.com/Linda_pp/items/44a67c64c14cba00eef1">typedef は C++11 ではオワコン - Qiita</a>
+        </p>
+    </section>
+    <section>
         <h2 id="stdint">stdint.h/cstdint</h2>
         <p>先ほど「文字以外の目的でchar型を使うときはtypedefして使うようにしましょう」と言いましたが、毎回typedefするのはめんdいです。</p>
         <p>また、先程から散々言ってるように、C/C++では型の大きさについて、明確な規定はほぼありません。これでは厳密に何bitかを使いたいとき(HTTP通信など)に困ってしまいます。</p>
         <p>そこでstdint.h/cstdintの出番です。これはC99/C++11で追加された標準ライブラリで、主に以下の型が使えます。</p>
-        <blockquote>int8_t, uint8_t, int16_t, uint16_t, int32_t, uint32_t, int64_t, uint64_t</blockquote>
+        <blockquote><a>int8_t, uint8_t, int16_t, uint16_t, int32_t, uint32_t, int64_t, uint64_t</a></blockquote>
         <p>これらは厳密に型の大きさが決まっています。(ゆえにすべての処理系で実装されているわけではない)</p>
         <pre class="brush: cpp;">uint8_t color_r = 187;
 int64_t receive_timestamp;// 受信タイムスタンプ

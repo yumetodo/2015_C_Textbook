@@ -31,8 +31,9 @@ div.syntaxhighlighter table caption{
 }
 div.syntaxhighlighter code.comments{
 	font-family: "IPAexゴシック", "IPAゴシック", "Lucida Grande", YuGothic, '游ゴシック', "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", Meiryo, メイリオ, sans-serif !important;
+	font-size: 0.9em !important;
 }
-p, li, q, b, a, dd{
+p, li, q, b, a, dd blockquote{
 	font-size: 14px;
 }
 .monospace{
