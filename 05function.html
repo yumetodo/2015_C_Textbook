@@ -200,8 +200,8 @@ printf("%d", myGetRValue(color));</pre>
                         <section id="answer1-3" style="display: none;">
                             <pre class="brush: cpp;">#include &lt;windows.h&gt;
 #include &lt;stdio.h&gt;
-uint8_t myGetRValue(COLORREF color){
-    return static_cast&lt;uint8_t>((static_cast&lt;DWORD_PTR>(color)) &amp; 0xff);
+uint8_t myGetGValue(COLORREF color){
+    return color &lt;&lt; 8;
 }</pre>
                         </section>
                     </div>
