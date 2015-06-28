@@ -201,7 +201,7 @@ printf("%d", myGetRValue(color));</pre>
                             <pre class="brush: cpp;">#include &lt;windows.h&gt;
 #include &lt;stdio.h&gt;
 uint8_t myGetGValue(COLORREF color){
-    return color &lt;&lt; 8;
+    return color &gt;&gt; 8;
 }</pre>
                         </section>
                     </div>
