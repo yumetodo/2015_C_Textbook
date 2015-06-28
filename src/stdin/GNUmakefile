@@ -10,11 +10,16 @@ CXX 	:= g++
 CC 		:= gcc
 
 # デバッグ時とリリース時の微調整
-CXX_DEBUG_FLAGS		=	-g -O0
+CXX_DEBUG_FLAGS		=	-g -O0 -Wall
 CXX_RELEASE_FLAGS	=	-O2
 
 # 基本オプション
-CPPFLAGS = --input-charset=utf-8 -fexec-charset=CP932 -Wall -std=c99
+# 基本オプション
+ifeq ($(CC),gcc)
+CPPFLAGS = --input-charset=utf-8 -fexec-charset=CP932 -std=c99
+else
+CPPFLAGS = -std=c99
+endif
 
 # make
 # debug
@@ -33,4 +38,4 @@ $(TARGET) : $(SRCS)
 # make clean
 .PHONY: clean
 clean:
-	rm -f *.o
+	$(RM) -f *.exe

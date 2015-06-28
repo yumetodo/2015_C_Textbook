@@ -102,7 +102,7 @@ int main(){
 }</pre>
         <p>というわけでポインターと文字列について何一つ説明していないのにばんばん使っていますが、すみません。すぐに解説します。</p>
         <article>
-            <h3>練習問題</h3>
+            <h3>練習問題1</h3>
             <p>以下のソースコードは標準入力から数値を受け取り、指定範囲内でない数値に対しては再度入力を促すプログラムである。</p>
             <p>しかし、これは意図した動作をしない。問題点を可能な限り多くあげよ(getnum関数はget_integer_num関数のもとになった関数でエラー対策に難がありますが、そこはスルーしてください)</p>
             <pre class="brush: cpp;">#include&lt;stdio.h&gt;
@@ -136,7 +136,8 @@ int main(void){
 
 	return 0;
 }</pre>
-            <section>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1')"></form>
+            <section id="answer1" style="display: none;">
                 <h4>回答</h4>
                 <ol>
                     <li>
@@ -213,6 +214,153 @@ int main(void){
 		printf("取得した値は%dです。\n", flag);
 	}
 	return 0;
+}</pre>
+            </section>
+        </article>
+        <article>
+            <h3>練習問題2</h3>
+            <p>
+                ここでは、コンピュータがランダムに考えた数字を、回答とそれに対するヒントにより当てて行くゲームを数当てゲームと呼ぶことにします。<br>
+                とりあえず乱数の範囲は5～80とし、10回まで回答できるものとします。<br>
+                応答としてはこんなかんじです。
+            </p>
+            <pre class="brush: plain; highlight:[3, 6, 9, 12, 15, 18, 21, 24, 27, 30]" title="動作例">
+最大値80, 最小値5の間で乱数が生成されました。数当てゲームの開始です！
+値を入力してください
+40
+もっと小さいよ
+値を入力してください
+20
+もっと大きいよ
+値を入力してください
+10
+もっと大きいよ
+値を入力してください
+15
+もっと大きいよ
+値を入力してください
+17
+もっと大きいよ
+値を入力してください
+19
+もっと大きいよ
+値を入力してください
+30
+もっと大きいよ
+値を入力してください
+35
+もっと小さいよ
+値を入力してください
+33
+もっと大きいよ
+値を入力してください
+34
+成功！</pre>
+            <p>
+                イメージは湧いたでしょうか？というわけでこれを作ってください・・・といっても穴埋めです。以下のmain関数をいじり、必要なら関数を追加してプログラムを完成させてください。<br>
+                input関数の使い方は<br>
+                <a href="http://www.biboro.org/snippet/398">http://www.biboro.org/snippet/398</a><br>
+                を参照。
+            </p>
+            <pre class="brush: cpp;">
+#if defined(_WIN32) || defined(_WIN64)
+#include &lt;windows.h>
+#include &lt;mmsystem.h>
+#if defined(_MSC_VER) || defined (__clang__)
+#pragma comment(lib, "winmm.lib")
+#endif
+#undef max//std::numeric_limitsとのconflict防止
+#endif
+#include &lt;iostream>
+#include &lt;exception>
+#include &lt;limits>
+#include &lt;cstdint>
+#include &lt;cstdio>
+#include &lt;cstdlib>
+#include &lt;ctime>
+unsigned int libc_rand_32_normal(){
+    unsigned int r = 0;
+    r  = ((rand() >> 3) &amp; 0x0fff); // 12 bit
+    r |= ((rand() >> 4) &amp; 0x07ff) &lt;&lt; 12; // 12+11 : 23 bit
+    r |= ((rand() >> 6) &amp; 0x01ff) &lt;&lt; 23; // 12+11+9 : 32 bit
+    return r;
+}
+unsigned int create_seed(int argc, char* argv[], uint32_t num = 0) {
+    char* dst = static_cast&lt;char*>(malloc(sizeof(char) * 2));
+    srand(static_cast&lt;unsigned int>(time(nullptr) % std::numeric_limits&lt;unsigned int>::max()));
+#if defined(_WIN32) || defined(_WIN64)
+    timeBeginPeriod(1);
+#endif
+    unsigned int seed = (
+            (reinterpret_cast&lt;uint64_t>(argv) >> 2)
+            + (reinterpret_cast&lt;uint64_t>(&amp;argc) >> (clock() % 16))
+            ^ (static_cast&lt;uint64_t>(num + libc_rand_32_normal()) | clock() ^ time(nullptr))
+            | (reinterpret_cast&lt;uint64_t>(dst) >> (time(nullptr) % 5))
+            ^ (static_cast&lt;uint64_t>((rand() &amp; 0xff) &lt;&lt; 16) | (3457450835 >> ((rand() >> 4) % 4)))
+            + ((rand() >> 4) &amp; 0x07ff) + (libc_rand_32_normal() &lt;&lt; (clock() % 7))
+        ) % std::numeric_limits&lt;unsigned int>::max();
+    free(dst);
+#if defined(_WIN32) || defined(_WIN64)
+    timeEndPeriod(1);
+#endif
+    return seed;
+}
+unsigned int distribution(unsigned int max, unsigned int min, unsigned int rand_max, auto (*random)() ->unsigned int) {
+    return min + static_cast&lt;unsigned int>(random() * (max - min + 1.0) / (1.0 + rand_max));
+}
+template&lt;typename T_> using limit = std::numeric_limits&lt;T_>;//create new type. C++11:alias declaration
+template&lt;typename T_> T_ input(const char* echo_str, const T_ max = limit&lt;T_>::max(), const T_ min = limit&lt;T_>::lowest()) noexcept {
+    static_assert(std::is_arithmetic&lt;T_>::value, "unexpected type T_");//T_が整数か浮動小数点型でないならばコンパイルエラーを出す
+    T_ buf;
+    try {
+        if (nullptr == echo_str) throw std::invalid_argument("echo_str is unexpected input");//エラー対策
+        if ('\0' != echo_str[0]) std::cout &lt;&lt; echo_str &lt;&lt; std::endl;//文字列が空じゃなければ出力
+        std::cin >> buf;//入力を受ける
+        if (max &lt; buf || buf &lt; min) throw std::out_of_range("input is iligal");//範囲チェック
+    }
+    catch (std::exception&amp; er) {
+        std::cerr &lt;&lt; er.what() &lt;&lt; std::endl;//エラーメッセージ表示
+        return input("再入力してください。", max, min);//エラー時は再帰する方向で
+    }
+    return buf;
+}
+int main(int argc, char* argv[]) {
+    constexpr unsigned int range_max = 80;
+    constexpr unsigned int range_min = 5;
+    constexpr size_t asl_lim = 10;
+    srand(create_seed(argc, argv));
+    const auto target_num = distribution(range_max, range_min, limit&lt;unsigned int>::max(), libc_rand_32_normal);
+    printf("最大値%d, 最小値%dの間で乱数が生成されました。数当てゲームの開始です！\n", range_max, range_min);
+
+    //ここを埋める
+    return 0;
+}</pre>
+            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer2')"></form>
+            <section id="answer2" style="display: none;">
+                <p>62行目以降のみ。</p>
+                <pre class="brush: cpp; first-line: 62;">
+void print_help_of_num(unsigned int target, unsigned int current) {
+    std::cout &lt;&lt; ((target > current) ? "もっと大きいよ" : "もっと小さいよ") &lt;&lt; std::endl;;
+}
+int main(int argc, char* argv[]) {
+    constexpr unsigned int range_max = 80;
+    constexpr unsigned int range_min = 5;
+    constexpr size_t ask_lim = 10;
+    srand(create_seed(argc, argv));
+    const auto target_num = distribution(range_max, range_min, limit&lt;unsigned int>::max(), libc_rand_32_normal);
+    printf("最大値%d, 最小値%dの間で乱数が生成されました。数当てゲームの開始です！\n", range_max, range_min);
+
+    unsigned int input_buf;
+    for (size_t i = 0; i &lt; ask_lim &amp;&amp; target_num != (input_buf = input("値を入力してください", range_max, range_min)); i++) {
+        print_help_of_num(target_num, input_buf);
+    }
+    if (target_num != input_buf) {
+        printf("%s 正解は%dです\n", "残念でした", target_num);
+    }
+    else {
+        puts("成功！");
+    }
+    return 0;
 }</pre>
             </section>
         </article>

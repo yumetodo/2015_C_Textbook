@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"s",
+				"script	Tag"
+			],
+			[
 				"al",
 				"alt	Attr"
 			],
@@ -252,10 +256,6 @@
 				"target	Attr"
 			],
 			[
-				"s",
-				"simple_slideshow.js"
-			],
-			[
 				"tab",
 				"table-cell"
 			],
@@ -356,29 +356,30 @@
 			}
 		},
 		{
-			"file": "/C/Users/yumetodo/AppData/Roaming/Sublime Text 3/Packages/User/SideBarEnhancements/Open With/Side Bar.sublime-menu",
+			"file": "02variable.html",
 			"settings":
 			{
-				"buffer_size": 2444,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "<!DOCTYPE html>\n\n<html lang=\"ja\">\n<head>\n    <meta charset=\"utf-8\" />\n    <title>第0章 ～プログラミングを始める前に～</title>\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css\">\n    <link rel=\"stylesheet\" href=\"./css/style.css\">\n    <script src=\"./syntaxhighlighter/scripts/shCore.js\" type=\"text/javascript\"></script>\n    <script src=\"./syntaxhighlighter/scripts/shBrushPlain.js\" type=\"text/javascript\"></script>\n    <script src=\"./syntaxhighlighter/scripts/shBrushCpp_kai.js\" type=\"text/javascript\"></script>\n    <link href=\"./syntaxhighlighter/styles/shCore.css\" rel=\"stylesheet\" type=\"text/css\">\n    <link href=\"./syntaxhighlighter/styles/shThemeMidnight_likeVS.css\" rel=\"stylesheet\" type=\"text/css\">\n    <script type=\"text/javascript\">\n        SyntaxHighlighter.all();\n    </script>\n\n</head>\n<body>\n    <h1>第0章 ～プログラミングを始める前に～</h1>\n    <h1>いっぱい書いたけど、4以外覚える必要はないです　気軽に読んでね</h1>\n     <nav class=\"bottom\">\n        <ul>\n            <li class=\"disable\">prev</li>\n            <li><a href=\"index.html\" title=\"目次\">main</a></li>\n            <li><a href=\"./01arikitarina_basic.html\" title=\"次頁\">next</a></li>\n        </ul>\n    </nav>\n   <section>\n        <h2>1.C言語とC++の簡単な歴史</h2>\n        <p>\n            C言語とはUNIXというオペレーティングシステムを開発するために作られた言語だそうです。<br>\n            初期はUNIXの作者であるKen Tompsonはアセンブラでプログラムを書いていたが、それが嫌になったのか「B」という言語を開発しました。<br>\n            Brian Kernighan によって改良を加えられ、NewB(NB)を経てC言語へと発展していきました。こうして出来たのが今で言うK&amp;Rです。<br>\n            こうして出来たC言語はあちこちに広がりましたが、機能があちこちで独自拡張されていきました<br>\n            これに収拾をつけるべくANCI(American National Standards Institute)とISO(International Organization for Standardization)は共同でC言語の規格を発表した。<br>\n            これが今日C89とかANCI-C89とかISO-C90とか呼ばれるものである(それぞれ1989年と1990年に規格を発行した)。\n        </p>\n        <p>\n            さて、話は少し巻き戻り1979年、C with Classesと呼ばれる言語の開発が始まりました。<br>\n            その名の通り、classを持つC言語で、1983年にはC++という名前に変わり、演算子と関数のオーバーロードや参照、const型、行コメント(//)などが追加されました。<br>\n            1985年、『The C++ Programming Language』という事実上の標準規格Version1.0である本が発売されました。<br>\n            1989年、『The Annotated C++ Reference Manual (ARM)』という事実上の標準規格Version2.0である本が発売されました。<br>\n            なお、C++はC99の登場まで完全な互換性を持っていました。\n        </p>\n        <p>\n            C++はその元となったC言語にも大きな影響を与え、1999年、ISOとIEC(International Electrotechnical Commission)が共同で新たな規格を発行しました。<br>\n            これが現在最も一般的に使われているC99と呼ばれる規格で、変数宣言位置の自由化やbool型、行コメント、inline関数などC++の機能が逆輸入されました。\n        </p>\n        <p>\n            同じく1998年、C++にも標準化の波が押し寄せ、C++99とよばれる規格が発行されました。この時いまやC+erの常識であるSTLと呼ばれる部分が規格に入りました。<br>\n            2003年のC++03、2007年のC++TR1によるC99の機能の輸入を経てC++は発展していきました。\n        </p>\n        <p>\n            初めC++0xとかC++09とか言われたC++1xの規格は、策定が遅れに遅れ、2011年8月、ついにC++11とよばれる規格がサポートされました。<br>\n            右辺値参照、型推論、range-base for、constexpr、lambda、enum class、nullptr、可変長引数template、Unicode文字列リテラル、ユーザー定義リテラル、マルチスレッド、正規表現、改良されたスマートポインター、新たな乱数生成など、<br>\n            それまでのC++と全く別物になったと言っていいくらいの大幅な機能拡張が行われたわけです。\n        </p>\n        <p>\n            C言語もC11と呼ばれる新規格を発表し、セキュリティ上大問題となっていたgets関数の廃止、_sサフィックス付き関数の追加、劣化版C++のマルチスレッド機能、型判定マクロ(劣化版template)、Unicode文字列リテラルの対応などをサポートしたわけですが、C++11のインパクトが大きすぎて多くの人に忘れられがちな規格となっています。\n        </p>\n        <p>\n            2014年、C++14と呼ばれる新規格が発行され、2進数リテラルの対応、型推論の強化、constexpr関数の制限緩和、ジェネリックlambdaなどのC++11の小規模アップデートが行われ、<br>\n            そして今C++17の策定が進んでいます。\n        </p>\n        <img alt=\"C/C++の歴史\" src=\"./pic/history_of_C_Cpp.png\" height=\"282\" width=\"1265\">\n        <p>なんかいっぱい書いたけどべつに覚える必要ないからね？ただ<b>C++11とかC99とかC++14とか言われたらなんかそんなのあったな～と思い出してくれればいい</b>です。</p>\n        <p>参考書「C言語ポインタ完全制覇」</p>\n    </section>\n    <section>\n        <h2>2.プログラ厶言語とはなにか</h2>\n        <p>wordだって、excelだって、ニコニコだって、モンハンだって、エロゲだって、みんなみんなプログラムでできている友達なんだ！</p>\n        <p>というように、コンピュータで動くありとあらゆるものはプログラムでできています。プログラムを動かすには、我々人間が機械に命令を与える必要があります。命令文をプログラム言語で書くことによって、機械に命令、実行させることができます。</p>\n        <p>プログラミング言語で書かれたプログラムを読み込んで、それを機械への命令に変換して実行するのですが、その方法は大きく分けて２通りあります。</p>\n        <h3>インタープリタ方式とコンパイル方式</h3>\n        <p>インタープリタ方式とは、プログラミング言語で書かれたプログラムを読み込んで、直ちにそれを機械への命令に変換して実行してくれます。ある程度まとまってれば、完成してなかったり、適当なこと書いていてもその場で実行して結果を確かめることができるので便利です。主にweb系のプログラムにこれが用いられます。現にこのテキストもhtml,javascriptという言語で書かれているので、この方法が用いられています。この方式のデメリットは、１行１行翻訳して実行してるので実行速度が落ちてしまいます。ですので、動きのある凝ったゲームとか作りたいならこの方式はあまり推奨されないでしょう。</p>\n\n        <p>コンパイル方式とは、プログラミング言語で書かれたプログラムを、機械が理解できるデータに変換して、普通はそれをファイルとして保存するということをします。この保存されたファイルの拡張子は.exeだったり。実行の段階では、もう構文解析とか機械語への翻訳は終わっているので、最適な実行速度が得られるわけです。まぁ、バグを取り除く作業（デバッグ作業）はいちいち大変なんですけどね汗　C言語はこの方式をとっています。</p>\n\n        <p>詳しく知りたい人は参考書で調べるなりgoogle先生なりに聞いてね♡</p>\n        <p>参考：http://www.geocities.jp/naosacra/mops/forbeginner/2.html</p>\n    </section>\n    <section>\n        <h2>3.プログラム言語の種類</h2>\n        <p>プログラム言語はいっぱいあります。ほんといっぱいあります。</p>\n        <p>身近な例を挙げてみましょう</p>\n        <dl>\n            <dt>NINTENDO64</dt>\n            <dd>C/C++</dd>\n            <dt>minecraft</dt>\n            <dd>java</dd>\n            <dt>艦これやスマホゲー</dt>\n            <dd>php, javascript, Object-C, java, C++ etc</dd>\n            <dt>3Dゲーム</dt>\n            <dd>C#やC/C++</dd>\n            <dt>東京理科大ホームページ</dt>\n            <dd>html,javascript,css</dd>\n        </dl>\n        <p>最近任天堂はC/C++からjavaScriptに開発環境を変えようとしてるみたいです。javaScriptの実行速度は遅いけど、マシン自体の性能は上がったから実行速度はそんなに考えなくてよく、開発時間の短くてすむ方に転換していったみたいですね。</p>\n        <p>参考記事：http://www.sankei.com/west/news/130715/wst1307150045-n1.html　</p>\n        <p>たぶん、１年生の皆さんはゲームを作りたいと思うのでこれからゲーム作りに使うであろうライブラリや開発環境を紹介しときます。</p>\n        <dl>\n            <dt>ライブラリ</dt>\n            <dd>Unity, DxLibrary, OpenGL, DirectXSiv3D</dd>\n            <dt>開発環境</dt>\n            <dd>Unity, VisualStudio, eclips, NetBeans, QT Creator</dd>\n        </dl>\n        <p>\n            ライブラリとは、関数がいっぱいあるソースコードのことで、例えばDirectXだと描画や音楽についての関数がいっぱいあります。<br>\n            これを駆使することにより、根幹のプログラムを自分で作る必要がなく、作品に力を入れることができます。<b>バグも減るし</b>。だいたい全部自分で書くなんてめんdじゃないですか。\n        </p>\n    </section>\n    <section>\n        <h2>4.どんな流れでコードが処理されているか</h2>\n        <h4>原則として、コードは上から下にマシンは読み取ります。</h4>\n        <p>例えば</p>\n        <pre class=\"brush: cpp;\">int a=10;\nprintf(\"a=%d\",a);</pre>\n        <p>とすると</p>\n        <pre class=\"brush: cpp;\">a=10</pre>\n        <p>となるが</p>\n        <pre class=\"brush: cpp;\">printf(\"a=%d\",a);\nint a=10;</pre>\n        <p>という順番にすると、コンパイラに「printf内のaってなんすか？」って怒られます</p>\n        <p>関数を宣言するときも同じです。</p>\n        <p>大事なことなのでもう一度</p>\n        <h4>原則として、コードは上から下にマシンは読み取ります。</h4>\n    </section>\n   <section>\n       <h2>5.C言語で開発するメリット・デメリット</h2>\n       <h3>長所</h3>\n       <ul>\n           <li>太古の昔からある言語だからわかんないことはグーグル先生に聞けばたいてい教えてくれる。</li>\n           <li>実行速度が速い速い、実際速い</li>\n           <li>ライブラリが多い</li>\n       </ul>\n       <h3>短所</h3>\n       <ul>\n           <li>書くのめんどくせぇ！C++で書けばはるかに楽かつ可読性の高いソースコードがかける</li>\n           <li>メモリの管理がめんどくせぇ！javaのガベージコレクション（メモリを勝手に解放してくれるスグレモノ）が欲しいですね。C++14でも採用は見送りとのこと。まあクラスもスマートポインターもあるからC++ならなくてもいいかもしれんけど。</li>\n           <li>コンパイラの実装がまちまちなのでそれを吸収するように書くのがややめんd</li>\n       </ul>\n   </section>\n    <section>\n        <h2>6.ビルドの流れ</h2>\n        <img alt=\"ビルドの流れ\" src=\"./pic/flow_of_build.png\" height=\"369\" width=\"377\">\n        <dl>\n            <dt>プリプロセッサ</dt>\n            <dd>\n                プリプロセッサとは、#includeや#define,#ifndef,#endifなどのプリプロセッサ分を解釈し、コンパイラへの入力を作成します。<br>\n                ざっくり言うと、#includeとか#defineが先に読み込まれるってことだね。\n            </dd>\n            <dt>コンパイラ</dt>\n            <dd>\n                コンパイラは、ソースコードを機械語に変換します。機械語に翻訳したあと、オブジェクトファイル（windowsなら拡張子.obj）を作ります。\n                もっというとアセンブリ言語に変換するのがコンパイラーで、アセンブリ言語からオブジェクトファイルを作るのはアセンブラーの仕事です。が、そこまで意識することはあまりないです。\n            </dd>\n            <dt>リンカー</dt>\n            <dd>\n                リンカーとは、オブジェクトファイル（複数個の場合がほとんど）とライブラリを結びつける働きをします。オブジェクトファイルにバグがあると正常に機能しません。<br>\n                またC++の場合マングリングというC++のオーバーロード機能を正常に動作させるための機能がコンパイラーによって実装がまちまちなため、違うコンパイラーで作ったオブジェクトファイル、ライブラリー同士をリンクさせることは不可能に近いです。<br>\n                よくソースコードに<code>extern \"C\"</code>と書いてあるのはこのためです。<br>\n                この時点でクローバル変数、static変数などの配置を決めていたりしますが、それについてはこのテキストでは解説しません。\n            </dd>\n        </dl>\n        <dl>\n            <dt>makeファイル</dt>\n            <dd>\n                makeファイルには例えば「○○.cppというソースファイルをコンパイルして、○○.objを作成する」といったようにビルドすると気の手順が細かく書かれています。<br>\n                <a href=\"https://github.com/yumetodo/2015_C_Textbook/blob/gh-pages/src/strstr/GNUmakefile\">https://github.com/yumetodo/2015_C_Textbook/blob/gh-pages/src/strstr/GNUmakefile</a><br>\n                みたいなやつです。<br>\n                <b>ソースコードに変更があった時だけコンパイルとかを実行できます。</b>別にコンパイル以外のことも実行できるんですけどね。<br>\n                なお大規模になるとmakefileからmakefileを呼び出すことができます。\n            </dd>\n            <dt>[Visual Studio]プロジェクトとソリューション</dt>\n            <dd>\n                makeファイルは細かく色々指定できて確かに便利なんですが、いくら殆どコピペできると言ってもmakefileを書くのはめんdです。<br>\n                Visual Studioにはその代わりにプロジェクト(拡張子vcxproj)とソリューション(拡張子sln)があります。<br>\n                普通ソリューションには多くても3つ、殆どの場合1つのプロジェクトがあります。プロジェクトごとにいろいろオプションを変えられたりするわけです。<br>\n                便利。これのお陰で「実際この記事を書いてる私はmakeファイルを作ったことないです。」という発言が飛び出るくらいには。\n            </dd>\n        </dl>\n        <h3>デバッグ、リリース</h3>\n        <p>デバッグとは、デ(de:取り除く)バッグ(bug:バグを)の意味です。どの時点でバグが起きたのか、今どんな状態なのかを確認することができます。</p>\n        <p>リリースとは、リリース（release:公開）の意味です。ゲームや作品を公開するときに使います。</p>\n        <p>\n            参考サイト<br>\n            ビルドは何をしている？ [VC++の使い方]<br>\n            <a href=\"http://www.nitoyon.com/vc/tutorial/project/build_detail.htm\">http://www.nitoyon.com/vc/tutorial/project/build_detail.htm</a><br>\n            ＶＣ++ Ｔｉｐｓ - About Library<br>\n            <a href=\"http://web.archive.org/web/20031103022217/http://www.bb.wakwak.com/~yamaguchi/takashi/Software/VCPP-Tips/AboutLib.html\">http://www.bb.wakwak.com/~yamaguchi/takashi/Software/VCPP-Tips/AboutLib.html</a>\n        </p>\n    </section>\n    <section>\n        <h2 id=\"important_things\">7.プログラミングの鉄則</h2>\n        <p>多くのプログラマーの中での共通認識が有ります。それは</p>\n        <p class=\"strong\">めんd</p>\n        <p>です。いかに面倒臭がるか、いかに手を抜くか、いかに楽してプログラミングするか、という意味です。そして僕からもう一言。</p>\n        <p class=\"strong\">プログラム　書かなければ　バグらない</p>\n        <p>\n            当たり前のようで忘れがちです。ついつい一から自分で作ろうとしてしまいます。あなたがやろうとしていることは大抵誰かがすでにやっています。<br>\n            <a href=\"http://codegarage.edisonthk.com/\">codegarage</a>とかa:link\n        </p>\n        <p>まとめると、可能な限り書くコード量を減らすことが大事ということになります。そのために先ほど言ったライブラリーがあるのです。</p>\n    </section>\n    <section>\n        <h2>8.コンパイラーの種類</h2>\n        <p>組み込みまで考えだすと数えきれないほどのコンパイラーが存在しますが、有名どこを上げると概ね4つになると思います。</p>\n        <dl>\n            <dt>Intel C Compiler(icc)</dt>\n            <dd>おそらく最強のコンパイラー。比較的優秀なIDE(統合開発環境)と世界最強のコンパイラー。これに勝るものはなし。ただしお値段10万円ほど。VCほどじゃないけど少し規格準拠が遅い。</dd>\n            <dt>GNU C Compiler(gcc)</dt>\n            <dd>GNU Public License(GPL)で開発が続く超有名無料のコンパイラー。そこそこ規格準拠も早く、大抵のLinuxには標準で入っている。コンパイル環境を選ばない。</dd>\n            <dt>Clang</dt>\n            <dd>\n                gccの対抗馬でgccを完全に置き換えることを目指すコンパイラー。University of Illinois/NCSA Open Source Licenseで開発されており、gccよりも規格準拠が早いことが特徴。<br>\n                ただしWindowsではコマンドプロンプトがまともにUTF-8に対応しないためminttyなどの別のターミナルエミュレーターなしには使いたくない。\n            </dd>\n            <dt>Visual Studio(VC)</dt>\n            <dd>\n                Microsoftが開発しているIDEでコンパイラーも付属。<b>話しにならないくらい規格準拠が遅い</b>が、IDEのデバッグ機能が他の追従を許さないくらい優秀すぎるため、幅広く使われている。<br>\n                これとMSOfficeがLinuxで使えるならWindowsなんて糞OSいらないのに。コンパイラーだけclangに差し替えるclang-clというプロジェクトもあるけど実用にはまだ耐えない。\n            </dd>\n        </dl>\n    </section>\n    <nav class=\"bottom\">\n        <ul>\n            <li class=\"disable\">prev</li>\n            <li><a href=\"index.html\" title=\"目次\">main</a></li>\n            <li><a href=\"./01arikitarina_basic.html\" title=\"次頁\">next</a></li>\n        </ul>\n    </nav>\n</body>\n</html>\n",
-			"file": "00the_first_step.html",
-			"file_size": 20355,
-			"file_write_time": 130794214806766053,
-			"settings":
-			{
-				"buffer_size": 11408,
+				"buffer_size": 18917,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "01arikitarina_basic.html",
+			"contents": "# Makefile for strcmp.exe\n\nTARGET 	= strcmp.exe\nSRCS 	= ./strcmp/main.cpp ./strcmp/strcmp.cpp\n\n# 基本コマンド\nRM 		:= rm\nCXX 	:= g++\nCC 		:= gcc\n\n# デバッグ時とリリース時の微調整\nCXX_DEBUG_FLAGS		=	-g -O0 -Wall\nCXX_RELEASE_FLAGS	=	-O2\n\n# 基本オプション\nifeq ($(CXX),gcc)\nCPPFLAGS = --input-charset=utf-8 -fexec-charset=CP932 -std=c++14\nelse\nCPPFLAGS = -std=c++14\nendif\n\n# make\n# debug\n.PHONY: Debug\nDebug: CXXFLAGS+=$(CXX_DEBUG_FLAGS)\nDebug: all\n# release\n.PHONY: Release\nRelease: CXXFLAGS+=$(CXX_RELEASE_FLAGS)\nRelease: all\n\nall: $(TARGET)\n$(TARGET): $(SRCS)\n	$(CXX) $^ -o $@ $(CXXFLAGS) $(CPPFLAGS)\n\n# make clean\n.PHONY: clean\nclean:\n	$(RM) -f *.exe",
+			"file": "src/strcmp/GNUmakefile",
+			"file_size": 689,
+			"file_write_time": 130745305383480300,
 			"settings":
 			{
-				"buffer_size": 3596,
+				"buffer_size": 623,
+				"line_ending": "Windows",
+				"scratch": true
+			}
+		},
+		{
+			"file": "/C/Users/yumetodo/Desktop/tet.html",
+			"settings":
+			{
+				"buffer_size": 449,
 				"line_ending": "Windows"
 			}
 		},
@@ -450,7 +451,7 @@
 			"file": "css/style.css",
 			"settings":
 			{
-				"buffer_size": 3065,
+				"buffer_size": 3106,
 				"line_ending": "Windows"
 			}
 		},
@@ -601,14 +602,21 @@
 	"expanded_folders":
 	[
 		"/C/Users/yumetodo/Documents/2015_C_Textbook",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/css",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strcmp",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strlen/strlen"
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strcmp"
 	],
 	"file_history":
 	[
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/04bit.html",
+		"/C/Users/yumetodo/Documents/git/biboro_angularjs/js/controllers.js",
+		"/C/msys64/mingw32/include/c++/4.9.2/parallel/numeric",
+		"/C/msys64/mingw64/include/c++/4.9.2/numeric",
+		"/C/msys64/mingw64/include/c++/4.9.2/parallel/numeric",
+		"/C/Users/yumetodo/Documents/Visual Studio 2015/Projects/make_array/GNUmakefile",
+		"/C/Users/yumetodo/Documents/Visual Studio 2015/Projects/make_array/make_array/GNUmakefile",
 		"/C/Users/yumetodo/AppData/Roaming/Sublime Text 3/Packages/User/SideBarEnhancements/Open With/Side Bar.sublime-menu",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/00the_first_step.html",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/04bit.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/17rand-num.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/16Range-base_for.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/14pointer.html",
@@ -679,7 +687,6 @@
 		"/C/Users/yumetodo/Google ドライブ/未来研究室実行委員会/HP仮UP/miraiken2015/event/2015/event_march/exhibition.html",
 		"/C/Users/yumetodo/Desktop/C_description.html",
 		"/C/Users/yumetodo/Desktop/matora01_2.c",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/00the_first_step.html",
 		"/C/Users/yumetodo/Desktop/matora01.c",
 		"/C/Users/yumetodo/Documents/Visual Studio 2015/Projects/ConsoleApplication3/ConsoleApplication3/Source.cpp",
 		"/C/Users/yumetodo/Documents/Visual Studio 2015/Projects/ConsoleApplication3/GNUmakefile",
@@ -728,13 +735,7 @@
 		"/C/Users/yumetodo/Documents/git/lsw-build2/README.md",
 		"/C/Users/yumetodo/Google ドライブ/未来研究室実行委員会/HP仮UP/miraiken2015/link/index.html",
 		"/C/msys64/mingw32/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++/tr1/cstdbool",
-		"/C/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++/cstdbool",
-		"/C/msys64/mingw32/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++/cstdbool",
-		"/C/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++/tr1/cstdbool",
-		"/C/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++/tr1/stdbool.h",
-		"/C/msys64/mingw32/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++/tr1/stdbool.h",
-		"/C/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/stdbool.h",
-		"/C/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++/x86_64-w64-mingw32/32/bits/c++config.h"
+		"/C/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++/cstdbool"
 	],
 	"find":
 	{
@@ -752,6 +753,12 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"data",
+			"loadTags",
+			"__accumulate_switch",
+			"accumulate",
+			"strcmp",
+			"217",
 			"str_was_terminate",
 			"&&",
 			"<<",
@@ -923,7 +930,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 5,
 			"sheets":
 			[
 				{
@@ -1014,7 +1021,7 @@
 						"translation.y": 57.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
@@ -1105,7 +1112,7 @@
 						"translation.y": 3763.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -1134,8 +1141,8 @@
 						"selection":
 						[
 							[
-								6949,
-								6949
+								4540,
+								4540
 							]
 						],
 						"settings":
@@ -1209,201 +1216,19 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2421.0,
+						"translation.y": 1314.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "/C/Users/yumetodo/AppData/Roaming/Sublime Text 3/Packages/User/SideBarEnhancements/Open With/Side Bar.sublime-menu",
+					"file": "02variable.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2444,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1853,
-								1853
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"auto_complete": true,
-							"bh_regions":
-							[
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content"
-							],
-							"open_with_edit": true,
-							"origin_encoding": "ASCII",
-							"syntax": "Packages/JavaScript/JSON.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 600.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "00the_first_step.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 11408,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								9997,
-								9997
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"auto_complete": false,
-							"bh_regions":
-							[
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content"
-							],
-							"is_xml": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 3487.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "01arikitarina_basic.html",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 3596,
+						"buffer_size": 18917,
 						"regions":
 						{
 							"TagLint":
@@ -1413,8 +1238,8 @@
 								"regions":
 								[
 									[
-										2938,
-										2941
+										15526,
+										15527
 									]
 								],
 								"scope": "variable.parameter"
@@ -1423,70 +1248,71 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								15603,
+								15603
 							]
 						],
 						"settings":
 						{
 							"BracketHighlighterBusy": false,
+							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content"
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content"
 							],
 							"is_xml": false,
 							"syntax": "Packages/HTML/HTML.tmLanguage",
@@ -1494,10 +1320,190 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
+						"translation.y": 6139.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/strcmp/GNUmakefile",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 623,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								483,
+								483
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"in_converting": true,
+							"origin_encoding": "SHIFT_JIS",
+							"syntax": "Packages/Makefile/Makefile.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/Users/yumetodo/Desktop/tet.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 449,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								322,
+								231
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"auto_name": "",
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"is_xml": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -1587,7 +1593,7 @@
 						"translation.y": 489.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1674,7 +1680,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -1762,7 +1768,7 @@
 						"translation.y": 146.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -1852,7 +1858,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -1945,7 +1951,7 @@
 						"translation.y": 1550.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -2034,7 +2040,7 @@
 						"translation.y": 574.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -2122,7 +2128,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -2131,15 +2137,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3065,
+						"buffer_size": 3106,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								395,
-								395
+								1514,
+								1524
 							]
 						],
 						"settings":
@@ -2207,10 +2213,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 104.0,
+						"translation.y": 168.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -2226,8 +2232,8 @@
 						"selection":
 						[
 							[
-								6583,
-								6625
+								68,
+								40
 							]
 						],
 						"settings":
@@ -2236,61 +2242,61 @@
 							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
 								"bh_c_define_close",
-								"bh_c_define_content"
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
 							],
 							"is_xml": false,
 							"syntax": "Packages/HTML/HTML.tmLanguage",
@@ -2298,10 +2304,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2023.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
