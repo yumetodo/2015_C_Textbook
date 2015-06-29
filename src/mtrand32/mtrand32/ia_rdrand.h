@@ -18,11 +18,16 @@ bool IsRDRANDsupport();
 extern "C" bool __fastcall rdrandx64(__deref_out unsigned*);
 
 // Map rdrand to the name of the function exported from the assembled module
-extern inline int __cdecl _rdrand64_step(unsigned __int64 * rnd) {
+int __cdecl _rdrand64_step(unsigned __int64 * rnd) {
 	return rdrandx64(rnd);
 }
 #define rdrand(param) rdrandx64( (param) )
+int __cdecl _rdrand32_step(unsigned int * rnd) {
+	unsigned __int64 buf;
+	const int re = rdrandx64(buf);
+	*rnd = (unsigned int)(buf >> 16) ^ (unsigned int)((unsigned char)(buf)) | ((unsigned int)(buf >> 40) & (unsigned int)(0xFF));
+}
 #else
-extern inline int __cdecl _rdrand32_step(unsigned int *);
+int __cdecl _rdrand32_step(unsigned int *);
 #endif
 #endif

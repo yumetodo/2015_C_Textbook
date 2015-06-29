@@ -74,7 +74,7 @@ bool rdrand(__deref_out unsigned* dest) {
 	// Return here with the result in EAX
 	;
 }
-inline int __cdecl _rdrand32_step(unsigned int * rnd) {
+int __cdecl _rdrand32_step(unsigned int * rnd) {
 	return rdrand(rnd);
 }
 #endif

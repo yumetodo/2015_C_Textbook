@@ -173,7 +173,7 @@ int get_integer_num(const int max, const int min){
     //戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
     char s[100];
 
-    if (NULL == fgets(s, 100, stdin)){
+    if (nullptr == fgets(s, 100, stdin)){
         if (feof(stdin)){//エラーの原因がEOFか切り分け
             return EOF;
         }
@@ -185,33 +185,28 @@ int get_integer_num(const int max, const int min){
     }
     if ('\n' == s[0]) return INT_MIN;
     errno = 0;
-    const long t = strtol(s, NULL, 10);
+    const long t = strtol(s, nullptr, 10);
     if (0 != errno || t &lt; min || max &lt; t)
         return INT_MIN;
     return (int)t;
 }
 int getnum_customized(const int max, const int min){
 	if (max &lt; min)	return -1;
-	int flag0;
-	bool temp_judge;
-	do{
-		flag0 = get_integer_num(max, min);
-		temp_judge = (INT_MIN == flag0);
-		if (temp_judge){
-			system("cls");
-			puts("再入力してください。");
-		}
-	} while (temp_judge);
-	return flag0;
+	int buf;
+    while(INT_MIN == (buf = get_integer_num(max, min))){
+        system("cls");//Windows only. Use 'system("clear")' instead when you run on Linux or Mac.
+        puts("再入力してください。");
+    }
+	return buf;
 }
 int main(void){
 	puts("値を入力してください。");
-	const int flag = getnum_customized(100, 0);
-	if(EOF == flag){
+	const int input_num = getnum_customized(100, 0);
+	if(EOF == input_num){
 		puts("ファイル終端です");
 	}
 	else{
-		printf("取得した値は%dです。\n", flag);
+		printf("取得した値は%dです。\n", input_num);
 	}
 	return 0;
 }</pre>
@@ -224,7 +219,9 @@ int main(void){
                 とりあえず乱数の範囲は5～80とし、10回まで回答できるものとします。<br>
                 応答としてはこんなかんじです。
             </p>
-            <pre class="brush: plain; highlight:[3, 6, 9, 12, 15, 18, 21, 24, 27, 30]" title="動作例">
+            <form><input type="button" value="動作例の表示/非表示" onclick="change_answer_state('example2')"></form>
+            <section id="example2" style="display: none;">
+                <pre class="brush: plain; highlight:[3, 6, 9, 12, 15, 18, 21, 24, 27, 30]" title="動作例">
 最大値80, 最小値5の間で乱数が生成されました。数当てゲームの開始です！
 値を入力してください
 40
@@ -256,6 +253,7 @@ int main(void){
 値を入力してください
 34
 成功！</pre>
+            </section>
             <p>
                 イメージは湧いたでしょうか？というわけでこれを作ってください・・・といっても穴埋めです。以下のmain関数をいじり、必要なら関数を追加してプログラムを完成させてください。<br>
                 input関数の使い方は<br>
@@ -335,7 +333,7 @@ int main(int argc, char* argv[]) {
     //ここを埋める
     return 0;
 }</pre>
-            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer2')"></form>
+            <form><input type="button" value="答えの表示/非表示" onclick="change_answer_state('answer2')"></form>
             <section id="answer2" style="display: none;">
                 <p>62行目以降のみ。</p>
                 <pre class="brush: cpp; first-line: 62;">

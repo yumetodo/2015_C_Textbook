@@ -6,8 +6,7 @@
 #include <random>
 #include <cstdint>//uint_least32_t
 #include <type_traits>
-#include <vector>
-void mtrand32_init(std::vector<std::uint_least32_t>& sed_v, std::random_device& rnd);//warning: inline function 'void mtrand32_init(std::vector<unsigned int>&, std::random_device&)' used but never defined
+std::mt19937 create_engine();
 
 template <bool Con, class Then, class Else>
 struct IF;
@@ -29,11 +28,7 @@ template<typename rand_type> class mtrand32
 {
 public:
 	mtrand32(rand_type min, rand_type max) : distribution(min, max){
-		std::random_device rnd;// ランダムデバイス
-		std::vector<std::uint_least32_t> v(10);// 初期化用ベクター
-		mtrand32_init(v, rnd);
-		std::seed_seq seq(v.begin(), v.end());
-		this->engine = std::move(std::mt19937(seq));
+		this->engine = create_engine();
 		static_assert(std::is_arithmetic<rand_type>::value == true, "'rand_type' is illegal type.");//非算術型にはコンパイルエラーを
 	}
 	rand_type mtrand(void) {
