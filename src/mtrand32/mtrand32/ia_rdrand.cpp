@@ -7,7 +7,11 @@
 
 #ifndef __INTEL_COMPILER
 #include <immintrin.h>
+#if defined(_WIN32) || defined(_WIN64)
 #include <intrin.h>
+#else
+#include <x86intrin.h>
+#endif //defined(_WIN32) || defined(_WIN64)
 #ifdef __GNUC__
 #include <cpuid.h>
 #endif //__GNUC__
