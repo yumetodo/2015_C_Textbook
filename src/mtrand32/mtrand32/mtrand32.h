@@ -3,8 +3,10 @@
 #if (defined(_MSC_VER) && _MSC_VER > 1000) || (defined(__clang__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ > 2))) ||(defined(__ICC) && __ICC > 1000) ||defined (__GNUC__) && !defined(__ICC) && !defined(__clang__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
 #pragma once
 #endif
-#include<random>
+#include <random>
+#include <cstdint>//uint_least32_t
 #include <type_traits>
+#include <vector>
 void mtrand32_init(std::vector<std::uint_least32_t>& sed_v, std::random_device& rnd);//warning: inline function 'void mtrand32_init(std::vector<unsigned int>&, std::random_device&)' used but never defined
 
 template <bool Con, class Then, class Else>

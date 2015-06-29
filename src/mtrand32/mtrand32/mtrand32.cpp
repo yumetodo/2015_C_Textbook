@@ -4,8 +4,6 @@
 #endif
 #include "mtrand32.h"
 #include "ia_rdrand.h"//rdrand_supported(), rdrand()
-#include <cstdint>//uint_least32_t
-#include <vector>
 #include <algorithm>//std::generate
 #include <ctime>//clock(), time()
 #include <functional>//std::ref in gcc
