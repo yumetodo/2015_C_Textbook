@@ -7,14 +7,18 @@ SRCS  := ./mtrand32/mtrand32.cpp ./mtrand32/ia_rdrand.cpp ./mtrand32/main.cpp
 RM 		:= rm
 CXX 	:= g++
 CC 		:= gcc
-
-ADDITIONALPOTIONS := -fexec-charset=CP932
+ifeq ($(CXX),g++)
+ADDITIONALPOTIONS_default = -fexec-charset=CP932
+else
+ADDITIONALPOTIONS_default = 
+endif
+ADDITIONALPOTIONS := $(ADDITIONALPOTIONS_default)
 # デバッグ時とリリース時の微調整
 CXX_DEBUG_FLAGS		=	-g -O0 -Wall
 CXX_RELEASE_FLAGS	=	-O2
 
 # 基本オプション
-ifeq ($(CXX),gcc)
+ifeq ($(CXX),g++)
 CPPFLAGS = --input-charset=utf-8 -std=c++14
 else
 CPPFLAGS = -std=c++14
