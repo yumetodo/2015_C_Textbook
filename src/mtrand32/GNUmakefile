@@ -1,21 +1,21 @@
-# Makefile for prime_number_generator.exe
+ï»¿# Makefile for mtrand32.exe
 
 TARGET:= mtrand32.exe
 SRCS  := ./mtrand32/mtrand32.cpp ./mtrand32/ia_rdrand.cpp ./mtrand32/main.cpp
 
-# Šî–{ƒRƒ}ƒ“ƒh
+# åŸºæœ¬ã‚³ãƒãƒ³ãƒ‰
 RM 		:= rm
 CXX 	:= g++
 CC 		:= gcc
 
-ADDITIONALPOTIONS :=
-# ƒfƒoƒbƒO‚ÆƒŠƒŠ[ƒX‚Ì”÷’²®
+ADDITIONALPOTIONS := -fexec-charset=CP932
+# ãƒ‡ãƒãƒƒã‚°æ™‚ã¨ãƒªãƒªãƒ¼ã‚¹æ™‚ã®å¾®èª¿æ•´
 CXX_DEBUG_FLAGS		=	-g -O0 -Wall
 CXX_RELEASE_FLAGS	=	-O2
 
-# Šî–{ƒIƒvƒVƒ‡ƒ“
+# åŸºæœ¬ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 ifeq ($(CXX),gcc)
-CPPFLAGS = --input-charset=utf-8 -fexec-charset=CP932 -std=c++14
+CPPFLAGS = --input-charset=utf-8 -std=c++14
 else
 CPPFLAGS = -std=c++14
 endif
