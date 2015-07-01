@@ -17,6 +17,13 @@
 </head>
 <body>
     <h1>第19章 ～文字列操作～</h1>
+    <nav class="top">
+        <ul>
+            <li><a href="./18c_char_str_base.html" title="前頁">prev</a></li>
+            <li><a href="index.html" title="目次">main</a></li>
+            <li><a href="./" title="次頁">next</a></li>
+        </ul>
+    </nav>
     <section>
         <h2>初めに</h2>
         <p>
@@ -146,7 +153,7 @@ int main(void){
         <form><input type="button" value="答えを 表示/非表示" onclick="change_answer_state('my_strstr')"></form>
         <section id="my_strstr" style="display: none;">
             <h4>回答</h4>
-            <pre class="brush: cpp; highlight:[19, 24, 28];" title="strstr.cpp">#include "strstr.h"
+            <pre class="brush: cpp; highlight:[18, 23, 27];" title="strstr.cpp">#include "strstr.h"
 #include &lt;limits>
 #ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.
 #ifdef __cplusplus
@@ -159,33 +166,36 @@ int main(void){
 _CONST_RETURN char *my_strstr(const char *str, const char *strSearch){
     if (nullptr == str || nullptr == strSearch) return nullptr;
     if ('\0' == strSearch[0]) return str;
-    size_t i, j;
-    bool str_is_not_terminate;
-    const auto search_limits = std::numeric_limits&lt;size_t>::max();//無限ループ防止
+    size_t i, j, k;
+    const auto search_lim = std::numeric_limits&lt;size_t>::max();//無限ループ防止
     for (
-        str_is_not_terminate = true, i = 0, j= 0;
-        search_limits != i &amp;&amp; str_is_not_terminate &amp;&amp; '\0' != str[i] &amp;&amp; '\0' != strSearch[j];//正規のbreak条件は'\0' == strSearch[j]
-        i++
+        str_is_not_terminate = true, i = 0, j= 0, k = 0;
+        search_lim != i &amp;&amp; '\0' != str[k] &amp;&amp; '\0' != str[i] &amp;&amp; '\0' != strSearch[j];//正規のbreak条件は'\0' == strSearch[j]
+        ++i
     ){
         for (
-            j = 0;
-            search_limits - 1 != i &amp;&amp; search_limits != j &amp;&amp; (str_is_not_terminate = ('\0' != str[i])) &amp;&amp; '\0' != strSearch[j] &amp;&amp; str[i] == strSearch[j];
-            i++, j++
+            j = 0, k = i;
+            search_lim - 1 != k &amp;&amp; search_lim != j &amp;&amp; '\0' != str[k] &amp;&amp; '\0' != strSearch[j] &amp;&amp; str[k] == strSearch[j];
+            ++j, ++k
         );
     }
     return ('\0' != strSearch[j]) ? nullptr : &amp;str[i - j - 1];//この時必ずi > jとなる。さもなくばreturnはnullptr
 }</pre>
             <p>
-                16, 19, 23行目に注目しながら読んでください。strの1文字目とstrSearchの1文字目が一致するかを調べ、しなければstrの2文字目とstrSearchの1文字目と言った具合に線形探索していきます。<br>
-                見つかるより先にstrが'\0'と24行目で判定されたら、変数str_is_not_terminateはfalseになるので19行目でループを抜けることになります。<br>
-                ただしこの時i++が実行されるので注意が必要です。<br>
-                見つかった場合23行目の段階で条件式「'\0' != strSearch[j]」はfalseになるので「&amp;str[i - j - 1]」を返します。-1はさっき言ったようにi++されるからです。<br>
-                変数str_is_not_terminateは24行目のループ継続条件「'\0' != str[i]」を満たさなくなり抜けた時falseになり、20行目でi++されても19行目で抜けられるようにします。<br>
-                str[i]とstr[j]が同時にNULL文字に遭遇した場合は変数str_is_not_terminateの作用で2つのループを抜けた後はstr[j]のみNULL文字に遭遇した場合と同じ扱いになります。
+                18, 23, 27行目に注目しながら読んでください。strの1文字目とstrSearchの1文字目が一致するかを調べ、しなければstrの2文字目とstrSearchの1文字目と言った具合に線形探索していきます。<br>
+                見つかるより先にstrが'\0'と24行目で判定されたら、18行目のループも抜けることになります。<br>
+                見つかった場合23行目の段階で条件式「'\0' != strSearch[j]」はfalseになるので「&amp;str[i - j - 1]」を返します。-1はさっき言ったようにi++されるからです。
             </p>
             <p>12, 13行目についてですが、これを逆にしてはいけません。nullポインターの実体って、あなた、それどこですか？</p>
+            <p>俗に力任せ法とか言われる方法ですが、別途配列を持たなければならないBM法やKMP法よりはL1キャッシュを活用しやすいはずなので、ポインタ減算が発生することを差し引いてもstrSearchが十分に短い文字列の場合、十分な早さで検索できます。BM法はひたすらポインタ減算するので論外ですし、KMP法はstrSearch内が同じ文字列の繰り返しのような特殊な場合以外では先にindexを構築する分速度面で不利になります。</p>
         </section>
-
     </section>
+    <nav class="bottom">
+        <ul>
+            <li><a href="./18c_char_str_base.html" title="前頁">prev</a></li>
+            <li><a href="index.html" title="目次">main</a></li>
+            <li><a href="./" title="次頁">next</a></li>
+        </ul>
+    </nav>
 </body>
 </html>
