@@ -119,6 +119,65 @@ inline T_ max(T_ a, T_ b){
         	from <a href="//www.slideshare.net/faithandbrave" target="_blank">Akira Takahashi</a>
         </p>
         <iframe src="http://www.slideshare.net/slideshow/embed_code/key/D94FOh5mptZIEK" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+        <p>上のスライドで出ているメタテンプレートプログラミングっていうのをほんの少しだけかじったコードがこれです。templateの特殊化という技法を使っているのですが・・・むずい。</p>
+        <pre class="brush: cpp;">
+#include &lt;random>
+template &lt;bool Con, class Then, class Else>
+struct IF;
+template &lt;class Then, class Else>
+struct IF&lt;true, Then, Else> {
+    typedef Then type;
+};
+template &lt;class Then, class Else>
+struct IF&lt;false, Then, Else> {
+    typedef Else type;
+};
+
+template&lt;typename rand_type>
+using my_uniform_distribution = typename IF&lt;
+    std::is_integral&lt;rand_type>::value, std::uniform_int_distribution&lt;rand_type>, std::uniform_real_distribution&lt;rand_type>
+>::type;
+//中略
+static_assert(std::is_arithmetic&lt;rand_type>::value == true, "'rand_type' is illegal type.");//非算術型にはコンパイルエラーを
+my_uniform_distribution&lt;rand_type> distribution;</pre>
+        <p>
+            あーめんd。なんでstatic_ifが規格に入らないんや。<br>
+            static_ifというのは、<br>
+            <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3322.pdf">N3322: A Preliminary Proposal for a Static if</a><br>
+            <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3329.pdf">N3329: Proposal: static if declaration</a><br>
+            でC++14に向けて提案され、かなり真剣に議論さいれてC++14に入りかけたが、コンパイラー実装者から強い反対にあったために結局入らなかったが、それでも諦めきれず<br>
+            <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4461.html">N4461: Static if resurrected</a><br>
+            で再度提案された機能である。<br>
+            <a href="http://cpplover.blogspot.jp/2012/01/2011-01-pre-kona-2012-mailing.html">2011-01 pre-Kona 2012 mailingの簡易レビュー | 本の虫</a><br>
+            <a href="http://cpplover.blogspot.jp/2015/07/c-2015-04-pre-lenexa.html">C++標準化委員会の文書 2015-04-pre-Lenexaのレビュー： N4460-N4469 | 本の虫</a><br>
+            ようはどうなるのかというと
+        </p>
+        <pre class="brush: cpp;" title="static_if不使用">
+template &lt;class T, class... Args> 
+enable_if_t&lt;is_constructible_v&lt;T, Args...>, unique_ptr&lt;T>> 
+make_unique(Args&amp;&amp;... args)
+{
+    return unique_ptr&lt;T>(new T(forward&lt;Args>(args)...));
+}
+
+template &lt;class T, class... Args> 
+enable_if_t&lt;!is_constructible_v&lt;T, Args...>, unique_ptr&lt;T>>
+make_unique(Args&amp;&amp;... args) 
+{
+    return unique_ptr&lt;T>(new T{forward&lt;Args>(args)...});
+}</pre>
+        <pre class="brush: cpp;" title="static_if使用">
+template &lt;class T, class... Args> 
+unique_ptr&lt;T>
+make_unique(Args&amp;&amp;... args) 
+{
+    static_if (is_constructible_v&lt;T, Args...>) {
+        return unique_ptr&lt;T>(new T(forward&lt;Args>(args)...));
+    } else {
+        return unique_ptr&lt;T>(new T{forward&lt;Args>(args)...});
+    }
+}</pre>
+        <p>すっきり。</p>
     </section>
     <section>
         <h2>C++のlValue参照</h2>

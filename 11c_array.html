@@ -171,7 +171,7 @@ char (*__countof_helper(_UNALIGNED _CountofType (&amp;_Array)[_SizeOfArray]))[_S
             この区切り一つ一つを配列の要素と言うわけですが、これに1加算すると隣の区切りが見られる、ということになります。例を見てください。
         </p>
         <pre class="brush: cpp;">int hoge[] = {5, 7, 9, 4};
-int * hoge_p = hoge;
+int* hoge_p = hoge;
 printf("sizeof(int)=%d", sizeof(int));
 printf("hoge_p..%p:%d", hoge_p, *hoge_p);
 hoge_p++;
@@ -231,7 +231,7 @@ num[i]
 i[num]</pre>
         <p>の証明もできたわけですが。</p>
         <p>ちなみに、C++にはイテレータというポインタもどきのようなものが有り、これの使い方がプログラムAにそっくりなので頭の片隅に入れておきましょう。(サンプルはC++11の機能を使っています)</p>
-        <pre class="brush: cpp;">std::vector&lt;int&gt; data{ 0, 1, 2, 3, 4 };//This usage is a thing of C++11.
+        <pre class="brush: cpp;">std::vector&lt;int&gt; data{ 0, 1, 2, 3, 4 };//C++11 or later.
 int total = 0;
 for(auto data_it = data.begin(); data_it != data.end(); data_it++) {
     total += *data_it; 

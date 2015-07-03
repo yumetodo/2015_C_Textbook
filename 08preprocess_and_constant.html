@@ -141,7 +141,7 @@ inline T_ max(T_ a, T_ b){
             <h3>#pragma onceとインクルードガード</h3>
             <p>その昔#pragma onceが使えなかった頃、ヘッダーファイルが複数読み込まれると、2重定義です、と言われコンパイルエラーになりました。この対策として</p>
             <pre class="brush: cpp;">#ifndef _INC_STDIO
-#define_INC_STDIO
+#define _INC_STDIO
 //ヘッダーファイルの中身を書く
 #endif /* _INC_STDIO */</pre>
             <p>といったことをしていました。こういう書き方をインクルードガードといいます。でもこんなの書くのはめんdいですよね？そこで生まれたのが#pragma onceです。</p>

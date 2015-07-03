@@ -57,16 +57,17 @@
             というところでしょうか。まあ、"動的"確保というだけあって、確保するサイズを実行中に決められたり、途中で大きさを変えられるわけです。<br>
             まあ使ってみましょう。
         </p>
-        <script src="http://ideone.com/e.js/Tj3sW8" type="text/javascript"></script>
-        <pre class="brush: plain;" title="実行例 (msys2 mingw32 clang++ 3.5.1)">$ ./d_array.exe
-d_arrayのアドレス:00911878
+        <script src="http://ideone.com/e.js/qXNhlI" type="text/javascript" ></script>
+        <pre class="brush: plain;" title="実行例 (msys2 mingw64 clang++ 3.6.1)">$ ./d_array.exe
+d_arrayのアドレス:00000000003E6A10
 3, 7, 4, 9,
-d_arrayのアドレス:00911878
-3, 7, 4, 9, -571263656, 54275, 9519592,
-</pre>
+d_arrayのアドレス:00000000003E7A40
+d_arrayのアドレス[300]:00000000003E7EF0
+3, 7, 4, 9, 0, 0, 0,
+4094528, 0, 4063576, 5, 0, 0, 0,</pre>
         <p>12行目のmalloc関数のイメージはこんなかんじです。</p>
         <img alt="description of memory allocation(No.1)" src="./pic/malloc_realloc1.png" class="canbas_white">
-        <p>20行目のrealloc関数のイメージはこんな感じです。必ずしも別空間に再確保するわけではないようです。実行例の場合もそうだね。</p>
+        <p>20行目のrealloc関数のイメージはこんな感じです。必ずしも別空間に再確保するわけではないようです。実行例の場合も29行目をコメントアウトしたらアドレスが変わってませんでした。</p>
         <img alt="description of memory allocation(No.2)" src="./pic/malloc_realloc2.png" class="canbas_white">
         <img alt="description of memory allocation(No.3)" src="./pic/malloc_realloc3.png" class="canbas_white">
         <img alt="description of memory allocation(No.4)" src="./pic/malloc_realloc4.png" class="canbas_white">

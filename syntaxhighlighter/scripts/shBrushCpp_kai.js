@@ -29,10 +29,11 @@
 						'explicit export extern __finally false for friend goto if inline ' +
 						'mutable naked namespace new noinline noreturn not nothrow not_eq nullptr ' +
 						'operator or or_eq private protected public register reinterpret_cast return selectany ' +
-						'sizeof static static_cast struct switch template this thread throw true ' +
+						'sizeof static static_cast static_assert　struct switch template this thread throw true ' +
 						'try __try typedef typeid typename union using uuid virtual volatile ' +
 						'while xor xor_eq signed unsigned bool char __int8 short __int16 ' + 
-						'__wchar_t wchar_t int __int32 long __int64 void float double ';
+						'__wchar_t wchar_t int __int32 long __int64 void float double ' +
+						'static_if ';//N4661
 
 		var macro = 	'errno AVSC_INLINE DEBUG NDEBUG NULL EOF　stdin stdout stderr tin tout ' +
 						'terr tlog __DATE__ __FILE__ __LINE__ __STDC__ __TIME__ __TIMESTAMP__ _ATL_VER __AVX__ ' +
@@ -61,7 +62,7 @@
 						'ATOMIC_CHAR_LOCK_FREE ATOMIC_CHAR_LOCK_FREE ATOMIC_CHAR_LOCK_FREE ATOMIC_CHAR16_T_LOCK_FREE ATOMIC_CHAR32_T_LOCK_FREE ATOMIC_WCHAR_T_LOCK_FREE ATOMIC_SHORT_LOCK_FREE ATOMIC_SHORT_LOCK_FREE ATOMIC_INT_LOCK_FREE ATOMIC_INT_LOCK_FREE ' +
 						'ATOMIC_LONG_LOCK_FREE ATOMIC_LONG_LOCK_FREE ATOMIC_LLONG_LOCK_FREE ATOMIC_LLONG_LOCK_FREE ' +
 						'_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES __GNUC__ __GNUC_MINOR__ __GNUC_PATCHLEVEL__ _countof ' + 
-						'KEY_INPUT_ESCAPE _CONST_RETURN';
+						'KEY_INPUT_ESCAPE _CONST_RETURN __ICC __clang__ __clang_major__ __clang_minor__ __bool_true_false_are_defined';
 
 		var typedefined = 'INPUT_PLUGIN_TABLE INPUT_HANDLE FILTER_DLL EXFUNC AVI_FILE_HANDLE SYS_INFO FILE_INFO FRAME_STATUS FILTER_PROC_INFO __m128 ' +
 						'__m128i __m128d __m256 __m256i __m256d dummy_handler_t au_video_output_handler_t yuv420_list func_convert_yuv420ple_i_to_yuv444p16le AVFrame ' +
@@ -138,8 +139,11 @@
 						'is_rvalue_reference is_same is_scalar is_signed is_standard_layout is_union is_unsigned is_void is_volatile make_signed ' +
 						'make_unsigned rank remove_all_extents remove_const remove_cv remove_extent remove_pointer remove_reference remove_volatile integral_constant ' +
 						'false_type true_type unordered_map unordered_multimap unordered_multiset unordered_set tuple_element tuple_size identity pair ' +
-					    'gslice gslice_array indirect_array mask_array slice valarray vector bitset numeric_limits ' +
-					    'rgb_t bignum_t uint';
+					    'gslice gslice_array indirect_array mask_array slice valarray vector bitset numeric_limits auto_ptr unique_ptr shared_ptr ' +
+					    'forward ' +
+					    'T_ T Args TYPE reference pointer limit iterator Value ' +//for Template
+					    'counter_iterator nth_loop rand_type Then Else IF my_uniform_distribution PrimitiveType status_t color_e_t myuint8_t ' +//Frequently used name
+					    'rgb_t bignum_t BIGNUM uint ';
 
 		var preprocessor_word = 'alloc_text auto_inline bss_seg check_stack code_seg comment component conform const_seg data_seg deprecated detect_mismatch ' +
 						'fenv_access float_control fp_contract function hdrstop include_alias init_seg inline_depth inline_recursion intrinsic ' +
