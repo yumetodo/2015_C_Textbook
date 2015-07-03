@@ -90,7 +90,7 @@
 						'__finddata64_t __wfinddata64_t _FPIEEE_RECORD fpos_t _HEAPINFO _HFILE lconv intptr_t jmp_buf mbstate_t ' +
 						'_off_t _onexit_t _PNH ptrdiff_t _purecall_handler sig_atomic_t size_t _stat __stat64 _stati64 ' +
 						'terminate_function time_t __time64_t _timeb __timeb64 tm uintptr_t _utimbuf va_list ' +
-						'wctrans_t wctype_t wint_t int8_t int16_t int32_t int64_t uint8_t uint16_t uint32_t uint64_t' +
+						'wctrans_t wctype_t wint_t int8_t int16_t int32_t int64_t uint8_t uint16_t uint32_t uint64_t ' +
 						'int_least8_t int_least16_t int_least32_t int_least64_t uint_least8_t uint_least16_t uint_least32_t uint_least64_t ' +
 						'int_fast8_t int_fast16_t int_fast32_t int_fast64_t uint_fast8_t uint_fast16_t uint_fast32_t uint_fast64_t ' +
 						'intmax_t uintmax_t ' +
