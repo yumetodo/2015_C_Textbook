@@ -158,7 +158,7 @@
 			{ regex: new RegExp(this.getKeywords(macro), 'gm'),			css: 'color2 bold' },
 			{ regex: new RegExp(this.getKeywords(reserved), 'gm'),		css: 'keyword bold' }
 			];
-	};
+	}
 
 	Brush.prototype	= new SyntaxHighlighter.Highlighter();
 	Brush.aliases	= ['cpp', 'c'];

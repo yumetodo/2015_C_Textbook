@@ -3,7 +3,7 @@
 #include<limits.h>//in gcc
 #include<errno.h>//in gcc
 
-#ifndef _cplusplus
+#ifndef __cplusplus
 #define nullptr NULL
 #endif
 #if !defined (_countof)

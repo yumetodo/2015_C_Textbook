@@ -78,7 +78,8 @@ int putchar(int c );</pre>
             もちろんscanfにはそれなりの良さがあるわけですが、だとしても3番目のように一度読み込んでからsscanfしますね。
         </p>
         <p>get_integer_num関数については簡単に説明すると、まず、fgets関数で文字列を受け、文字列をstrtol関数で数値に変換しています。</p>
-        <p>ちなみにC++だともっとスマートです。</p>
+        <p>というわけでポインターと文字列について何一つ説明していないのにばんばん使っていますが、すみません。すぐに解説します。</p>
+        <p>ちなみにC++だともっとスマートです。例外処理を考えなければね。</p>
         <pre class="brush: cpp;">#include &lt;iostrem&gt;
 #include &lt;string&gt;
 int main(){
@@ -100,7 +101,40 @@ int main(){
     
     return 0;
 }</pre>
-        <p>というわけでポインターと文字列について何一つ説明していないのにばんばん使っていますが、すみません。すぐに解説します。</p>
+        <p>
+            これだと例外が発生した時にプログラムの外に例外が飛んでしまいます。それでいいこともあるかもしれませんが。<br>
+            また例外を投げる可能性のある関数の存在はコンパイラーの最適化の妨げになることがあります。<br>
+            というわけで例外処理をしたバージョンを書いておきます。エラー時は再帰します。関数の引数の後にnoexceptとあるのは、例外を投げませんよ、とコンパイラに教えるものです。・・・例外やら再帰やらナンノコッチャだと思いますが20章くらいで解説します、きっと。
+        </p>
+        <pre class="brush: cpp; highlight: [12, 17]">
+#include &lt;iostream>
+#include &lt;limits>
+#include &lt;exception>//gcc or clang
+#include &lt;stdexcept>//gcc or clang
+template&lt;typename T_> using limit = std::numeric_limits&lt;T_>;//create new type. C++11:alias declaration
+template&lt;typename T_> T_ input(const char* echo_str, const T_ max = limit&lt;T_>::max(), const T_ min = limit&lt;T_>::lowest()) noexcept {
+    static_assert(std::is_arithmetic&lt;T_>::value, "unexpected type T_");//T_が整数か浮動小数点型でないならばコンパイルエラーを出す
+    T_ buf;
+    try {
+        if (nullptr == echo_str) throw std::invalid_argument("echo_str is unexpected input");//エラー対策
+        if ('\0' != echo_str[0]) std::cout &lt;&lt; echo_str &lt;&lt; std::endl;//文字列が空じゃなければ出力
+        std::cin >> buf;//入力を受ける
+        if (max &lt; buf || buf &lt; min) throw std::out_of_range("input is iligal");//範囲チェック
+    }
+    catch (std::exception&amp; er) {
+        std::cerr &lt;&lt; er.what() &lt;&lt; std::endl;//エラーメッセージ表示
+        return input("再入力してください。", max, min);//エラー時は再帰する方向で
+    }
+    return buf;
+}
+int main(){
+    const auto input1 = input("数字を1～50の間で入力してください", 50, 1);//input1はint型
+    const auto input2 = input("数字を1～50の間で入力してください", 50U, 1U);//input2はunsigned int型
+    const auto input3 = input&lt;unsigned long long>("数字を1～50の間で入力してください", 1200, 3);//input3はunsigned long long型
+    const auto input4 = input&lt;unsigned short>("数字を入力してください");//input4はunsigned short型
+    return 0;
+}</pre>
+        <p>12行目で入力を受け、エラー時は17行目で再帰します。</p>
         <article>
             <h3>練習問題1</h3>
             <p>以下のソースコードは標準入力から数値を受け取り、指定範囲内でない数値に対しては再度入力を促すプログラムである。</p>

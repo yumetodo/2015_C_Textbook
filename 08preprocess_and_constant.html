@@ -28,7 +28,11 @@
         <h2>プリプロセッサー</h2>
         <p>
             お待たせしました。ようやくプリプロセッサーのお話です。<br>
-            はい、#includeとかなにげに書いてきたものが何なのかわかります。
+            はい、#includeとかなにげに書いてきたものが何なのかわかります。<br>
+            はじめに言うと、今C++の規格はこのプリプロセッサのしごとをなるべくなくそうという方向になっています。なぜならばプリプロセッサには型の概念がないからです。<br>
+            このことにより思わぬ副作用を招くことがあり、またその記法の特殊さから<b>いずれ消え去る運命にある</b>ものと思われます。<br>
+            最もよく使う「#include」すら廃止しようという提案がC++に出されています(通るかは知らん) <br>
+            実際コンパイラー間の差異を吸収するためにつかう#defineとヘッダー読み込みに使う#include、ヘッダー二重読み込み防止の#pragma once以外は使う機会がないはずです。
         </p>
         <ul>
             <li>#include</li>
@@ -49,7 +53,7 @@
         <p>
             これだけ種類が有ります。解説するのは#includeと#define、#pragma once、#pragma commentにとどめます。他は<br>
             <a href="http://itref.fc2web.com/c/preprocessor.html">http://itref.fc2web.com/c/preprocessor.html</a><br>
-            を参照してください。なお、#if/#else/#ifdef/#ifndefはこれまでもこれからもしれっと使います。
+            を参照してください。とてもわかり易いので。なお、#if/#else/#ifdef/#ifndefはこれまでもこれからもしれっと使います。
         </p>
         <section>
             <h3>#include</h3>
@@ -92,7 +96,7 @@ inline T_ max(T_ a, T_ b){
             <pre class="brush: plain">-lsetupapi -lhid -lwinmm</pre>
             <p>つけるわけですが・・・ってそんな話はよくって、対応してない機能をコンパイラーに渡すと当然コンパイルエラーになるのでこのようにgccコンパイラーでコンパイルする時を考えてこのように書いています。</p>
             <p>すでに察しているかもしれませんが何も書かなくてもいくつかのマクロがdefineされています。例えばVCなら_MSC_VER、gccなら__GNUC__,__GNUC_MINOR__などがその代表的なものになります。</p>
-            <pre class="brush: cpp; first-line: 3;" title="arikitari.h">#if (defined(_MSC_VER) && _MSC_VER > 1000) || (defined(__clang__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ > 2))) ||(defined(__ICC) && __ICC > 1000) ||defined (__GNUC__) && !defined(__ICC) && !defined(__clang__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
+            <pre class="brush: cpp; first-line: 3;" title="arikitari.h">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))
 #pragma once
 #endif</pre>
             <p>
@@ -244,7 +248,10 @@ static BOOL create_adj_exdata(FILTER *fp, LOGO_HEADER *adjdata, const LOGO_HEADE
             <p>ところで<code>#define</code>マクロにはいくつかの問題点があり、コンパイラー間の差異やターゲット環境の差異を吸収する時を除き使うことはありません。当然定数として使うこともありません。では問題点を見て行きましょう。</p>
             <section>
                 <h4>型がないことに起因する冗長さ</h4>
-                <p>verに型はありません。C言語ではそれでもいいかもしれませんが、C++ではオーバーロードという、変数の型によって同名の関数とかとかを呼び分ける機能があるのでこれでは困ります。</p>
+                <p>
+                    verに型はありません。C++ではオーバーロードという、変数の型によって同名の関数とかとかを呼び分ける機能があるのでこれでは困ります。<br>
+                    C言語でもC11で型判定マクロが導入されたので対岸の火事ではありません。
+                </p>
                 <pre class="brush: cpp;">//int16_t型はshort型、int32_t はint型、int64_t型はlong long型と仮定する
 int64_t add(int32_t a, int32_t b);
 int32_t add(int16_t a, int16_t b);
@@ -330,9 +337,7 @@ int main(void){
         <section>
             <h3>constexpr</h3>
             <p>これはC++11で導入された記法でコンパイル時定数を作るために導入されました。既に何度か使用していますが改めて。書き方は</p>
-            <pre class="brush: cpp;">constexpr unsigned long tmp = 32;
-static_assert(2147483647L &lt;= std::numeric_limits&lt;int&gt;::max(), “”); 
-</pre>
+            <pre class="brush: cpp;">constexpr unsigned long tmp = 32;</pre>
             <p>
                 です。すっきり。コンパイル時定数なのでこの後習う配列や、template、static_assartにも使用できます。
                 が、C++で定数を返す関数もこれに対応しているはずなんですけど、Visual Studio 2013 Novenber 2013 CTPでは対応しない。VC2015使えってことね。
