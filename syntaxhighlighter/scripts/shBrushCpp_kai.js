@@ -141,7 +141,7 @@
 						'false_type true_type unordered_map unordered_multimap unordered_multiset unordered_set tuple_element tuple_size identity pair ' +
 					    'gslice gslice_array indirect_array mask_array slice valarray vector bitset numeric_limits auto_ptr unique_ptr shared_ptr ' +
 					    'forward ' +
-					    'T_ T Args TYPE reference pointer limit iterator Value ' +//for Template
+					    'T_ T Args TYPE reference pointer limit iterator Value type ' +//for Template
 					    'counter_iterator nth_loop rand_type Then Else IF my_uniform_distribution PrimitiveType status_t color_e_t myuint8_t ' +//Frequently used name
 					    'rgb_t bignum_t BIGNUM uint ';
 

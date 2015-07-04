@@ -122,6 +122,7 @@ inline T_ max(T_ a, T_ b){
         <p>上のスライドで出ているメタテンプレートプログラミングっていうのをほんの少しだけかじったコードがこれです。templateの特殊化という技法を使っているのですが・・・むずい。</p>
         <pre class="brush: cpp;">
 #include &lt;random>
+#include &lt;type_traits>
 template &lt;bool Con, class Then, class Else>
 struct IF;
 template &lt;class Then, class Else>
