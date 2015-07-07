@@ -97,6 +97,15 @@ size_t my_strlen(const char *str){
         </section>
     </section>
     <section>
+        <h2>strcmp</h2>
+        <p>
+            文字列を比較する関数です。第1引数の文字列のと第2引数の文字列を1文字づつ比較していきます。<br>
+            文字が一致しなくなるかnull文字に遭遇するとループを終了し値をかえします。<br>
+            そのときその文字コードが第一引数のほうが大きかったら正の値を、小さかったら負の値を、両方同じなら0を返します。<br>
+            正の値とは具体的に何かというと実装依存ですが、MSVCもgccもclangも1を返すようです。負の値は同様に-1のようです。
+        </p>
+    </section>
+    <section>
         <h2>strstr</h2>
         <p>文字列を検索する関数です。見つかるとその先頭のポインターを返し、見つからない場合はNULLポインターを返します。プロトタイプ宣言を見てみましょう。</p>
         <pre class="brush: cpp;" title="プロトタイプ宣言">char *strstr(const char *str, const char *strSearch); // C only

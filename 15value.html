@@ -91,45 +91,7 @@ int main()
         </blockquote>
         <p>もう説明やめていいかな・・・(なにも説明してないけど)？ようはlvalueは明確に実体があって、rvalueは一時的なものなんだよ。</p>
         <p>ただこの後説明するreferenceが絡むとすこしわかりにくくなります。例を見てください。</p>
-        <pre class="brush: cpp;">
-#include &lt;iostrream>
-#include &lt;cmath>
-class test_class
-{
-public:
-    test_class(double height, double weight){
-        this->height = height;
-        this->weight = weight;
-    }
-    int&amp; get_weight(){
-        return this->weight;
-    }
-    const int&amp; get_weight() const {
-        return this->weight;
-    }
-    int&amp; get_height(){
-        return this->height;
-    }
-    const int&amp; get_height() const {
-        return this->height;
-    }
-private:
-    double weight;
-    double height;
-};
-inline double calc_bmi(double height, double weight) noexcept{
-    return weight / pow(height / 100, 2.0);
-}
-int main(){
-    test_class hoge1(170.3, 56.4);
-    const test_class hoge2(158.4, 48.7);
-    hoge1.get_weight() = 45;//OK. これは変更可能なlvalue
-    hoge2.get_weight() = 38;//error. これは変更不可能なlvalue
-    const auto re = calc_bmi(hoge1.get_height(), hoge1.get_weight());//OK. 変数reはlvalue
-    calc_bmi(hoge1.get_height(), hoge1.get_weight()) = 7;//error. rvalueに代入はできない
-
-    return 0;
-}</pre>
+        <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/lvalue_and_rvalue_with_class/lvalue_and_rvalue_with_class/Source.cpp"></script>
         <p>
             もっと詳しく知りたい人は<br>
             何が lvalue で何が rvalue なのか - iorateの日記<br>

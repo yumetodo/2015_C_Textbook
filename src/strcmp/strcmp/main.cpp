@@ -15,7 +15,7 @@ void strstr_and_do(const char* str1, const char* str2, strcmp_t strcomare, const
 }
 int main(void){
 	auto str1 = "arikitari_na_world!";
-	const char* str2[] = { "arikitarina_world!", "arikitari_na_world", "arikitari_na_world!", "arikitari_na_world!!" };
+	const char* str2[] = { "akrikitariahanai", "arikitari_na_world", "arikitari_na_world!", "arikitari_na_world!!", "arikitari_na_world_" };
 
 	for (auto i : str2){
 		strstr_and_do(str1, i, strcmp, "string.hのstrcmp関数");

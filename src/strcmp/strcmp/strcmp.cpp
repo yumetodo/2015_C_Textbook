@@ -14,6 +14,6 @@ int my_strcmp(const char *string1, const char *string2){
 		errno = EINVAL;
 		return -2;
 	}
-	//MSVCの実装では1,0,-1のいずれかを返す
+	//MSVC, gcc, clangの実装では1,0,-1のいずれかを返す
 	return (string1[i] == string2[i]) ? 0 : (string1[i] > string2[i]) ? 1 : -1;//引き算にするとアンダーフローの危険がある
 }
