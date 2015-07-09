@@ -25,90 +25,48 @@
         </ul>
     </nav>
     <section>
-        <h2>lValueとrvalue</h2>
-        <p>一度ポインタから話が離れます。lValueとrValueです。左辺値と右辺値という風に訳されることが多いですが(JISのC++規格書日本語訳版がそう訳してる)、誤解を招くのでlValueとrValueと呼ぶことにします。</p>
-        <p>でこれらが何者か？ですが、ちょっと幾つか引用したいと思います(書くのが面倒だったわけじゃないんだからねっ！)。</p>
-        <blockquote cite="http://cpplover.blogspot.jp/2009/11/rvalue-reference_23.html">
-            <p>
-                rvalue reference 完全解説 | 本の虫<br>
-                <a href="http://cpplover.blogspot.jp/2009/11/rvalue-reference_23.html">http://cpplover.blogspot.jp/2009/11/rvalue-reference_23.html</a>
-            </p>
-            <p>
-                Cの時代では、lvalueとrvalueの違いは、代入演算子の左側か右側かという違いだけであった。つまり、left hand value, right hand valueの略である。<br>
-                従って、訳語も、左辺値、右辺値であった。C++においては、これはもはや正しくはない。従って、右辺値、左辺値というのも、誤訳である。<br>
-                それ故に、ここでは、これ以上、左辺値、右辺値という名称を使用しない。
-            </p>
-            <p><b>誤解を恐れずにいえば、lvalueとは、明示的に実体のある、名前付きのオブジェクトであり、rvalueとは、一時的に生成される無名のオブジェクトである。</b></p>
-            <pre class="brush: cpp;">struct X{} ;
-int f() { return 0 ; }
-int main()
-{
-　　int i = 0 ;
-　　i ;　　 // lvalue
-　　0 ;　　 // rvalue
-　　X x ;
-　　x ;　　 // lvalue
-　　X() ;　 // rvalue
-　　f() ;　 // rvalue
-}</pre>
-            <p>上記のコードを読めば、lvalueとrvalueの違いが、なんとなく分かってくれる事と思う。lvalueはrvalueに変換できるが、その逆、rvalueをlvalueに変換することは出来ない。 </p>
-        </blockquote>
-        <blockquote cite="https://msdn.microsoft.com/ja-jp/library/f90831hc.aspx">
-            <p>
-                左辺値と右辺値 | MSDN<br>
-                <a href="https://msdn.microsoft.com/ja-jp/library/f90831hc.aspx">https://msdn.microsoft.com/ja-jp/library/f90831hc.aspx</a>
-            </p>
-            <p>
-                すべての C++ の式は左辺値または右辺値です。 左辺値は、1 つの式を超えて保持するオブジェクトを参照します。 <br>
-                lvalue は、名前を持つオブジェクトと考えることができます。 変更不可能な (const) 変数を含めて、すべての変数は左辺値です。 <br>
-                右辺値は、それを使用する式を超えて保持されない一時的な値です。 lvalues と rvalues の相違点をより詳しく理解するために、次の例について考えてみましょう。
-            </p>
-            <pre class="brush: cpp;">#include &lt;iostream&gt;
-using namespace std;
-int main()
-{
-   int x = 3 + 4;
-   cout &lt;&lt; x &lt;&lt; endl;
-}</pre>
-            <p>この例では、x は、これを定義する式の外側で保持されるので、左辺値です。 式 3 + 4 は右辺値です。定義した式を超えては存在しない一時的な値と評価されるためです。 </p>
-            <p>次の例は、左辺値と右辺値の正しい使用方法と間違った使用方法のいくつかを示しています。</p>
-            <pre class="brush: cpp;">int main()
-{
-   int i, j, *p;
-   // Correct usage: the variable i is an lvalue.
-   i = 7;
-   // Incorrect usage: The left operand must be an lvalue (C2106).
-   7 = i; // C2106
-   j * 4 = 7; // C2106
-   // Correct usage: the dereferenced pointer is an lvalue.
-   *p = i;
-   const int ci = 7;
-   // Incorrect usage: the variable is a non-modifiable lvalue (C3892).
-   ci = 9; // C3892
-   // Correct usage: the conditional operator returns an lvalue.
-   ((i &lt; 3) ? i : j) = 7;
-}</pre>
-        </blockquote>
-        <p>もう説明やめていいかな・・・(なにも説明してないけど)？ようはlvalueは明確に実体があって、rvalueは一時的なものなんだよ。</p>
-        <p>ただこの後説明するreferenceが絡むとすこしわかりにくくなります。例を見てください。</p>
-        <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/lvalue_and_rvalue_with_class/lvalue_and_rvalue_with_class/Source.cpp"></script>
-        <p>
-            もっと詳しく知りたい人は<br>
-            何が lvalue で何が rvalue なのか - iorateの日記<br>
-            <a href="http://d.hatena.ne.jp/iorate/20111207/1323280542">http://d.hatena.ne.jp/iorate/20111207/1323280542</a><br>
-            を見てください。
-        </p>
-    </section>
-    <section>
         <h2>template入門</h2>
-        <p>はい、入門です。こんなのまじめに解説したら本が一冊書けます。まあすでに出てきましたが。</p>
-        <pre class="brush: cpp;">template&lt;typename T_&gt;
+        <p>はい、入門です。こんなのまじめに解説したら本が一冊書けます。まあすでに出てきましたが。まずは定義から。</p>
+        <blockquote>
+            <a>テンプレートとは、コンパイル時に型や値を引数として渡す機能のことである。</a><br>
+            <a href="http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#temp">14 テンプレート(Templates) | C++11の文法と機能(C++11: Syntax and Feature)</a>
+        </blockquote>
+        <p>分かった・・・？いい？<b>コンパイル時だよ？コンパイル時。</b>そこ大事だからね。</p>
+        <pre class="brush: cpp;">
+#include &lt;iostream>
+template&lt;typename T_&gt;
 inline T_ max(T_ a, T_ b){
     return (a > b)? a : b;
+}
+int main(){
+    const auto hoge1 = max(54, 23);//hoge1はint型
+    const auto hoge2 = max&lt;unsigned int>(54, 23);//hoge2はunsigned int型
+
+    std::cout &lt;&lt; hoge1 &lt;&lt; hoge2 &lt;&lt; std::endl;
+    return 0;
 }</pre>
         <p>みれば分かるように最大値を返す関数ですが、型が「T_」になってます。どういうことだってばよ？</p>
         <p>これまで最大値を求める関数を作ろうと思ったら全部の型ごとに関数を書く必要が有りました。事実C言語のmath.hを見ると同じような機能の型が違う関数が乱造されています。んなもんいちいち覚えてらんないですよね？</p>
         <p>そういった背景からC++では関数をオーバーロード出来るようになりました。つまり、<b>引数の型が異なれば</b>同名の関数をいくつでも作れるようになりました。</p>
+        <p>
+            2行目を見てください。templateから始まる部分がありますが、これがtemplateの仮引数と呼ばれるところです。関数にも仮引数があったけどあれに似てます。<br>
+            ただし指定できるのは型名(とコンパイル時定数)のみです。<br>
+            例えばこの場合新たにT_という型をでっち上げているわけですが、この時点では実際の型はわかりません。若干違いますが方の異なる関数が無限に存在するイメージで差し支えありません。<br>
+        </p>
+        <p>
+            7行目を見てください。これは<a href="http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#temp.expl.spec">テンプレートの実引数推定(Template argument deduction)</a>という機能を使っています。<br>
+            できるだけ普通のプログラマーの常識に合わせるために、とても複雑になっているのですが、逆に言えば、<br>
+            <b>ノリと勘と気分となんとなくでどーにかなる</b>ということです。<br>
+            ようはtemplate関数の引数に書いた型に推論されるわけで。まあみればわかるでしょ。
+        </p>
+        <p>
+            8行目は<a href="http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#temp.fct.spec">明示的なテンプレート実引数指定(explicit template argument specification)</a>と呼ばれていて<br>
+            かっこ良く名前をつけましたがこの場合ならようはT_の型はunsigned intだよ～と教えているだけです。
+        </p>
+        <p>
+            7, 8行目のようにtemplateを使ったもの(今回はtempalte関数)を実際に読んでコンパイルされると、先ほどの「無限に存在する」状態の例えで言うならどれか特定のものに定まります。<br>
+            もちろん実際に関数としてコンパイルされるのは呼び出されているものだけです。
+        </p>
         <p>関数のオーバーロードをするのにもっとも楽なのはtemplateを使って上のように書く方法です。コンパイラーはコンパイル時にどの型の関数が必要かわかるのでコンパイラーが型だけ違えた関数を勝手に作ってくれます。便利。</p>
         <p>まあ関数のオーバーロードよりは、クラスのオーバーロードで使うことのほうが多いんですけどね・・・、まいっか。</p>
         <p>ちなみにこの関数、もしchar*型の変数が引数になったらどうなるでしょうか？多分意図した動作では無いですよね？気をつけないと後述するスタックオーバーフローとかが起きかねないので注意です。</p>

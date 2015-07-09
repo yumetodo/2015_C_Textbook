@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"s",
+				"src/"
+			],
+			[
+				"ti",
+				"title=〔attribute〕"
+			],
+			[
+				"hoge",
+				"hoge1"
+			],
+			[
+				"get",
+				"get_height"
+			],
+			[
+				"h",
+				"height"
+			],
+			[
 				"cas",
 				"case4_input"
 			],
@@ -24,10 +44,6 @@
 				"case4_inout"
 			],
 			[
-				"get",
-				"getdate"
-			],
-			[
 				"col",
 				"color_arr〔variable〕"
 			],
@@ -38,10 +54,6 @@
 			[
 				"p",
 				"push〔function〕"
-			],
-			[
-				"s",
-				"set_y"
 			],
 			[
 				"al",
@@ -328,10 +340,6 @@
 				"article	Tag"
 			],
 			[
-				"ti",
-				"title	Attr"
-			],
-			[
 				"se",
 				"section	Tag"
 			],
@@ -344,91 +352,59 @@
 	"buffers":
 	[
 		{
-			"contents": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n    <meta charset=\"utf-8\" />\n    <title>第19章 ～文字列操作～</title>\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css\">\n    <link rel=\"stylesheet\" href=\"./css/style.css\">\n    <script src=\"./syntaxhighlighter/scripts/shCore.js\" type=\"text/javascript\"></script>\n    <script src=\"./syntaxhighlighter/scripts/shBrushPlain.js\" type=\"text/javascript\"></script>\n    <script src=\"./syntaxhighlighter/scripts/shBrushCpp_kai.js\" type=\"text/javascript\"></script>\n    <link href=\"./syntaxhighlighter/styles/shCore.css\" rel=\"stylesheet\" type=\"text/css\">\n    <link href=\"./syntaxhighlighter/styles/shThemeMidnight_likeVS.css\" rel=\"stylesheet\" type=\"text/css\">\n    <script src=\"./scripts/common.js\" type=\"text/javascript\"></script>\n    <script type=\"text/javascript\">\n        SyntaxHighlighter.all();\n    </script>\n</head>\n<body>\n    <h1>第19章 ～文字列操作～</h1>\n    <nav class=\"top\">\n        <ul>\n            <li><a href=\"./18c_char_str_base.html\" title=\"前頁\">prev</a></li>\n            <li><a href=\"index.html\" title=\"目次\">main</a></li>\n            <li><a href=\"./\" title=\"次頁\">next</a></li>\n        </ul>\n    </nav>\n    <section>\n        <h2>初めに</h2>\n        <p>\n            C言語最難関の文字列操作です。ひたすら気を使わないといけないことが多い、<b>心折設計</b>となっております。<br>\n            ここでは、Cでの文字列操作の難しさを苦しみつつ体感していただきつつ、C++のSTL、std::stringの便利さを痛感していただければ、と思います。\n        </p>\n    </section>\n    <section>\n        <h2>strlen</h2>\n        <p>文字列の長さを求める関数です。といってもマルチバイト文字は考慮しないのでNULL文字を除くbyte数を求めることになります。プロトタイプ宣言を見てみましょう。</p>\n        <pre class=\"brush: cpp;\" title=\"プロトタイプ宣言\">size_t strlen(const char *str);</pre>\n        <p>使用例を見ましょう。</p>\n        <pre class=\"brush: cpp;\" title=\"main.cpp\">#include &lt;iostream>\n#include &lt;cstring>\nvoid strlen_and_do(const char* str, auto (*getstrlen)(const char*) -> size_t, const char* message){\n    std::cout &lt;&lt; message &lt;&lt; \"を呼び出します\" &lt;&lt; std::endl;\n    const auto re = getstrlen(str);\n    if (0 == re){\n        std::cout &lt;&lt; \"エラーなんだぜ\" &lt;&lt; std::endl;\n    }\n    else{\n        std::cout &lt;&lt; re &lt;&lt; \"文字だよ\" &lt;&lt; std::endl;\n    }\n}\nint main(void){\n    auto str = \"arikitari_na_world!\";\n\n    std::cout &lt;&lt; \"base_str : \" &lt;&lt; str &lt;&lt; std::endl;\n\n    strlen_and_do(str, strlen, \"string.hのstrlen関数\");\n    return 0;\n}</pre>\n        <p>では、このstrlen関数を自作してみましょう。まあnull文字が出るまでfor回すだけだから楽勝だよね？</p>\n        <pre class=\"brush: cpp;\" title=\"strlen.h\">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))\n#pragma once\n#endif\n#ifndef _INC_MY_STRLEN_H\n#define _INC_MY_STRLEN_H\n#include &lt;cstddef>\nsize_t my_strlen(const char *str);\n#endif\n</pre>\n        <p>これをstrlen.hとかしてさっきのmain関数のあるcppと自作する関数の定義を書くcppでincludeしてください。つまりmainのあるcppは</p>\n        <pre class=\"brush: cpp;\" title=\"main.cpp\">#include &lt;iostream>\n#include &lt;cstring>\n#include \"strlen.h\"</pre>\n        <p>中略</p>\n        <pre class=\"brush: cpp; first-line: 14\">int main(void){\n    auto str = \"arikitari_na_world!\";\n\n    std::cout &lt;&lt; \"base_str : \" &lt;&lt; str &lt;&lt; std::endl;\n\n    strlen_and_do(str, strlen, \"string.hのstrlen関数\");\n    strlen_and_do(str, my_strlen, \"strlen.hのmy_strlen関数\");\n    return 0;\n}</pre>\n        <p>な感じ</p>\n        <form><input type=\"button\" value=\"答えを 表示/非表示\" onclick=\"change_answer_state('my_strlen')\"></form>\n        <section id=\"my_strlen\" style=\"display: none;\">\n            <h4>回答</h4>\n            <pre class=\"brush: cpp;\">#include \"strlen.h\"\n#include &lt;limits>\nsize_t my_strlen(const char *str){\n    if (nullptr == str) return 0;\n    const auto search_limits = std::numeric_limits&lt;size_t>::max();//無限ループ防止\n    size_t len;\n    for (len = 0; search_limits > len &amp;&amp; '\\0' != str[len]; len++);\n    return (search_limits == len) ? 0 : len;\n}\n</pre>\n        </section>\n    </section>\n    <section>\n        <h2>strstr</h2>\n        <p>文字列を検索する関数です。見つかるとその先頭のポインターを返し、見つからない場合はNULLポインターを返します。プロトタイプ宣言を見てみましょう。</p>\n        <pre class=\"brush: cpp;\" title=\"プロトタイプ宣言\">char *strstr(const char *str, const char *strSearch); // C only\nchar *strstr(char *str, const char *strSearch); // C++ only\nconst char *strstr(const char *str, const char *strSearch); // C++ only</pre>\n        <p>\n            CとC++で違うのはCとC++のconstの扱いのせいでしょうね。前に話したと思いますが。使用例を見ましょう。<br>\n            _CONST_RETURNってのは上のプロトタイプ宣言で「C only」とか「C++ only」とか書いてありましたが、それです。<br>\n            my_strstrってのはこれから作ってもらう関数名なので作る時実験したい場合は3, 31行目のコメントアウトを外してみてください。\n        </p>\n        <pre class=\"brush: cpp;\" title=\"main.cpp\">#include &lt;iostream>\n#include &lt;cstring>\n//#include \"strstr.h\"\n#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.\n#ifdef __cplusplus\n#define _CONST_RETURN  const\n#define _CRT_CONST_CORRECT_OVERLOADS\n#else  /* __cplusplus */\n#define _CONST_RETURN\n#endif  /* __cplusplus */\n#endif  /* _CONST_RETURN */\nusing strstr_t = _CONST_RETURN char*(*)(const char*, const char*);\nvoid strstr_and_do(const char* str, const char* search_key, strstr_t strsearch, const char* message){\n    std::cout &lt;&lt; message &lt;&lt; \"を呼び出します\" &lt;&lt; std::endl;\n    auto re = strsearch(str, search_key);\n    if (nullptr == re){\n        std::cout &lt;&lt; \"見つからなかったんだぜ\" &lt;&lt; std::endl;\n    }\n    else{\n        std::cout &lt;&lt; (re - str) + 1 &lt;&lt; \"番目で見つかったよ\" &lt;&lt; std::endl;\n    }\n}\nint main(void){\n    auto str = \"arikitari_na_world!\";\n    auto search_key = \"world\";\n\n    std::cout &lt;&lt; \"base_str : \" &lt;&lt; str &lt;&lt; std::endl;\n    std::cout &lt;&lt; \"search_key : \" &lt;&lt; search_key &lt;&lt; std::endl;\n\n    strstr_and_do(str, search_key, strstr, \"string.hのstrstr関数\");\n    //strstr_and_do(str, search_key, my_strstr, \"strstr.hのmy_strstr関数\");\n    return 0;\n}</pre>\n        <p>さて、この関数を作ってみましょう。forの2重ループを組むのが一番早いと思います。</p>\n        <blockquote cite=\"http://www.cplusplus.com/reference/cstring/strstr/\">\n            <a href=\"http://www.cplusplus.com/reference/cstring/strstr/\">strstr - C++ Reference</a><br>\n            A pointer to the first occurrence in str1 of the entire sequence of characters specified in str2, or a null pointer if the sequence is not present in str1.\n        </blockquote>\n        <blockquote cite=\"https://msdn.microsoft.com/ja-jp/library/z9da80kz.aspx\">\n            <a href=\"https://msdn.microsoft.com/ja-jp/library/z9da80kz.aspx\">strstr、wcsstr、_mbsstr、_mbsstr_l | MSDN</a><br>\n             Returns a pointer to the first occurrence of strSearch in str, or NULL if strSearch does not appear in str. If strSearch points to a string of zero length, the function returns str.\n        </blockquote>\n        <p>第2引数が空の文字列(=0番目の要素が'\\0')のときは第1引数をそのまま帰す必要がある点に注意してください。また使用例の4-11行目、_CONST_RETURNについての部分も書かないとダメです。</p>\n        <form><input type=\"button\" value=\"答えを 表示/非表示\" onclick=\"change_answer_state('my_strstr')\"></form>\n        <section id=\"my_strstr\" style=\"display: none;\">\n            <h4>回答</h4>\n            <pre class=\"brush: cpp; highlight:[18, 23, 27];\" title=\"strstr.cpp\">#include \"strstr.h\"\n#include &lt;limits>\n#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.\n#ifdef __cplusplus\n#define _CONST_RETURN  const\n#define _CRT_CONST_CORRECT_OVERLOADS\n#else  /* __cplusplus */\n#define _CONST_RETURN\n#endif  /* __cplusplus */\n#endif  /* _CONST_RETURN */\n_CONST_RETURN char *my_strstr(const char *str, const char *strSearch){\n    if (nullptr == str || nullptr == strSearch) return nullptr;\n    if ('\\0' == strSearch[0]) return str;\n    size_t i, j, k;\n    const auto search_lim = std::numeric_limits&lt;size_t>::max();//無限ループ防止\n    for (\n        str_is_not_terminate = true, i = 0, j= 0, k = 0;\n        search_lim != i &amp;&amp; '\\0' != str[k] &amp;&amp; '\\0' != str[i] &amp;&amp; '\\0' != strSearch[j];//正規のbreak条件は'\\0' == strSearch[j]\n        ++i\n    ){\n        for (\n            j = 0, k = i;\n            search_lim - 1 != k &amp;&amp; search_lim != j &amp;&amp; '\\0' != str[k] &amp;&amp; '\\0' != strSearch[j] &amp;&amp; str[k] == strSearch[j];\n            ++j, ++k\n        );\n    }\n    return ('\\0' != strSearch[j]) ? nullptr : &amp;str[i - j - 1];//この時必ずi > jとなる。さもなくばreturnはnullptr\n}</pre>\n            <p>\n                18, 23, 27行目に注目しながら読んでください。strの1文字目とstrSearchの1文字目が一致するかを調べ、しなければstrの2文字目とstrSearchの1文字目と言った具合に線形探索していきます。<br>\n                見つかるより先にstrが'\\0'と24行目で判定されたら、18行目のループも抜けることになります。<br>\n                見つかった場合23行目の段階で条件式「'\\0' != strSearch[j]」はfalseになるので「&amp;str[i - j - 1]」を返します。-1はさっき言ったようにi++されるからです。\n            </p>\n            <p>12, 13行目についてですが、これを逆にしてはいけません。nullポインターの実体って、あなた、それどこですか？</p>\n            <p>俗に力任せ法とか言われる方法ですが、別途配列を持たなければならないBM法やKMP法よりはL1キャッシュを活用しやすいはずなので、ポインタ減算が発生することを差し引いてもstrSearchが十分に短い文字列の場合、十分な早さで検索できます。BM法はひたすらポインタ減算するので論外ですし、KMP法はstrSearch内が同じ文字列の繰り返しのような特殊な場合以外では先にindexを構築する分速度面で不利になります。</p>\n        </section>\n    </section>\n    <nav class=\"bottom\">\n        <ul>\n            <li><a href=\"./18c_char_str_base.html\" title=\"前頁\">prev</a></li>\n            <li><a href=\"index.html\" title=\"目次\">main</a></li>\n            <li><a href=\"./\" title=\"次頁\">next</a></li>\n        </ul>\n    </nav>\n</body>\n</html>",
+			"contents": "arikitari",
 			"file": "19str_manipulate.html",
-			"file_size": 11738,
-			"file_write_time": 130801934412012862,
+			"file_size": 12572,
+			"file_write_time": 130808849578061042,
 			"settings":
 			{
-				"buffer_size": 9281,
+				"buffer_size": 9733,
 				"line_ending": "Windows",
 				"scratch": true
 			}
 		},
 		{
-			"file": "02variable.html",
+			"file": "15value.html",
 			"settings":
 			{
-				"buffer_size": 19146,
+				"buffer_size": 12626,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "#include <stdio.h>\n#include <string.h>\nint main(){\n    char T[] = { 'p', 'r', 'p', 'r', 'e', 't','\\0'};\n    char P[] = { 'p', 'r', 'e','\\0' };\n    int skip[256];\n    const size_t P_len = strlen(P);\n    for(auto& i : skip) i = P_len;//パターン長をずらす\n    for(size_t i = 0; i < _countof(P); i++){\n        skip[P[i]] -= i + 1;\n    }\n    for(size_t i = P_len - 1; i < strlen(T); i += ((skip[T[i]] > P_len - j) ? skip[T[i]] : P_len - j){\n        for(size_t j = P_len - 1; T[i] == P[j]; --i, --j){\n            if(0 == j){\n                printf(\"%sの%d番目に%sが見つかりました。\\r\", T, i - j + 1, P);\n                return 0;\n            }\n        }\n    }\n    printf(\"見つかりませんでした\\r\");\n\n    return 0;\n}",
+			"file": "06conditional_state.html",
 			"settings":
 			{
-				"buffer_size": 676,
+				"buffer_size": 21327,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "# Makefile for strcmp.exe\n\nTARGET 	= strcmp.exe\nSRCS 	= ./strcmp/main.cpp ./strcmp/strcmp.cpp\n\n# 基本コマンド\nRM 		:= rm\nCXX 	:= g++\nCC 		:= gcc\n\n# デバッグ時とリリース時の微調整\nCXX_DEBUG_FLAGS		=	-g -O0 -Wall\nCXX_RELEASE_FLAGS	=	-O2\n\n# 基本オプション\nifeq ($(CXX),gcc)\nCPPFLAGS = --input-charset=utf-8 -fexec-charset=CP932 -std=c++14\nelse\nCPPFLAGS = -std=c++14\nendif\n\n# make\n# debug\n.PHONY: Debug\nDebug: CXXFLAGS+=$(CXX_DEBUG_FLAGS)\nDebug: all\n# release\n.PHONY: Release\nRelease: CXXFLAGS+=$(CXX_RELEASE_FLAGS)\nRelease: all\n\nall: $(TARGET)\n$(TARGET): $(SRCS)\n	$(CXX) $^ -o $@ $(CXXFLAGS) $(CPPFLAGS)\n\n# make clean\n.PHONY: clean\nclean:\n	$(RM) -f *.exe",
+			"file": "src/strcmp/GNUmakefile",
+			"file_size": 689,
+			"file_write_time": 130745305383480300,
+			"settings":
+			{
+				"buffer_size": 623,
+				"line_ending": "Windows",
+				"scratch": true
 			}
 		},
 		{
 			"file": "09standard_input_output.html",
 			"settings":
 			{
-				"buffer_size": 17672,
+				"buffer_size": 19489,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n    <meta charset=\"utf-8\" />\n    <title>第18章 ～C言語の文字と文字列～</title>\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css\">\n    <link rel=\"stylesheet\" href=\"./css/style.css\">\n    <script src=\"./syntaxhighlighter/scripts/shCore.js\" type=\"text/javascript\"></script>\n    <script src=\"./syntaxhighlighter/scripts/shBrushPlain.js\" type=\"text/javascript\"></script>\n    <script src=\"./syntaxhighlighter/scripts/shBrushCpp_kai.js\" type=\"text/javascript\"></script>\n    <link href=\"./syntaxhighlighter/styles/shCore.css\" rel=\"stylesheet\" type=\"text/css\">\n    <link href=\"./syntaxhighlighter/styles/shThemeMidnight_likeVS.css\" rel=\"stylesheet\" type=\"text/css\">\n    <script type=\"text/javascript\">\n        SyntaxHighlighter.all();\n    </script>\n</head>\n<body>\n    <h1>第18章 ～C言語の文字と文字列～</h1>\n    <nav class=\"top\">\n        <ul>\n            <li><a href=\"./17rand-num.html\" title=\"前頁\">prev</a></li>\n            <li><a href=\"index.html\" title=\"目次\">main</a></li>\n            <li><a href=\"./19str_manipulate.html\" title=\"次頁\">next</a></li>\n        </ul>\n    </nav>\n    <section>\n        <h2>はじめに</h2>\n        <p>\n            C言語には文字列という概念がありません。NULL文字で終わるバイト集合があるだけです。<br>\n            ・・・と書いても何が何やらさっぱりだと思うので、順番に解説します。<br>\n            配列についでの理解があやふやな場合、ポインターを矢印に例えて誰かに説明できそうにない場合は引き返してください。\n        </p>\n    </section>\n    <section>\n        <h2>符号化文字集合と符号化方式</h2>\n        <p>まずここが理解できないとすべてが宙ぶらりんでその場しのぎの理解になってしまいます。なのでプログラミングから一旦離れて解説しようと思います。</p>\n        <!--http://equj65.net/tech/charcode/-->\n        <p>まず、以下のキーワードを覚えてください。</p>\n        <dl>\n            <dt>文字</dt>\n            <dd>私たちが普段見ている文字。その形そのもの</dd>\n            <dt>符号点</dt>\n            <dd>符号点は文字を割り当て「うる」点のことである、ようは文字に仮想的に数値（普通非負の整数）を割り当てた（文字を座標空間に対応付けた）ものである。</dd>\n            <dt>バイト列</dt>\n            <dd>実際にPC等であつかう数値の羅列。符号点と一致することもある</dd>\n        </dl>\n        <p>覚えたかな？もうちょっとだけ続くんじゃ。</p>\n        <dl>\n            <dt>符号化文字集合</dt>\n            <dd>文字と符号点を対応付けるもの</dd>\n            <dt>符号化方式</dt>\n            <dd>符号点とバイト列を対応付けるもの</dd>\n        </dl>\n        <p>\n            で、すべての文字の表し方がこれに従っているかというと、そうでもありません。もう一度いいます、必ずしも符号化文字集合と符号化方式の2つがあるわけではありません。<br>\n            しかも、上の「符号化文字集合」と「符号化方式」の説明も必ずしも正しくありません。というのはいろんな規格でいろいろ言っていたり、定義があやふやだったりするからです。\n            じゃあ今までの話は意味がなかったのか？というとそんなことはありません。\n        </p>\n        <blockquote>\n            <p>\n                シフトJISが符号化文字集合? - yanok.net<br>\n                <a href=\"http://yanok.net/2011/08/jis-2.html\">http://yanok.net/2011/08/jis-2.html</a>\n            </p>\n            <p>\n                肝心なことは、「符号化文字集合と文字符号化方式」という区分は絶対的・本質的なものでは必ずしもないということです。そういう区分を設けた方が便利なときだけ、採用すればいいわけです。\n            </p>\n        </blockquote>\n        <p>ということです。まあ、抽象的な話ばっかしていても仕方ないので実例を上げましょう</p>\n        <dl>\n            <dt>符号化文字集合</dt>\n            <dd>JIS X 0208, JIS X 0213, Unicodeなど・・・</dd>\n            <dt>符号化方式</dt>\n            <dd>Shift-JIS, EUC, UTF-8, UTF-16, UTF-32など・・・</dd>\n            <dt>そんな区分ねーから</dt>\n            <dd>ASCII, Latin-1, Big5など・・</dd>\n        </dl>\n        <p>\n            みんなテキストエディタの保存の設定でよく見たことが有りますよね？<br>\n            最初に言ったようにShift-JISとかUTF-16やUTF-32だけ覚えてくれてればとりあえずいいです。\n        </p>\n        <p>\n            ところが某Windowsのエディターのせいで混乱はますます広がってしまいます。詳しくは<br>\n            <a href=\"http://equj65.net/tech/charcode/\">http://equj65.net/tech/charcode/</a>\n        </p>\n    </section>\n    <section>\n        <h2>C/C++言語では文字をどう扱うか</h2>\n        <p>でこれら文字符号化形式をC/C++でどう扱うかですが、実はいまだにごたついています(VCのせい・・・ではなく、アルファベットしか使わない連中がパソコンを作ったせい)。あれれ～。</p>\n        <p>ちなみにうまく覆い隠してはいますが、他の言語でもこの文字コードの取り扱いは未だにごたついています。だってそれら、C/C++で書かれてますから！(一部除く)</p>\n        <dl>\n            <dt>char型</dt>\n            <dd>実装定義ですが、char型が1byteなので普通Shift-JISかUTF-8を入れます。</dd>\n            <dt>wchar_t型</dt>\n            <dd>\n                これまた実装定義ですが、Unicodeには違いないです。今のところVCではUTF-16, mingw-gccではUTF-32のようです。<br>\n                wchar_t型のひとつのオブジェクトは、実装がサポートするロケールの文字セットの任意の一文字を表現できる。<br>\n                と規格ではなっています。といってることからわかるように、そんなことは現実には存在しません。\n            </dd>\n            <dt>char16_t型(C11/C++11 or later)</dt>\n            <dd>\n                マクロ__STDC_UTF_16__が1にdefineされている時はUTF-16になります。ただdefineされているだけ、またはdefineされていない場合は処理系定義です。<br>\n                <a href=\"http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2018.html\">規格では</a>uchar.h/cucharでdefineされていることになっています。<br>\n                Visual Studio 2015 Previewではdefineされておらず<a href=\"http://web.archive.org/save/http://becpp.org/blog/wp-content/uploads/2015/01/Marc-Gregoire-Whats-new-in-Visual-C-2015.pptx\">(参考資料(399KB, .pptx))</a>、Visual Studio 2015 RCではただdefineされているだけです。<a href=\"https://www.visualstudio.com/ja-jp/news/vs2015-vs.aspx#C++\">多分UTF-16でエンコードされているとは思いますが</a>。しっかりしろ、MS。<br>\n                gcc/clangでは少なくとも私が持っているgcc4.8.2/clang3.5.1では1にdefineされています。\n            </dd>\n            <dt>char32_t型(C11/C++11 or later)</dt>\n            <dd>\n                マクロ__STDC_UTF_32__が1にdefineされている時はUTF-32になります。ただdefineされているだけ、またはdefineされていない場合は処理系定義です。<br>\n                以下同文(ぇ)\n            </dd>\n        </dl>\n        <p>\n            で、毎度のことですが、VCは規格を準拠する気がないので、さっぱり実装が進みませんでした。2015年夏に正式release予定のVisual Studio 2015でようやっと実装されます(RC版でも実装されている)。遅っそいわ！\n        </p>\n        <p>\n            で、これは日本一C++に詳しい人も<a href=\"http://ask.fm/EzoeRyou/answer/128564272215\">言っていた話なのですが</a>、なんでUTF-8専用の型が規格に入らなかったんでしょうね～。\n        </p>\n    </section>\n    <section>\n        <h2>文字リテラル(Character literals)</h2>\n        <p>整数リテラルや小数リテラルがあるんだから、当然文字リテラルも有ります。が、これまた揉めたんだ。</p>\n        <pre class=\"brush: cpp;\">/* 以前からある記法 */\n// 型はchar、値は実装依存。\nauto ordinary_c = 'x' ;\n// 型はwchar_t、値は実装依存。\nauto wide_c = L'x' ;\n\n/* C11/C++11 以降で追加されている記法 */\n// 型はchar16_t、符号化方式はUTF-16、値は、0x3042。\nauto u16_c = u'あ' ;\n// 型はchar32_t、符号化方式はUTF-32、値は、0x00003042。\nauto u32_c = U'あ' ;\n\n/* C++17以降の記法 */\n//型はchar、符号化方式はUTF-8、 値は0x78\nauto u8_c = u8'x';</pre>\n        <p>LとかuとかUとかu8とかをprefixといいます。</p>\n        <p>u8-prefixをつけるときは必ずその文字がsingle UTF-8 code unit、つまり8bitに収まる必要があります。ようは</p>\n        <pre class=\"brush: cpp;\">auto u8_c = u8'あ';//ill-formed</pre>\n        <p>はダメです。同様にu-prefixをつけるときは必ずその文字が16bitに収まる必要があります。ようは</p>\n        <pre class=\"brush: cpp;\">auto u16_c = u'𠮷';//ill-formed</pre>\n        <p>\n            はダメです。なおこのように文字型に収まりきらない文字は2つで一つだったり3つで１つの文字を表すわけですが(文字列リテラルを参照)、こういうのをサロゲートペアといいます。<br>\n            今のところ、UTF-32なら32bitですべての世界中の文字を表せる、ということになっています。\n        </p>\n        <p>\n            で、なぜかu8のCharacter literalsのprefixとしての機能だけつまはじきにあってC++17に追いやられています(<a href=\"http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4296.pdf\">n4296</a>)<br>\n            uとUはC11/C++11で採用されました(<a href=\"http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf\">n3337</a>,<a href=\"http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3797.pdf\">n3797</a> )。<br>\n            でVisualStudioはu8とuとUをVisualStudio2015 RCでようやくサポートしました。<br>\n            Visual Studio 2015 RC | Release Notes<br>\n            <a href=\"https://www.visualstudio.com/en-us/news/vs2015-vs.aspx#C++\">https://www.visualstudio.com/en-us/news/vs2015-vs.aspx#C++</a>\n        </p>\n    </section>\n    <section>\n        <h2>エスケープシーケンス</h2>\n        <p>いくつかの特殊な文字を表すために、\\(バックスラッシュ)から始まるエスケープシーケンスが存在します。なお\\(バックスラッシュ)自体が表せなくなるため、それ自体のエスケープもあります。</p>\n        <table>\n            <tr><th>エスケープシーケンス</th><th>文字名(日本語)</th><th>文字名(英語)</th><th>文字</th></tr>\n            <tr class=\"strong\"><td>\\n</td><td>改行</td><td>new-line</td><td>NL(LF)</td></tr>\n            <tr class=\"strong\"><td>\\t</td><td>水平タブ</td><td>horizontal tab</td><td>HT</td></tr>\n            <tr><td>\\v</td><td>垂直タブ</td><td>vertical tab</td><td>VT</td></tr>\n            <tr><td>\\b</td><td>バックスペース</td><td>backspace</td><td>BS</td></tr>\n            <tr class=\"strong\"><td>\\r</td><td>キャリッジリターン</td><td>carriage return</td><td>CR</td></tr>\n            <tr><td>\\f</td><td>フォームフィード</td><td>form feed</td><td>FF</td></tr>\n            <tr><td>\\a</td><td>アラート文字、ベル文字</td><td>alert</td><td>BEL</td></tr>\n            <tr class=\"strong\"><td>\\\\</td><td>バックスラッシュ</td><td>backslash</td><td>\\</td></tr>\n            <tr><td>\\?</td><td>疑問符</td><td>question mark</td><td>?</td></tr>\n            <tr><td>\\'</td><td>単一引用符</td><td>single quote</td><td>'</td></tr>\n            <tr class=\"strong\"><td>\\\"</td><td>二重引用符</td><td>double quote</td><td>\"</td></tr>\n        </table>\n        <pre class=\"brush: cpp;\">'\\n';//OK\n'\\\\';//OK\n'\\\"';//OK\n'\"';//OK\n'\\?';//OK\n'?';//OK\n'\\';//エラー</pre>\n    </section>\n    <section>\n        <h2>文字列リテラル</h2>\n        <p>当然文字列リテラルもあります。文字列リテラルとは、<b>NULL文字で終端する</b>文字リテラルの集合です。例を見ましょう。</p>\n        <pre class=\"brush: cpp;\">auto str = \"arikitari\";//型はconst char*\nauto w_str = L\"arikitari\";//型はconst wchar_t*\n\n/* C11/C++11 以降で追加されている記法 */\n//u8も文字列リテラルのprefixとしてはC++11の範疇でVisualStudio2015で対応\nauto u8_str = u8\"arikitari\";//型はconst char*\nauto u16_str = u\"arikitari\";//型はconst char16_t*\nauto u32_str = U\"arikitari\";//型はconst char32_t*</pre>\n        <p>まあ文字リテラルとあんま変わらないですね。注意点ですが文字列リテラルはconstポインター型です(C言語ではconst無し)。なのでこんなことはできません</p>\n        <pre class=\"brush: cpp; highlight: [6,10];\">#include &lt;iostream&gt;\n#include &lt;cstdio&gt;\nvoid do_something(char* in_str);\nvoid do_something2(char const* in_str);\nint main(void){\n    char* str0 = \"arikitari\";//C++11以降ではエラー。constを暗黙のうちに消しさることは許されない\n    auto str = \"arikitari\";\n    \"arikitari\"[2] = 'a';//未定義動作。やるべきじゃない\n    str[2] = 'a';//エラー。str is pointer to read-only char.\n    do_something(str);//C++11以降ではエラー。constを暗黙のうちに消しさることは許されない\n    do_something2(str);//OK\n    return 0;\n}\nvoid do_something(char* in_str){\n    puts(in_str);\n}\nvoid do_something2(char const* in_str){\n    puts(in_str);\n}</pre>\n        <p>6,10行目みたいなことは<a href=\"http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#encoding-scheme\">昔はできたらしいのですが</a>(書いたことないから知らん)、するべきではありませんね。</p>\n        <p>ここで改めてputs関数のプロトタイプ宣言を見てみましょう。</p>\n        <pre class=\"brush: cpp;\">int puts(const char *str);</pre>\n        <p>もうなんで引数がchar*型でなくてchar const*型かわかりますね。もちろん引数を変更しませんよ、という意味もあるのですが、それ以上に</p>\n        <pre class=\"brush: cpp;\">#include &lt;stdio.h&gt;\nint main(void){\n    puts(\"arikitari na world!\");//画面に表示\n    return 0;\n}</pre>\n        <p>のように文字リテラルを引数に指定できるようにするためです。</p>\n        \n        <p>ここまでで必然的に導き出される結論ですが、他のこれまで紹介したリテラルと異なり、<b>string literalsはread-only lValueである</b>、ということです。</p>\n        <p>\n            参考サイト<br>\n            文字列リテラル（String literals）| C++11の文法と機能(C++11: Syntax and Feature)<br>\n            <a href=\"http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.string\">http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.string</a>\n        </p>\n    </section>\n    <section>\n        <h2>配列と文字列リテラル</h2>\n        <p>\n            さっきも述べたとおり文字列リテラルは変更不可能(読み取り専用)なlValueです。変更できません。<br>\n            これでは困ります。そこで登場するのが配列です。初期化リストの代わりに文字列を使えます。\n        </p>\n        <pre class=\"brush: cpp;\">char str[] = \"arikitari\";\nchar str2[10];\nstr2 = \"arikitari\";//エラー</pre>\n        <p>なので定義と同時である必要があります。</p>\n        <p>ところでここまで書けばもう既にわかっていると思いますが、以下の2つは同値です。</p>\n        <pre class=\"brush: cpp;\">// 以下の二行のコードは同じ意味である。\nchar s[4] = { 'a', 'b', 'c', '\\0' } ;\nchar s[] = \"abc\" ;</pre>\n        <p>なんどでもいいますが、Cの文字列は必ずNULL文字(\\0)で終端します。なので<b>文字列の長さ+1の大きさの領域が必要となります</b>。</p>\n        <pre class=\"brush: cpp;\">char str1[9] = \"arikitari\";//conflicting declaration(矛盾する宣言)</pre>\n        <p>\n            ようはこれはダメってこと。\n            で、こうしてできた配列は変更可能なlValueなので<b>変更できます。</b>やったね。\n        </p>\n        <pre class=\"brush: cpp;\">char str[] = \"arakitari\";\nputs(str);//arakitari\nstr[2] = 'i';\nputs(str);//arikitari\n</pre>\n    </section>\n    <section>\n        <h2>Shift-JISなんて捨ててしまえ(Windowsの呪縛から逃げられない人の無駄なあがき)</h2>\n        <p>\n            何も考えずにShift-JISを普段使いがちですが(あるいは意識すらしていない？)、これは誤った選択です。<br>\n            例えば、Win32APIの文字周りはUNICODE(UTF-16, UTF-32)とShift-JISの2つが選択できますが、後者は<b>下位互換性(バイナリ互換性)のためだけに存在する馬鹿げた機能なので使うべきではないのです</b><br>\n            つまり以下の3箇所で文字コードに注意する必要があります。\n        </p>\n        <ul>\n            <li>ソースコードの文字コード　→　問答無用でUTF-8 BOM付き、ただし最後の行は空行(EOFのみ)に。bccじゃあるまいしShift-JIS使うなんて愚の骨頂。</li>\n            <li>文字・文字列リテラルの文字コード　→　u8prefixをつければいい</li>\n            <li>コンパイラーの文字コード変換機能　→　本来はいじらなくていいんだけど(後述)</li>\n        </ul>\n        <p>\n            ところがWindowsは日本語対応という点でLinuxに比べて非常に遅れています。<br>\n            GNU/Linuxの方がWindowsより日本語サポートが優れている | 本の虫<br>\n            <a href=\"http://cpplover.blogspot.jp/2012/04/gnulinuxwindows.html\">http://cpplover.blogspot.jp/2012/04/gnulinuxwindows.html</a><br>\n            コマンドラインを強化せよ! - Windows 7のコマンドプロンプトをカスタマイズする (3) コマンドプロンプトのフォントとウィンドウサイズを変更する.1 | マイナビニュース<br>\n            <a href=\"http://news.mynavi.jp/articles/2011/07/05/commandline/002.html\">http://news.mynavi.jp/articles/2011/07/05/commandline/002.html</a><br>\n            コマンドラインを強化せよ! - windows 7のコマンドプロンプトをカスタマイズする (3) コマンドプロンプトのフォントとウィンドウサイズを変更する.1 | マイナビニュース<br>\n            <a href=\"http://news.mynavi.jp/articles/2011/07/05/commandline/003.html\">http://news.mynavi.jp/articles/2011/07/05/commandline/003.html</a><br>\n            だれがレジストリいじったりフォント変えたりしてまでコマンドプロンプトでUTF-8を使うんですかねぇ。<br>\n            というわけでもうしばらくコンパイラー側でShift-JISに変える日々が続きそうです。Windows10のコマンドプロンプトは改善されたのかな・・・？<br>\n            なお、Unicode文字を一時的に表示させるにはコマンドプロンプトのtypeコマンドを使うのが手っ取り早いという奇妙な事態になっています。\n        </p>\n        <p>コンパイラーで出力文字列の文字コード変換をする方法ですが</p>\n        <dl>\n            <dt>Visual Studio</dt>\n            <dd>デフォルトで</dd>\n            <dt>gcc</dt>\n            <dd>\n                コンパイルオプションに<br>\n                <pre class=\"brush: plain;\">-fexec-charset=CP932</pre>\n                但しutf-8なソースを読ませるために\n                <pre class=\"brush: cpp;\">--input-charset=utf-8</pre>\n                も必要\n            </dd>\n            <dt>clang</dt>\n            <dd>\n                uft-8なソースはデフォルトで読めるから気にしなくていいけど出力は変換できないっぽい。コマンドプロンプトなんてクソや！\n            </dd>\n        </dl>\n        <p>\n            というわけで主にWindowsのせいで話がややこしくなっています。なので、<b>コンソールアプリケーションに限っては</b>コンパイラー側でShift-JISを使う日々になりそうです。<br>\n            従ってprefixも<b>コンソールアプリケーションに限っては</b>なくていいや、という結論に至ります。おのれWindows！\n        </p>\n        <p>なお、言うまでもなくWin32APIを使ったGUIの文字はUNICODE対応ですから、<b>迷うことなくwchar_t型とLprefixを</b>使いましょう</p>\n        <p>またGUI開発で有名なQTは事実上UTF-8を要求しますので、u8prefixの活躍の機会です(Visual Studio2015から使えるようになる)</p>\n    </section>\n    <nav class=\"bottom\">\n        <ul>\n            <li><a href=\"./17rand-num.html\" title=\"前頁\">prev</a></li>\n            <li><a href=\"index.html\" title=\"目次\">main</a></li>\n            <li><a href=\"./19str_manipulate.html\" title=\"次頁\">next</a></li>\n        </ul>\n    </nav>\n</body>\n</html>\n",
-			"file": "18c_char_str_base.html",
-			"file_size": 22383,
-			"file_write_time": 130801934467486035,
+			"file": "syntaxhighlighter/scripts/shBrushCpp_kai.js",
 			"settings":
 			{
-				"buffer_size": 14372,
-				"line_ending": "Windows",
-				"scratch": true
-			}
-		},
-		{
-			"file": "index.html",
-			"settings":
-			{
-				"buffer_size": 11061,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Users/yumetodo/Desktop/calender.cpp",
-			"settings":
-			{
-				"buffer_size": 2383,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "05function.html",
-			"settings":
-			{
-				"buffer_size": 21135,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "css/style.css",
-			"settings":
-			{
-				"buffer_size": 3106,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "03calc.html",
-			"settings":
-			{
-				"buffer_size": 8748,
-				"line_ending": "Windows"
+				"buffer_size": 17516,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -573,13 +549,38 @@
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/scripts",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/mtrand32",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/stdin",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strcmp",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/syntaxhighlighter",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/syntaxhighlighter/scripts"
 	],
 	"file_history":
 	[
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/2015_C_Textbook.sublime-workspace",
+		"/C/Users/yumetodo/Desktop/SampleProject/src/sample/Main.java",
+		"/C/Users/yumetodo/Desktop/ideone_qXNhlI.cpp",
+		"/C/Users/yumetodo/Desktop/addressbook-complete/FriendTreeView.cpp",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/index.html",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/18c_char_str_base.html",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/13structure.html",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/08preprocess_and_constant.html",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/15value.html",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/14pointer.html",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/11c_array.html",
+		"/C/Users/yumetodo/Google ドライブ/share_神御田_yumetodo/神御田→yumetodo/DxLib Project4/Win32DxLibProject1/main.cpp",
+		"/C/Users/yumetodo/Google ドライブ/share_神御田_yumetodo/yumetodo→神御田/ConsoleApplication2/ConsoleApplication2/main.cpp",
+		"/C/Users/yumetodo/Documents/Visual Studio 2013/Projects/dxlib/DxLib Project2/DxLib Project2/Source.cpp",
+		"/C/Users/yumetodo/Documents/Visual Studio 2013/Projects/dxlib/DxLib Project3/DxLib Project3/Source.cpp",
+		"/C/Users/yumetodo/Documents/Visual Studio 2013/Projects/dxlib/Test3/Test3/Source.cpp",
+		"/C/Users/yumetodo/Documents/Visual Studio 2013/Projects/dxlib/Test3/Test3.sln",
+		"/C/Users/yumetodo/Documents/Visual Studio 2013/Projects/dxlib/Test4/Test4/Source.cpp",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/css/style.css",
+		"/C/Users/yumetodo/Desktop/calender.cpp",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/02variable.html",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/03calc.html",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/05function.html",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/09standard_input_output.html",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/number_guessing_game/number_guessing_game/Source.cpp",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/stdin/stdin/Source.c",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/syntaxhighlighter/scripts/shBrushCpp_kai.js",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strcmp/GNUmakefile",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/mtrand32/GNUmakefile",
@@ -595,10 +596,8 @@
 		"/C/msys64/mingw32/i686-w64-mingw32/include/sec_api/stdlib_s.h",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strlen/strlen/main.cpp",
 		"/C/Users/yumetodo/Desktop/tet.html",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/05function.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/scripts/common.js",
 		"/C/msys64/mingw64/x86_64-w64-mingw32/include/uchar.h",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/15value.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strlen/strlen/strlen.cpp",
 		"/C/Users/yumetodo/Documents/Visual Studio 2015/Projects/getcudir_unix/getcudir_unix/mytchar.h",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strlen/GNUmakefile",
@@ -613,15 +612,9 @@
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/04bit.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/17rand-num.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/16Range-base_for.html",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/14pointer.html",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/13structure.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/12m.d.c_array.html",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/11c_array.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/10introduction_of_pointer.html",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/09standard_input_output.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/06conditional_state.html",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/02variable.html",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/2015_C_Textbook.sublime-workspace",
 		"/C/Users/yumetodo/Documents/git/liwe_review/style.css",
 		"/C/Users/yumetodo/Documents/git/liwe_review/with_jCanvas.js",
 		"/C/Users/yumetodo/Documents/git/liwe_review/with_jCanvas.html",
@@ -633,7 +626,6 @@
 		"/C/Users/yumetodo/Desktop/jQuerySample/007_jquery_jcanvas_event.html",
 		"/C/Users/yumetodo/Desktop/jQuerySample/002_jquery_jcanvas.html",
 		"/C/Users/yumetodo/Documents/git/liwe_review/test.html",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/08preprocess_and_constant.html",
 		"/C/msys64/mingw32/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++/random",
 		"/C/msys64/mingw32/lib/gcc/x86_64-w64-mingw32/4.9.2/include/x86intrin.h",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/prime_number_generator/GNUmakefile",
@@ -648,7 +640,6 @@
 		"/C/Users/yumetodo/Google ドライブ/未来研究室実行委員会/HP仮UP/miraiken2015/event/2015/event_june/resource/exhibition.css",
 		"/C/Users/yumetodo/Google ドライブ/未来研究室実行委員会/HP仮UP/miraiken2015/event/2015/event_june/coord.txt",
 		"/C/Users/yumetodo/Google ドライブ/未来研究室実行委員会/HP仮UP/miraiken2015/event/2015/event_june/exhibition_test.html",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/18c_char_str_base.html",
 		"/C/Users/yumetodo/Desktop/appVersion.html",
 		"/C/Users/yumetodo/Desktop/xml.txt",
 		"/C/Users/yumetodo/AppData/Roaming/Sublime Text 3/Packages/User/Base File.sublime-settings",
@@ -691,23 +682,7 @@
 		"/C/Users/yumetodo/Documents/git/study_of_OpenSSL.wiki/OpenSSL.md",
 		"/C/Users/yumetodo/Documents/git/study_of_OpenSSL.wiki/Home.md",
 		"/C/Users/yumetodo/Desktop/ninzuu.txt",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/index.html",
-		"/C/Users/yumetodo/Documents/git/ini_read-write/ConsoleApplication1/ini_read-write.sln",
-		"/C/Users/yumetodo/Documents/git/ini_read-write/ConsoleApplication1/ini_read-write/ini_read-write.vcxproj.filters",
-		"/C/Users/yumetodo/Documents/git/ini_read-write/ConsoleApplication1/ini_read-write/ini_read-write.vcxproj",
-		"/C/Users/yumetodo/Documents/git/ini_read-write/ConsoleApplication1/ConsoleApplication1.sln",
-		"/C/Users/yumetodo/Documents/git/ini_read-write/ConsoleApplication1/ConsoleApplication1 - コピー.sln",
-		"/C/Users/yumetodo/Desktop/チャーリーさんサイエンスショー　【第一回】参加申し込みフォーム（回答） - to_CSV.csv",
-		"/C/Users/yumetodo/Desktop/チャーリーさんサイエンスショー　【第二回】参加申し込みフォーム （回答） - to_CSV.csv",
-		"/C/Users/yumetodo/Desktop/チャーリーさんサイエンスショー　【メルマガ会員席】参加申し込みフォーム  のコピー（回答） - to_CSV.csv",
-		"/C/Users/yumetodo/Desktop/addSheetsFunction.gs",
-		"/C/Users/yumetodo/Desktop/法学150,430.md",
-		"/C/Users/yumetodo/Desktop/get7z_msys2.ps1",
-		"/C/Users/yumetodo/Google ドライブ/未来研究室実行委員会/HP仮UP/miraiken2015/for_freshman/public_relations_department.html",
-		"/C/Users/yumetodo/Google ドライブ/未来研究室実行委員会/HP仮UP/miraiken2015/event/2015/event_june/resource/simple_slideshow.js",
-		"/C/Users/yumetodo/Google ドライブ/未来研究室実行委員会/HP仮UP/miraiken2015/index.html",
-		"/C/Users/yumetodo/Google ドライブ/未来研究室実行委員会/HP仮UP/miraiken2015/for_freshman/index.html",
-		"/C/Users/yumetodo/OneDrive/ドキュメント/東京理科大/情報/daysoflive.pl"
+		"/C/Users/yumetodo/Documents/git/ini_read-write/ConsoleApplication1/ini_read-write.sln"
 	],
 	"find":
 	{
@@ -725,6 +700,26 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"∼",
+			"  1個",
+			",  ",
+			",　",
+			"name",
+			"DWORD",
+			"BaseClass",
+			"baseClass",
+			"theClass",
+			"id",
+			"[^ ]' \\+",
+			"[^ ]' \\+\\n",
+			"_ptr",
+			"unique_ptr",
+			"<T>",
+			"&&",
+			"<T>",
+			"<rand_type>",
+			"template <",
+			"_countof",
 			"&&",
 			"\" \\+\\n\\t\\t\"",
 			"\" \\+\\n",
@@ -832,34 +827,22 @@
 			"&",
 			"<",
 			"h4>",
-			"h3>",
-			"h2>",
-			"<",
-			"prime_number_generator",
-			"n",
-			"x",
-			" -.+",
-			"switc",
-			"switch",
-			"<strike><span style=\"color: #00CCFF;\"><br />\\n<.span></strike>",
-			"<a class=\"strong\">",
-			"<span class=\"strong\">(.+)</span>",
-			"class=\"strong\"",
-			" style=\"background-color: #FFFF00;color: #0000FF;\"",
-			" style=\"background-color: #FFFF00;color: #0000FF;\" class=\".*\"",
-			"L-SMASH",
-			"チャーリー西村",
-			"ctrl+shift+e",
-			"alt+",
-			"shift+tab",
-			"shift+e"
+			"h3>"
 		],
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
+			"-",
+			"",
+			"\\n",
+			"&lt;T>",
+			"&amp;&amp;",
+			"&lt;T>",
+			"&lt;rand_type>",
+			"template &lt;",
 			"&amp;&amp;",
 			" ",
 			"\" +",
@@ -949,7 +932,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -958,7 +941,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9281,
+						"buffer_size": 9733,
 						"regions":
 						{
 							"TagLint":
@@ -968,8 +951,8 @@
 								"regions":
 								[
 									[
-										4242,
-										4245
+										4694,
+										4697
 									]
 								],
 								"scope": "variable.parameter"
@@ -978,8 +961,8 @@
 						"selection":
 						[
 							[
-								80,
-								92
+								1780,
+								1780
 							]
 						],
 						"settings":
@@ -988,36 +971,6 @@
 							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -1028,21 +981,51 @@
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
-								"bh_tag_content"
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
 							],
 							"in_converting": true,
 							"is_xml": false,
@@ -1053,27 +1036,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 443.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "02variable.html",
+					"file": "15value.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19146,
+						"buffer_size": 12626,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								958,
-								958
+								2812,
+								2812
 							]
 						],
 						"settings":
@@ -1082,36 +1065,6 @@
 							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -1122,21 +1075,51 @@
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
-								"bh_tag_content"
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
 							],
 							"is_xml": false,
 							"syntax": "Packages/HTML/HTML.tmLanguage",
@@ -1144,63 +1127,48 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 593.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
+					"file": "06conditional_state.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 676,
+						"buffer_size": 21327,
 						"regions":
 						{
+							"TagLint":
+							{
+								"flags": 2356,
+								"icon": "dot",
+								"regions":
+								[
+									[
+										8015,
+										8018
+									]
+								],
+								"scope": "variable.parameter"
+							}
 						},
 						"selection":
 						[
 							[
-								79,
-								79
+								4411,
+								4411
 							]
 						],
 						"settings":
 						{
 							"BracketHighlighterBusy": false,
+							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -1211,27 +1179,146 @@
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"is_xml": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1304.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/strcmp/GNUmakefile",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 623,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content"
 							],
-							"default_dir": "C:\\Users\\yumetodo\\Documents\\2015_C_Textbook",
-							"is_xml": false,
-							"syntax": "Packages/C++11/C++11.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"in_converting": true,
+							"origin_encoding": "SHIFT_JIS",
+							"syntax": "Packages/Makefile/Makefile.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1241,78 +1328,77 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 4,
 					"file": "09standard_input_output.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17672,
+						"buffer_size": 19489,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7753,
-								7753
+								3618,
+								3748
 							]
 						],
 						"settings":
 						{
 							"BracketHighlighterBusy": false,
-							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
@@ -1325,120 +1411,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1464.0,
+						"translation.y": 904.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "18c_char_str_base.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 14372,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								440,
-								440
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"auto_complete": false,
-							"bh_regions":
-							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
-							],
-							"in_converting": true,
-							"is_xml": false,
-							"origin_encoding": "UTF-8-SIG",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 4968.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "index.html",
+					"file": "syntaxhighlighter/scripts/shBrushCpp_kai.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 11061,
+						"buffer_size": 17516,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								40,
-								69
+								15660,
+								15660
 							]
 						],
 						"settings":
@@ -1447,459 +1440,71 @@
 							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content"
 							],
-							"is_xml": false,
 							"origin_encoding": "UTF-8",
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "/C/Users/yumetodo/Desktop/calender.cpp",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2383,
-						"regions":
-						{
-							"TagLint":
-							{
-								"flags": 2356,
-								"icon": "dot",
-								"regions":
-								[
-									[
-										10,
-										18
-									]
-								],
-								"scope": "variable.parameter"
-							}
-						},
-						"selection":
-						[
-							[
-								158,
-								158
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
-							],
-							"is_xml": false,
-							"syntax": "Packages/C++11/C++11.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 410.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "05function.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 21135,
-						"regions":
-						{
-							"TagLint":
-							{
-								"flags": 2356,
-								"icon": "dot",
-								"regions":
-								[
-									[
-										2078,
-										2081
-									]
-								],
-								"scope": "variable.parameter"
-							}
-						},
-						"selection":
-						[
-							[
-								11433,
-								11433
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"auto_complete": false,
-							"bh_regions":
-							[
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
-							],
-							"is_xml": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 4590.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "css/style.css",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3106,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1514,
-								1524
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content"
-							],
-							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 168.0,
+						"translation.y": 2169.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "03calc.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 8748,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								68,
-								40
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"auto_complete": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content"
-							],
-							"is_xml": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
+					"stack_index": 5,
 					"type": "text"
 				}
 			]
@@ -1982,7 +1587,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 194.0,
+	"side_bar_width": 197.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
