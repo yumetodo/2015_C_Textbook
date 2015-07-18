@@ -115,3 +115,66 @@ int main(){
     print_arr("c_arr1", c_arr1);
     return 0;
 }
+// yumetodo@yumetodo-MSI MINGW64 /c/Users/yumetodo/Desktop
+// $ clang++ -O2 -Wall -std=c++14 -o  insertaion_sort.exe  insertaion_sort.cpp
+// insertaion_sort.cpp:72:74: error: expected string literal for diagnostic message in static_assert
+//     static_assert(insertaion_sort_helper::is_executable<Compare>::value, message);
+//                                                                          ^
+// insertaion_sort.cpp:96:5: error: static_assert failed "ass"
+//     static_assert(insertaion_sort_helper::is_executable<C>::value, "ass");
+//     ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// insertaion_sort.cpp:97:5: error: static_assert failed "ass"
+//     static_assert(insertaion_sort_helper::is_executable<decltype(c)>::value, "ass");
+//     ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// insertaion_sort.cpp:98:5: error: static_assert failed "ass"
+//     static_assert(insertaion_sort_helper::is_executable<decltype(foo)>::value, "ass");
+//     ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// insertaion_sort.cpp:99:5: error: static_assert failed "ass"
+//     static_assert(insertaion_sort_helper::is_executable<bool(int, int)>::value, "ass");
+//     ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// 5 errors generated.
+
+// yumetodo@yumetodo-MSI MINGW64 /c/Users/yumetodo/Desktop
+// $ g++ -O2 -Wall -std=c++14 -o  insertaion_sort.exe  insertaion_sort.cpp
+// insertaion_sort.cpp: In function 'void insertaion_sort(RandomIt, RandomIt, Compare)':
+// insertaion_sort.cpp:72:74: error: expected string-literal before 'message'
+//      static_assert(insertaion_sort_helper::is_executable<Compare>::value, message);
+//                                                                           ^
+// insertaion_sort.cpp:72:74: error: expected ')' before 'message'
+// insertaion_sort.cpp: In function 'int main()':
+// insertaion_sort.cpp:96:5: error: static assertion failed: ass
+//      static_assert(insertaion_sort_helper::is_executable<C>::value, "ass");
+//      ^
+// insertaion_sort.cpp:97:5: error: static assertion failed: ass
+//      static_assert(insertaion_sort_helper::is_executable<decltype(c)>::value, "ass");
+//      ^
+// insertaion_sort.cpp:98:5: error: static assertion failed: ass
+//      static_assert(insertaion_sort_helper::is_executable<decltype(foo)>::value, "ass");
+//      ^
+// insertaion_sort.cpp:99:5: error: static assertion failed: ass
+//      static_assert(insertaion_sort_helper::is_executable<bool(int, int)>::value, "ass");
+//      ^
+// insertaion_sort.cpp: In instantiation of 'void insertaion_sort(RandomIt, RandomIt, Compare) [with RandomIt = int*; Compare = main()::<lambda(const int&, const int&)>]':
+// insertaion_sort.cpp:111:103:   required from here
+// insertaion_sort.cpp:71:20: warning: unused variable 'message' [-Wunused-variable]
+//      constexpr auto message = "Argument 'comp' must be lambda or function object or pointer to function.";
+//                     ^
+// insertaion_sort.cpp: In instantiation of 'void insertaion_sort(RandomIt, RandomIt, Compare) [with RandomIt = int*; Compare = insertaion_sort(RandomIt, RandomIt) [with RandomIt = int*]::<lambda(const auto:1&, const auto:2&)>]':
+// insertaion_sort.cpp:86:92:   required from 'void insertaion_sort(RandomIt, RandomIt) [with RandomIt = int*]'
+// insertaion_sort.cpp:110:45:   required from here
+// insertaion_sort.cpp:71:20: warning: unused variable 'message' [-Wunused-variable]
+// yumetodo@yumetodo-MSI MINGW64 /c/Users/yumetodo/Desktop
+// $ g++ -v
+// Using built-in specs.
+// COLLECT_GCC=C:\msys64\mingw64\bin\g++.exe
+// COLLECT_LTO_WRAPPER=C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/4.9.2/lto-wrapper.exe
+// Target: x86_64-w64-mingw32
+// Configured with: ../gcc-4.9.2/configure --prefix=/mingw64 --with-local-prefix=/mingw64/local --build=x86_64-w64-mingw32 --host=x86_64-w64-mingw32 --target=x86_64-w64-mingw32 --with-native-system-header-dir=/mingw64/x86_64-w64-mingw32/include --libexecdir=/mingw64/lib --with-gxx-include-dir=/mingw64/include/c++/4.9.2 --enable-bootstrap --with-arch=x86-64 --with-tune=generic --enable-languages=c,lto,c++,objc,obj-c++,fortran,ada --enable-shared --enable-static --enable-libatomic --enable-threads=posix --enable-graphite --enable-fully-dynamic-string --enable-libstdcxx-time=yes --disable-libstdcxx-pch --disable-libstdcxx-debug --enable-cloog-backend=isl --enable-version-specific-runtime-libs --disable-cloog-version-check --disable-isl-version-check --enable-lto --enable-libgomp --disable-multilib --enable-checking=release --disable-rpath --disable-win32-registry --disable-nls --disable-werror --disable-symvers --with-libiconv --with-system-zlib --with-gmp=/mingw64 --with-mpfr=/mingw64 --with-mpc=/mingw64 --with-isl=/mingw64 --with-cloog=/mingw64 --with-pkgversion='Rev5, Built by MSYS2 project' --with-bugurl=http://sourceforge.net/projects/msys2 --with-gnu-as --with-gnu-ld
+// Thread model: posix
+// gcc version 4.9.2 (Rev5, Built by MSYS2 project)
+
+// yumetodo@yumetodo-MSI MINGW64 /c/Users/yumetodo/Desktop
+// $ clang++ -v
+// clang version 3.6.1 (tags/RELEASE_361/final)
+// Target: x86_64-w64-windows-gnu
+// Thread model: posix
