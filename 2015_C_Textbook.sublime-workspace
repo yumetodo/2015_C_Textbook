@@ -4,8 +4,24 @@
 		"selected_items":
 		[
 			[
+				"siz",
+				"size_t"
+			],
+			[
 				"is",
-				"is_same"
+				"create_is_prime_num_table"
+			],
+			[
+				"da",
+				"dailyrate"
+			],
+			[
+				"me",
+				"medication_charge"
+			],
+			[
+				"pa",
+				"patienttype"
 			],
 			[
 				"type",
@@ -14,10 +30,6 @@
 			[
 				"si",
 				"table_of_time_required_size"
-			],
-			[
-				"siz",
-				"sizeof"
 			],
 			[
 				"d",
@@ -448,10 +460,6 @@
 				"width: 〔property〕"
 			],
 			[
-				"pa",
-				"pagetitle"
-			],
-			[
 				"2015",
 				"2015年"
 			],
@@ -515,7 +523,7 @@
 			"file": "09standard_input_output.html",
 			"settings":
 			{
-				"buffer_size": 19489,
+				"buffer_size": 19515,
 				"line_ending": "Windows"
 			}
 		},
@@ -531,7 +539,23 @@
 			"file": "src/insertaion_sort.cpp",
 			"settings":
 			{
-				"buffer_size": 4207,
+				"buffer_size": 4230,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "#include <stdio.h>\n#include <stdlib.h>\n#include <stdint.h>\n#include <limits.h>//in gcc\n#include <errno.h>//in gcc\ntypedef unsigned int uint;\nunsigned int get_uinteger_num(const char* message, const uint max, const uint min){\n    //機能：標準入力を数字に変換する。\n    //引数：戻り値の最大値,戻り値の最小値\n    //戻り値：入力した数字、EOFのときはUINT_MAX\n    if(NULL != message && '\\0' != message[0]) puts(message);\n    char s[100];\n\n    if (NULL == fgets(s, 100, stdin)){\n        if (feof(stdin)){//エラーの原因がEOFか切り分け\n            return UINT_MAX;\n        }\n        //改行文字が入力を受けた配列にない場合、入力ストリームにごみがある\n        size_t i;\n        for(i = 0; i < 100 && '\\0' == s[i]; i++);//strlenもどき\n        if('\\n' != s[i - 1]) while(getchar() != '\\n');//入力ストリームを掃除\n        goto get_uinteger_num_error;\n    }\n    if ('\\n' == s[0]) goto get_uinteger_num_error;\n    errno = 0;\n    const unsigned long t = strtoul(s, NULL, 10);\n    if (0 != errno || t < min || max < t)\n        goto get_uinteger_num_error;\n    return (uint)t;\nget_uinteger_num_error:\n    return get_uinteger_num(\"再入力してください\", max, min);\n}\nuint8_t* create_is_not_prime_num_table(const size_t generate_max){\n    uint8_t* p = (char*)(calloc((size_t)(generate_max) + 1, sizeof(char)));\n    p[0] = p[1] = 1;\n    for (size_t j = 2; j < generate_max; j++) {\n        for (size_t k = j + j; k <= generate_max; k += j)\n            p[k] = 1;\n    }\n    return p;\n}\nint main(void){\n    const uint create_max = get_uinteger_num(\"生成する最大値を入力してください\", UINT_MAX, 1);\n    uint8_t* is_not_prime_num_table = create_is_not_prime_num_table(create_max);//must free.\n\n    //フィボナッチ数列最初の2項は素数ではない。\n    size_t x, y, i;\n    for (x = 1, y = 1, i = 2; i <= create_max; x = y, y = i, i = x + y){\n        if (!is_prime_num_table[i]){\n            printf(\"%d,\", i);\n        }\n    }\n    free(is_prime_num_table);\n    return 0;\n}",
+			"settings":
+			{
+				"buffer_size": 1783,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "class ENEMY{ \n	private: \n		double x, y; \n		int gh[3]; \n		int width, height; \n		int in_time, stop_time, out_time; int count; \n		bool endflag; \n	public: \n		bool All(); \n		void Move(); \n		void Draw(); \n		ENEMY(); \n		ENEMY *enemy = nullptr;\n}; \n#include \"control.h\"\n#include \"enemy.h\"\n#include \"define.h\"\nCONTROL::CONTROL() {\n//プレイヤークラスの生成\n	player = new PLAYER;\n	back = new BACK;\n}\nCONTROL::~CONTROL() {\n//プレイヤークラスの解放\n	delete player;\n}\nvoid CONTROL::All() {\n	ENEMY *enemy=0;\n//プレイヤークラスのAll関数実行\n	SetDrawArea(MARGIN, MARGIN, MARGIN + 380, MARGIN + 460);\n	back->All();\n	player->All();\n	if (enemy != NULL){\n		if (enemy -> All()){\n			delete enemy;\n			enemy = NULL;\n		}\n	}\n	++g_count;\n}\nENEMY::ENEMY(){\n	LoadDivGraph(\"enemy.png\", 3, 1, 3, 27, 25, gh);\n	width = 27;\n	height = 25;\n	x = 50;\n	y = -50;\n	in_time = 180;\n	stop_time = 300;\n	out_time = 420;\n	count = 0;\n	endflag = false;\n}\nvoid ENEMY::Move(){\n//出てきてから止まる時間までの間なら下に移動\n	if (in_time < g_count && g_count < stop_time){\n		y += 2;\n	}\n	else if (g_count > out_time){\n		y -= 2;\n		if (y < -40){\n			endflag = true;\n		}\n	}\n}\nvoid ENEMY::Draw(){\n	int temp;\n	if (!endflag){\n		temp = count % 40 / 10;\n		if (temp == 3)\n			temp = 1;\n		DrawGraph(x, y, gh[temp], TRUE);\n	}\n}\nbool ENEMY::All(){\n	Move();\n	Draw();\n	++count;\n	return endflag;\n}\n\n/*ここまでcontrol.cpp*/\n\n/*ここからdefine.h*/\n#include\n#pragma once\n//プレイヤーの歩くスピード\n#define PLAYER_SPEED 4\n//メッセージボックス\n#define MSG(m) {\\\nMessageBox(NULL,m,\"メッセージ\",MB_OK);}\n//extern宣言してkey配列にどこからでもアクセスできるようにする\nextern char key[256];\nextern int g_count;\n//define\n#define MARGIN 10\n#define SCROLL_SPEED 1\n#define PSHOT_NUM 20\n#define PSHOT_SPEED 14\nstruct SHOT{\nbool flag; //弾が発射中かどうか\ndouble x; //x座標\ndouble y; //y座標\nint gh; //グラフィックハンドル\nint width, height; //画像の幅と高さ\n};",
+			"settings":
+			{
+				"buffer_size": 1727,
 				"line_ending": "Windows"
 			}
 		}
@@ -830,6 +854,29 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"j",
+			"error",
+			"return UINT_MAX",
+			"INT_MIN",
+			"count",
+			"file_count_to",
+			"error_count",
+			"ext_name",
+			"FD_get",
+			"FALSE",
+			"TRUE",
+			"FD_get",
+			"moji",
+			"exit(1)",
+			"backup_check",
+			"dr",
+			"bw",
+			"cout",
+			"	public :",
+			"	private :",
+			"BOOST_STATIC_ASSERT\\(\\(([^\\(\\)]+)\\)\\)",
+			" template",
+			"generate_max",
 			"table_of_time_required.size()",
 			"SYMBOL",
 			"auto",
@@ -934,37 +981,16 @@
 			"flag",
 			"and",
 			"flag0",
-			"<uint>",
-			"#include <",
-			"template<",
-			"<T_>",
-			"ev_state_c&",
-			"&&",
-			"<<",
-			" < ",
-			"<<",
-			"&&",
-			"&amp;amp;",
-			"ev_state_c&",
-			"id_arr",
-			"speed",
-			"_cas_",
-			"&&",
-			"<<",
-			"#include <",
-			"template<&lt;",
-			"t<&lt;",
-			"_cast<",
-			"template<",
-			" < ",
-			" & "
+			"<uint>"
 		],
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
+			"static_assert($1)",
+			"template",
 			"\", \"",
 			"static constexpr bool value = false;",
 			" = ",
@@ -1074,7 +1100,7 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 7,
 			"sheets":
 			[
 				{
@@ -1181,7 +1207,7 @@
 						"translation.y": 143.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1272,7 +1298,7 @@
 						"translation.y": 71.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1311,31 +1337,26 @@
 							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
@@ -1346,26 +1367,31 @@
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
-								"bh_square_content"
+								"bh_square_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
 							],
 							"is_xml": false,
 							"syntax": "Packages/HTML/HTML.tmLanguage",
@@ -1376,7 +1402,7 @@
 						"translation.y": 26.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1385,47 +1411,43 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19489,
+						"buffer_size": 19515,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3618,
-								3748
+								5260,
+								5260
 							]
 						],
 						"settings":
 						{
 							"BracketHighlighterBusy": false,
+							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
@@ -1436,26 +1458,31 @@
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
-								"bh_square_content"
+								"bh_square_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
 							],
 							"is_xml": false,
 							"syntax": "Packages/HTML/HTML.tmLanguage",
@@ -1463,7 +1490,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 40.0,
+						"translation.y": 1607.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -1556,7 +1583,7 @@
 						"translation.y": 2341.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -1565,15 +1592,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4207,
+						"buffer_size": 4230,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1624,
-								1624
+								3207,
+								3207
 							]
 						],
 						"settings":
@@ -1581,31 +1608,26 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_regex",
 								"bh_regex_center",
 								"bh_regex_open",
@@ -1616,31 +1638,214 @@
 								"bh_c_define_open",
 								"bh_c_define_close",
 								"bh_c_define_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
-								"bh_square_content"
+								"bh_square_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
 							],
 							"origin_encoding": "ASCII",
 							"syntax": "Packages/C++11/C++11.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1177.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1783,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								1783
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"default_dir": "C:\\Users\\yumetodo\\Documents\\2015_C_Textbook",
+							"is_xml": false,
+							"syntax": "Packages/C++11/C++11.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 254.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1727,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								321,
+								321
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"default_dir": "C:\\Users\\yumetodo\\Documents\\2015_C_Textbook",
+							"is_xml": false,
+							"syntax": "Packages/C++11/C++11.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,

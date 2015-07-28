@@ -6,19 +6,15 @@
 #include <array>
 #include <type_traits>
 
-template<class T>
-constexpr std::array<T, 0> make_array()
-{
+template<class T> constexpr std::array<T, 0> make_array() {
     return std::array<T, 0>{{}};
 }
 
-template<class... T>
-constexpr std::array<typename std::common_type<T...>::type, sizeof...(T)> make_array(T... args)
-{
+template<class... T> constexpr std::array<typename std::common_type<T...>::type, sizeof...(T)> make_array(T... args) {
     return std::array<typename std::common_type<T...>::type, sizeof...(T)>{{args...}};
 }
 template <typename T> struct is_iterator {
-    static char test(...);
+    static char test(...);//ignored. SFINAE(C+11)
 
     template <typename U,
         typename=typename std::iterator_traits<U>::difference_type,
