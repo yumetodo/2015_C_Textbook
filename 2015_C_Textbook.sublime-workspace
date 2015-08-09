@@ -4,6 +4,110 @@
 		"selected_items":
 		[
 			[
+				"s",
+				"start"
+			],
+			[
+				"uint",
+				"uint32_t"
+			],
+			[
+				"unt",
+				"uint64_t"
+			],
+			[
+				"li",
+				"list_last_p"
+			],
+			[
+				"list",
+				"list_t"
+			],
+			[
+				"n",
+				"name"
+			],
+			[
+				"num",
+				"number"
+			],
+			[
+				"pri",
+				"price"
+			],
+			[
+				"my",
+				"mygets_s_with_allocate"
+			],
+			[
+				"ma",
+				"maker"
+			],
+			[
+				"size",
+				"size_t"
+			],
+			[
+				"str",
+				"str2"
+			],
+			[
+				"arr",
+				"arr_size"
+			],
+			[
+				"in",
+				"insert_str"
+			],
+			[
+				"de",
+				"den"
+			],
+			[
+				"v",
+				"val2"
+			],
+			[
+				"d",
+				"den"
+			],
+			[
+				"va",
+				"val1"
+			],
+			[
+				"an",
+				"angle2"
+			],
+			[
+				"ang",
+				"angle_t"
+			],
+			[
+				"int",
+				"int8_t"
+			],
+			[
+				"av",
+				"average"
+			],
+			[
+				"a",
+				"average"
+			],
+			[
+				"for",
+				"for_each_row"
+			],
+			[
+				"data",
+				"data_i"
+			],
+			[
+				"make",
+				"make_str_database"
+			],
+			[
 				"siz",
 				"size_t"
 			],
@@ -32,10 +136,6 @@
 				"table_of_time_required_size"
 			],
 			[
-				"d",
-				"def	#ifndef … #define … #endif"
-			],
-			[
 				"get",
 				"get_integer_num"
 			],
@@ -46,10 +146,6 @@
 			[
 				"rnd",
 				"rnd_num"
-			],
-			[
-				"in",
-				"inputed"
 			],
 			[
 				"o",
@@ -68,16 +164,8 @@
 				"skip_eval_str_until_find_digit_or_bracket"
 			],
 			[
-				"de",
-				"delete_eval_store_buf_t"
-			],
-			[
 				"buf",
 				"buf_size"
-			],
-			[
-				"size",
-				"size_t"
 			],
 			[
 				"ch",
@@ -112,20 +200,12 @@
 				"bracket_close_count"
 			],
 			[
-				"ma",
-				"markup_percentage"
-			],
-			[
 				"di",
 				"division_names"
 			],
 			[
 				"divi",
 				"division_name"
-			],
-			[
-				"v",
-				"value"
 			],
 			[
 				"C",
@@ -136,16 +216,8 @@
 				"static_assert"
 			],
 			[
-				"arr",
-				"arr1"
-			],
-			[
 				"c",
 				"c_arr1"
-			],
-			[
-				"pri",
-				"print_arr"
 			],
 			[
 				"it",
@@ -192,16 +264,8 @@
 				"input_key"
 			],
 			[
-				"num",
-				"numbers"
-			],
-			[
 				"prin",
 				"print_mb_num"
-			],
-			[
-				"s",
-				"src/"
 			],
 			[
 				"ti",
@@ -218,10 +282,6 @@
 			[
 				"cas",
 				"case4_input"
-			],
-			[
-				"str",
-				"str_last〔variable〕"
 			],
 			[
 				"case",
@@ -384,10 +444,6 @@
 				"background-image: 〔property〕"
 			],
 			[
-				"li",
-				"link	Tag"
-			],
-			[
 				"st",
 				"style	Tag"
 			],
@@ -428,10 +484,6 @@
 				"swap_char_ptr"
 			],
 			[
-				"a",
-				"alphanumeric"
-			],
-			[
 				"ty",
 				"typeof"
 			],
@@ -462,30 +514,6 @@
 			[
 				"2015",
 				"2015年"
-			],
-			[
-				"th",
-				"thread_num"
-			],
-			[
-				"Se",
-				"section"
-			],
-			[
-				"fon",
-				"font-size"
-			],
-			[
-				"do",
-				"do_something1"
-			],
-			[
-				"ar",
-				"article	Tag"
-			],
-			[
-				"se",
-				"section	Tag"
 			]
 		]
 	},
@@ -544,19 +572,73 @@
 			}
 		},
 		{
-			"contents": "#include <stdio.h>\n#include <stdlib.h>\n#include <stdint.h>\n#include <limits.h>//in gcc\n#include <errno.h>//in gcc\ntypedef unsigned int uint;\nunsigned int get_uinteger_num(const char* message, const uint max, const uint min){\n    //機能：標準入力を数字に変換する。\n    //引数：戻り値の最大値,戻り値の最小値\n    //戻り値：入力した数字、EOFのときはUINT_MAX\n    if(NULL != message && '\\0' != message[0]) puts(message);\n    char s[100];\n\n    if (NULL == fgets(s, 100, stdin)){\n        if (feof(stdin)){//エラーの原因がEOFか切り分け\n            return UINT_MAX;\n        }\n        //改行文字が入力を受けた配列にない場合、入力ストリームにごみがある\n        size_t i;\n        for(i = 0; i < 100 && '\\0' == s[i]; i++);//strlenもどき\n        if('\\n' != s[i - 1]) while(getchar() != '\\n');//入力ストリームを掃除\n        goto get_uinteger_num_error;\n    }\n    if ('\\n' == s[0]) goto get_uinteger_num_error;\n    errno = 0;\n    const unsigned long t = strtoul(s, NULL, 10);\n    if (0 != errno || t < min || max < t)\n        goto get_uinteger_num_error;\n    return (uint)t;\nget_uinteger_num_error:\n    return get_uinteger_num(\"再入力してください\", max, min);\n}\nuint8_t* create_is_not_prime_num_table(const size_t generate_max){\n    uint8_t* p = (char*)(calloc((size_t)(generate_max) + 1, sizeof(char)));\n    p[0] = p[1] = 1;\n    for (size_t j = 2; j < generate_max; j++) {\n        for (size_t k = j + j; k <= generate_max; k += j)\n            p[k] = 1;\n    }\n    return p;\n}\nint main(void){\n    const uint create_max = get_uinteger_num(\"生成する最大値を入力してください\", UINT_MAX, 1);\n    uint8_t* is_not_prime_num_table = create_is_not_prime_num_table(create_max);//must free.\n\n    //フィボナッチ数列最初の2項は素数ではない。\n    size_t x, y, i;\n    for (x = 1, y = 1, i = 2; i <= create_max; x = y, y = i, i = x + y){\n        if (!is_prime_num_table[i]){\n            printf(\"%d,\", i);\n        }\n    }\n    free(is_prime_num_table);\n    return 0;\n}",
+			"file": "/C/Users/yumetodo/Desktop/insertaion_sort.cpp",
 			"settings":
 			{
-				"buffer_size": 1783,
+				"buffer_size": 9036,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#include <stdio.h>\n#include <stdlib.h>\n#include <stdint.h>\n#include <limits.h>//in gcc\n#include <errno.h>//in gcc\ntypedef unsigned int uint;\nunsigned int get_uinteger_num(const char* message, const uint max, const uint min){\n    //機能：標準入力を数字に変換する。\n    //引数：戻り値の最大値,戻り値の最小値\n    //戻り値：入力した数字、EOFのときはUINT_MAX\n    if(NULL != message && '\\0' != message[0]) puts(message);\n    char s[100];\n\n    if (NULL == fgets(s, 100, stdin)){\n        if (feof(stdin)){//エラーの原因がEOFか切り分け\n            return UINT_MAX;\n        }\n        //改行文字が入力を受けた配列にない場合、入力ストリームにごみがある\n        size_t i;\n        for(i = 0; i < 100 && '\\0' == s[i]; i++);//strlenもどき\n        if('\\n' != s[i - 1]) while(getchar() != '\\n');//入力ストリームを掃除\n        goto get_uinteger_num_error;\n    }\n    if ('\\n' == s[0]) goto get_uinteger_num_error;\n    errno = 0;\n    const unsigned long t = strtoul(s, NULL, 10);\n    if (0 != errno || t < min || max < t)\n        goto get_uinteger_num_error;\n    return (uint)t;\nget_uinteger_num_error:\n    return get_uinteger_num(\"再入力してください\", max, min);\n}\nuint8_t* create_is_not_prime_num_table(const size_t generate_max){\n    uint8_t* p = (uint8_t*)(calloc((size_t)(generate_max) + 1, sizeof(uint8_t)));\n    p[0] = p[1] = 1;\n    for (size_t j = 2; j < generate_max; j++) {\n        for (size_t k = j + j; k <= generate_max; k += j)\n            p[k] = 1;\n    }\n    return p;\n}\nint main(void){\n    const uint create_max = get_uinteger_num(\"生成する最大値を入力してください\", UINT_MAX, 1);\n    uint8_t* is_not_prime_num_table = create_is_not_prime_num_table(create_max);//must free.\n\n    //フィボナッチ数列最初の2項は素数ではない。\n    size_t x, y, i;\n    for (x = 1, y = 1, i = 2; i <= create_max; x = y, y = i, i = x + y){\n        if (!is_prime_num_table[i]){\n            printf(\"%d,\", i);\n        }\n    }\n    free(is_prime_num_table);\n    return 0;\n}",
+			"settings":
+			{
+				"buffer_size": 1789,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "class ENEMY{ \n	private: \n		double x, y; \n		int gh[3]; \n		int width, height; \n		int in_time, stop_time, out_time; int count; \n		bool endflag; \n	public: \n		bool All(); \n		void Move(); \n		void Draw(); \n		ENEMY(); \n		ENEMY *enemy = nullptr;\n}; \n#include \"control.h\"\n#include \"enemy.h\"\n#include \"define.h\"\nCONTROL::CONTROL() {\n//プレイヤークラスの生成\n	player = new PLAYER;\n	back = new BACK;\n}\nCONTROL::~CONTROL() {\n//プレイヤークラスの解放\n	delete player;\n}\nvoid CONTROL::All() {\n	ENEMY *enemy=0;\n//プレイヤークラスのAll関数実行\n	SetDrawArea(MARGIN, MARGIN, MARGIN + 380, MARGIN + 460);\n	back->All();\n	player->All();\n	if (enemy != NULL){\n		if (enemy -> All()){\n			delete enemy;\n			enemy = NULL;\n		}\n	}\n	++g_count;\n}\nENEMY::ENEMY(){\n	LoadDivGraph(\"enemy.png\", 3, 1, 3, 27, 25, gh);\n	width = 27;\n	height = 25;\n	x = 50;\n	y = -50;\n	in_time = 180;\n	stop_time = 300;\n	out_time = 420;\n	count = 0;\n	endflag = false;\n}\nvoid ENEMY::Move(){\n//出てきてから止まる時間までの間なら下に移動\n	if (in_time < g_count && g_count < stop_time){\n		y += 2;\n	}\n	else if (g_count > out_time){\n		y -= 2;\n		if (y < -40){\n			endflag = true;\n		}\n	}\n}\nvoid ENEMY::Draw(){\n	int temp;\n	if (!endflag){\n		temp = count % 40 / 10;\n		if (temp == 3)\n			temp = 1;\n		DrawGraph(x, y, gh[temp], TRUE);\n	}\n}\nbool ENEMY::All(){\n	Move();\n	Draw();\n	++count;\n	return endflag;\n}\n\n/*ここまでcontrol.cpp*/\n\n/*ここからdefine.h*/\n#include\n#pragma once\n//プレイヤーの歩くスピード\n#define PLAYER_SPEED 4\n//メッセージボックス\n#define MSG(m) {\\\nMessageBox(NULL,m,\"メッセージ\",MB_OK);}\n//extern宣言してkey配列にどこからでもアクセスできるようにする\nextern char key[256];\nextern int g_count;\n//define\n#define MARGIN 10\n#define SCROLL_SPEED 1\n#define PSHOT_NUM 20\n#define PSHOT_SPEED 14\nstruct SHOT{\nbool flag; //弾が発射中かどうか\ndouble x; //x座標\ndouble y; //y座標\nint gh; //グラフィックハンドル\nint width, height; //画像の幅と高さ\n};",
+			"contents": "著作権法第二条(定義)第1項9号の5\nイ\n	公衆の用に供されている電気通信回線\n	に\n	接続している\n	自動公衆送信装置（\n		公衆の用に供する電気通信回線\n		に\n		接続することにより、\n		その記録媒体のうち\n			自動公衆送信の用に供する部分（\n				以下\n					この号\n				及び\n					第四十七条の五第一項第一号\n				において「公衆送信用記録媒体」という。\n			）\n			に記録され、\n		又は\n			当該装置に入力される情報\n		を\n		自動公衆送信する機能を有する装置\n		をいう。\n		以下同じ。\n	）\n	の\n	公衆送信用記録媒体\n	に\n	情報\n	を\n	記録し、\n\n		情報が記録された記録媒体\n		を\n		当該自動公衆送信装置\n		の\n		公衆送信用記録媒体\n		として加え、\n	若しくは\n		情報が記録された記録媒体\n		を\n		当該自動公衆送信装置\n		の\n			公衆送信用記録媒体\n			に変換し、\n		又は\n			当該自動公衆送信装置\n			に\n			情報を入力すること。\n\nロ\n		その公衆送信用記録媒体\n		に\n		情報が記録され、\n	又は\n		当該自動公衆送信装置\n		に\n		情報が入力されている自動公衆送信装置について、\n		公衆の用に供されている電気通信回線への接続（\n			配線、自動公衆送信装置の始動、送受信用プログラムの起動その他の一連の行為\n			により行われる場合には、\n			当該一連の行為のうち最後のものをいう。\n		）を行うこと。",
 			"settings":
 			{
-				"buffer_size": 1727,
+				"buffer_size": 652,
+				"line_ending": "Windows",
+				"name": "著作権法第二条(定義)第1項9号の5"
+			}
+		},
+		{
+			"file": "/D/lsw-build2-master/FirstAutomatedBld.vbs",
+			"settings":
+			{
+				"buffer_size": 10566,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/D/lsw-build2-master/bld_ffmpeg.sh",
+			"settings":
+			{
+				"buffer_size": 715,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "@echo off\nsetlocal\nrem set wgetstr=aaa\nrem echo %wgetstr%\nset wgetstr=--trust-server-names -t 10 -O msys2.tar.xz \"http://downloads.sourceforge.net/project/msys2/%1?r=http://sourceforge.net/projects/msys2/files/%1/download&ts=1438367151&use_mirror=jaist\"\necho %wgetstr%\npause\necho on\nwget %wgetstr%\n@echo off\npause\nendlocal",
+			"file": "/D/lsw-build2-master/msys2_dl_wget.bat",
+			"file_size": 333,
+			"file_write_time": 130828697374481941,
+			"settings":
+			{
+				"buffer_size": 322,
+				"line_ending": "Windows",
+				"scratch": true
+			}
+		},
+		{
+			"file": "/C/Users/yumetodo/Desktop/zxing.md",
+			"settings":
+			{
+				"buffer_size": 4508,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/yumetodo/Desktop/link_bio.txt",
+			"settings":
+			{
+				"buffer_size": 617,
+				"line_ending": "Windows",
+				"name": "http://first.lifesciencedb.jp/archives/7831"
 			}
 		}
 	],
@@ -709,6 +791,12 @@
 	],
 	"file_history":
 	[
+		"/C/lib/zxing/cpp/README.md",
+		"/C/lib/zxing/qt/README.txt",
+		"/C/lib/zxing/NOTICE",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/18c_char_str_base.html",
+		"/C/Users/yumetodo/AppData/Roaming/Sublime Text 3/Packages/User/bh_wrapping.sublime-settings",
+		"/C/Users/yumetodo/AppData/Roaming/Sublime Text 3/Packages/BracketHighlighter/bh_wrapping.sublime-settings",
 		"/C/Users/yumetodo/Desktop/divisions_sales.cpp",
 		"/C/Users/yumetodo/Desktop/eval.cpp",
 		"/C/Users/yumetodo/Desktop/insertaion_sort.cpp",
@@ -722,7 +810,6 @@
 		"/C/Users/yumetodo/Desktop/ideone_qXNhlI.cpp",
 		"/C/Users/yumetodo/Desktop/addressbook-complete/FriendTreeView.cpp",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/index.html",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/18c_char_str_base.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/13structure.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/08preprocess_and_constant.html",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/15value.html",
@@ -831,12 +918,7 @@
 		"/C/Users/yumetodo/Desktop/matora01.c",
 		"/C/Users/yumetodo/Documents/Visual Studio 2015/Projects/ConsoleApplication3/ConsoleApplication3/Source.cpp",
 		"/C/Users/yumetodo/Documents/Visual Studio 2015/Projects/ConsoleApplication3/GNUmakefile",
-		"/C/msys64/etc/pacman.conf",
-		"/C/msys64/home/yumetodo/coreupdate.sh",
-		"/C/msys64/home/yumetodo/inst_base.sh",
-		"/C/Users/yumetodo/Documents/Visual Studio 2015/Projects/ConsoleApplication3/ConsoleApplication3/GNUmakefile",
-		"/C/Users/yumetodo/Documents/git/ini_read-write/ini_read-write/Source.cpp",
-		"/C/Users/yumetodo/Documents/git/ini_read-write/ini_read-write/ini_read-write.vcxproj"
+		"/C/msys64/etc/pacman.conf"
 	],
 	"find":
 	{
@@ -854,6 +936,28 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"%ld",
+			"re",
+			"list*",
+			"new_list_elem_",
+			"new_p",
+			"re",
+			"printf",
+			"error",
+			"return INT_MIN",
+			"struct list",
+			"WGET",
+			"CMD_WGET",
+			"insert_place",
+			"str ",
+			"str",
+			"SYMBOL",
+			"insert_place",
+			"str",
+			"re",
+			"fraction",
+			"struct fraction",
+			"put_data",
 			"j",
 			"error",
 			"return UINT_MAX",
@@ -959,29 +1063,7 @@
 			"&&",
 			"<T>",
 			"<rand_type>",
-			"template <",
-			"_countof",
-			"&&",
-			"\" \\+\\n\\t\\t\"",
-			"\" \\+\\n",
-			"\",",
-			"\", \"",
-			"\\n",
-			"(.+)",
-			".+",
-			"case1_iput",
-			"case4_inout",
-			"search_limits",
-			"i",
-			"m",
-			"n",
-			"\\n",
-			"n",
-			"rand",
-			"flag",
-			"and",
-			"flag0",
-			"<uint>"
+			"template <"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -989,6 +1071,7 @@
 		"regex": true,
 		"replace_history":
 		[
+			"str_arr ",
 			"static_assert($1)",
 			"template",
 			"\", \"",
@@ -1100,7 +1183,7 @@
 	"groups":
 	[
 		{
-			"selected": 7,
+			"selected": 12,
 			"sheets":
 			[
 				{
@@ -1207,7 +1290,7 @@
 						"translation.y": 143.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
@@ -1298,7 +1381,7 @@
 						"translation.y": 71.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -1402,7 +1485,7 @@
 						"translation.y": 26.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -1493,7 +1576,7 @@
 						"translation.y": 1607.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -1519,46 +1602,51 @@
 							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
 								"bh_double_quote_close",
 								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
@@ -1568,12 +1656,7 @@
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
-								"bh_tag_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content"
+								"bh_tag_content"
 							],
 							"origin_encoding": "UTF-8",
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
@@ -1583,7 +1666,7 @@
 						"translation.y": 2341.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -1599,8 +1682,8 @@
 						"selection":
 						[
 							[
-								3207,
-								3207
+								2374,
+								2374
 							]
 						],
 						"settings":
@@ -1613,56 +1696,56 @@
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
 							],
 							"origin_encoding": "ASCII",
 							"syntax": "Packages/C++11/C++11.tmLanguage",
@@ -1670,26 +1753,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1177.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
 					"buffer": 6,
+					"file": "/C/Users/yumetodo/Desktop/insertaion_sort.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1783,
+						"buffer_size": 9036,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								1783
+								2927,
+								2927
 							]
 						],
 						"settings":
@@ -1702,68 +1786,67 @@
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
 							],
-							"default_dir": "C:\\Users\\yumetodo\\Documents\\2015_C_Textbook",
-							"is_xml": false,
+							"origin_encoding": "ASCII",
 							"syntax": "Packages/C++11/C++11.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 254.0,
+						"translation.y": 1148.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1771,15 +1854,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1727,
+						"buffer_size": 1789,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								321,
-								321
+								1348,
+								1348
 							]
 						],
 						"settings":
@@ -1787,56 +1870,56 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
 								"bh_default_close",
 								"bh_default_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
 								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
@@ -1845,13 +1928,554 @@
 							],
 							"default_dir": "C:\\Users\\yumetodo\\Documents\\2015_C_Textbook",
 							"is_xml": false,
-							"syntax": "Packages/C++11/C++11.tmLanguage"
+							"syntax": "Packages/C++11/C++11.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 612.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 652,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								62,
+								259
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_name": "著作権法第二条(定義)第1項9号の5",
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"default_dir": "C:\\Users\\yumetodo\\Documents\\2015_C_Textbook",
+							"is_xml": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/D/lsw-build2-master/FirstAutomatedBld.vbs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10566,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2857,
+								2857
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"origin_encoding": "ASCII",
+							"syntax": "Packages/VBScript/VBScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1158.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/D/lsw-build2-master/bld_ffmpeg.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 715,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"origin_encoding": "ASCII",
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "/D/lsw-build2-master/msys2_dl_wget.bat",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 322,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								307,
+								307
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_name": "",
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"force_encoding": "Shift_JIS",
+							"in_converting": true,
+							"is_xml": false,
+							"origin_encoding": "Shift_JIS",
+							"syntax": "Packages/Batch File/Batch File.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 247.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "/C/Users/yumetodo/Desktop/zxing.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4508,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3351,
+								3351
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_complete": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"is_xml": false,
+							"syntax": "Packages/Markdown Extended/Syntaxes/Markdown Extended.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1113.0,
+						"zoom_level": 1.0
+					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "/C/Users/yumetodo/Desktop/link_bio.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 617,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								564,
+								564
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_name": "http://first.lifesciencedb.jp/archives/7831",
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"is_xml": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				}
 			]

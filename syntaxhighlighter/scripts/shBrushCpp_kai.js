@@ -24,7 +24,7 @@
 		// Copyright 2006 Shin, YoungJin
 	
 		var reserved = 	'__stdcall __cdecl and and_eq asm _asm auto bitand bitor ' + 
-						' bool break case catch class compl constexpr const const_cast continue __declspec ' +
+						' bool break case catch class compl constexpr const const_cast continue __declspec decltype ' +
 						'default delete deprecated dllexport dllimport do dynamic_cast else enum __exception ' +
 						'explicit export extern __finally false for friend goto if inline ' +
 						'mutable naked namespace new noinline noreturn not nothrow not_eq nullptr ' +
