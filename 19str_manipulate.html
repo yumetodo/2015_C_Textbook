@@ -264,7 +264,10 @@ template&lt;size_t SIZE> struct c_str_insert_c &lt;char[SIZE]> {//c_array
 };
 #endif //__cplusplus
 #endif //_INC_C_STR_INSERT_H </pre>
-            <p>マクロ関数cstr_insertはなんとかマクロ使わずにできないのかな・・・</p>
+            <p>
+                16～30行目はいわゆる関数オブジェクトとかfunction-like objectというやつです。templateの特殊化によって6～8行目の関数を呼び分けます。<br>
+                マクロ関数cstr_insertはなんとかマクロ使わずにできないのかな・・・
+            </p>
         </section>
         <section style="height: 200px;overflow-y: scroll;">
             <h3>使用例</h3>
