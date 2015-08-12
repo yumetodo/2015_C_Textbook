@@ -14,6 +14,12 @@
     <script type="text/javascript">
         SyntaxHighlighter.all();
     </script>
+    <style type="text/css">
+        .scroll_box{
+            height: 200px;
+            overflow-y: scroll;
+        }
+    </style>
 </head>
 <body>
     <h1>第19章 ～文字列操作～</h1>
@@ -28,7 +34,8 @@
         <h2>初めに</h2>
         <p>
             C言語最難関の文字列操作です。ひたすら気を使わないといけないことが多い、<b>心折設計</b>となっております。<br>
-            ここでは、Cでの文字列操作の難しさを苦しみつつ体感していただきつつ、C++のSTL、std::stringの便利さを痛感していただければ、と思います。
+            ここでは、Cでの文字列操作の難しさを苦しみつつ体感していただきつつ、C++のSTL、std::stringの便利さを痛感していただければ、と思います。<br>
+            その前に一言。Cで文字列操作するならとりあえずsprintf使え。
         </p>
     </section>
     <section>
@@ -36,8 +43,37 @@
         <p>文字列の長さを求める関数です。といってもマルチバイト文字は考慮しないのでNULL文字を除くbyte数を求めることになります。プロトタイプ宣言を見てみましょう。</p>
         <pre class="brush: cpp;" title="プロトタイプ宣言">size_t strlen(const char *str);</pre>
         <p>使用例を見ましょう。</p>
-        <pre class="brush: cpp;" title="main.cpp">#include &lt;iostream>
+        <pre class="brush: cpp;" title="使用例">#include &lt;stdio.h>
+#include &lt;string.h>
+int main(){
+    const char* str = "arikitari_na_world!";
+    printf("文字列%sの長さは\n%zu\n", str, strlen(str));
+    return 0;
+}</pre>
+        <p>
+            使い方もわかりやすいのでいいですね。・・・と言いたいのですが、使用には実は細心の注意が必要です。<br>
+            <a href="http://mavericktse.mooo.com/wordpress/archives/1982">Do not use strlen() family to determine size of dynamic array! | 舶来ゴミ置き場</a><br>
+            Cで文字列操作といえばほぼ例外なくsprintf系関数を使うのですが、その書き込み先のサイズ指定にstrlenを用いてはいけません。<br>
+            なぜならば、strlenで取得できるのはあくまで文字列の長さであって、確保しているメモリサイズではないからです。<br>
+            strlen関数は便利でいいのですが、過去の私みたいに落とし穴にハマることの無いよう、お気をつけ下さい。
+        </p>
+        <p>では、このstrlen関数を自作してみましょう。まあnull文字が出るまでfor回すだけだから楽勝だよね？</p>
+        <section>
+            <h3>ヘッダー</h3>
+            <pre class="brush: cpp;" title="strlen.h">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))
+#pragma once
+#endif
+#ifndef _INC_MY_STRLEN_H
+#define _INC_MY_STRLEN_H
+#include &lt;cstddef>
+size_t my_strlen(const char *str);
+#endif</pre>
+        </section>
+        <section class="scroll_box">
+            <h3>使用例</h3>
+            <pre class="brush: cpp;" title="main.cpp">#include &lt;iostream>
 #include &lt;cstring>
+#include "strlen.h"
 void strlen_and_do(const char* str, auto (*getstrlen)(const char*) -> size_t, const char* message){
     std::cout &lt;&lt; message &lt;&lt; "を呼び出します" &lt;&lt; std::endl;
     const auto re = getstrlen(str);
@@ -54,37 +90,21 @@ int main(void){
     std::cout &lt;&lt; "base_str : " &lt;&lt; str &lt;&lt; std::endl;
 
     strlen_and_do(str, strlen, "string.hのstrlen関数");
-    return 0;
-}</pre>
-        <p>では、このstrlen関数を自作してみましょう。まあnull文字が出るまでfor回すだけだから楽勝だよね？</p>
-        <pre class="brush: cpp;" title="strlen.h">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))
-#pragma once
-#endif
-#ifndef _INC_MY_STRLEN_H
-#define _INC_MY_STRLEN_H
-#include &lt;cstddef>
-size_t my_strlen(const char *str);
-#endif
-</pre>
-        <p>これをstrlen.hとかしてさっきのmain関数のあるcppと自作する関数の定義を書くcppでincludeしてください。つまりmainのあるcppは</p>
-        <pre class="brush: cpp;" title="main.cpp">#include &lt;iostream>
-#include &lt;cstring>
-#include "strlen.h"</pre>
-        <p>中略</p>
-        <pre class="brush: cpp; first-line: 14">int main(void){
-    auto str = "arikitari_na_world!";
-
-    std::cout &lt;&lt; "base_str : " &lt;&lt; str &lt;&lt; std::endl;
-
-    strlen_and_do(str, strlen, "string.hのstrlen関数");
     strlen_and_do(str, my_strlen, "strlen.hのmy_strlen関数");
     return 0;
-}</pre>
-        <p>な感じ</p>
+}
+</pre>
+        </section>
+        <pre class="brush: plain" title="望ましい実行例1">$ ./strlen.exe
+base_str : arikitari_na_world!
+string.hのstrlen関数を呼び出します
+19文字だよ
+strlen.hのmy_strlen関数を呼び出します
+19文字だよ</pre>
         <form><input type="button" value="答えを 表示/非表示" onclick="change_answer_state('my_strlen')"></form>
         <section id="my_strlen" style="display: none;">
             <h4>回答</h4>
-            <pre class="brush: cpp;">#include "strlen.h"
+            <pre class="brush: cpp;" title="strlen.cpp">#include "strlen.h"
 #include &lt;limits>
 size_t my_strlen(const char *str){
     if (nullptr == str) return 0;
@@ -97,29 +117,28 @@ size_t my_strlen(const char *str){
         </section>
     </section>
     <section>
-        <h2>strcmp</h2>
+        <h2>strchr</h2>
         <p>
-            文字列を比較する関数です。第1引数の文字列のと第2引数の文字列を1文字づつ比較していきます。<br>
-            文字が一致しなくなるかnull文字に遭遇するとループを終了し値をかえします。<br>
-            そのときその文字コードが第一引数のほうが大きかったら正の値を、小さかったら負の値を、両方同じなら0を返します。<br>
-            正の値とは具体的に何かというと実装依存ですが、MSVCもgccもclangも1を返すようです。負の値は同様に-1のようです。
+            指定した文字を文字列中から検索し、最初に見つかった場所へのポインタを返します。<br>
+            見つからない場合はnullptrを返します。
         </p>
-        <pre class="brush: cpp;" title="プロトタイプ宣言">int strcmp ( const char * str1, const char * str2 );</pre>
-    </section>
-    <section>
-        <h2>strstr</h2>
-        <p>文字列を検索する関数です。見つかるとその先頭のポインターを返し、見つからない場合はNULLポインターを返します。プロトタイプ宣言を見てみましょう。</p>
-        <pre class="brush: cpp;" title="プロトタイプ宣言">char *strstr(const char *str, const char *strSearch); // C only
-char *strstr(char *str, const char *strSearch); // C++ only
-const char *strstr(const char *str, const char *strSearch); // C++ only</pre>
-        <p>
-            CとC++で違うのはCとC++のconstの扱いのせいでしょうね。前に話したと思いますが。使用例を見ましょう。<br>
-            _CONST_RETURNってのは上のプロトタイプ宣言で「C only」とか「C++ only」とか書いてありましたが、それです。<br>
-            my_strstrってのはこれから作ってもらう関数名なので作る時実験したい場合は3, 31行目のコメントアウトを外してみてください。
-        </p>
-        <pre class="brush: cpp;" title="main.cpp">#include &lt;iostream>
-#include &lt;cstring>
-//#include "strstr.h"
+        <pre class="brush: cpp;" title="使用例">#Include &lt;stdio.h>
+int main(){
+    char buf[1024];
+    fgets(buf, 1024, stdin);
+    strchr(buf, '\n')[0] = '\0';
+
+    puts(buf);
+
+    return 0;
+}</pre>
+        <p>というわけで作りましょう、これまたfor書くだけの簡単なお仕事。</p>
+        <section>
+            <h3>ヘッダー</h3>
+            <pre class="brush: cpp; highlight: [14, 16];" title="strlen.h">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))
+#pragma once
+#endif
+#include &lt;stddef.h>
 #ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.
 #ifdef __cplusplus
 #define _CONST_RETURN  const
@@ -128,6 +147,201 @@ const char *strstr(const char *str, const char *strSearch); // C++ only</pre>
 #define _CONST_RETURN
 #endif  /* __cplusplus */
 #endif  /* _CONST_RETURN */
+#ifdef __cplusplus
+char * mystrchr(char * str, int character);
+#endif
+_CONST_RETURN char * mystrchr(const char * str, int character);
+</pre>
+        </section>
+        <section class="scroll_box">
+            <h3>使用例</h3>
+            <pre class="brush: cpp;" title="main.cpp">#include "strchr.h"
+#include &lt;cstdio>
+#include &lt;cstring>
+using strchr_t = char* (*)(char*, int);
+template&lt;size_t SIZE>void replace_newline_char(char (&amp;str)[SIZE], const char* func_name, strchr_t func) {
+    printf("関数名: %s\n", func_name);
+    printf("Before: %s\n", str);
+    func(str, '\n')[0] = '\0';
+    printf("After: %s\n", str);
+}
+int main() {
+    constexpr size_t arr_size = 1024;
+    char str1[arr_size], str2[arr_size];
+    puts("文字列を入力してください");
+    fgets(str1, arr_size, stdin);
+    memcpy(str2, str1, strlen(str1) + 1);
+
+    replace_newline_char(str1, "strchr", strchr);
+    replace_newline_char(str2, "mystrchr", mystrchr);
+
+    return 0;
+}</pre>
+        </section>
+        <pre class="brush: plain" title="望ましい実行例1">$ ./strchr.exe
+文字列を入力してください
+arikitari_na_world!
+関数名: strchr
+Before: arikitari_na_world!
+
+After: arikitari_na_world!
+関数名: mystrchr
+Before: arikitari_na_world!
+
+After: arikitari_na_world!
+</pre>
+        <form><input type="button" value="答えを 表示/非表示" onclick="change_answer_state('my_strchr')"></form>
+        <section id="my_strchr" style="display: none;">
+            <h4>回答</h4>
+            <pre class="brush: cpp;" title="strlen.cpp">#include "strchr.h"
+#ifdef __cplusplus
+char * mystrchr(char * str, int character) {
+    size_t i;
+    for (i = 0; '\0' != str[i] &amp;&amp; character != str[i]; ++i);
+    return (character != str[i]) ? nullptr : &amp;str[i];
+}
+#endif
+_CONST_RETURN char * mystrchr(const char * str, int character) {
+    return mystrchr(const_cast&lt;char*>(str), character);
+}</pre>
+        </section>
+    </section>
+    <section>
+        <h2>strcmp</h2>
+        <p>
+            文字列を比較する関数です。第1引数の文字列のと第2引数の文字列を1文字づつ比較していきます。<br>
+            文字が一致しなくなるかnull文字に遭遇するとループを終了し値をかえします。<br>
+            そのときその文字コードが第一引数のほうが大きかったら正の値を、小さかったら負の値を、両方同じなら0を返します。<br>
+            正の値とは具体的に何かというと実装依存ですが、MSVCもgccもclangも1を返すようです。負の値は同様に-1のようです。
+        </p>
+        <pre class="brush: cpp;" title="プロトタイプ宣言">int strcmp ( const char * str1, const char * str2 );</pre>
+        <pre class="brush: cpp;" title="実行例">#include &lt;stdio.h>
+#include &lt;string.h>
+int main(){
+    char buf[1024];
+    fgets(buf, 1024, stdin);
+    strchr(buf, '\n')[0] = '\0';
+    if(0 == strcmp("add", buf)){
+        puts("足し算");
+    }
+    else if(0 == strcmp("sub", buf)){
+        puts("引き算");
+    }
+    else if(0 == strcmp("mul", buf)){
+        puts("掛け算");
+    }
+    else if(0 == strcmp("div", buf)){
+        puts("割り算");
+    }
+    else{
+        puts("unknown command");
+    }
+    return 0;
+}</pre>
+        <section>
+            <h3>ヘッダー</h3>
+            <pre class="brush: cpp;" title="strcmp.h">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))
+#pragma once
+#endif
+#ifndef _INC_MY_STRLEN_H
+#define _INC_MY_STRLEN_H
+int my_strcmp(const char *string1, const char *string2);
+#endif</pre>
+        </section>
+        <section class="scroll_box">
+            <h3>使用例</h3>
+            <pre class="brush: cpp;" title="main.cpp">#include &lt;iostream>
+#include &lt;cstdio>
+#include &lt;cstring>
+#include "strcmp.h"
+using strcmp_t = int (*)(const char*, const char*);
+void strstr_and_do(const char* str1, const char* str2, strcmp_t strcomare, const char* message){
+    std::cout &lt;&lt; message &lt;&lt; "を呼び出します" &lt;&lt; std::endl;
+    const auto re = strcomare(str1, str2);
+    if (0 == re){
+        std::cout &lt;&lt; "\"" &lt;&lt; str1 &lt;&lt; "\", \"" &lt;&lt; str2 &lt;&lt; "\" は一致しました" &lt;&lt; std::endl;
+    }
+    else{
+        std::cout &lt;&lt; re &lt;&lt; " = strcmp(\"" &lt;&lt; str1 &lt;&lt; "\", \"" &lt;&lt; str2 &lt;&lt; "\")  戻り値 :" &lt;&lt; ((re > 0) ? '>' : '&lt;') &lt;&lt; "0" &lt;&lt; std::endl;
+    }
+}
+int main(void){
+    auto str1 = "arikitari_na_world!";
+    const char* str2[] = { "akrikitariahanai", "arikitari_na_world", "arikitari_na_world!", "arikitari_na_world!!", "arikitari_na_world_" };
+
+    for (auto i : str2){
+        strstr_and_do(str1, i, strcmp, "string.hのstrcmp関数");
+        strstr_and_do(str1, i, my_strcmp, "strcmp.hのmy_strcmp関数");
+        std::cout &lt;&lt; std::endl;
+    }
+    return 0;
+}
+</pre>
+        </section>
+        <form><input type="button" value="答えを 表示/非表示" onclick="change_answer_state('my_strcmp')"></form>
+        <section id="my_strcmp" style="display: none;">
+            <h4>回答</h4>
+            <pre class="brush: cpp;" title="strcmp.cpp">#include "strcmp.h"
+#include &lt;limits>
+#include &lt;cstddef>
+#include &lt;cerrno>
+int my_strcmp(const char *string1, const char *string2){
+    if (nullptr == string1 || nullptr == string2){
+        errno = EINVAL;
+        return -2;
+    }
+    const auto search_limits = std::numeric_limits&lt;size_t>::max();//無限ループ防止
+    size_t i;
+    for (i = 0; i &lt; search_limits &amp;&amp; '\0' != string1[i] &amp;&amp; '\0' != string2[i] &amp;&amp; string1[i] == string2[i]; i++);
+    if (search_limits == i){
+        errno = EINVAL;
+        return -2;
+    }
+    //MSVC, gcc, clangの実装では1,0,-1のいずれかを返す
+    return (string1[i] == string2[i]) ? 0 : (string1[i] > string2[i]) ? 1 : -1;//引き算にするとアンダーフローの危険がある
+}
+</pre>
+        </section>
+    </section>
+    <section>
+        <h2>strstr</h2>
+        <p>文字列を検索する関数です。見つかるとその先頭のポインターを返し、見つからない場合はNULLポインターを返します。</p>
+        <pre class="brush: cpp;" title="使用例">#include &lt;stdio.h>
+#include &lt;string.h>
+int main(void){
+    char str[] = "arikitari_na_world!";
+    printf("Before: %s\n", str);
+    memcpy(strstr(str, "arikitari"), "arifureta___", 12);
+    printf("After : %s\n", str);
+    return 0;
+}</pre>
+        <section>
+            <h3>ヘッダー</h3>
+            <pre class="brush: cpp;" title="strcmp.h">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))
+#pragma once
+#endif
+#ifndef _INC_MY_STRSTR_H
+#define _INC_MY_STRSTR_H
+#include &lt;cstddef>//To use _CONST_RETURN
+#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.
+#ifdef __cplusplus
+#define _CONST_RETURN  const
+#define _CRT_CONST_CORRECT_OVERLOADS
+#else  /* __cplusplus */
+#define _CONST_RETURN
+#endif  /* __cplusplus */
+#endif  /* _CONST_RETURN */
+#ifdef __cplusplus
+char *my_strstr(char *str, const char *strSearch);
+#endif
+_CONST_RETURN char *my_strstr(const char *str, const char *strSearch);
+#endif</pre>
+        </section>
+        <section class="scroll_box">
+            <h3>使用例</h3>
+            <pre class="brush: cpp;" title="main.cpp">#include &lt;iostream>
+#include &lt;cstring>
+#include "strstr.h"
 using strstr_t = _CONST_RETURN char*(*)(const char*, const char*);
 void strstr_and_do(const char* str, const char* search_key, strstr_t strsearch, const char* message){
     std::cout &lt;&lt; message &lt;&lt; "を呼び出します" &lt;&lt; std::endl;
@@ -136,20 +350,21 @@ void strstr_and_do(const char* str, const char* search_key, strstr_t strsearch, 
         std::cout &lt;&lt; "見つからなかったんだぜ" &lt;&lt; std::endl;
     }
     else{
-        std::cout &lt;&lt; (re - str) + 1 &lt;&lt; "番目で見つかったよ" &lt;&lt; std::endl;
+        std::cout &lt;&lt; (re - str) + 1 &lt;&lt; "番目で見つかったよ (" &lt;&lt; re[0] &lt;&lt; ")" &lt;&lt; std::endl;
     }
 }
 int main(void){
-    auto str = "arikitari_na_world!";
+    auto str = "arikitari_na_world";
     auto search_key = "world";
 
     std::cout &lt;&lt; "base_str : " &lt;&lt; str &lt;&lt; std::endl;
     std::cout &lt;&lt; "search_key : " &lt;&lt; search_key &lt;&lt; std::endl;
 
     strstr_and_do(str, search_key, strstr, "string.hのstrstr関数");
-    //strstr_and_do(str, search_key, my_strstr, "strstr.hのmy_strstr関数");
+    strstr_and_do(str, search_key, my_strstr, "strstr.hのmy_strstr関数");
     return 0;
 }</pre>
+        </section>
         <p>さて、この関数を作ってみましょう。forの2重ループを組むのが一番早いと思います。</p>
         <blockquote cite="http://www.cplusplus.com/reference/cstring/strstr/">
             <a href="http://www.cplusplus.com/reference/cstring/strstr/">strstr - C++ Reference</a><br>
@@ -160,6 +375,13 @@ int main(void){
              Returns a pointer to the first occurrence of strSearch in str, or NULL if strSearch does not appear in str. If strSearch points to a string of zero length, the function returns str.
         </blockquote>
         <p>第2引数が空の文字列(=0番目の要素が'\0')のときは第1引数をそのまま帰す必要がある点に注意してください。また使用例の4-11行目、_CONST_RETURNについての部分も書かないとダメです。</p>
+        <pre class="brush: plain" title="望ましい実行例1">$ ./strstr.exe
+base_str : arikitari_na_world
+search_key : world
+string.hのstrstr関数を呼び出します
+14番目で見つかったよ (w)
+strstr.hのmy_strstr関数を呼び出します
+14番目で見つかったよ (w)</pre>
         <form><input type="button" value="答えを 表示/非表示" onclick="change_answer_state('my_strstr')"></form>
         <section id="my_strstr" style="display: none;">
             <h4>回答</h4>
@@ -198,6 +420,124 @@ _CONST_RETURN char *my_strstr(const char *str, const char *strSearch){
             </p>
             <p>12, 13行目についてですが、これを逆にしてはいけません。nullポインターの実体って、あなた、それどこですか？</p>
             <p>俗に力任せ法とか言われる方法ですが、別途配列を持たなければならないBM法やKMP法よりはL1キャッシュを活用しやすいはずなので、ポインタ減算が発生することを差し引いてもstrSearchが十分に短い文字列の場合、十分な早さで検索できます。BM法はひたすらポインタ減算するので論外ですし、KMP法はstrSearch内が同じ文字列の繰り返しのような特殊な場合以外では先にindexを構築する分速度面で不利になります。</p>
+        </section>
+    </section>
+    <section>
+        <h2>sprintf</h2>
+        <p>
+            Cで文字列操作するならとりあえずsprintf使え、と最初に言いましたがその通りです。<br>
+            使い方はいたってシンプル。というかprintfと全く同じです。<br>
+            printfでもsprintfでも第一引数に確保されている領域へのポインタ(配列、動的配列)を渡せば結果がそこに書き込まれます。
+        </p>
+        <section>
+            <h3>サンプル: 数字の桁数を求める</h3>
+            <script src="http://ideone.com/e.js/idduCj" type="text/javascript" ></script>
+        </section>
+        <p>
+            というわけで、下に掲げる関数を短くしてください。<br>
+            元ネタは<br>
+            <a href="http://www.pro.or.jp/~fuji/mybooks/cdiag/cdiag.9.3.html">Ｃプログラミング診断室／珠玉の力作／文字列処理</a>です<br>
+            短くした後の関数のプロトタイプは
+        </p>
+        <pre class="brush: cpp;">void SetUp_OutputFileName_fix(char* poutputfile_path_name, const char* pjob_name, PFILE_INFORMATION pfile_information);</pre>
+        <p>とします。</p>
+        <section class="scroll_box">
+            <h3>問題のコード</h3>
+            <pre class="brush: plain;">void SetUp_OutputFileName(unsigned char* poutputfile_path_name, unsigned char* pjob_name, PFILE_INFORMATION pfile_information){
+/*1991.10.21  変更前開始*/
+/*
+if (pfile_information->type == FILE_TYPE_BLOCK_COPY)
+    {
+    strcpy((char *)poutputfile_path_name, PATH_OUTPUT_HOME);
+    strcat((char *)poutputfile_path_name, "/");
+    strcat((char *)poutputfile_path_name, (char *)pjob_name);
+    strcat((char *)poutputfile_path_name, PATH_BLOCK_COPY_FILE);
+    sprintf((char *)poutputfile_path_name + strlen(PATH_OUTPUT_HOME) + 1 + strlen((char *)pjob_name) + strlen(PATH_BLOCK_COPY_FILE) + 0,
+            "%1X",
+            pfile_information->information.block_copy.black_flag);
+    sprintf((char *)poutputfile_path_name + strlen(PATH_OUTPUT_HOME) + 1 + strlen((char *)pjob_name) + strlen(PATH_BLOCK_COPY_FILE) + 1,
+            "%1X",
+            pfile_information->information.block_copy.plane_code);
+    sprintf((char *)poutputfile_path_name + strlen(PATH_OUTPUT_HOME) + 1 + strlen((char *)pjob_name) + strlen(PATH_BLOCK_COPY_FILE) + 2,
+            "%1X",
+            pfile_information->information.block_copy.color_code);
+    sprintf((char *)poutputfile_path_name + strlen(PATH_OUTPUT_HOME) + 1 + strlen((char *)pjob_name) + strlen(PATH_BLOCK_COPY_FILE) + 3,
+            "%1X",
+            pfile_information->information.block_copy.image_flag);
+    sprintf((char *)poutputfile_path_name + strlen(PATH_OUTPUT_HOME) + 1 + strlen((char *)pjob_name) + strlen(PATH_BLOCK_COPY_FILE) + 4,
+            "%1X",
+            pfile_information->information.block_copy.border_flag);
+    sprintf((char *)poutputfile_path_name + strlen(PATH_OUTPUT_HOME) + 1 + strlen((char *)pjob_name) + strlen(PATH_BLOCK_COPY_FILE) + 5,
+            "%1X",
+            pfile_information->information.block_copy.special_flag);
+    strcat((char *)poutputfile_path_name, ".");
+    strcat((char *)poutputfile_path_name, (char *)pfile_information->information.block_copy.ppage_no);
+    }
+else if (pfile_information->type == FILE_TYPE_MASK)
+    {
+    strcpy((char *)poutputfile_path_name, PATH_OUTPUT_HOME);
+    strcat((char *)poutputfile_path_name, "/");
+    strcat((char *)poutputfile_path_name, (char *)pjob_name);
+    strcat((char *)poutputfile_path_name, PATH_MASK_FILE);
+    strcat((char *)poutputfile_path_name, ".");
+    strcat((char *)poutputfile_path_name, (char *)pfile_information->information.mask.ppage_no);
+    }*/
+/*1991.10.21  変更前終了*/
+/*1991.10.21  変更後開始*/
+    if (pfile_information->type == FILE_TYPE_BLOCK_COPY) {
+        strcpy((char *)poutputfile_path_name, PATH_OUTPUT_HOME);
+        strcat((char *)poutputfile_path_name, "/");
+        strcat((char *)poutputfile_path_name, (char *)pjob_name);
+        strcat((char *)poutputfile_path_name, "/");
+        strcat((char *)poutputfile_path_name, "R");
+        strcat((char *)poutputfile_path_name, (char *)pfile_information->information.block_copy.ppage_no);
+        strcat((char *)poutputfile_path_name, ".HAN");
+    } else if (pfile_information->type == FILE_TYPE_MASK) {
+        strcpy((char *)poutputfile_path_name, PATH_OUTPUT_HOME);
+        strcat((char *)poutputfile_path_name, "/");
+        strcat((char *)poutputfile_path_name, (char *)pjob_name);
+        strcat((char *)poutputfile_path_name, "/");
+        strcat((char *)poutputfile_path_name, "R");
+        strcat((char *)poutputfile_path_name, (char *)pfile_information->information.mask.ppage_no);
+        strcat((char *)poutputfile_path_name, ".MAS");
+    }
+/*1991.10.21  変更後終了*/
+
+return;
+}</pre>
+        </section>
+        <form><input type="button" value="答えを 表示/非表示" onclick="change_answer_state('sprintf')"></form>
+        <section id="sprintf" style="display: none;">
+            <h4>回答</h4>
+            <pre class="brush: cpp;">void SetUp_OutputFileName_fix(const char* poutputfile_path_name, char* pjob_name, PFILE_INFORMATION pfile_information){
+    switch(pfile_information->type){
+    case FILE_TYPE_BLOCK_COPY:
+        sprintf(poutputfile_path_name, "%s/%s/R%s.HAN", PATH_OUTPUT_HOME, pjob_name, pfile_information->information.block_copy.ppage_no);
+        break;
+    case FILE_TYPE_MASK:
+        sprintf(poutputfile_path_name, "%s/%s/R%s.MAS", PATH_OUTPUT_HOME, pjob_name, pfile_information->information.mask.ppage_no);
+        break;
+    default:
+        break;
+    }
+}</pre>
+            <p>
+                もうね、圧倒的圧縮率。問題文のsyntaxhighlightを止めていたのはコメントの多さがばれないようにするためでした。<br>
+                とりあえず過去のコードをコメントアウトするな、gitで管理しろ、strcat関数は使うなと言いたい。<br>
+                ちなみにC++のstd::stringつかうとこんな感じ。
+            </p>
+            <pre class="brush: cpp;">std::string SetUp_OutputFileName_fix(const char* pjob_name, PFILE_INFORMATION pfile_information) {
+    auto&amp; inf = pfile_information->information;
+    switch (pfile_information->type) {
+    case FILE_TYPE_BLOCK_COPY:
+        return std::string(PATH_OUTPUT_HOME) + '/' + pjob_name +"/R" + inf.block_copy.ppage_no + ".HAN";
+    case FILE_TYPE_MASK:
+        return std::string(PATH_OUTPUT_HOME) + '/' + pjob_name + "/R" + inf.mask.ppage_no + ".MAS";
+    default:
+        return "";
+        break;
+    }
+}</pre>
         </section>
     </section>
     <section>
@@ -269,7 +609,7 @@ template&lt;size_t SIZE> struct c_str_insert_c &lt;char[SIZE]> {//c_array
                 マクロ関数cstr_insertはなんとかマクロ使わずにできないのかな・・・
             </p>
         </section>
-        <section style="height: 200px;overflow-y: scroll;">
+        <section class="scroll_box">
             <h3>使用例</h3>
             <pre class="brush: cpp;" title="main.cpp">#include "c_str_insert.h"
 #include &lt;stdio.h>

@@ -1,14 +1,6 @@
 ﻿#include "strstr.h"
 #include <limits>
-#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.
-#ifdef __cplusplus
-#define _CONST_RETURN  const
-#define _CRT_CONST_CORRECT_OVERLOADS
-#else  /* __cplusplus */
-#define _CONST_RETURN
-#endif  /* __cplusplus */
-#endif  /* _CONST_RETURN */
-_CONST_RETURN char *my_strstr(const char *str, const char *strSearch){
+char *my_strstr(char *str, const char *strSearch){
 	if (nullptr == str || nullptr == strSearch) return nullptr;
 	if ('\0' == strSearch[0]) return str;
 	size_t i, j;
@@ -26,4 +18,7 @@ _CONST_RETURN char *my_strstr(const char *str, const char *strSearch){
 		);
 	}
 	return ('\0' != strSearch[j]) ? nullptr : &str[i - j - 1];//この時必ずi > jとなる。さもなくばreturnはnullptr
+}
+_CONST_RETURN char *my_strstr(const char *str, const char *strSearch) {
+	return my_strstr(const_cast<char*>(str), strSearch);
 }

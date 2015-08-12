@@ -1,14 +1,6 @@
 ﻿#include <iostream>
 #include <cstring>
 #include "strstr.h"
-#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.
-#ifdef __cplusplus
-#define _CONST_RETURN  const
-#define _CRT_CONST_CORRECT_OVERLOADS
-#else  /* __cplusplus */
-#define _CONST_RETURN
-#endif  /* __cplusplus */
-#endif  /* _CONST_RETURN */
 using strstr_t = _CONST_RETURN char*(*)(const char*, const char*);
 void strstr_and_do(const char* str, const char* search_key, strstr_t strsearch, const char* message){
 	std::cout << message << "を呼び出します" << std::endl;

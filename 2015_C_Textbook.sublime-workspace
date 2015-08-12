@@ -4,6 +4,38 @@
 		"selected_items":
 		[
 			[
+				"str",
+				"strcmp"
+			],
+			[
+				"o",
+				"overflow"
+			],
+			[
+				"sc",
+				"scroll〔value〕"
+			],
+			[
+				"overflow",
+				"overflow-y: 〔property〕"
+			],
+			[
+				"se",
+				"section	Tag"
+			],
+			[
+				"siz",
+				"sizeof"
+			],
+			[
+				"print",
+				"print_num_as_graph"
+			],
+			[
+				"num",
+				"numof"
+			],
+			[
 				"s",
 				"start"
 			],
@@ -28,10 +60,6 @@
 				"name"
 			],
 			[
-				"num",
-				"number"
-			],
-			[
 				"pri",
 				"price"
 			],
@@ -46,10 +74,6 @@
 			[
 				"size",
 				"size_t"
-			],
-			[
-				"str",
-				"str2"
 			],
 			[
 				"arr",
@@ -108,10 +132,6 @@
 				"make_str_database"
 			],
 			[
-				"siz",
-				"size_t"
-			],
-			[
 				"is",
 				"create_is_prime_num_table"
 			],
@@ -146,10 +166,6 @@
 			[
 				"rnd",
 				"rnd_num"
-			],
-			[
-				"o",
-				"operator_arr"
 			],
 			[
 				"s_",
@@ -436,10 +452,6 @@
 				"pseudo_color_transition_jCanvas.js"
 			],
 			[
-				"sc",
-				"src"
-			],
-			[
 				"bai",
 				"background-image: 〔property〕"
 			],
@@ -502,33 +514,45 @@
 			[
 				"pad",
 				"padding"
-			],
-			[
-				"display",
-				"display: 〔property〕"
-			],
-			[
-				"wid",
-				"width: 〔property〕"
-			],
-			[
-				"2015",
-				"2015年"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"contents": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n    <meta charset=\"utf-8\" />\n    <title>第19章 ～文字列操作～</title>\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css\">\n    <link rel=\"stylesheet\" href=\"./css/style.css\">\n    <script src=\"./syntaxhighlighter/scripts/shCore.js\" type=\"text/javascript\"></script>\n    <script src=\"./syntaxhighlighter/scripts/shBrushPlain.js\" type=\"text/javascript\"></script>\n    <script src=\"./syntaxhighlighter/scripts/shBrushCpp_kai.js\" type=\"text/javascript\"></script>\n    <link href=\"./syntaxhighlighter/styles/shCore.css\" rel=\"stylesheet\" type=\"text/css\">\n    <link href=\"./syntaxhighlighter/styles/shThemeMidnight_likeVS.css\" rel=\"stylesheet\" type=\"text/css\">\n    <script src=\"./scripts/common.js\" type=\"text/javascript\"></script>\n    <script type=\"text/javascript\">\n        SyntaxHighlighter.all();\n    </script>\n</head>\n<body>\n    <h1>第19章 ～文字列操作～</h1>\n    <nav class=\"top\">\n        <ul>\n            <li><a href=\"./18c_char_str_base.html\" title=\"前頁\">prev</a></li>\n            <li><a href=\"index.html\" title=\"目次\">main</a></li>\n            <li><a href=\"./\" title=\"次頁\">next</a></li>\n        </ul>\n    </nav>\n    <section>\n        <h2>初めに</h2>\n        <p>\n            C言語最難関の文字列操作です。ひたすら気を使わないといけないことが多い、<b>心折設計</b>となっております。<br>\n            ここでは、Cでの文字列操作の難しさを苦しみつつ体感していただきつつ、C++のSTL、std::stringの便利さを痛感していただければ、と思います。\n        </p>\n    </section>\n    <section>\n        <h2>strlen</h2>\n        <p>文字列の長さを求める関数です。といってもマルチバイト文字は考慮しないのでNULL文字を除くbyte数を求めることになります。プロトタイプ宣言を見てみましょう。</p>\n        <pre class=\"brush: cpp;\" title=\"プロトタイプ宣言\">size_t strlen(const char *str);</pre>\n        <p>使用例を見ましょう。</p>\n        <pre class=\"brush: cpp;\" title=\"main.cpp\">#include &lt;iostream>\n#include &lt;cstring>\nvoid strlen_and_do(const char* str, auto (*getstrlen)(const char*) -> size_t, const char* message){\n    std::cout &lt;&lt; message &lt;&lt; \"を呼び出します\" &lt;&lt; std::endl;\n    const auto re = getstrlen(str);\n    if (0 == re){\n        std::cout &lt;&lt; \"エラーなんだぜ\" &lt;&lt; std::endl;\n    }\n    else{\n        std::cout &lt;&lt; re &lt;&lt; \"文字だよ\" &lt;&lt; std::endl;\n    }\n}\nint main(void){\n    auto str = \"arikitari_na_world!\";\n\n    std::cout &lt;&lt; \"base_str : \" &lt;&lt; str &lt;&lt; std::endl;\n\n    strlen_and_do(str, strlen, \"string.hのstrlen関数\");\n    return 0;\n}</pre>\n        <p>では、このstrlen関数を自作してみましょう。まあnull文字が出るまでfor回すだけだから楽勝だよね？</p>\n        <pre class=\"brush: cpp;\" title=\"strlen.h\">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))\n#pragma once\n#endif\n#ifndef _INC_MY_STRLEN_H\n#define _INC_MY_STRLEN_H\n#include &lt;cstddef>\nsize_t my_strlen(const char *str);\n#endif\n</pre>\n        <p>これをstrlen.hとかしてさっきのmain関数のあるcppと自作する関数の定義を書くcppでincludeしてください。つまりmainのあるcppは</p>\n        <pre class=\"brush: cpp;\" title=\"main.cpp\">#include &lt;iostream>\n#include &lt;cstring>\n#include \"strlen.h\"</pre>\n        <p>中略</p>\n        <pre class=\"brush: cpp; first-line: 14\">int main(void){\n    auto str = \"arikitari_na_world!\";\n\n    std::cout &lt;&lt; \"base_str : \" &lt;&lt; str &lt;&lt; std::endl;\n\n    strlen_and_do(str, strlen, \"string.hのstrlen関数\");\n    strlen_and_do(str, my_strlen, \"strlen.hのmy_strlen関数\");\n    return 0;\n}</pre>\n        <p>な感じ</p>\n        <form><input type=\"button\" value=\"答えを 表示/非表示\" onclick=\"change_answer_state('my_strlen')\"></form>\n        <section id=\"my_strlen\" style=\"display: none;\">\n            <h4>回答</h4>\n            <pre class=\"brush: cpp;\">#include \"strlen.h\"\n#include &lt;limits>\nsize_t my_strlen(const char *str){\n    if (nullptr == str) return 0;\n    const auto search_limits = std::numeric_limits&lt;size_t>::max();//無限ループ防止\n    size_t len;\n    for (len = 0; search_limits > len &amp;&amp; '\\0' != str[len]; len++);\n    return (search_limits == len) ? 0 : len;\n}\n</pre>\n        </section>\n    </section>\n    <section>\n        <h2>strcmp</h2>\n        <p>\n            文字列を比較する関数です。第1引数の文字列のと第2引数の文字列を1文字づつ比較していきます。<br>\n            文字が一致しなくなるかnull文字に遭遇するとループを終了し値をかえします。<br>\n            そのときその文字コードが第一引数のほうが大きかったら正の値を、小さかったら負の値を、両方同じなら0を返します。<br>\n            正の値とは具体的に何かというと実装依存ですが、MSVCもgccもclangも1を返すようです。負の値は同様に-1のようです。\n        </p>\n        <pre class=\"brush: cpp;\" title=\"プロトタイプ宣言\">int strcmp ( const char * str1, const char * str2 );</pre>\n    </section>\n    <section>\n        <h2>strstr</h2>\n        <p>文字列を検索する関数です。見つかるとその先頭のポインターを返し、見つからない場合はNULLポインターを返します。プロトタイプ宣言を見てみましょう。</p>\n        <pre class=\"brush: cpp;\" title=\"プロトタイプ宣言\">char *strstr(const char *str, const char *strSearch); // C only\nchar *strstr(char *str, const char *strSearch); // C++ only\nconst char *strstr(const char *str, const char *strSearch); // C++ only</pre>\n        <p>\n            CとC++で違うのはCとC++のconstの扱いのせいでしょうね。前に話したと思いますが。使用例を見ましょう。<br>\n            _CONST_RETURNってのは上のプロトタイプ宣言で「C only」とか「C++ only」とか書いてありましたが、それです。<br>\n            my_strstrってのはこれから作ってもらう関数名なので作る時実験したい場合は3, 31行目のコメントアウトを外してみてください。\n        </p>\n        <pre class=\"brush: cpp;\" title=\"main.cpp\">#include &lt;iostream>\n#include &lt;cstring>\n//#include \"strstr.h\"\n#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.\n#ifdef __cplusplus\n#define _CONST_RETURN  const\n#define _CRT_CONST_CORRECT_OVERLOADS\n#else  /* __cplusplus */\n#define _CONST_RETURN\n#endif  /* __cplusplus */\n#endif  /* _CONST_RETURN */\nusing strstr_t = _CONST_RETURN char*(*)(const char*, const char*);\nvoid strstr_and_do(const char* str, const char* search_key, strstr_t strsearch, const char* message){\n    std::cout &lt;&lt; message &lt;&lt; \"を呼び出します\" &lt;&lt; std::endl;\n    auto re = strsearch(str, search_key);\n    if (nullptr == re){\n        std::cout &lt;&lt; \"見つからなかったんだぜ\" &lt;&lt; std::endl;\n    }\n    else{\n        std::cout &lt;&lt; (re - str) + 1 &lt;&lt; \"番目で見つかったよ\" &lt;&lt; std::endl;\n    }\n}\nint main(void){\n    auto str = \"arikitari_na_world!\";\n    auto search_key = \"world\";\n\n    std::cout &lt;&lt; \"base_str : \" &lt;&lt; str &lt;&lt; std::endl;\n    std::cout &lt;&lt; \"search_key : \" &lt;&lt; search_key &lt;&lt; std::endl;\n\n    strstr_and_do(str, search_key, strstr, \"string.hのstrstr関数\");\n    //strstr_and_do(str, search_key, my_strstr, \"strstr.hのmy_strstr関数\");\n    return 0;\n}</pre>\n        <p>さて、この関数を作ってみましょう。forの2重ループを組むのが一番早いと思います。</p>\n        <blockquote cite=\"http://www.cplusplus.com/reference/cstring/strstr/\">\n            <a href=\"http://www.cplusplus.com/reference/cstring/strstr/\">strstr - C++ Reference</a><br>\n            A pointer to the first occurrence in str1 of the entire sequence of characters specified in str2, or a null pointer if the sequence is not present in str1.\n        </blockquote>\n        <blockquote cite=\"https://msdn.microsoft.com/ja-jp/library/z9da80kz.aspx\">\n            <a href=\"https://msdn.microsoft.com/ja-jp/library/z9da80kz.aspx\">strstr、wcsstr、_mbsstr、_mbsstr_l | MSDN</a><br>\n             Returns a pointer to the first occurrence of strSearch in str, or NULL if strSearch does not appear in str. If strSearch points to a string of zero length, the function returns str.\n        </blockquote>\n        <p>第2引数が空の文字列(=0番目の要素が'\\0')のときは第1引数をそのまま帰す必要がある点に注意してください。また使用例の4-11行目、_CONST_RETURNについての部分も書かないとダメです。</p>\n        <form><input type=\"button\" value=\"答えを 表示/非表示\" onclick=\"change_answer_state('my_strstr')\"></form>\n        <section id=\"my_strstr\" style=\"display: none;\">\n            <h4>回答</h4>\n            <pre class=\"brush: cpp; highlight:[18, 23, 27];\" title=\"strstr.cpp\">#include \"strstr.h\"\n#include &lt;limits>\n#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.\n#ifdef __cplusplus\n#define _CONST_RETURN  const\n#define _CRT_CONST_CORRECT_OVERLOADS\n#else  /* __cplusplus */\n#define _CONST_RETURN\n#endif  /* __cplusplus */\n#endif  /* _CONST_RETURN */\n_CONST_RETURN char *my_strstr(const char *str, const char *strSearch){\n    if (nullptr == str || nullptr == strSearch) return nullptr;\n    if ('\\0' == strSearch[0]) return str;\n    size_t i, j, k;\n    const auto search_lim = std::numeric_limits&lt;size_t>::max();//無限ループ防止\n    for (\n        str_is_not_terminate = true, i = 0, j= 0, k = 0;\n        search_lim != i &amp;&amp; '\\0' != str[k] &amp;&amp; '\\0' != str[i] &amp;&amp; '\\0' != strSearch[j];//正規のbreak条件は'\\0' == strSearch[j]\n        ++i\n    ){\n        for (\n            j = 0, k = i;\n            search_lim - 1 != k &amp;&amp; search_lim != j &amp;&amp; '\\0' != str[k] &amp;&amp; '\\0' != strSearch[j] &amp;&amp; str[k] == strSearch[j];\n            ++j, ++k\n        );\n    }\n    return ('\\0' != strSearch[j]) ? nullptr : &amp;str[i - j - 1];//この時必ずi > jとなる。さもなくばreturnはnullptr\n}</pre>\n            <p>\n                18, 23, 27行目に注目しながら読んでください。strの1文字目とstrSearchの1文字目が一致するかを調べ、しなければstrの2文字目とstrSearchの1文字目と言った具合に線形探索していきます。<br>\n                見つかるより先にstrが'\\0'と24行目で判定されたら、18行目のループも抜けることになります。<br>\n                見つかった場合23行目の段階で条件式「'\\0' != strSearch[j]」はfalseになるので「&amp;str[i - j - 1]」を返します。-1はさっき言ったようにi++されるからです。\n            </p>\n            <p>12, 13行目についてですが、これを逆にしてはいけません。nullポインターの実体って、あなた、それどこですか？</p>\n            <p>俗に力任せ法とか言われる方法ですが、別途配列を持たなければならないBM法やKMP法よりはL1キャッシュを活用しやすいはずなので、ポインタ減算が発生することを差し引いてもstrSearchが十分に短い文字列の場合、十分な早さで検索できます。BM法はひたすらポインタ減算するので論外ですし、KMP法はstrSearch内が同じ文字列の繰り返しのような特殊な場合以外では先にindexを構築する分速度面で不利になります。</p>\n        </section>\n    </section>\n    <nav class=\"bottom\">\n        <ul>\n            <li><a href=\"./18c_char_str_base.html\" title=\"前頁\">prev</a></li>\n            <li><a href=\"index.html\" title=\"目次\">main</a></li>\n            <li><a href=\"./\" title=\"次頁\">next</a></li>\n        </ul>\n    </nav>\n</body>\n</html>",
+			"contents": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n    <meta charset=\"utf-8\" />\n    <title>第19章 ～文字列操作～</title>\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css\">\n    <link rel=\"stylesheet\" href=\"./css/style.css\">\n    <script src=\"./syntaxhighlighter/scripts/shCore.js\" type=\"text/javascript\"></script>\n    <script src=\"./syntaxhighlighter/scripts/shBrushPlain.js\" type=\"text/javascript\"></script>\n    <script src=\"./syntaxhighlighter/scripts/shBrushCpp_kai.js\" type=\"text/javascript\"></script>\n    <link href=\"./syntaxhighlighter/styles/shCore.css\" rel=\"stylesheet\" type=\"text/css\">\n    <link href=\"./syntaxhighlighter/styles/shThemeMidnight_likeVS.css\" rel=\"stylesheet\" type=\"text/css\">\n    <script src=\"./scripts/common.js\" type=\"text/javascript\"></script>\n    <script type=\"text/javascript\">\n        SyntaxHighlighter.all();\n    </script>\n</head>\n<body>\n    <h1>第19章 ～文字列操作～</h1>\n    <nav class=\"top\">\n        <ul>\n            <li><a href=\"./18c_char_str_base.html\" title=\"前頁\">prev</a></li>\n            <li><a href=\"index.html\" title=\"目次\">main</a></li>\n            <li><a href=\"./\" title=\"次頁\">next</a></li>\n        </ul>\n    </nav>\n    <section>\n        <h2>初めに</h2>\n        <p>\n            C言語最難関の文字列操作です。ひたすら気を使わないといけないことが多い、<b>心折設計</b>となっております。<br>\n            ここでは、Cでの文字列操作の難しさを苦しみつつ体感していただきつつ、C++のSTL、std::stringの便利さを痛感していただければ、と思います。\n        </p>\n    </section>\n    <section>\n        <h2>strlen</h2>\n        <p>文字列の長さを求める関数です。といってもマルチバイト文字は考慮しないのでNULL文字を除くbyte数を求めることになります。プロトタイプ宣言を見てみましょう。</p>\n        <pre class=\"brush: cpp;\" title=\"プロトタイプ宣言\">size_t strlen(const char *str);</pre>\n        <p>使用例を見ましょう。</p>\n        <pre class=\"brush: cpp;\" title=\"使用例\">#include &lt;stdio.h>\n#include &lt;string.h>\nint main(){\n    const char* str = \"arikitari_na_world!\";\n    printf(\"文字列%sの長さは\\n%zu\\n\", str, strlen(str));\n    return 0;\n}</pre>\n        <p>\n            使い方もわかりやすいのでいいですね。・・・と言いたいのですが、使用には実は細心の注意が必要です。<br>\n            <a href=\"http://mavericktse.mooo.com/wordpress/archives/1982\">Do not use strlen() family to determine size of dynamic array! | 舶来ゴミ置き場</a><br>\n            Cで文字列操作といえばほぼ例外なくsprintf系関数を使うのですが、その書き込み先のサイズ指定にstrlenを用いてはいけません。<br>\n            なぜならば、strlenで取得できるのはあくまで文字列の長さであって、確保しているメモリサイズではないからです。<br>\n            strlen関数は便利でいいのですが、過去の私みたいに落とし穴にハマることの無いよう、お気をつけ下さい。\n        </p>\n        <p>では、このstrlen関数を自作してみましょう。まあnull文字が出るまでfor回すだけだから楽勝だよね？</p>\n        <section>\n            <h3>ヘッダー</h3>\n            <pre class=\"brush: cpp;\" title=\"strlen.h\">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))\n#pragma once\n#endif\n#ifndef _INC_MY_STRLEN_H\n#define _INC_MY_STRLEN_H\n#include &lt;cstddef>\nsize_t my_strlen(const char *str);\n#endif</pre>\n        </section>\n        <section style=\"height: 200px;overflow-y: scroll;\">\n            <h3>使用例</h3>\n            <pre class=\"brush: cpp;\" title=\"main.cpp\">#include &lt;iostream>\n#include &lt;cstring>\n#include \"strlen.h\"\nvoid strlen_and_do(const char* str, auto (*getstrlen)(const char*) -> size_t, const char* message){\n    std::cout &lt;&lt; message &lt;&lt; \"を呼び出します\" &lt;&lt; std::endl;\n    const auto re = getstrlen(str);\n    if (0 == re){\n        std::cout &lt;&lt; \"エラーなんだぜ\" &lt;&lt; std::endl;\n    }\n    else{\n        std::cout &lt;&lt; re &lt;&lt; \"文字だよ\" &lt;&lt; std::endl;\n    }\n}\nint main(void){\n    auto str = \"arikitari_na_world!\";\n\n    std::cout &lt;&lt; \"base_str : \" &lt;&lt; str &lt;&lt; std::endl;\n\n    strlen_and_do(str, strlen, \"string.hのstrlen関数\");\n    strlen_and_do(str, my_strlen, \"strlen.hのmy_strlen関数\");\n    return 0;\n}\n</pre>\n        </section>\n        <pre class=\"brush: plain\" title=\"望ましい実行例1\">$ ./strlen.exe\nbase_str : arikitari_na_world!\nstring.hのstrlen関数を呼び出します\n19文字だよ\nstrlen.hのmy_strlen関数を呼び出します\n19文字だよ</pre>\n        <form><input type=\"button\" value=\"答えを 表示/非表示\" onclick=\"change_answer_state('my_strlen')\"></form>\n        <section id=\"my_strlen\" style=\"display: none;\">\n            <h4>回答</h4>\n            <pre class=\"brush: cpp;\" title=\"strlen.cpp\">#include \"strlen.h\"\n#include &lt;limits>\nsize_t my_strlen(const char *str){\n    if (nullptr == str) return 0;\n    const auto search_limits = std::numeric_limits&lt;size_t>::max();//無限ループ防止\n    size_t len;\n    for (len = 0; search_limits > len &amp;&amp; '\\0' != str[len]; len++);\n    return (search_limits == len) ? 0 : len;\n}\n</pre>\n        </section>\n    </section>\n    <section>\n        <h2>strcmp</h2>\n        <p>\n            文字列を比較する関数です。第1引数の文字列のと第2引数の文字列を1文字づつ比較していきます。<br>\n            文字が一致しなくなるかnull文字に遭遇するとループを終了し値をかえします。<br>\n            そのときその文字コードが第一引数のほうが大きかったら正の値を、小さかったら負の値を、両方同じなら0を返します。<br>\n            正の値とは具体的に何かというと実装依存ですが、MSVCもgccもclangも1を返すようです。負の値は同様に-1のようです。\n        </p>\n        <pre class=\"brush: cpp;\" title=\"プロトタイプ宣言\">int strcmp ( const char * str1, const char * str2 );</pre>\n        <pre class=\"brush: cpp;\" title=\"実行例\">#include &lt;stdio.h>\n#include &lt;string.h>\nint main(){\n    char buf[1024];\n    fgets(buf, 1024, stdin);\n    strchr(buf, '\\n')[0] = '\\0';\n    if(0 == strcmp(\"add\", buf)){\n        puts(\"足し算\");\n    }\n    else if(0 == strcmp(\"sub\", buf)){\n        puts(\"引き算\");\n    }\n    else if(0 == strcmp(\"mul\", buf)){\n        puts(\"掛け算\");\n    }\n    else if(0 == strcmp(\"div\", buf)){\n        puts(\"割り算\");\n    }\n    else{\n        puts(\"unknown command\");\n    }\n    return 0;\n}</pre>\n        <section>\n            <h3>ヘッダー</h3>\n            <pre class=\"brush: cpp;\" title=\"strcmp.h\">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))\n#pragma once\n#endif\n#ifndef _INC_MY_STRLEN_H\n#define _INC_MY_STRLEN_H\nint my_strcmp(const char *string1, const char *string2);\n#endif</pre>\n        </section>\n        <section style=\"height: 200px;overflow-y: scroll;\">\n            <h3>使用例</h3>\n            <pre class=\"brush: cpp;\" title=\"main.cpp\">#include &lt;iostream>\n#include &lt;cstdio>\n#include &lt;cstring>\n#include \"strcmp.h\"\nusing strcmp_t = int (*)(const char*, const char*);\nvoid strstr_and_do(const char* str1, const char* str2, strcmp_t strcomare, const char* message){\n    std::cout &lt;&lt; message &lt;&lt; \"を呼び出します\" &lt;&lt; std::endl;\n    const auto re = strcomare(str1, str2);\n    if (0 == re){\n        std::cout &lt;&lt; \"\\\"\" &lt;&lt; str1 &lt;&lt; \"\\\", \\\"\" &lt;&lt; str2 &lt;&lt; \"\\\" は一致しました\" &lt;&lt; std::endl;\n    }\n    else{\n        std::cout &lt;&lt; re &lt;&lt; \" = strcmp(\\\"\" &lt;&lt; str1 &lt;&lt; \"\\\", \\\"\" &lt;&lt; str2 &lt;&lt; \"\\\")  戻り値 :\" &lt;&lt; ((re > 0) ? '>' : '&lt;') &lt;&lt; \"0\" &lt;&lt; std::endl;\n    }\n}\nint main(void){\n    auto str1 = \"arikitari_na_world!\";\n    const char* str2[] = { \"akrikitariahanai\", \"arikitari_na_world\", \"arikitari_na_world!\", \"arikitari_na_world!!\", \"arikitari_na_world_\" };\n\n    for (auto i : str2){\n        strstr_and_do(str1, i, strcmp, \"string.hのstrcmp関数\");\n        strstr_and_do(str1, i, my_strcmp, \"strcmp.hのmy_strcmp関数\");\n        std::cout &lt;&lt; std::endl;\n    }\n    return 0;\n}\n</pre>\n        </section>\n        <form><input type=\"button\" value=\"答えを 表示/非表示\" onclick=\"change_answer_state('my_strcmp')\"></form>\n        <section id=\"my_strcmp\" style=\"display: none;\">\n            <h4>回答</h4>\n            <pre class=\"brush: cpp;\" title=\"strcmp.cpp\">#include \"strcmp.h\"\n#include &lt;limits>\n#include &lt;cstddef>\n#include &lt;cerrno>\nint my_strcmp(const char *string1, const char *string2){\n    if (nullptr == string1 || nullptr == string2){\n        errno = EINVAL;\n        return -2;\n    }\n    const auto search_limits = std::numeric_limits&lt;size_t>::max();//無限ループ防止\n    size_t i;\n    for (i = 0; i &lt; search_limits &amp;&amp; '\\0' != string1[i] &amp;&amp; '\\0' != string2[i] &amp;&amp; string1[i] == string2[i]; i++);\n    if (search_limits == i){\n        errno = EINVAL;\n        return -2;\n    }\n    //MSVC, gcc, clangの実装では1,0,-1のいずれかを返す\n    return (string1[i] == string2[i]) ? 0 : (string1[i] > string2[i]) ? 1 : -1;//引き算にするとアンダーフローの危険がある\n}\n</pre>\n        </section>\n    </section>\n    <section>\n        <h2>strstr</h2>\n        <p>文字列を検索する関数です。見つかるとその先頭のポインターを返し、見つからない場合はNULLポインターを返します。プロトタイプ宣言を見てみましょう。</p>\n        <pre class=\"brush: cpp;\" title=\"プロトタイプ宣言\">char *strstr(const char *str, const char *strSearch); // C only\nchar *strstr(char *str, const char *strSearch); // C++ only\nconst char *strstr(const char *str, const char *strSearch); // C++ only</pre>\n        <p>\n            CとC++で違うのはCとC++のconstの扱いのせいでしょうね。前に話したと思いますが。使用例を見ましょう。<br>\n            _CONST_RETURNってのは上のプロトタイプ宣言で「C only」とか「C++ only」とか書いてありましたが、それです。<br>\n            my_strstrってのはこれから作ってもらう関数名なので作る時実験したい場合は3, 31行目のコメントアウトを外してみてください。\n        </p>\n        <pre class=\"brush: cpp;\" title=\"main.cpp\">#include &lt;iostream>\n#include &lt;cstring>\n//#include \"strstr.h\"\n#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.\n#ifdef __cplusplus\n#define _CONST_RETURN  const\n#define _CRT_CONST_CORRECT_OVERLOADS\n#else  /* __cplusplus */\n#define _CONST_RETURN\n#endif  /* __cplusplus */\n#endif  /* _CONST_RETURN */\nusing strstr_t = _CONST_RETURN char*(*)(const char*, const char*);\nvoid strstr_and_do(const char* str, const char* search_key, strstr_t strsearch, const char* message){\n    std::cout &lt;&lt; message &lt;&lt; \"を呼び出します\" &lt;&lt; std::endl;\n    auto re = strsearch(str, search_key);\n    if (nullptr == re){\n        std::cout &lt;&lt; \"見つからなかったんだぜ\" &lt;&lt; std::endl;\n    }\n    else{\n        std::cout &lt;&lt; (re - str) + 1 &lt;&lt; \"番目で見つかったよ\" &lt;&lt; std::endl;\n    }\n}\nint main(void){\n    auto str = \"arikitari_na_world!\";\n    auto search_key = \"world\";\n\n    std::cout &lt;&lt; \"base_str : \" &lt;&lt; str &lt;&lt; std::endl;\n    std::cout &lt;&lt; \"search_key : \" &lt;&lt; search_key &lt;&lt; std::endl;\n\n    strstr_and_do(str, search_key, strstr, \"string.hのstrstr関数\");\n    //strstr_and_do(str, search_key, my_strstr, \"strstr.hのmy_strstr関数\");\n    return 0;\n}</pre>\n        <p>さて、この関数を作ってみましょう。forの2重ループを組むのが一番早いと思います。</p>\n        <blockquote cite=\"http://www.cplusplus.com/reference/cstring/strstr/\">\n            <a href=\"http://www.cplusplus.com/reference/cstring/strstr/\">strstr - C++ Reference</a><br>\n            A pointer to the first occurrence in str1 of the entire sequence of characters specified in str2, or a null pointer if the sequence is not present in str1.\n        </blockquote>\n        <blockquote cite=\"https://msdn.microsoft.com/ja-jp/library/z9da80kz.aspx\">\n            <a href=\"https://msdn.microsoft.com/ja-jp/library/z9da80kz.aspx\">strstr、wcsstr、_mbsstr、_mbsstr_l | MSDN</a><br>\n             Returns a pointer to the first occurrence of strSearch in str, or NULL if strSearch does not appear in str. If strSearch points to a string of zero length, the function returns str.\n        </blockquote>\n        <p>第2引数が空の文字列(=0番目の要素が'\\0')のときは第1引数をそのまま帰す必要がある点に注意してください。また使用例の4-11行目、_CONST_RETURNについての部分も書かないとダメです。</p>\n        <form><input type=\"button\" value=\"答えを 表示/非表示\" onclick=\"change_answer_state('my_strstr')\"></form>\n        <section id=\"my_strstr\" style=\"display: none;\">\n            <h4>回答</h4>\n            <pre class=\"brush: cpp; highlight:[18, 23, 27];\" title=\"strstr.cpp\">#include \"strstr.h\"\n#include &lt;limits>\n#ifndef _CONST_RETURN//for msys2 mingw64 clang 3.5.1.\n#ifdef __cplusplus\n#define _CONST_RETURN  const\n#define _CRT_CONST_CORRECT_OVERLOADS\n#else  /* __cplusplus */\n#define _CONST_RETURN\n#endif  /* __cplusplus */\n#endif  /* _CONST_RETURN */\n_CONST_RETURN char *my_strstr(const char *str, const char *strSearch){\n    if (nullptr == str || nullptr == strSearch) return nullptr;\n    if ('\\0' == strSearch[0]) return str;\n    size_t i, j, k;\n    const auto search_lim = std::numeric_limits&lt;size_t>::max();//無限ループ防止\n    for (\n        str_is_not_terminate = true, i = 0, j= 0, k = 0;\n        search_lim != i &amp;&amp; '\\0' != str[k] &amp;&amp; '\\0' != str[i] &amp;&amp; '\\0' != strSearch[j];//正規のbreak条件は'\\0' == strSearch[j]\n        ++i\n    ){\n        for (\n            j = 0, k = i;\n            search_lim - 1 != k &amp;&amp; search_lim != j &amp;&amp; '\\0' != str[k] &amp;&amp; '\\0' != strSearch[j] &amp;&amp; str[k] == strSearch[j];\n            ++j, ++k\n        );\n    }\n    return ('\\0' != strSearch[j]) ? nullptr : &amp;str[i - j - 1];//この時必ずi > jとなる。さもなくばreturnはnullptr\n}</pre>\n            <p>\n                18, 23, 27行目に注目しながら読んでください。strの1文字目とstrSearchの1文字目が一致するかを調べ、しなければstrの2文字目とstrSearchの1文字目と言った具合に線形探索していきます。<br>\n                見つかるより先にstrが'\\0'と24行目で判定されたら、18行目のループも抜けることになります。<br>\n                見つかった場合23行目の段階で条件式「'\\0' != strSearch[j]」はfalseになるので「&amp;str[i - j - 1]」を返します。-1はさっき言ったようにi++されるからです。\n            </p>\n            <p>12, 13行目についてですが、これを逆にしてはいけません。nullポインターの実体って、あなた、それどこですか？</p>\n            <p>俗に力任せ法とか言われる方法ですが、別途配列を持たなければならないBM法やKMP法よりはL1キャッシュを活用しやすいはずなので、ポインタ減算が発生することを差し引いてもstrSearchが十分に短い文字列の場合、十分な早さで検索できます。BM法はひたすらポインタ減算するので論外ですし、KMP法はstrSearch内が同じ文字列の繰り返しのような特殊な場合以外では先にindexを構築する分速度面で不利になります。</p>\n        </section>\n    </section>\n    <section>\n        <h2>insert</h2>\n        <p>C++のstd::stringにはinsertメンバー関数があります。</p>\n        <pre class=\"brush: cpp;\">std::string str = \"arikitari_na_world!\";\nstr.insert(10, \"dehanai\");</pre>\n        <p>\n            とっても簡単でわかりやすい。<br>\n            しかしC言語標準ライブラリにはinseetはないんです。というのも、文字列を編集するには配列か、動的確保された領域に文字列が入っている必要があります。<br>\n            しかも配列の場合はinsertしても配列に格納しきれることが必要なので、かなり面倒です。<br>\n            まあつくってみましょう。<br>\n            しかし場合分けが必要になります。\n        </p>\n        <dl>\n            <dt>文字列リテラルなどconst char*型の場合</dt>\n            <dd>\n                この場合は新たに動的確保した領域に文字列をコピーして返すしかありません。<br>\n                下のc_str_insert_const関数が該当します。\n            </dd>\n            <dt>配列に入っている場合</dt>\n            <dd>\n                この場合、挿入しても配列に収まりきる場合のみ挿入できます。そうでない場合はnullptrを返すしか無いです。<br>\n                なぜなら、c_str_insert_const関数を内部で呼ぶと呼び出し側でfreeが必要か否か判断が付きませんからね。<br>\n                下のc_str_insert_c_array関数が該当します。\n            </dd>\n            <dt>動的確保された領域に文字列が入っている場合</dt>\n            <dd>\n                この場合はreallocすればいいですね。<br>\n                下のc_str_insert_no_const関数が該当します。\n            </dd>\n        </dl>\n        <section>\n            <h3>ヘッダー</h3>\n            <pre class=\"brush: cpp; highlight:[6, 7, 8];\" title=\"c_str_insert.h\">#pragma once\n#ifndef _INC_C_STR_INSERT_H\n#define _INC_C_STR_INSERT_H\n#include &lt;stddef.h>\n\nchar* c_str_insert_no_const(char* base_str, size_t insert_index, const char* insert_str);//reallocate\nchar* c_str_insert_const(const char* base_str, size_t insert_index, const char* insert_str);//unchangeable string\nchar* c_str_insert_c_array(char* base_str, size_t array_num, size_t insert_index, const char* insert_str);//c_array\n#ifdef __cplusplus\n#ifndef cstr_insert\n#define cstr_insert( base_str, insert_index, insert_str) c_str_insert_c&lt;decltype(base_str)>()(base_str, insert_index, insert_str)\n#endif //cstr_insert\ntemplate&lt;size_t SIZE> char* c_str_insert_c_array(char(&amp;str_arr)[SIZE], size_t insert_index, const char* insert_str) {//c_array\n    return c_str_insert_c_array(str_arr, SIZE, insert_index, insert_str);\n}\ntemplate&lt;typename T_> struct c_str_insert_c{//reallocate\n    char* operator()(T_ base_str, size_t insert_index, const char* insert_str) {\n        return c_str_insert_no_const(base_str, insert_index, insert_str);\n    }\n};\ntemplate&lt;> struct c_str_insert_c &lt;const char*>{//unchangeable string\n    char* operator()(const char* base_str, size_t insert_index, const char* insert_str) {\n        return c_str_insert_const(base_str, insert_index, insert_str);\n    }\n};\ntemplate&lt;size_t SIZE> struct c_str_insert_c &lt;char[SIZE]> {//c_array\n    char* operator()(char (&amp;base_str)[SIZE], size_t insert_index, const char* insert_str) {\n        return c_str_insert_c_array(base_str, SIZE, insert_index, insert_str);\n    }\n};\n#endif //__cplusplus\n#endif //_INC_C_STR_INSERT_H </pre>\n            <p>\n                16～30行目はいわゆる関数オブジェクトとかfunction-like objectというやつです。templateの特殊化によって6～8行目の関数を呼び分けます。<br>\n                マクロ関数cstr_insertはなんとかマクロ使わずにできないのかな・・・\n            </p>\n        </section>\n        <section style=\"height: 200px;overflow-y: scroll;\">\n            <h3>使用例</h3>\n            <pre class=\"brush: cpp;\" title=\"main.cpp\">#include \"c_str_insert.h\"\n#include &lt;stdio.h>\n#include &lt;stdlib.h>\n#include &lt;string.h>\n#if !defined (_countof)\n#if !defined (__cplusplus)\n#define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))\n#else  /* !defined (__cplusplus) */\nextern \"C++\"\n{\n    template&lt;typename TYPE,  std::size_t SIZE>\n    std::size_t array_length(const TYPE(&amp;)[SIZE]){\n        return SIZE;\n    }\n#define _countof(_Array) array_length(_Array)\n}\n#endif  /* !defined (__cplusplus) */\n#endif  /* !defined (_countof) */\n#ifndef print_c_str_when_it_is_not_null\n#define print_c_str_when_it_is_not_null( str ) print_c_str_when_it_is_not_null_helper(#str, str)\n#endif\nvoid print_c_str_when_it_is_not_null_helper(const char* variable_name, const char* str) {\n    printf(\"%s : \", variable_name);\n    if (nullptr != str) puts(str); else putchar('\\n');\n}\nchar* make_str_heap(const char* str) {\n    char* re = static_cast&lt;char*>(calloc(strlen(str) + 1, sizeof(char)));\n#ifdef _MSC_VER\n    sprintf_s(re, strlen(str) + 1, \"%s\", str);\n#else\n    sprintf(re, \"%s\", str1);\n#endif\n    return re;\n}\nint main() {\n    const char* str1 = \"arikitari_na_world!\";\n    char str2[] = \"arikitari_na_world!\";\n    char str1_3[28] = \"arikitari_na_world!\";\n    char str2_3[28] = \"arikitari_na_world!\";\n    char str3_3[28] = \"arikitari_na_world!\";\n    char* str1_4 = make_str_heap(str1);\n    char* str2_4 = make_str_heap(str1);\n    const char* insert_str = \"dehanai\";\n\n    char* re1 = cstr_insert(str1, 10, insert_str);\n    char* re2 = cstr_insert(str2, 10, insert_str);\n    char* re3 = cstr_insert(str1_3, 10, insert_str);\n    char* re4 = cstr_insert(str1_4, 10, insert_str);\n    print_c_str_when_it_is_not_null(re1);\n    print_c_str_when_it_is_not_null(re2);\n    print_c_str_when_it_is_not_null(re3);\n    print_c_str_when_it_is_not_null(re4);\n    free(re1);\n    free(re4);//nullptrが渡された時は何も起きないと保証されている\n\n    char* re2_1 = c_str_insert_const(str1, 10, insert_str);\n    char* re2_2 = c_str_insert_c_array(str2, 10, insert_str);\n    char* re2_3 = c_str_insert_c_array(str2_3, 10, insert_str);\n    char* re2_4 = c_str_insert_no_const(str2_4, 10, insert_str);\n    print_c_str_when_it_is_not_null(re2_1);\n    print_c_str_when_it_is_not_null(re2_2);\n    print_c_str_when_it_is_not_null(re2_3);\n    print_c_str_when_it_is_not_null(re2_4);\n    free(re2_1);\n    free(re2_4);//nullptrが渡された時は何も起きないと保証されている\n\n    char* re3_2 = c_str_insert_c_array(str2, _countof(str2),10, insert_str);\n    char* re3_3 = c_str_insert_c_array(str3_3, _countof(str3_3), 10, insert_str);\n    print_c_str_when_it_is_not_null(re3_2);\n    print_c_str_when_it_is_not_null(re3_3);\n\n    return 0;\n}</pre>\n        </section>\n        <p>\n            まあヘッダーの6-8行目にある関数を作って欲しいわけです。なおstrcpy, strncpy, strcpy_s関数は使用禁止とします。<br>\n            また、配列版は要素数チェックを必ずしましょう<br>\n            ちゃんとできていれば上の使用例を実行すると以下のようになるはずです。\n        </p>\n        <pre class=\"brush: plain;\" title=\"望ましい実行例\">re1 : arikitari_dehanaina_world!\nre2 :\nre3 : arikitari_dehanaina_world!\nre4 : arikitari_dehanaina_world!\nre2_1 : arikitari_dehanaina_world!\nre2_2 :\nre2_3 : arikitari_dehanaina_world!\nre2_4 : arikitari_dehanaina_world!\nre3_2 :\nre3_3 : arikitari_dehanaina_world!</pre>\n        <form><input type=\"button\" value=\"答えを 表示/非表示\" onclick=\"change_answer_state('c_str_insert')\"></form>\n        <section id=\"c_str_insert\" style=\"display: none;\">\n            <h4>回答</h4>\n            <p>\n                文字列編集と言ったら真っ先にsprintf関数を思い出さなければなりません。memcpyとかstrcatとか使う前にまずこれを思い出しましょう。<br>\n                ただ、reallocate版と配列版は引数を変更できるので、sprintfよりmemmoveとmemcpyを使うほうが楽です。<br>\n                今回reallocate版と配列版は最初の処理以外同じなのでc_str_insert_helper_という関数に処理をまとめています。<br>\n                c_str_insert_helper_is_insertable_関数は配列の要素数チェックをします。書き込むだけの領域が確保されているか、必ず確認しましょう。<br>\n                なお、Visual Studioではsprintf関数はsprintf_s使えと怒られますが、今回は必要分メモリー確保してあるので要素数チェックをするsprintf_sではなくsprintfを使いたいので、warning (disable: 4996)しています。\n            </p>\n            <pre class=\"brush: cpp;\">#include \"c_str_insert.h\"\n#include &lt;stdio.h>\n#include &lt;stdlib.h>\n#include &lt;string.h>\n#if !defined(__cplusplus) &amp;&amp; !defined(nullptr)\n#define nullptr NULL\n#endif\nchar* c_str_insert_helper_(char* str_arr, size_t insert_index, const char* insert_str) {\n    memmove(str_arr + insert_index + strlen(insert_str), str_arr + insert_index, strlen(str_arr + insert_index) + 1);\n    memcpy(str_arr + insert_index, insert_str, strlen(insert_str));\n    return str_arr;\n}\nbool c_str_insert_helper_is_insertable_(const char* str_arr, const char* insert_str, size_t size) {\n    return strlen(str_arr) + strlen(insert_str) + 1 &lt;= size;\n}\n#ifdef _MSC_VER\n#pragma warning (push)\n#pragma warning (disable: 4996) //error C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.\n#endif\nchar* c_str_insert_const(const char* base_str, size_t insert_index, const char* insert_str) {//文字列リテラル\n    char* new_str = (char*)(calloc(strlen(base_str) + strlen(insert_str) + 2, sizeof(char)));\n    if (nullptr != new_str) sprintf(new_str, \"%.*s%s%s\", insert_index, base_str, insert_str, &amp;base_str[insert_index]);\n    return new_str;\n}\n#ifdef _MSC_VER\n#pragma warning (pop)\n#endif\nchar* c_str_insert_c_array(char* base_str, size_t array_num, size_t insert_index, const char* insert_str) {//配列\n    return (nullptr != base_str &amp;&amp; c_str_insert_helper_is_insertable_(base_str, insert_str, array_num)) ? c_str_insert_helper_(base_str, insert_index, insert_str) : nullptr;\n}\nchar* c_str_insert_no_const(char* base_str, size_t insert_index, const char* insert_str) {//realocate\n    char* new_str = (char*)(realloc(base_str, (strlen(base_str) + strlen(insert_str) + 2) * sizeof(char)));\n    return (nullptr == new_str) ? nullptr : c_str_insert_helper_(new_str, insert_index, insert_str);\n}\n</pre>\n        </section>\n    </section>\n    <nav class=\"bottom\">\n        <ul>\n            <li><a href=\"./18c_char_str_base.html\" title=\"前頁\">prev</a></li>\n            <li><a href=\"index.html\" title=\"目次\">main</a></li>\n            <li><a href=\"./\" title=\"次頁\">next</a></li>\n        </ul>\n    </nav>\n</body>\n</html>",
 			"file": "19str_manipulate.html",
-			"file_size": 12572,
-			"file_write_time": 130808849578061042,
+			"file_size": 28203,
+			"file_write_time": 130836695535230120,
 			"settings":
 			{
-				"buffer_size": 9733,
+				"buffer_size": 22751,
 				"line_ending": "Windows",
 				"scratch": true
+			}
+		},
+		{
+			"file": "syntaxhighlighter/styles/shCore.css",
+			"settings":
+			{
+				"buffer_size": 6256,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/strcmp/strcmp/main.cpp",
+			"settings":
+			{
+				"buffer_size": 921,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "#include <stdio.h>\n#include <string.h>\nint main(){\n	char buf[1024];\n	fgets(buf, 1024, stdin);\n	strchr(buf, '\\n')[0] = '\\0';\n	if(0 == strcmp(\"add\", buf)){\n		puts(\"足し算\");\n	}\n	else if(0 == strcmp(\"sub\", buf)){\n		puts(\"引き算\");\n	}\n	else if(0 == strcmp(\"mul\", buf)){\n		puts(\"掛け算\");\n	}\n	else if(0 == strcmp(\"div\", buf)){\n		puts(\"割り算\");\n	}\n	else{\n		puts(\"unknown command\");\n	}\n	return 0;\n}",
+			"settings":
+			{
+				"buffer_size": 380,
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -559,7 +583,7 @@
 			"file": "syntaxhighlighter/scripts/shBrushCpp_kai.js",
 			"settings":
 			{
-				"buffer_size": 17516,
+				"buffer_size": 17525,
 				"line_ending": "Unix"
 			}
 		},
@@ -782,15 +806,17 @@
 		"/C/Users/yumetodo/Documents/2015_C_Textbook",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/scripts",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/mtrand32",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/mtrand32/mtrand32",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/Multidimensional_array",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strcmp",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strcmp/strcmp",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strlen/strlen",
 		"/C/Users/yumetodo/Documents/2015_C_Textbook/syntaxhighlighter",
-		"/C/Users/yumetodo/Documents/2015_C_Textbook/syntaxhighlighter/scripts"
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/syntaxhighlighter/styles"
 	],
 	"file_history":
 	[
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strcmp/strcmp/strcmp.cpp",
+		"/C/Users/yumetodo/Documents/2015_C_Textbook/src/strlen/strlen/strlen.h",
 		"/C/lib/zxing/cpp/README.md",
 		"/C/lib/zxing/qt/README.txt",
 		"/C/lib/zxing/NOTICE",
@@ -916,9 +942,7 @@
 		"/C/Users/yumetodo/Desktop/C_description.html",
 		"/C/Users/yumetodo/Desktop/matora01_2.c",
 		"/C/Users/yumetodo/Desktop/matora01.c",
-		"/C/Users/yumetodo/Documents/Visual Studio 2015/Projects/ConsoleApplication3/ConsoleApplication3/Source.cpp",
-		"/C/Users/yumetodo/Documents/Visual Studio 2015/Projects/ConsoleApplication3/GNUmakefile",
-		"/C/msys64/etc/pacman.conf"
+		"/C/Users/yumetodo/Documents/Visual Studio 2015/Projects/ConsoleApplication3/ConsoleApplication3/Source.cpp"
 	],
 	"find":
 	{
@@ -936,6 +960,24 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"&&",
+			"#include <",
+			"<<",
+			"#include <",
+			"&&",
+			"<< ",
+			"auto",
+			"template<",
+			"SYMBOL",
+			"/* title */",
+			" /* set_poss */",
+			" /* main */",
+			" /* while */",
+			" /* if1 */",
+			" /* then1 */",
+			" /* if */",
+			" /* then */",
+			"SYMBOL",
 			"%ld",
 			"re",
 			"list*",
@@ -1045,25 +1087,7 @@
 			"w",
 			"printf(\"\\n\");",
 			"\"<!",
-			"∼",
-			"  1個",
-			",  ",
-			",　",
-			"name",
-			"DWORD",
-			"BaseClass",
-			"baseClass",
-			"theClass",
-			"id",
-			"[^ ]' \\+",
-			"[^ ]' \\+\\n",
-			"_ptr",
-			"unique_ptr",
-			"<T>",
-			"&&",
-			"<T>",
-			"<rand_type>",
-			"template <"
+			"∼"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1071,6 +1095,7 @@
 		"regex": true,
 		"replace_history":
 		[
+			"template&lt;",
 			"str_arr ",
 			"static_assert($1)",
 			"template",
@@ -1183,7 +1208,7 @@
 	"groups":
 	[
 		{
-			"selected": 12,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -1192,7 +1217,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9733,
+						"buffer_size": 22751,
 						"regions":
 						{
 							"TagLint":
@@ -1202,8 +1227,8 @@
 								"regions":
 								[
 									[
-										4694,
-										4697
+										8635,
+										8638
 									]
 								],
 								"scope": "variable.parameter"
@@ -1212,8 +1237,8 @@
 						"selection":
 						[
 							[
-								5413,
-								5413
+								8353,
+								8353
 							]
 						],
 						"settings":
@@ -1222,46 +1247,26 @@
 							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
@@ -1276,7 +1281,27 @@
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
-								"bh_tag_content"
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
 							],
 							"in_converting": true,
 							"is_xml": false,
@@ -1287,14 +1312,280 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 143.0,
+						"translation.y": 3226.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
+					"file": "syntaxhighlighter/styles/shCore.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6256,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1721,
+								1721
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"origin_encoding": "ASCII",
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 631.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/strcmp/strcmp/main.cpp",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 921,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								921
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/C++11/C++11.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 380,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								380
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"default_dir": "C:\\Users\\yumetodo\\Documents\\2015_C_Textbook",
+							"is_xml": false,
+							"syntax": "Packages/C++/C.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "15value.html",
 					"semi_transient": false,
 					"settings":
@@ -1381,11 +1672,11 @@
 						"translation.y": 71.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 5,
 					"file": "06conditional_state.html",
 					"semi_transient": false,
 					"settings":
@@ -1485,11 +1776,11 @@
 						"translation.y": 26.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 6,
 					"file": "09standard_input_output.html",
 					"semi_transient": false,
 					"settings":
@@ -1576,24 +1867,24 @@
 						"translation.y": 1607.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 7,
 					"file": "syntaxhighlighter/scripts/shBrushCpp_kai.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17516,
+						"buffer_size": 17525,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								14239,
-								14239
+								762,
+								762
 							]
 						],
 						"settings":
@@ -1602,26 +1893,6 @@
 							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -1632,45 +1903,65 @@
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
 							],
 							"origin_encoding": "UTF-8",
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2341.0,
+						"translation.y": 260.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 8,
 					"file": "src/insertaion_sort.cpp",
 					"semi_transient": false,
 					"settings":
@@ -1756,11 +2047,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 9,
 					"file": "/C/Users/yumetodo/Desktop/insertaion_sort.cpp",
 					"semi_transient": false,
 					"settings":
@@ -1846,11 +2137,11 @@
 						"translation.y": 1148.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 10,
 					"semi_transient": false,
 					"settings":
 					{
@@ -1936,11 +2227,11 @@
 						"translation.y": 612.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 11,
 					"semi_transient": false,
 					"settings":
 					{
@@ -1951,8 +2242,8 @@
 						"selection":
 						[
 							[
-								62,
-								259
+								95,
+								95
 							]
 						],
 						"settings":
@@ -1961,26 +2252,6 @@
 							"auto_name": "著作権法第二条(定義)第1項9号の5",
 							"bh_regions":
 							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
 								"bh_c_define",
 								"bh_c_define_center",
 								"bh_c_define_open",
@@ -1991,31 +2262,51 @@
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
 								"bh_curly",
 								"bh_curly_center",
 								"bh_curly_open",
 								"bh_curly_close",
 								"bh_curly_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_unmatched",
 								"bh_unmatched_center",
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content"
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
 							],
 							"default_dir": "C:\\Users\\yumetodo\\Documents\\2015_C_Textbook",
 							"is_xml": false,
@@ -2023,14 +2314,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 54.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 12,
 					"file": "/D/lsw-build2-master/FirstAutomatedBld.vbs",
 					"semi_transient": false,
 					"settings":
@@ -2116,11 +2407,11 @@
 						"translation.y": 1158.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 13,
 					"file": "/D/lsw-build2-master/bld_ffmpeg.sh",
 					"semi_transient": false,
 					"settings":
@@ -2204,11 +2495,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 14,
 					"file": "/D/lsw-build2-master/msys2_dl_wget.bat",
 					"semi_transient": false,
 					"settings":
@@ -2297,11 +2588,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 15,
 					"file": "/C/Users/yumetodo/Desktop/zxing.md",
 					"semi_transient": false,
 					"settings":
@@ -2313,8 +2604,8 @@
 						"selection":
 						[
 							[
-								3351,
-								3351
+								2905,
+								2905
 							]
 						],
 						"settings":
@@ -2323,11 +2614,26 @@
 							"auto_complete": false,
 							"bh_regions":
 							[
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -2338,31 +2644,16 @@
 								"bh_tag_open",
 								"bh_tag_close",
 								"bh_tag_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
 								"bh_angle",
 								"bh_angle_center",
 								"bh_angle_open",
 								"bh_angle_close",
 								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
 								"bh_default",
 								"bh_default_center",
 								"bh_default_open",
@@ -2373,24 +2664,25 @@
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content"
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content"
 							],
 							"is_xml": false,
+							"origin_encoding": "UTF-8",
 							"syntax": "Packages/Markdown Extended/Syntaxes/Markdown Extended.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 1113.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 16,
 					"file": "/C/Users/yumetodo/Desktop/link_bio.txt",
 					"semi_transient": false,
 					"settings":
@@ -2469,13 +2761,14 @@
 								"bh_single_quote_content"
 							],
 							"is_xml": false,
+							"origin_encoding": "ASCII",
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 5,
 					"type": "text"
 				}
 			]

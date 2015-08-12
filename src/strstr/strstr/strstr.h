@@ -12,5 +12,8 @@
 #define _CONST_RETURN
 #endif  /* __cplusplus */
 #endif  /* _CONST_RETURN */
+#ifdef __cplusplus
+char *my_strstr(char *str, const char *strSearch);
+#endif
 _CONST_RETURN char *my_strstr(const char *str, const char *strSearch);
 #endif

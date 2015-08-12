@@ -7,6 +7,7 @@
  *
  * @version
  * 3.0.83 (July 02 2010)
+ * changed by yumetodo
  * 
  * @copyright
  * Copyright (C) 2004-2010 Alex Gorbatchev.
@@ -35,7 +36,7 @@
   line-height: 1.1em !important;
   margin: 0 !important;
   outline: 0 !important;
-  overflow: visible !important;
+  overflow: visible;
   padding: 0 !important;
   position: static !important;
   right: auto !important;
@@ -51,12 +52,12 @@
   min-height: inherit !important;
   min-height: auto !important;
 }
-
 .syntaxhighlighter {
   width: 100% !important;
   margin: 1em 0 1em 0 !important;
   position: relative !important;
-  overflow: auto !important;
+  overflow-x: auto;
+  overflow-y: hidden;/* prevent show scroll-bar*/
   font-size: 1em !important;
 }
 .syntaxhighlighter.source {
