@@ -51,7 +51,7 @@
                 掲載しているソースコードは特に記述のない限り、以下の環境でコンパイルし実行できることを確認しています。
                 <ul>
                     <li>Visual Studio 2013 Community November 2013 CTP</li>
-                    <li>Visual Studio 2015 RC Community</li>
+                    <li>Visual Studio 2015 Community</li>
                     <li>msys2 mingw gcc4.9.2 -std=c++14</li>
                     <li>msys2 mingw clang3.6.1 -std=c++14</li>
                 </ul>
@@ -66,7 +66,6 @@
             <li>C++への移行がスムーズに進むように心がけています(そういうテキストになっているとは言っていない)</li>
             <li>時間的制約から誤字脱字の修正が間に合っていません。</li>
             <li>少しでも疑問に思ったらまずググれ、ググって苦しんだあともう一度このテキストを見ればかなり理解できるはず。</li>
-            <li>まれに不自由なWindowsでしか実行できないバイナリの実行を要求する練習問題がありますが、そのうち消えるのでスルー推奨</li>
             <li>私はMinecraftの動画が好きだ</li>
             <li>ありきたりって意外と難しい</li>
         </ul>
@@ -99,6 +98,17 @@
     <section>
         <h2>コンパイラー及び開発環境導入</h2>
         <section>
+            <h3>Visual Studio 2015</h3>
+            <ol>
+                <li><a href="https://www.visualstudio.com/downloads/download-visual-studio-vs">https://www.visualstudio.com/downloads/download-visual-studio-vs</a>にアクセスする</li>
+                <li>
+                    <img src="./pic/vs_2015_dl.png" alt="vs2015 dlpage"><br>
+                    ダウンロードを押す。
+                </li>
+                <li><a href="https://azulea.wordpress.com/2015/07/21/visual-studio-2015-vs2015-%E3%81%AE%E3%80%8C%E6%A8%99%E6%BA%96%E3%80%8D%E3%81%AB%E3%81%AF-c-%E3%81%8C%E5%90%AB%E3%81%BE%E3%82%8C%E3%81%A6%E3%81%84%E3%81%AA%E3%81%84/">https://azulea.wordpress.com/2015/07/21/visual-studio-2015-vs2015-の「標準」には-c-が含まれていない</a>を参照してカスタムインストールでインストール。</li>
+            </ol>
+        </section>
+        <section>
             <h3>Visual Studio 2013</h3>
             <ol>
                 <li>
@@ -125,7 +135,6 @@
                 <li>
                     <pre class="brush: plain">pacman -S mingw-w64-x86_64-gdb
 pacman -S libxml2-devel
-pacman -S mingw-w64-i686-clang
 pacman -S mingw-w64-x86_64-clang </pre>
                     と実行する。最後の2行はclangも入れる人のみ
                 </li>
@@ -190,6 +199,10 @@ pacman -S mingw-w64-x86_64-clang </pre>
                 <dd>License : GNU Free Documentation License v1.3</dd>
                 <dt>C言語ポインタ完全制覇</dt>
                 <dd>著作者 : 前橋和也</dd>
+                <dd>License : 未調査</dd>
+                <dt>Ｃプログラミング診断室</dt>
+                <dd><a href="http://www.pro.or.jp/~fuji/mybooks/cdiag/index.html">http://www.pro.or.jp/~fuji/mybooks/cdiag/index.html</a></dd>
+                <dd>著作者 : 藤原博文</dd>
                 <dd>License : 未調査</dd>
             </dl>
         </section>
