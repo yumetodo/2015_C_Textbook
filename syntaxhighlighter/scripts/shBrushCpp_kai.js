@@ -24,7 +24,7 @@
 		// Copyright 2006 Shin, YoungJin
 	
 		var reserved = 	'__stdcall __cdecl and and_eq asm _asm auto bitand bitor ' + 
-						' bool break case catch class compl constexpr const const_cast continue __declspec decltype ' +
+						' bool break case catch class compl co1nstexpr const const_cast continue __declspec decltype ' +
 						'default delete deprecated dllexport dllimport do dynamic_cast else enum __exception ' +
 						'explicit export extern __finally false for friend goto if inline ' +
 						'mutable naked namespace new noinline noreturn not nothrow not_eq nullptr ' +
@@ -33,6 +33,7 @@
 						'try __try typedef typeid typename union using uuid virtual volatile ' +
 						'while xor xor_eq signed unsigned bool char __int8 short __int16 ' + 
 						'__wchar_t wchar_t int __int32 long __int64 void float double ' +
+						'noexcept ' +
 						'static_if ';//N4661
 
 		var macro = 	'errno AVSC_INLINE DEBUG NDEBUG NULL EOF　stdin stdout stderr tin tout ' +
@@ -62,7 +63,10 @@
 						'ATOMIC_CHAR_LOCK_FREE ATOMIC_CHAR_LOCK_FREE ATOMIC_CHAR_LOCK_FREE ATOMIC_CHAR16_T_LOCK_FREE ATOMIC_CHAR32_T_LOCK_FREE ATOMIC_WCHAR_T_LOCK_FREE ATOMIC_SHORT_LOCK_FREE ATOMIC_SHORT_LOCK_FREE ATOMIC_INT_LOCK_FREE ATOMIC_INT_LOCK_FREE ' +
 						'ATOMIC_LONG_LOCK_FREE ATOMIC_LONG_LOCK_FREE ATOMIC_LLONG_LOCK_FREE ATOMIC_LLONG_LOCK_FREE ' +
 						'_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_COUNT _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES __GNUC__ __GNUC_MINOR__ __GNUC_PATCHLEVEL__ _countof ' + 
-						'KEY_INPUT_ESCAPE _CONST_RETURN __ICC __clang__ __clang_major__ __clang_minor__ __bool_true_false_are_defined _CRT_RAND_S';
+						'KEY_INPUT_ESCAPE _CONST_RETURN __ICC __clang__ __clang_major__ __clang_minor__ __bool_true_false_are_defined _CRT_RAND_S ' +
+						'BOOST_VERSION BOOST_ASIO_ERROR_CATEGORY_NOEXCEPT BOOST_NOEXCEPT BOOST_ASIO_MSVC BOOST_USER_CONFIG BOOST_COMPILER_CONFIG BOOST_STDLIB_CONFIG ' +//Boost
+						'BOOST_PLATFORM_CONFIG BOOST_HAS_PRAGMA_ONCE __REQUIRED_RPCNDR_H_VERSION__ __REQUIRED_RPCSAL_H_VERSION__ BOOST_MPL_AUX_LAMBDA_SUPPORT ' +
+						'BOOST_ASIO_MOVE_CAST BOOST_ASIO_WRITE_HANDLER_CHECK ';
 
 		var typedefined = 'INPUT_PLUGIN_TABLE INPUT_HANDLE FILTER_DLL EXFUNC AVI_FILE_HANDLE SYS_INFO FILE_INFO FRAME_STATUS FILTER_PROC_INFO __m128 ' +
 						'__m128i __m128d __m256 __m256i __m256d dummy_handler_t au_video_output_handler_t yuv420_list func_convert_yuv420ple_i_to_yuv444p16le AVFrame ' +
@@ -140,10 +144,16 @@
 						'make_unsigned rank remove_all_extents remove_const remove_cv remove_extent remove_pointer remove_reference remove_volatile integral_constant ' +
 						'false_type true_type unordered_map unordered_multimap unordered_multiset unordered_set tuple_element tuple_size identity pair ' +
 					    'gslice gslice_array indirect_array mask_array slice valarray vector bitset numeric_limits auto_ptr unique_ptr shared_ptr ' +
-					    'forward ' +
-					    'T_ T Args TYPE reference pointer limit iterator Value type ' +//for Template
+					    'forward enable_shared_from_this IID' +
+					    'const_buffer tcp endpoint acceptor socket io_service async_result async_result_init handler_type async_result_type_helper AsyncStatus ' +//boost.asio
+					    'RPC_IF_HANDLE IAsyncInfo IInspectable win_event posix_event std_event null_event event atomic_count basic_handle native_type native_handle_type lowest_layer_type' +
+					    'io_service basic_io_object basic_object_handle basic_random_access_handle type_check' +
+					    'ObjectHandleService HandleService WaitHandler RandomAccessHandleService ConstBufferSequence '+//Boost.asio template
+					    'distance_impl apply msvc_eti_base iter_fold iterator_range long_ distance encode_type_impl decode_type_impl decode_nested_template_helper_impl encode_type decode_type ' +//Boost.mpl
+					    'enable_if_c lazy_enable_if_c disable_if_c lazy_disable_if_c ' +//Boost
+					    'T_ T Args TYPE reference pointer limit iterator Value type Handler Signature First Last Tag Cond next ' +//for Template
 					    'counter_iterator nth_loop rand_type Then Else IF my_uniform_distribution PrimitiveType status_t color_e_t myuint8_t ' +//Frequently used name
-					    'rgb_t bignum_t BIGNUM uint ';
+					    'rgb_t bignum_t BIGNUM uint shared_const_buffer MutableBufferSequence';
 
 		var preprocessor_word = 'alloc_text auto_inline bss_seg check_stack code_seg comment component conform const_seg data_seg deprecated detect_mismatch ' +
 						'fenv_access float_control fp_contract function hdrstop include_alias init_seg inline_depth inline_recursion intrinsic ' +
@@ -151,11 +161,11 @@
 						'runtime_checks section setlocale strict_gs_check unmanaged vtordisp warning defined ';
 
 		this.regexList = [
+			{ regex: /#[ ]*(?:define|error|import|undef|elif|include|using|ifdef|line|ifndef|if|pragma|else|endif)/g,　css: 'preprocessor' },
 			{ regex: SyntaxHighlighter.regexLib.singleLineCComments,	css: 'comments' },			// one line comments
 			{ regex: SyntaxHighlighter.regexLib.multiLineCComments,		css: 'comments' },			// multiline comments
 			{ regex: SyntaxHighlighter.regexLib.doubleQuotedString,		css: 'string' },			// strings
 			{ regex: SyntaxHighlighter.regexLib.singleQuotedString,		css: 'string' },			// strings
-			{ regex: /#(?:define|error|import|undef|elif|include|using|ifdef|line|ifndef|if|pragma|else|endif)/g,　css: 'preprocessor' },
 			{ regex: /!(?:defined)/g,　css: 'preprocessor' },
 			{ regex: new RegExp(this.getKeywords(preprocessor_word), 'gm'),	css: 'preprocessor' },
 			{ regex: new RegExp(this.getKeywords(typedefined), 'gm'),	css: 'color1 bold' },
