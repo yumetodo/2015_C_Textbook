@@ -166,6 +166,18 @@ make_unique(Args&amp;&amp;... args)
             <b>参照とはあくまで元からあるlValue(変数とか)に別名をつける機能です。</b><br>
             たしかにポインタに似ていますが、<b>参照とポインタの関連性について意識してはいけません</b>。
         </p>
+        <pre class="brush: cpp;">#include &lt;iostream>
+#include &lt;cstdint>
+void modifier(uint32_t&amp; modified, uint8_t r, uint8_t g, uint8_t b){
+    modified = r + static_cast&lt;uint16_t>(g) &lt;&lt; 8 + static_cast&lt;uint32_t>(b) &lt;&lt; 16; 
+}
+int main(){
+    uint32_t rgb = 0;
+    std::cout &lt;&lt; rgb &lt;&lt; std::endl;//0
+    modifier(rgb, 64, 32, 84);
+    std::cout &lt;&lt; rgb &lt;&lt; std::endl;//5513280
+    return 0;
+}</pre>
         <p>当面クラスとか使わないわけで、役に立つシーンは配列を関数に渡す場合です。例を見ましょう。</p>
         <pre class="brush: cpp;">#include &lt;stdio.h&gt;
 #if !defined (_countof)

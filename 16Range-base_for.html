@@ -84,15 +84,12 @@ for(auto i : data) {
     total += i; 
 }</pre>
         <p>
-            スッキリ。言うまでもなくiの型はint型です。なのでautoの代わりにintと書くこともできますが、いちいち型がなにか考えるのはめんdいですね。<br>
-            ちなみにTarse Range-Based forというこの進化版がC++17に提案されていたんですが、採用されなかったっぽい。<br>
-            Tarse Range-Based forがClangから取り除かれていた | 本の虫<br>
-            <a href="http://cpplover.blogspot.jp/2014/12/tarse-range-based-forclang.html">http://cpplover.blogspot.jp/2014/12/tarse-range-based-forclang.html</a><br>
-            なのになぜかVisual Studio 2015 RCではサポートのアナウンス。どうしたんだ、MIcrosoft。<br>
-            Visual Studio 2015 RC | Release Notes<br>
-            <a href="https://www.visualstudio.com/en-us/news/vs2015-vs.aspx#C++">https://www.visualstudio.com/en-us/news/vs2015-vs.aspx#C++</a>
+            スッキリ。言うまでもなくiの型はint型です。なのでautoの代わりにintと書くこともできますが、いちいち型がなにか考えるのはめんdいですね。
         </p>
-        <p>Range-base forは内部的には上のRange-base for未使用の例と同様に読み替えられています。ということが分かるようにちょっと引用させてもらいましょう</p>
+    </section>
+    <section>
+        <h2>Range-based forの内部構造</h2>
+        <p>Range-base forは内部的には上のRange-base for未使用の例と同様に読み替えられています。どういうことが分かるようにちょっと引用させてもらいましょう</p>
         <blockquote cite="http://cpplover.blogspot.jp/2009/08/n2930-range-based-for-loop.html">
             <p>
                 n2930: Range-based for loopについて | 本の虫<br>
@@ -101,7 +98,7 @@ for(auto i : data) {
             <p>Range-based forは以下のような構文になっている。 </p>
             <pre class="brush: cpp;">for ( for-range-declaration : expression ) statement</pre>
             <p>これは、コンパイラによって、以下のように変換される。</p>
-            <pre class="brush: cpp;">{
+            <pre class="brush: cpp; highlight: [4]">{
     auto &amp;&amp; __range = ( expression );
     for (auto __begin = begin-expr, __end = end-expr; __begin != __end; ++__begin ) {
        for-range-declaration = *__begin;
@@ -109,6 +106,90 @@ for(auto i : data) {
     }
 }</pre>
         </blockquote>
+        <blockquote>
+            <p>
+                Learning C++: range based for <br>
+                <a href="http://cxx11.blogspot.jp/2012/01/range-based-for.html">http://cxx11.blogspot.jp/2012/01/range-based-for.html</a>
+            </p>
+            <p>リストのすべての要素を捜査するときには、for文を次のように記述します。</p>
+            <pre class="brush: cpp;">// 配列の場合
+int array[] = {1, 2, 3, 4};
+for (int val : array) {
+  std::cout &lt;&lt; val &lt;&lt; std::endl;
+}
+// 配列以外の場合
+std:vector&lt;int> vec = {1, 2, 3, 4};
+for (int val : vec) {
+  std::cout &lt;&lt; val &lt;&lt; std::endl;
+}</pre>
+            <p>range based forは、配列と配列以外の場合それぞれ次のように展開され処理されます。</p>
+            <pre class="brush: cpp; highlight: [10]">// 配列の場合
+int array[] = {1, 2, 3, 4};
+for (int i = 0; i &lt; sizeof(array) / sizeof(decltype(*array)); ++i) {
+  auto val = *(array + i);
+  std::cout &lt;&lt; val &lt;&lt; std::endl;
+}
+// 配列以外の場合
+std:vector&lt;int> vec = {1, 2, 3, 4};
+for (auto i = begin(vec); i != end(vec); ++i) {
+  auto val = *i;
+  std::cout &lt;&lt; val &lt;&lt; std::endl;
+}</pre>
+        </blockquote>
+    </section>
+    <section>
+        <h2>for-range-declarationの考察</h2>
+        <p>
+            for-range-declarationの部分の型指定ですが、もちろんintやdoubleなど自分で書いてもいいのですが、<br>
+            <b>殆どの場合型推論させます</b><br>
+            というわけで幾つかパターンを見て行きましょう。
+        </p>
+        <section>
+            <h3>auto&amp;&amp;</h3>
+            <p>
+                rvalue referenceで受ける場合ですね。<b>ほぼ例外なくこれ書いておけば間違いないです。</b><br>
+                何故かと言うと、本の虫の引用部分で言うbegin-exprの部分はコンテナのbeginメンバー関数が呼ばれるのですが、これで得られるイテレータのoperator*が、std::vector&lt;bool>に代表されるようにrvalueを返す場合があって、これはauto&amp;&amp;かautoでしか受けられないのです。<br>
+                かと言ってautoで受けると殆どの場合でコピーされてしまいます。なのでこれの出番です。
+            </p>
+            <pre class="brush: cpp;">#include &lt;iostream>
+#include &lt;vector>
+#include &lt;array>
+#include &lt;utility>
+#include &lt;string>
+int main(){
+    std::vector&lt;std::pair&lt;std::string, std::array&lt;int, 4>>> data;
+    //中略
+    for(auto&amp;&amp; i : data){
+        std::cout &lt;&lt; i.first;
+        for(auto&amp;&amp; j : i.second) std::cout &lt;&lt; j &lt;&lt; ", ";
+        std::cout &lt;&lt; std::endl;
+    }
+    return 0;
+}</pre>
+            <p>
+                ちなみにTarse Range-Based forというこの進化版がC++17に提案されていたんですが、採用されなかったっぽい。<br>
+                Tarse Range-Based forがClangから取り除かれていた | 本の虫<br>
+                <a href="http://cpplover.blogspot.jp/2014/12/tarse-range-based-forclang.html">http://cpplover.blogspot.jp/2014/12/tarse-range-based-forclang.html</a><br>
+                なのになぜかVisual Studio 2015 RCではサポートのアナウンス。どうしたんだ、MIcrosoft。<br>
+                Visual Studio 2015 RC | Release Notes<br>
+                <a href="https://www.visualstudio.com/en-us/news/vs2015-vs.aspx#C++">https://www.visualstudio.com/en-us/news/vs2015-vs.aspx#C++</a>
+            </p>
+        </section>
+        <section>
+            <h3>const auto&amp;</h3>
+            <p>const lvalue referenceで受ける場合ですね。変更しないぞアピールをするときに。ただし前述のとおりrvalueを受けられないという問題があります。</p>
+        </section>
+        <section>
+            <h3>auto&amp;</h3>
+            <p>前述のような問題はありますが、一文字type数が少ないので使うことも。</p>
+        </section>
+        <section>
+            <h3>auto</h3>
+            <p>基本型(int, doubleとかとか)などコピーのコストが重くない場合はこれで良かったりします。</p>
+        </section>
+    </section>
+    <section>
+        <h3>リンクとか</h3>
         <p>
             実はこのRange-base forはconceptとADL(argument-dependent lookup)とunqualified lookup周りをめぐってそこそこ議論が有り、<br>
             解説サイトによって詳細が違ったりしますが、結局unqualified lookupは行われないことになったので、下記参考サイトを見るときは注意してください。
@@ -141,6 +222,10 @@ for(auto i : data) {
             <li>
                 C++ - 任意のメンバ関数でrange-based-forをする - Qiita<br>
                 <a href="http://qiita.com/ikaro1192/items/c212bc258bcc729b4a17">http://qiita.com/ikaro1192/items/c212bc258bcc729b4a17</a>
+            </li>
+            <li>
+                <b>C++ - range-based for loopsの要素の型について - Qiita</b><br>
+                <a href="http://qiita.com/rinse_/items/cdfce8aa6a685a8ebe0c">http://qiita.com/rinse_/items/cdfce8aa6a685a8ebe0c</a>
             </li>
             <li>
                 <b>range-based forに対する意見求む | 本の虫</b><br>

@@ -196,9 +196,12 @@ extern int __cdecl _rdrand64_step(unsigned __int64 *);
             <li>seedを作る方法がOS依存になったりCPU依存になったりする</li>
         </ul>
         <p>とまあ、C++っぽく作りましょうか。細けーことは後だ。</p>
-        <pre class="brush: cpp;">#include&lt;iostream&gt;
-#include&lt;vector&gt;
-#include&lt;random&gt;
+        <pre class="brush: cpp; highlight: [30, 31, 32, 33, 34, 35];">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;random&gt;
+#include &lt;cstdint&gt;
+#include &lt;functional&gt;//std::ref
+#include &lt;algorithm&gt;//std::generate
 class counter_iterator {
     std::size_t i;
 public:
@@ -206,8 +209,8 @@ public:
     counter_iterator(std::size_t n) : i(n) { }
     bool operator == (const counter_iterator &amp; rhs) const { return i == rhs.i; }
     bool operator != (const counter_iterator &amp; rhs) const { return i != rhs.i; }
-    std::size_t &amp; operator * () { return i; }
-    counter_iterator &amp; operator ++ () { ++i; return *this; }
+    std::size_t &amp; operator* () { return i; }
+    counter_iterator &amp; operator++ () { ++i; return *this; }
 };
 class nth_loop {
 private:
@@ -222,18 +225,12 @@ nth_loop operator "" _( unsigned long long int n ){
 	return nth_loop( n ) ;
 }
 int main(){
-	// ランダムデバイス
-	std::random_device rnd;
-	// 初期化用ベクタ
-	std::vector&lt;std::uint_least32_t> v(10);
-	// ベクタの初期化
-	std::generate(v.begin(), v.end(), std::ref(rnd));
-	
-	// 乱数エンジン
+	std::random_device rnd;// ランダムデバイス
+	std::vector&lt;std::uint_least32_t> v(10);// 初期化用ベクタ
+	std::generate(v.begin(), v.end(), std::ref(rnd));// ベクタの初期化
     std::seed_seq seed(v.begin(), v.end());
-	std::mt19937 engine(seed);
-	// distribution
-	std::uniform_real_distribution&amp;&lt;double&gt; distribution(0.0, 1.0);
+	std::mt19937 engine(seed);// 乱数エンジン
+	std::uniform_real_distribution&lt;double&gt; distribution(0.0, 1.0);// distribution
 	
 	for (auto i : 10_)
 		std::cout &lt;&lt; distribution(engine) &lt;&lt; std::endl;
@@ -248,7 +245,9 @@ int main(){
         <p>
             話がそれました。random_device rndってのが真の乱数を作るやつで、作ったのを保管するのが変数v、seedを真の乱数から作るのがgenerateで、<br>
             srandにあたるseedを与えるのが16行目です。<br>
-            uniform_real_distributionってのはできた乱数を指定した型で指定した範囲に加工するやつですのでなくてもいいですが・・・あったほうが楽やんね。
+            uniform_real_distributionってのはできた乱数を指定した型で指定した範囲に加工するやつですのでなくてもいいですが・・・あったほうが楽やんね。ｂ<br>
+            疑似乱数生成をになうengineと乱数の範囲・分布調整を行うdistributionが明確に分離しているのが多言語との差かな？<br>
+            厳密な乱数を作りたいときは嬉しい機能ですが、ちょっと乱数がほしいという気軽な要望には答えられないですね。
         </p>
     </section>
     <nav class="bottom">
