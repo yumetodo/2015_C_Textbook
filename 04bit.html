@@ -67,13 +67,13 @@ const uint32_t re_si = si_a &lt;&lt; si_b;//80:1010000</pre>
             <li>
                 オーバーフローしないか<br>
                 左シフトの結果がその型の最大値を超えるようなことがあったらだめ、ということ。だからこれはだめ<br>
-                <pre class="brush: cpp; gutter:false;">unsigned int re = UINT_MAX << 1;</pre>
+                <pre class="brush: cpp; gutter:false;">unsigned int re = UINT_MAX &lt;&lt; 1;</pre>
             </li>
             <li>
                 右オペランドが格上げ後の左オペランドの精度以下<br>
                 具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしgcc/clang独自拡張の__builtin_popcount関数を用いるか、<br>
                 math.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
-                <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b < __popcnt(UINT_MAX))? si_a &lt;&lt; si_b : 0;</pre>
+                <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b &lt; __popcnt(UINT_MAX))? si_a &lt;&lt; si_b : 0;</pre>
             </li>
         </ul>
         <p>
@@ -249,7 +249,7 @@ const uint32_t re = a | b;//30:0b11110</pre>
 const uint32_t b = 0b11010;//26
 const uint32_t re = a ^ b;//12:0b1100</pre>
         <p>各bitにXOR演算をします。</p>
-        <img alt="XOR" src="http:////upload.wikimedia.org/wikipedia/ja/6/6b/Venn-Diagram-XOR.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
+        <img alt="XOR" src="http://upload.wikimedia.org/wikipedia/ja/6/6b/Venn-Diagram-XOR.png" class="thumbimage" data-file-width="186" data-file-height="110" height="110" width="186">
         <table class="bit_04">
             <tr>
                 <th>A</th>

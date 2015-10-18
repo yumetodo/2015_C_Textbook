@@ -261,7 +261,7 @@ int main(){
         printf("数値を入力してください(-1で終了):");
         num = get_integer_num(INT_MAX, INT_MIN);
         if (-1 == num || INT_MIN == num || EOF == num)
-        if(num < 0) continue;
+        if(num &lt; 0) continue;
             sum += num;
     }
     printf("入力した数値の合計は%dです。\n", sum);

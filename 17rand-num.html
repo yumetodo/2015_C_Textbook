@@ -61,8 +61,8 @@ int main(void){
 	/* 乱数系列の変更 */
 	srand(static_cast&lt;unsigned int&gt;(time(nullptr)));
 	/* 1～100の擬似乱数を10個ずつ10行発生 */
-	for (i = 1; i <= 10; i++) {
-		for (j = 0; j < 10; j++) {
+	for (i = 1; i &lt;= 10; i++) {
+		for (j = 0; j &lt; 10; j++) {
 			printf("%3d ", rand() % 100 + 1);
 		}
 		putchar('\n');
@@ -82,8 +82,8 @@ int main(void){
 	/* 乱数系列の変更 */
 	srand(static_cast&lt;unsigned int&gt;(time(nullptr)));
 	/* 1～100の擬似乱数を10個ずつ10行発生 */
-	for (i = 1; i <= 10; i++) {
-		for (j = 0; j < 10; j++) {
+	for (i = 1; i &lt;= 10; i++) {
+		for (j = 0; j &lt; 10; j++) {
 			printf("%3d ", gen_uirand(100, 1));
 		}
 		putchar('\n');
@@ -223,19 +223,20 @@ nth_loop operator "" _( unsigned long long int n ){
 }
 int main(){
 	// ランダムデバイス
-	std::random_device rnd ;
+	std::random_device rnd;
 	// 初期化用ベクタ
-	std::vector< std::uint_least32_t> v(10) ;
+	std::vector&lt;std::uint_least32_t> v(10);
 	// ベクタの初期化
-	std::generate( v.begin(), v.end(), std::ref(rnd) ) ;
+	std::generate(v.begin(), v.end(), std::ref(rnd));
 	
 	// 乱数エンジン
-	std::mt19937 engine( std::seed_seq( v.begin(), v.end() ) ) ;
+    std::seed_seq seed(v.begin(), v.end());
+	std::mt19937 engine(seed);
 	// distribution
-	std::uniform_real_distribution&amp;&lt;double&gt; distribution(0.0, 1.0) ;
+	std::uniform_real_distribution&amp;&lt;double&gt; distribution(0.0, 1.0);
 	
 	for (auto i : 10_)
-		std::cout &lt;&lt; distribution(engine) &lt;&lt; std::endl ;
+		std::cout &lt;&lt; distribution(engine) &lt;&lt; std::endl;
 }</pre>
         <p>
             ちゃっかり前回のRange-base forと参考リンクに上げた固定回ループの書き方を使っています。だって「C++っぽく作りましょうか」って言ったでしょ。<br>

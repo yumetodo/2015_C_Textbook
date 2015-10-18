@@ -256,6 +256,7 @@ int main(void){
             </p>
             <form><input type="button" value="動作例の表示/非表示" onclick="change_answer_state('example2')"></form>
             <section id="example2" style="display: none;">
+                <h4>動作例</h4>
                 <pre class="brush: plain; highlight:[3, 6, 9, 12, 15, 18, 21, 24, 27, 30]" title="動作例">
 最大値80, 最小値5の間で乱数が生成されました。数当てゲームの開始です！
 値を入力してください
@@ -370,6 +371,7 @@ int main(int argc, char* argv[]) {
 }</pre>
             <form><input type="button" value="答えの表示/非表示" onclick="change_answer_state('answer2')"></form>
             <section id="answer2" style="display: none;">
+                <h4>答え</h4>
                 <p>62行目以降のみ。</p>
                 <pre class="brush: cpp; first-line: 62;">
 void print_help_of_num(unsigned int target, unsigned int current) {

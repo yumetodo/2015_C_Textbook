@@ -115,3 +115,12 @@ nav ul li.disable{
 	background-color: #9790a4;
 	border: 2px #9790a4 solid;
 }
+
+.slideshare {
+	margin: 0;
+	overflow: hidden;
+	border: 1px solid #CCC;
+	border-width: 1px;
+	margin-bottom: 5px;
+	max-width: 100%;
+}

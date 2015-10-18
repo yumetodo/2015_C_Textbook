@@ -62,15 +62,9 @@ char ch = getchar();</pre>
         <h2 id="variable_type">変数の型</h2>
         <p>C/C++言語はとくに型にうるさい言語として知られています。(JavaScriptやperlなど型を明示できない言語もある)。C++なんて型なしではやっていけません。</p>
         <p>じゃあその「型」ってなんでしょうか？「型」とはコンパイラに変数をどういう風にメモリー上に配置したらいいのか教えるものです。</p>
-        <table>
-            <colgroup style="width: 32px;"></colgroup>
-            <colgroup style="width: 99px;"></colgroup>
-            <colgroup style="width: 85px;"></colgroup>
-            <colgroup style="width: 95px;"></colgroup>
-            <colgroup style="width: 95px;"></colgroup>
-            <colgroup style="width: 120px;"></colgroup>
+        <table style="font-size: 13px;">
             <tr>
-                <th>基本型名</th>
+                <th style="min-width: 32px;">基本型名</th>
                 <th>整数型/浮動小数点型</th>
                 <th>型の大きさ</th>
                 <th>signedの最大値を求めるマクロ</th>
@@ -147,7 +141,7 @@ char ch = getchar();</pre>
                 <td>不定</td>
                 <td>FLT_MAX</td>
                 <td>-FLT_MAX</td>
-                <td>そんなものはない</td>
+                <td>存在しない</td>
                 <td><pre class="brush: cpp; gutter:false;">float r = 312;</pre></td>
             </tr>
             <tr>
@@ -156,7 +150,7 @@ char ch = getchar();</pre>
                 <td>不定</td>
                 <td>DBL_MAX</td>
                 <td>-DBL_MAX</td>
-                <td>そんなものはない</td>
+                <td>存在しない</td>
                 <td><pre class="brush: cpp; gutter:false;">double bmi = 6.41284;</pre></td>
             </tr>
         </table>

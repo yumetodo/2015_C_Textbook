@@ -241,7 +241,7 @@ for(auto data_it = data.begin(); data_it != data.end(); data_it++) {
         <h2>配列とメモリー空間とオーバーフローとバッファオーバーラン</h2>
         <p>なんどでもいいますが配列は単に大きく確保したメモリー空間を指定型に区切っているだけです。では確保していない領域に書き込もうとすると？</p>
         <pre class="brush: cpp;">int arr[5];
-for(size_t i = 0; i <= _countof(arr); i++){
+for(size_t i = 0; i &lt;= _countof(arr); i++){
     arr[i] = i;//配列の範囲をこえて値を書き込んでいる
 }</pre>
         <p>
