@@ -178,6 +178,14 @@ int main(){
     std::cout &lt;&lt; rgb &lt;&lt; std::endl;//5513280
     return 0;
 }</pre>
+        <p>ただしlvalue referenceなのでrvalueは参照できません！！！ところがどっこいconst lvalue referenceならrvalueを参照できるっていうんだからややこしい。なんでかはクラスを学ぶまでおあずけ。</p>
+        <pre class="brush: cpp;">int foo(){
+    return 3;
+}
+int main(){
+    //int&amp; a = foo();//error
+    const int &amp; a = foo();//OK. but dirty
+}</pre>
         <p>当面クラスとか使わないわけで、役に立つシーンは配列を関数に渡す場合です。例を見ましょう。</p>
         <pre class="brush: cpp;">#include &lt;stdio.h&gt;
 #if !defined (_countof)
