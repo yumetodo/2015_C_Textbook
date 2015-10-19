@@ -124,3 +124,7 @@ nav ul li.disable{
 	margin-bottom: 5px;
 	max-width: 100%;
 }
+.scroll_box{
+    height: 200px;
+    overflow-y: scroll;
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+	<title>第21章 ～std::string (STL1)～</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script src="./scripts/common.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+</head>
+<body>
+    <h1>第20章 ～std::string (STL1)～</h1>
+    <nav class="top">
+        <ul>
+            <li><a href="./20pointer_to_function.html" title="前頁">prev</a></li>
+            <li><a href="index.html" title="目次">main</a></li>
+            <li><a href="./" title="次頁">next</a></li>
+        </ul>
+    </nav>
+    <section>
+    	<h2>std::stringとは</h2>
+    	<p>
+    		みなさま、待ち望んだ？であろう？std::stringです。<br>
+    		C++にはSTLと呼ばれる強力なライブラリがあります。<br>
+    		std::stringは文字列操作を司るクラスです。・・・しのこの言わず使ってみますか。
+    	</p>
+    	<pre class="brush: cpp;">#include &lt;iostream>
+#include &lt;string>
+int main(){
+	std::string str1 = "arikitari";
+	auto str2 = std::string("na");
+	std::string str3("world!");
+	std::cout &lt;&lt; str1 &lt;&lt; "_" &lt;&lt; str2 &lt;&lt; "_" &lt;&lt; str3 &lt;&lt; std::endl;
+	return 0;
+}</pre>
+		<p>こんな風に使います。しかしstd::stringの真価はまだ発揮されていません。ここからが本番だ！</p>
+		<p>
+			なお以降は<br>
+			<a href="http://www.cplusplus.com/reference/string/string/00the_first_step.html">string - C++ Reference</a><br>
+			を参照しつつ読み進めてください。
+		</p>
+    </section>
+    <section>
+    	<h2>文字列の長さを求める</h2>
+    	<p>文字列の長さを求めます。strlenみたいなやつですがどちらにも注意点があります。</p>
+    	<p class="strong">それ文字列の長さやない、文字単位数や</p>
+    	<p>
+    		文字単位数とは何ぞ？という話ですが、Cで文字列扱うとき配列みたいに扱いましたよね？あの一要素のことを一単位を言うと思って構いません。<br>
+    		なおstd::stringはsizeof(char)幅なので、1単位=1byteになります。
+    	</p>
+    	<pre class="brush: cpp;">#include &lt;iostream>
+#include &lt;string>
+int main(){
+	std::string str1 = "arikitari";
+	std::cout &lt;&lt; str1 &lt;&lt; " : len:" &lt;&lt; str1.length() &lt;&lt; " : size:" &lt;&lt; str1.size() &lt;&lt; std::endl;
+	return 0;
+}</pre>
+		<p>どういうわけか、length()とsize()の結果は同じになります。</p>
+    </section>
+    <section>
+    	<h2>文字列の結合</h2>
+    	<p>Cだと配列の大きさを気にしたり動的確保したりと死ぬほど大変な文字列の結合もstd::stringの手にかかればご覧の有様です。</p>
+    	<pre class="brush: cpp; highlight: [23];">#include &lt;string>
+int main(){
+	//OK : std::string + std::string
+	auto str1 = std::string("arikitari") + std::string("_na");
+	//OK : const char* + std::string
+	auto str2 = std::string("arikitari") + "_na";
+	//OK : std::string + const char*
+	auto str3 = "arikitari" + std::string("_na");
+	//OK : std::string += std::string
+	str1 += std::string("_world!");
+	//OK : std::string += const char*
+	str2 += "_world!"
+	//OK. But it's redundant
+	str3.insert(str3.length(), std::string("world"));
+	//OK. But it's redundant
+	auto str4 = std::string("arikitari_na");
+	str4.insert(str4.length(), "world");
+	//OK : std::string + const char* + const char*
+	auto str5 = std::string("arikitari") + "_na" + "_world!";
+	//OK : const char* + std::string + const char*
+	auto str6 ="arikitari" + std::string("_na") + "_world!";
+	//NG : const char* + const char* + std::string
+	//auto str6 ="arikitari" + "_na" + std::string("_world!");
+	//NG : 変更可能なlvalueではない
+	//const std::string str6 = "arikitari"
+	//str6 += "_na_world!";
+	return 0;
+}</pre>
+		<p>
+			基本的にはoperator+またはoperator+=をつかえばいい感じです。ただしその場合式が左から評価される都合上、一番左もしくは左から2番目の型がstd::atringじゃないといけません。<br>
+			当たり前ですが変更可能な左辺値ないし右辺値である必要があります。
+		</p>
+    </section>
+    <section>
+    	<h2>文字列比較</h2>
+    	<p>文字列が一致するか調べます。といっても簡単です。</p>
+    	<pre class="brush: cpp;">#include &lt;string>
+int main(){
+	std::string str = "arikitari_na_world";
+	bool is_same_str = ("arikitari_na_world!" == str);//false
+	return 0;
+}</pre>
+		<p>だってoperator==かoperator!=呼ぶだけですし。なお部分一致とかしたい場合はcompareメンバー関数を呼べばいいです。</p>
+    </section>
+    <section>
+    	<h2>insert</h2>
+    	<p>どこにも悩む要素ないです。</p>
+    	<pre class="brush: cpp;">std::string str = "arikitari_na_world!";
+str.insert(10, "dehanai");</pre>
+    </section>
+    <nav class="bottom">
+        <ul>
+            <li><a href="./20pointer_to_function.html" title="前頁">prev</a></li>
+            <li><a href="index.html" title="目次">main</a></li>
+            <li><a href="./" title="次頁">next</a></li>
+        </ul>
+    </nav>
+</body>
+</html>
