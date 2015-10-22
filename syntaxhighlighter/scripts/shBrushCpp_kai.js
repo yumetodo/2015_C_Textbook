@@ -151,7 +151,7 @@
 					    'ObjectHandleService HandleService WaitHandler RandomAccessHandleService ConstBufferSequence '+//Boost.asio template
 					    'distance_impl apply msvc_eti_base iter_fold iterator_range long_ distance encode_type_impl decode_type_impl decode_nested_template_helper_impl encode_type decode_type ' +//Boost.mpl
 					    'enable_if_c lazy_enable_if_c disable_if_c lazy_disable_if_c ' +//Boost
-					    'T_ T Args TYPE reference pointer limit iterator Value type Handler Signature First Last Tag Cond next ' +//for Template
+					    'T_ T Args TYPE reference pointer limit iterator Value type Handler Signature First Last Tag Cond next Cont ' +//for Template
 					    'counter_iterator nth_loop rand_type Then Else IF my_uniform_distribution PrimitiveType status_t color_e_t myuint8_t ' +//Frequently used name
 					    'rgb_t bignum_t BIGNUM uint shared_const_buffer MutableBufferSequence';
 

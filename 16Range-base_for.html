@@ -167,7 +167,7 @@ int main(){
     return 0;
 }</pre>
             <p>
-                ちなみにTarse Range-Based forというこの進化版がC++17に提案されていたんですが、採用されなかったっぽい。<br>
+                ちなみにTarse Range-Based forというauto&amp;&amp;を書かなくても同じ意味になるものがC++17に提案されていたんですが、採用されなかったっぽい。<br>
                 Tarse Range-Based forがClangから取り除かれていた | 本の虫<br>
                 <a href="http://cpplover.blogspot.jp/2014/12/tarse-range-based-forclang.html">http://cpplover.blogspot.jp/2014/12/tarse-range-based-forclang.html</a><br>
                 なのになぜかVisual Studio 2015 RCではサポートのアナウンス。どうしたんだ、MIcrosoft。<br>
@@ -186,7 +186,107 @@ int main(){
         <section>
             <h3>auto</h3>
             <p>基本型(int, doubleとかとか)などコピーのコストが重くない場合はこれで良かったりします。</p>
+            <pre class="brush: cpp;">#include &lt;iostream&gt;
+template&lt;size_t SIZE&gt;
+int max_of_arr(int (&amp;in_arr)[SIZE]){
+    int re = 0;
+    for(auto i : in_arr){
+        re = (re &lt; i)? in_arr[i] : re;
+    }
+    return re;
+}
+int main(void){
+    static const int arr[] = {5, 7, 2, -6, 27463, -24724, 387472, 392};
+    std::cout &lt;&lt; max_of_arr(arr) &lt;&lt; std::endl;
+    return 0;
+}</pre>
+        <p>
+            あ、ちなみに上の例のように配列やC++のコンテナの最大/最小値を求めるのにforを書く必要はないです。<br>
+            std::max_elementやstd::min_elementやstd::minmax_elementを使いましょう。
+        </p>
+            <pre class="brush: cpp;">#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;iterator&gt;
+int main(void){
+    static const int arr[] = {5, 7, 2, -6, 27463, -24724, 387472, 392};
+    std::cout &lt;&lt; std::max_element(std::begin(arr), std::end(arr)) &lt;&lt; std::endl;
+    return 0;
+}</pre>
+        <p>
+            C++17に<br>
+            <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0022r0.html">P0022R0: Proxy Iterators for the Ranges Extensions</a><br>
+            コンセプトを使ったRangeライブラリの提案が通れば
+        </p>
+            <pre class="brush: cpp;">#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+int main(void){
+    static const int arr[] = {5, 7, 2, -6, 27463, -24724, 387472, 392};
+    std::cout &lt;&lt; std::max_element(arr) &lt;&lt; std::endl;
+    return 0;
+}</pre>
+        <p>のようにかけるのかもね。</p>
         </section>
+    </section>
+    <section>
+        <h2>P0026R0: multi-range-based for loops</h2>
+        <p>
+            C++17に向けて、<br>
+            <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/p0026r0.pdf">[PDF注意]P0026R0: multi-range-based for loops</a><br>
+            が提案されています。
+        </p>
+        <p>
+            現行のRange-based forでは、複数のコンテナ、配列を同時に扱えません。
+        </p>
+        <pre class="brush: cpp;" title="現状">#include &lt;vector>
+int main(){
+    std::vector&lt;int> v1, v2 ;
+
+    auto iter1 = v1.begin() ;
+    auto iter2 = v2.begin() ;
+
+    for( ; iter1 != v1.end() &amp;&amp; iter2 != v2.end() ; ++iter1, ++iter2 ){
+        DoSomething( *iter1, *iter2 ) ;
+    }
+}</pre>
+        <pre class="brush: cpp;" title="無理やりRange-based forを使う(with Boost.zip_iterator)">#include &lt;iostream>
+#include &lt;vector>
+#include &lt;boost/iterator/zip_iterator.hpp>
+#include &lt;boost/range/iterator_range.hpp>
+template &lt;typename ...Cont>
+auto multi_range(Cont&amp;... containers) ->
+decltype(boost::make_iterator_range(
+    boost::make_zip_iterator(
+        boost::make_tuple(containers.begin()...)
+        ),
+    boost::make_zip_iterator(
+        boost::make_tuple(containers.end()...)
+        )))
+{
+    return{
+        boost::make_zip_iterator(
+        boost::make_tuple(containers.begin()...)
+            ),
+        boost::make_zip_iterator(
+            boost::make_tuple(containers.end()...)
+            ) };
+}
+int main() {
+    std::vector&lt;int> vec1, vec2;
+    for (auto&amp;&amp; t : multi_range(vec1, vec2))
+    {
+        DoSomething(t.get&lt;0>(), t.get&lt;1>());
+    }
+}
+</pre>
+        <p>これは冗長だということで</p>
+        <pre class="brush: cpp;" title="P0026R0提案">#include &lt;vector>
+int main(){
+    std::vector&lt;int> v1, v2 ;
+    for ( auto &amp;&amp; e1 : v1 ; auto &amp;&amp; e2 : v2 ){
+        DoSomething( e1, e2 ) ; 
+    }
+}</pre>
+        <p>すっきり。提案が通るといいね。</p>
     </section>
     <section>
         <h3>リンクとか</h3>
