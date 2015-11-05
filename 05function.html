@@ -384,8 +384,6 @@ int main(void){
                 小数点以下は切り捨てなので変数の型は全てintでよい。<br>
                 なお、値の取得については下のgetnum関数を用いること。<br>
                 メイン関数が５行を超えたら公開処刑です。<br>
-                アドバイス<br>
-                1.3倍する箇所を×1.3の部分まで全て(　)でくくって頭にstatic_cast&lt;int>をつけるとwarning回避できます。
             </p>
             <p>数値入力には以下のget_score関数を利用する。エラー時は自動的にもう一度数値入力を求めるのでエラー処理は書かなくて良い。</p>
             <pre class="brush: cpp;">#include　&lt;iostream>
@@ -449,7 +447,7 @@ uint redundancy_calculater_of_the_point_of_a_school_report(void) {
     four_subjects_sum += get_score(5, 1);
     puts("体育の内申点を入力してください");
     four_subjects_sum += get_score(5, 1);
-    return four_subjects_sum + static_cast&lt;uint>(four_subjects_sum * 1.3);
+    return four_subjects_sum + (four_subjects_sum * 1.3);
 }
 int main(void){
     printf("%d", redundancy_calculater_of_the_point_of_a_school_report());
@@ -485,7 +483,7 @@ uint arikitari_na_calculater_of_the_point_of_a_school_report(void) {
         ask_what_subject(subject);
         sum[1] += get_score(5, 1);
     }
-    return sum[0] + static_cast&lt;uint>(sum[1] * 1.3);
+    return sum[0] + (sum[1] * 1.3);
 }
 int main(){
     std::cout &lt;&lt; arikitari_na_calculater_of_the_point_of_a_school_report() &lt;&lt; std::endl;
