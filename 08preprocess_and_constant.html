@@ -29,10 +29,8 @@
         <p>
             お待たせしました。ようやくプリプロセッサーのお話です。<br>
             はい、#includeとかなにげに書いてきたものが何なのかわかります。<br>
-            はじめに言うと、今C++の規格はこのプリプロセッサのしごとをなるべくなくそうという方向になっています。なぜならばプリプロセッサには型の概念がないからです。<br>
-            このことにより思わぬ副作用を招くことがあり、またその記法の特殊さから<b>いずれ消え去る運命にある</b>ものと思われます。<br>
-            最もよく使う「#include」すら廃止しようという提案がC++に出されています(通るかは知らん) <br>
-            実際コンパイラー間の差異を吸収するためにつかう#defineとヘッダー読み込みに使う#include、ヘッダー二重読み込み防止の#pragma once以外は使う機会がないはずです。
+            はじめに言うと、プリプロセッサのしごとをなるべくなくすべきです。なぜならばプリプロセッサには型の概念がないからです。<br>
+            このことにより思わぬ副作用を招くことがあり、またその記法は特殊なものになってしまいます。
         </p>
         <ul>
             <li>#include</li>
@@ -63,7 +61,7 @@
             <p>
                 一般的なお話として、&lt;&gt;で囲むとコンパイラーの規定の場所とコンパイルオプションで指定した(gccなら-Iオプション)場所からヘッダーファイルを探します。<br>
                 また、""で囲むと、それに加えて、#includeを書いたファイルと同じ場所も捜索対象になります。<br>
-                ゆえに自分で作ったヘッダーは""で囲い、C/C++標準ライブラリ―のヘッダーは&lt;&gt;で囲むのが普通です。ありきたり。
+                ゆえに自分で作ったヘッダーは""で囲い、C言語標準ライブラリ―のヘッダーは&lt;&gt;で囲むのが普通です。ありきたり。
             </p>
         </section>
         <section>
@@ -73,64 +71,7 @@
             <pre class="brush: cpp;">#define WINDOW_HEIGH 1024</pre>
             <p>こんな風に定数っぽいのを作ることもできますし</p>
             <pre class="brush: cpp;">#define MAX(A, B) (A > B)? A : B</pre>
-            <p>みたいに関数もどきも作れます。・・・がしかし、使いません。だってそれぞれ</p>
-            <pre class="brush: cpp;">constexpr int WINDOW_HEIGH = 1024;//C++11
-template&lt;typename T_&gt;
-inline T_ max(T_ a, T_ b){
-    return (a > b)? a : b;
-}</pre>
-            <p>のほうがわかりやすいじゃん。で、マクロを何に使うかというと、コンパイラー間の差異を吸収するために使います。どういうことでしょうか？</p>
-            <p>
-                最初に話したとおり、コンパイラーには何種類か有りますが、その中でも人口が多いVisual Studio C Compiler(以降VC)とGNU C Compiler(以降gcc)の２つだけ見ても、その差異は大きいです。<br>
-                例えばfloat型とdouble型の計算速度のところで出したサンプルコードを見てみましょう。
-            </p>
-            <pre class="brush: cpp; first-line: 4">#if !defined (__GNUC__) || defined(__ICC) || defined(__clang__)
-#pragma comment(lib, "setupapi.lib")
-#pragma comment(lib, "hid.lib")
-#pragma comment(lib, "winmm.lib")
-#endif</pre>
-            <p>
-                ifndefというのはそのマクロ(この場合__GNUC__)が既に定義されているかを(プリプロセッサが)調べ、真なら対応するendifまでを有効にするものですが(偽ならその部分はコンパイラーに渡されない)<br>
-                あとで説明する通りgccは「#pragma comment」という書き方はできません。この場合だとコンパイルオプションに
-            </p>
-            <pre class="brush: plain">-lsetupapi -lhid -lwinmm</pre>
-            <p>つけるわけですが・・・ってそんな話はよくって、対応してない機能をコンパイラーに渡すと当然コンパイルエラーになるのでこのようにgccコンパイラーでコンパイルする時を考えてこのように書いています。</p>
-            <p>すでに察しているかもしれませんが何も書かなくてもいくつかのマクロがdefineされています。例えばVCなら_MSC_VER、gccなら__GNUC__,__GNUC_MINOR__などがその代表的なものになります。</p>
-            <pre class="brush: cpp; first-line: 3;" title="arikitari.h">#if (defined(_MSC_VER) &amp;&amp; _MSC_VER > 1000) || (defined(__clang__) &amp;&amp; (__clang_major__ > 3 || (__clang_major__ == 3 &amp;&amp; __clang_minor__ > 2))) ||(defined(__ICC) &amp;&amp; __ICC > 1000) ||defined (__GNUC__) &amp;&amp; !defined(__ICC) &amp;&amp; !defined(__clang__) &amp;&amp; (__GNUC__ >= 4 || (__GNUC__ == 3 &amp;&amp; __GNUC_MINOR__ >= 4))
-#pragma once
-#endif</pre>
-            <p>
-                ヘッダーファイルに分ける、のところで書いたこの文の意味も今なら分かるでしょう。<br>
-                #pragma onceという書き方に対応したのがVisual Studio.NET 2003以降、gcc3.4以降、clang3.3(3.2でバグが有ったっぽい)以降、Intel C Compiler10.00以降だからです。
-            </p>
-            <p>
-                どのコンパイラーで何が定義されているかは<br>
-                C/C++ tip: How to detect the compiler name and version using compiler predefined macros | Nadeau Software<br>
-                <a href="http://nadeausoftware.com/articles/2012/10/c_c_tip_how_detect_compiler_name_and_version_using_compiler_predefined_macros">http://nadeausoftware.com/articles/2012/10/c_c_tip_how_detect_compiler_name_and_version_using_compiler_predefined_macros</a><br>
-                の解説が非常に詳しくわかりやすいです。
-            </p>
-            <table>
-                <tbody>
-                    <tr><th>コンパイラ</th><th>_MSC_VER値</th><th>備考</th></tr>
-                    <tr><td>C Compiler 6.0</td><td style="text-align: center;">600</td><td></td></tr>
-                    <tr><td>C/C++ Compiler 7.0</td><td style="text-align: center;">700</td><td></td></tr>
-                    <tr><td>Visual C++ 1.0</td><td style="text-align: center;">800</td><td></td></tr>
-                    <tr><td>Visual C++ 2.0</td><td style="text-align: center;">900</td><td></td></tr>
-                    <tr><td>Visual C++ 4.0</td><td style="text-align: center;">1000</td><td></td></tr>
-                    <tr><td>Visual C++ 4.1</td><td style="text-align: center;">1010</td><td></td></tr>
-                    <tr><td>Visual C++ 4.2</td><td style="text-align: center;">1020</td><td></td></tr>
-                    <tr><td>Visual C++ 5.0 (Visual Studio 97)</td><td style="text-align: center;">1100</td><td></td></tr>
-                    <tr><td>Visual C++ 6.0 (Visual Studio 6.0)</td><td style="text-align: center;">1200</td><td></td></tr>
-                    <tr><td>Visual C++ 7.0 (Visual Studio.NET 2002)</td><td style="text-align: center;">1300</td><td></td></tr>
-                    <tr><td>Visual C++ 7.1 (Visual Studio.NET 2003)</td><td style="text-align: center;">1310</td><td></td></tr>
-                    <tr><td>Visual C++ 8.0 (Visual Studio 2005)</td><td style="text-align: center;">1400</td><td></td></tr>
-                    <tr><td>Visual C++ 9.0 (Visual Studio 2008)</td><td style="text-align: center;">1500</td><td></td></tr>
-                    <tr><td>Visual C++ 10.0 (Visual Studio 2010)</td><td style="text-align: center;">1600</td><td>stdint.h使用可</td></tr>
-                    <tr><td>Visual C++ 11.0 (Visual Studio 2012)</td><td style="text-align: center;">1700</td><td><a href="http://msdn.microsoft.com/ja-jp/library/vstudio/hh567368.aspx">出典</a></td></tr>
-                    <tr><td>Visual C++ 12.0 (Visual Studio 2013)</td><td style="text-align: center;">1800</td><td><a href="http://stackoverflow.com/questions/70013/how-to-detect-if-im-compiling-code-with-visual-studio-2008">出典</a></td></tr>
-                    <tr><td>Visual C++ 13.0 (Visual Studio 2015)</td><td style="text-align: center;">1900</td><td>RC版は1900だった<a href="http://www.reddit.com/r/cpp/comments/2786nw/visual_studio_14_ctp_visual_c_team_blog/">出典</a></td></tr>
-                </tbody>
-            </table>
+            <p>という表現もできます。</p>
         </section>
         <section>
             <h3>#pragma comment</h3>
@@ -206,7 +147,7 @@ static BOOL create_adj_exdata(FILTER *fp, LOGO_HEADER *adjdata, const LOGO_HEADE
     </section>
     <section>
         <h2>定数</h2>
-        <p>C/C++における定数はC++11まで含めると5つあります。ただ、定数と一口にいっても3つに大きく分かれます。</p>
+        <p>C言語における定数は3つあります。</p>
         <dl>
             <dt>実行時定数</dt>
             <dd>プログラムの実行中に変数を読み取り専用にすることで、書き換えができなくなるようにするもの</dd>
@@ -247,34 +188,6 @@ static BOOL create_adj_exdata(FILTER *fp, LOGO_HEADER *adjdata, const LOGO_HEADE
 <pre class="brush: cpp;">#define var 5 </pre>
             <p>ところで<code>#define</code>マクロにはいくつかの問題点があり、コンパイラー間の差異やターゲット環境の差異を吸収する時を除き使うことはありません。当然定数として使うこともありません。では問題点を見て行きましょう。</p>
             <section>
-                <h4>型がないことに起因する冗長さ</h4>
-                <p>
-                    verに型はありません。C++ではオーバーロードという、変数の型によって同名の関数とかとかを呼び分ける機能があるのでこれでは困ります。<br>
-                    C言語でもC11で型判定マクロが導入されたので対岸の火事ではありません。
-                </p>
-                <pre class="brush: cpp;">//int16_t型はshort型、int32_t はint型、int64_t型はlong long型と仮定する
-int64_t add(int32_t a, int32_t b);
-int32_t add(int16_t a, int16_t b);
-#define ver1 5
-#define ver2 10
-int main(void){
-    auto x = add(ver1, ver2);
-    return 0;
-}</pre>
-                <p>ここでxの型は何でしょうか？正解はlong long型です。つまり関数addは上のほうが呼ばれています。では下の方を呼ぶには？</p>
-                <pre class="brush: cpp; first-line: 7;">auto x = add(static_cast&lt;int16_t>(ver1), static_cast&lt;int16_t&gt;(ver2));</pre>
-                <p>冗長でしょ。<code>constexpr</code>使えば</p>
-                <pre class="brush: cpp;">int64_t add(int32_t a, int32_t b);
-int32_t add(int16_t a, int16_t b);
-constexpr int16_t ver1 = 5;
-constexpr int16_t ver2 = 10;
-int main(void){
-    auto x = add(ver1, ver2);
-    return 0;
-}</pre>
-                <p>すっきり。</p>
-            </section>
-            <section>
                 <h4>単なるソースコード置換であることに起因する問題</h4>
                 <p>早速例を見ましょう。</p>
                 <pre class="brush: cpp;">#define BASE_SIZE 1 &lt;&lt; 8
@@ -303,76 +216,6 @@ constexpr unsigned int BASE_SIZE = 1 &lt;&lt; 8;</pre>
                     スコープの概念がないと何が問題かというと、#defineに関して言えば書いたファイルとそれをincludeしているファイルでその名前が消費されるので、変数名の衝突が起こしやすくなります。
                 </p>
             </section>
-        </section>
-        <section>
-            <h3>enum</h3>
-            <p>enumを使った定数っぽい書き方はこんな感じでした。</p>
-            <pre class="brush: cpp;">enum { var = 5 };
-int main(void){
-    int tmp1 = var;
-}</pre>
-            <p>しかしこれにも問題点が有ります。</p>
-            <section>
-                <h4>冗長</h4>
-                <p>定数を使いたいだけなのに書く量がおおく、普通の変数宣言と書き方が少し違う。そもそも幾つもの関連のある定数もどきを列挙して宣言するためのものなんだから、なにか間違っている</p>
-            </section>
-            <section>
-                <h4>スコープがない</h4>
-                <p>#defineと同じ理由なので以下略。</p>
-            </section>
-        </section>
-        <section>
-            <h3>enum class(scoped enumeration)</h3>
-            <p>enum　classを使った定数っぽい書き方はこんな感じでした。</p>
-            <pre class="brush: cpp;">enum class tag{ var = 5 };
-int main(void){
-    int tmp1 = static_cast&lt;int&gt;(tag::var);
-}</pre>
-            <p>しかしこれにも問題が有ります。</p>
-            <section>
-                <h3>冗長</h3>
-                <p>キャストを無駄に強いる。それが便利なこともあるだろうけど、なんか間違っている気がする。あとはenumと同様。</p>
-            </section>
-        </section>
-        <section>
-            <h3>constexpr</h3>
-            <p>これはC++11で導入された記法でコンパイル時定数を作るために導入されました。既に何度か使用していますが改めて。書き方は</p>
-            <pre class="brush: cpp;">constexpr unsigned long tmp = 32;</pre>
-            <p>
-                です。すっきり。コンパイル時定数なのでこの後習う配列や、template、static_assartにも使用できます。
-                が、C++で定数を返す関数もこれに対応しているはずなんですけど、Visual Studio 2013 Novenber 2013 CTPでは対応しない。VC2015使えってことね。
-            </p>
-
-<pre class="brush: cpp;">
-constexpr size_t tmp = 32;
-int tmp[tmp];
-static_assert(2147483647L &lt;= std::numeric_limits&lt;int&gt;::max(), “”);//VC2015以降
-</pre>
-            <p>
-                <code>constexpr</code>に関する非常にわかりやすく、詳しい解説はこちら<br>
-                <a href="http://www.slideshare.net/GenyaMurakami/onstexprcpu">constexpr関数はコンパイル時処理。これはいい。実行時が霞んで見える。cpuの嬌声が聞こえてきそうだ</a><br>
-                 from <a href="//www.slideshare.net/GenyaMurakami">Genya Murakami</a>
-            </p>
-            <iframe src="http://www.slideshare.net/slideshow/embed_code/key/pH1NfxbtZFSoHF" width="510" height="420" class="slideshare" allowfullscreen> </iframe>
-            <section>
-                <h4>constexprとrVarue reference</h4>
-                <p>
-                    クラスを作るまでお世話になることはありませんが、C++にはrVarue Referenceという物があります。<br>
-                    こいつとこの<code>constexpr</code>を組み合わせるとC++11の範囲だと正常に<code>std::move</code>できないそうです。<br>
-                    この辺についてはこのテキストではほとんど解説しないので、<a href="./15value.html">rvarueの解説</a>の参考リンクを参照してください。<br>
-                    constexprとrvalue参照問題 - とくにあぶなくないRiSKのブログ<br>
-                    <a href="http://sscrisk.hatenablog.com/entry/2014/05/31/constexpr%E3%81%A8rvalue%E5%8F%82%E7%85%A7%E5%95%8F%E9%A1%8C">http://sscrisk.hatenablog.com/entry/2014/05/31/constexprとrvalue参照問題</a>
-                </p>
-            </section>
-        </section>
-        <section>
-            <h3>まとめ</h3>
-            <ul>
-                <li>実行中に定数に(Read-Only)にしたいならconst</li>
-                <li>コンパイル時定数が作りたいなら<code>constexpr</code></li>
-                <li>ポインターを取る必要があるならconst</li>
-            </ul>
-            <p>を使う。実にスッキリした結論。C++最高！</p>
         </section>
         <p>
             参考サイト<br>

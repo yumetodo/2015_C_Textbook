@@ -27,11 +27,11 @@
     <section>
         <h2>関数とは</h2>
         <p>
-            既にそこかしこで出てますが、改めて。関数とは、処理の集合です。C/C++では、すべてのプログラムは必ず1つ以上の関数が含まれています。<br>
+            既にそこかしこで出てますが、改めて。関数とは、処理の集合です。C言語では、すべてのプログラムは必ず1つ以上の関数が含まれています。<br>
             これまで見てきたmain関数も関数の一つです。C言語においてとにかく大事なものです。そのくせ独習Cの説明は十分とは言えません、あれで説明してるつもりなんですかね。
         </p>
         <p>関数の一般的な書き方は</p>
-        <pre class="brush: plain;">[戻り値の型] ([関数呼び出し規約]) [関数名](仮引数リスト){
+        <pre class="brush: plain;">[戻り値の型] [関数名](仮引数リスト){
     //処理
 }</pre>
         <p>です。戻り値の型がvoid以外の時は、必ず戻り値を返さなければなりません。</p>
@@ -44,7 +44,6 @@ int do_something2(void){
     //do something
     return 0;
 }</pre>
-        <p>関数の呼び出し規約は省略することが多いが(その場合__cdeclになる)、Win32APIを使うならお世話になるだろし、C++のクラスのメンバー関数は呼び出し規約が更に異なります。後述する。</p>
         <p>実際に関数を作るときには「プロトタイプ宣言」という物を書くことになる。書き方を立方体の体積を求める関数を例に説明する。</p>
         <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/call_function.cpp"></script>
         <pre class="brush: cpp;">double calc_volume(double si, double s2, double s3);
@@ -55,14 +54,6 @@ int do_something2(void){
         </p>
         <p>このcalc_volume関数が定義されるのは、10～13行目の部分だ。ここで関数の実際の処理を書く。</p>
         <p>この関数が呼び出される7行目だ。ここで初めて実際に定義に基づいて処理を行う。calc_volume関数内のreturn文にかいたものが変数resultに代入されている。</p>
-    </section>
-    <section>
-        <h2>C++11の戻り値の型を後置する記法</h2>
-        <p>なにも難しくないです。ようは先のcalc_volue関数が</p>
-        <pre class="brush: cpp;">auto calc_volume(const double s1, const double s2, const double s3) -> double {
-    return s1 * s2 * s3;
-}</pre>
-        <p>とも書ける、という話です。これのありがたみはもうしばらくわからないでしょう。</p>
     </section>
     <section>
         <h2>C標準ライブラリ</h2>
@@ -249,77 +240,6 @@ argv[3]:world!
             これを使ってプログラムにいろいろな値を与えられるわけです。
         </p>
     </section>
-
-    <section>
-        <h2>main関数の戻り値の意味</h2>
-        <p>
-            最初の方でも書きましたが、main関数はint型で、必ず値を返さなければなりません。<br>
-            今までのサンプルコードを見てきた人は、｢main関数は必ず0を返さなければいけないんですか？｣と思ったのではないでしょうか？(むしろ思っててほしいです)<br>
-            いいえ、そんなことはありません、下のサンプルを見てください。
-        </p>
-        <pre class="brush: cpp;">#include&lt;cstdio&gt;
-#include&lt;cstdlib&gt;
-#include&lt;climits&gt;//in gcc
-#include&lt;cerrno&gt;//in gcc
-#ifndef __cplusplus
-#define nullptr NULL
-#endif
-int get_integer_num(const int max, const int min){
-    //機能：標準入力を数字に変換する。
-    //引数：戻り値の最大値,戻り値の最小値
-    //戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
-    char s[100];
-
-    if (NULL == fgets(s, 100, stdin)){
-        if (feof(stdin)){//エラーの原因がEOFか切り分け
-            return EOF;
-        }
-        //改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
-        size_t i;
-        for(i = 0; i &lt; 100 &amp;&amp; '\0' == s[i]; i++);//strlenもどき
-        if('\n' != s[i - 1]) while(getchar() != '\n');//入力ストリームを掃除
-        return INT_MIN;
-    }
-    if ('\n' == s[0]) return INT_MIN;
-    errno = 0;
-    const long t = strtol(s, NULL, 10);
-    if (0 != errno || t &lt; min || max &lt; t)
-        return INT_MIN;
-    return (int)t;
-}
-int main(void){
-	printf("今の時間帯は？\n1.朝　2.昼　3.夜(まだ寝ない)　4.夜(もう寝る)\n");
-	const int time = get_integer_num(4, 1);
-	switch (time){
-	case 1:
-		printf("おはようございます\n");
-		break;
-	case 2:
-		printf("こんにちは\n");
-		break;
-	case 3:
-		printf("こんばんは\n");
-		break;
-	case 4:
-		printf("おやすみなさい\n");
-		break;
-	default:
-		time = -1;
-		break;
-	}
-	return time;
-}</pre>
-        <p>
-            このサンプルコードでは、時間帯を聞いたところで入力された値が返されるようになっています。<br>
-            ｢上のint get_integer_numは何？｣って？後で説明するのでここではスルーしてください。<br>
-            このように、main関数では必ずしも0を返す必要はありません。この程度のコードなら普通に0返せばいいじゃんと思うかもしれませんが、そんなのは今回どうでもいい話です。
-            問題なのはmain関数は0以外の値を返しても大丈夫かどうかなので。<br>
-            じゃあメイン関数の戻り値にはどういう意味があるのかって？そのプログラムの内部においては何にも関係ありません。この値はプログラムの外部に影響があります。<br>
-            我々が作ったプログラムはどうやって呼ばれるかというと、別の何らかのプログラムが呼び出しています。普通の関数がそうであるように、main関数も例外ではなく、呼び出し元に値を返します。<br>
-            この値をどう処理するかは各ＯＳによって異なり、さらにバッチファイルなどから呼び出す場合はその値に対する挙動はプログラマーが決められます。<br>
-            細かいことはどうでもいいです。とりあえずここでは、main関数内の値はプログラム内部には影響がないってことだけ覚えておいてください。
-        </p>
-    </section>
     <section>
         <h2>関数を書く時の注意</h2>
         <p>まずはこれを見てください。</p>
@@ -377,168 +297,6 @@ int main(void){
             大事なことなのでもう一度言います。<br>
             プログラムは<b>見やすく・短く・少なく</b>です。
         </p>
-        <section>
-            <h2>練習問題２</h2>
-            <p>
-                換算内申(基本５教科：1.0倍、実技４教科：1.3倍)を300点満点の調査書点に換算するプログラムを作成せよ。<br>
-                小数点以下は切り捨てなので変数の型は全てintでよい。<br>
-                なお、値の取得については下のgetnum関数を用いること。<br>
-                メイン関数が５行を超えたら公開処刑です。<br>
-            </p>
-            <p>数値入力には以下のget_score関数を利用する。エラー時は自動的にもう一度数値入力を求めるのでエラー処理は書かなくて良い。</p>
-            <pre class="brush: cpp;">#include　&lt;iostream>
-#include &lt;exception>
-typedef unsigned int uint;
-uint get_score(const uint max, const uint min) {
-    uint re;
-    try {
-        std::cin >> re;
-    }
-    catch (std::exception&amp; er) {
-        std::cerr &lt;&lt; er.what() &lt;&lt; std::endl;
-        re =  0;
-    }
-    return (re &lt;min || max &lt; re) ? get_score(max, min) : re;
-}
-int main(void){
-    puts("値を入力してください。\n");
-    const auto num = get_score(9, 0);//カンマの左側の数字が入力できる値の最大値、右が最小値
-    printf("あなたが入力した値は%dです。", num);
-    return 0;
-}
-</pre>
-            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer2-1')"></form>
-            <section id="answer2-1" style="display: none;">
-                <h3>回答</h3>
-                <p>こんなかんじかな。</p>
-                <pre class="brush: cpp;">#include &lt;iostream>
-#include &lt;exception>
-#include &lt;cstdio>
-typedef unsigned int uint;
-uint get_score(const uint max, const uint min) {
-    uint re;
-    try {
-        std::cerr &lt;&lt; er.what() &lt;&lt; std::endl;
-        std::cin >> re;
-    }
-    catch (std::exception&amp; er) {
-        re =  0;
-    }
-    return (re &lt; min || max &lt; re) ? get_score(max, min) : re;
-}
-uint redundancy_calculater_of_the_point_of_a_school_report(void) {
-    uint five_subjects_sum = 0;
-    puts("国語の内申点を入力してください");
-    five_subjects_sum += get_score(5, 1);
-    puts("数学の内申点を入力してください");
-    five_subjects_sum += get_score(5, 1);
-    puts("英語の内申点を入力してください");
-    five_subjects_sum += get_score(5, 1);
-    puts("理科の内申点を入力してください");
-    five_subjects_sum += get_score(5, 1);
-    puts("社会の内申点を入力してください");
-    five_subjects_sum += get_score(5, 1);
-    uint four_subjects_sum = 0;
-    puts("美術の内申点を入力してください");
-    four_subjects_sum += get_score(5, 1);
-    puts("技術・家庭科の内申点を入力してください");
-    four_subjects_sum += get_score(5, 1);
-    puts("音楽の内申点を入力してください");
-    four_subjects_sum += get_score(5, 1);
-    puts("体育の内申点を入力してください");
-    four_subjects_sum += get_score(5, 1);
-    return four_subjects_sum + (four_subjects_sum * 1.3);
-}
-int main(void){
-    printf("%d", redundancy_calculater_of_the_point_of_a_school_report());
-    return 0;
-}</pre>
-                <p>配列とかループとかstd::arrayとかつかってもそこまで綺麗には書けないですね。std::vector使うのはどうかと思うし。</p>
-                <pre class="brush: cpp;">#include &lt;iostream>
-#include &lt;exception>
-typedef unsigned int uint;
-uint get_score(const uint max, const uint min) {
-    uint re;
-    try {
-        std::cin >> re;
-    }
-    catch (std::exception&amp; er) {
-        std::cerr &lt;&lt; er.what() &lt;&lt; std::endl;
-        re =  0;
-    }
-    return (re &lt; min || max &lt; re) ? get_score(max, min) : re;
-}
-void ask_what_subject(const char* str) {
-    std::cout &lt;&lt; str &lt;&lt; "の内申点を入力してください" &lt;&lt; std::endl;
-}
-uint arikitari_na_calculater_of_the_point_of_a_school_report(void) {
-    static const char* subject_name1[] = { "国語", "数学", "英語", "理科", "社会" };
-    static const char* subject_name2[] = { "美術", "技術・家庭科", "音楽", "体育" };
-    uint sum[2] = { 0 };
-    for (auto subject : subject_name1) {
-        ask_what_subject(subject);
-        sum[0] += get_score(5, 1);
-    }
-    for (auto subject : subject_name2) {
-        ask_what_subject(subject);
-        sum[1] += get_score(5, 1);
-    }
-    return sum[0] + (sum[1] * 1.3);
-}
-int main(){
-    std::cout &lt;&lt; arikitari_na_calculater_of_the_point_of_a_school_report() &lt;&lt; std::endl;
-    return 0;
-}</pre>
-            </section>
-        </section>
-    </section>
-    <section>
-        <h2>C++11/14のlambda</h2>
-        <p>lambdaとかいて「ラムダ」と読みます。関数のページに書いてることから察せると思いますが一種の関数です。見て行きましょう。</p>
-        <pre class="brush: cpp;">#include &lt;iostream&gt;
-#include &lt;cstdint&gt;
-#include &lt;cstdlib&gt;
-#include &lt;cerrno&gt;
-typedef uint64_t num_store_t;
-constexpr num_store_t search_max_temp = 117800;
-int main(int argc, char* argv[]){
-    const auto search_max = (1 == argc) ? search_max_temp : [](const char* str) -> num_store_t {
-        errno = 0;
-        const auto tmp = strtoull(str, nullptr, 10);//引数があればそれを採用する
-        return (0 == errno) ? tmp : search_max_temp;//引数が異常な時は(仮)の値を使用
-    }(argv[1]);
-    std::cout &lt;&lt; "search_max: " &lt;&lt; search_max &lt;&lt; std::endl;
-    return 0;
-}</pre>
-        <p>lambdaとか仰々しい名前がついてますがようは関数なので仮引数リストも戻り値の型も関数定義も関数呼び出しもあります。</p>
-        <p>
-            仮引数リストは<code>(const char* str)</code>の部分です。普通の関数となんら変わりませんね。<br>
-            戻り値は、<code> -> num_store_t</code>の部分です。C++11で追加された関数の戻り値を後置する記法そのものですね<br>
-            <code>(argv[1])</code>の部分はこれまで関数を呼び出すときに変数を渡していたところですね。
-        </p>
-        <p>このようにわざわざ関数名考えて関数を作るまでもないような、しかし関数を使った方がわかりやすくかける時、lambdaは重宝します。</p>
-        <p>ちなみに上の例はもう少しシンプルに書けます。</p>
-        <pre class="brush: cpp;">#include &lt;iostream&gt;
-#include &lt;cstdint&gt;
-#include &lt;cstdlib&gt;
-#include &lt;cerrno&gt;
-typedef uint64_t num_store_t;
-constexpr num_store_t search_max_temp = 117800;
-int main(int argc, char* argv[]){
-    const auto search_max = (1 == argc) ? search_max_temp : [&amp;]{
-        errno = 0;
-        const num_store_t tmp = strtoull(argv[1], nullptr, 10);//引数があればそれを採用する
-        return (0 == errno) ? tmp : search_max_temp;//引数が異常な時は(仮)の値を使用
-    };
-    std::cout &lt;&lt; "search_max: " &lt;&lt; search_max &lt;&lt; std::endl;
-    return 0;
-}</pre>
-        <p>
-            が、ここまではまだ覚えないでいいです。詳しく知りたい方は<br>
-            lambda 完全解説 | 本の虫<br>
-            <a href="http://cpplover.blogspot.jp/2009/11/lambda.html">http://cpplover.blogspot.jp/2009/11/lambda.html</a>
-        </p>
-    </section>
     <nav class="bottom">
         <ul>
             <li><a href="./04bit.html" title="前頁">prev</a></li>

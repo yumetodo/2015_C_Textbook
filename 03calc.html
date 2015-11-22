@@ -105,82 +105,15 @@ const double surplus = input - (divisor * temp);</pre>
         <p>よくキャストを「ある型とみなす」と説明する人が居ますが、誤りです。bitの並びが変わることもあることからわかるように、実際に変換されます。</p>
         <section class="technique">
             <h3>コーディングの作法</h3>
-            <p>C言語のキャストは、非常に強力で、どんな型にでも変換ができます。ゆえにしてはいけない型変換もできてしまいます。</p>
-            <p>そこでC++ではキャストが4種類にわかれました。</p>
-            <table>
-                <tbody>
-                    <tr><th> 名称 </th><th> 説明 </th><th> 使用 </th></tr>
-                    <tr><td>dynamic_cast</td><td> 基本クラスから派生クラスへのキャスト</td><td>使用するべきではない</td></tr>
-                    <tr><td>const_cast</td><td> const を外すキャスト</td><td>使用するべきではない</td></tr>
-                    <tr><td>static_cast</td><td> double から int など暗黙の変換のあるキャスト </td><td>使用可</td></tr>
-                    <tr><td>reinterpret_cast</td><td> double * から long long などの無理やりキャスト </td><td>なるべく使用しない</td></tr>
-                </tbody>
-            </table>
-            <p>
-                詳細な説明は<br>
-                キャスト | プログラマーズ雑記帳<br>
-                <a href="http://yohshiy.blog.fc2.com/blog-category-9.html">http://yohshiy.blog.fc2.com/blog-category-9.html</a><br>
-                に譲りますが、Cのキャストは理由がない限り使わず、C++のstatic_castを使用しましょう。キャストしないに越したことはありませんが、
-            </p>
-            <p class="strong">static_castならかなり安全に使用できます。Cのキャストは使うな。</p>
-            <pre class="brush: cpp;">const int temp = static_cast&lt;int&gt;(input) / divisor;</pre>
-            <p>
+            <p>C言語のキャストは、非常に強力で、どんな型にでも変換ができます。ゆえにしてはいけない型変換もできてしまいます。</br>
                 もっとも、まともなコーディングをしていれば、malloc,calloc,realloc関数以外でキャストを使う場面はないはずです。<br>
                 もしあなたがキャストを使おうとしているならば、それはあなたが寝ぼけているのか、ライブラリ作者がうっかりしている、ということになります。<br>
                 後者なら、作者に文句を言いましょう。(実際私はDxLibraryの作者に色の扱いについて文句を言って、Ver 3.13eで修正してもらいました)
             </p>
             <p>signedとunsignedの変換はとくに理由のない限りしないようにしましょう。</p>
         </section>
-        <article>
-            <h3>問題</h3>
-            <p>
-                画像処理、映像処理の分野において、色を表すのにRGB系のほかにYUV系、YCbCr系、Y'PbPr系などがある。<br>
-                RGB座標系からYCbCr系への変換にはBT.601 (ITU-R BT.601-7 より) という規格があり、
-                RGB座標系からY'PbPr系への変換にはBT.709 (ITU-R BT.709-5 より) という規格がある。
-                変換行列は以下のとおりである。
-            </p>
-            <img alt="picture of matrix to covert RGB into YCbCr" src="./pic/bt601_bt709.png">
-            <p>BT.709の式に従いY'を求めるプログラムが以下に示すものである。完成させよ。</p>
-            <pre class="brush: cpp;">#include &lt;cstdio&gt;
-#include &lt;cstdint&gt;
-typedef uint8_t color_e_t;
-int main(void){
-    const color_e_t r = 137;
-    const color_e_t g = 195;
-    const color_e_t b = 235;
-
-    const color_e_t y = static_cast&lt;color_e_t&gt;(  );
-
-    printf("R:%d G:%d B:%d -> Y':%d\n", r, g, b, y);
-    return 0;
-}</pre>
-            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1')"></form>
-            <section id="answer1" style="display: none;">
-                <h4>回答</h4>
-                <p>9行目のみ。</p>
-                <pre class="brush: cpp;">const color_e_t y = static_cast&lt;color_e_t&gt;(0.2126* r +  0.7152 * g + 0.0722 * b)</pre>
-            </section>
-        </article>
     </section>
 
-    <section>
-        <h2>promotionsとconversions</h2>
-        <p>型変換、と一口に言っても2つあり、promotionsとconversionsとそれぞれ呼ばれます。</p>
-        <p>
-            promotionsがなにか、については<br>
-            C++11の文法と機能(C++11: Syntax and Feature)<br>
-            <a href="http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#conv.prom">http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#conv.prom</a><br>
-            に丸投げするとして、promotionsでなければconversionsである(そりゃそーだ)。
-        </p>
-        <p>conversionsは一般に危険をはらんでいます。何故かというと、変換元の数値を変換先の型で表せないかもしれないからです。</p>
-        <p>unsigned charが8ビット、unsigned intが16ビットと仮定して実例を上げてみましょう。</p>
-        <pre class="brush: cpp;">int main(void){
-    unsigned int ui = 1234 ;
-    unsigned char uc = ui ; // 210
-}</pre>
-        <p>この場合、unsigned int型は、16ビット、uiの値は、2進数で表すと0000010011010010になります。unsigned char型は8ビット。つまり、この場合の対応する下位桁の値は、2進数で11010010（uiの下位8ビット）です。よって、ucは、10進数で210となります。 </p>
-        <p>しかし、そもそも型変換でオーバーフローやアンダーフローを起こさないようにコーディングするべきでしょう。</p>
-    </section>
     <nav class="bottom">
         <ul>
             <li><a href="./02variable.html" title="前頁">prev</a></li>

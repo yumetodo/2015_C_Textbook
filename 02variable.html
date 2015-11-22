@@ -60,7 +60,7 @@ char ch = getchar();</pre>
     </section>
     <section>
         <h2 id="variable_type">変数の型</h2>
-        <p>C/C++言語はとくに型にうるさい言語として知られています。(JavaScriptやperlなど型を明示できない言語もある)。C++なんて型なしではやっていけません。</p>
+        <p>C/言語はとくに型にうるさい言語として知られています。(JavaScriptやperlなど型を明示できない言語もある)。</p>
         <p>じゃあその「型」ってなんでしょうか？「型」とはコンパイラに変数をどういう風にメモリー上に配置したらいいのか教えるものです。</p>
         <table style="font-size: 13px;">
             <tr>
@@ -203,17 +203,6 @@ char ch = getchar();</pre>
     <section>
         <h2>型の表せる範囲</h2>
         <p>先ほどの表で<code>INT_MAX</code>とか<code>INT_MIN</code>とかいろいろ有りましたが、要するにその型に入れられる最大値とか最小値です。</p>
-        <p>これらは後に説明するプリプロセッサマクロですが、C++ではこういうのを使うのは余り好ましくない、とされています。なので</p>
-        <pre class="brush: cpp;">#include&lt;limits&gt;
-//中略
-std::numeric_limits&lt;int&gt;::max()</pre>
-        <p>とかで求めます。戻り値はconstexpr(後述)なのでプリプロセッサマクロ同様コンパイル時定数です。</p>
-        <p>
-            numeric_limits - cpprefjp C++日本語リファレンス<br>
-            <a href="http://cpprefjp.github.io/reference/limits/numeric_limits.html">http://cpprefjp.github.io/reference/limits/numeric_limits.html</a><br>
-            numeric_limitsはデフォルトで意味無い値を提供する - ::Eldesh a b = LEFT a | RIGHT b<br>
-            <a href="http://d.hatena.ne.jp/eldesh/20110120/1295497346">http://d.hatena.ne.jp/eldesh/20110120/1295497346</a>
-        </p>
     </section>
     <section>
         <h2>型の大きさ</h2>
@@ -223,39 +212,6 @@ std::numeric_limits&lt;int&gt;::max()</pre>
         </p>
         <pre class="brush: cpp;">printf("%d\n", sizeof(int));</pre>
         <p>sizeof演算子には必ずしも<code>()</code>は必要ありませんが、あったほうがはるかに見やすいのでつけましょう。</p>
-        <article>
-            <h3>問題</h3>
-            <p>下記は<code>void, bool</code>型を除く全ての基本型の大きさを表示するプログラムである。完成させよ。</p>
-            <pre class="brush: cpp;">#include &lt;cstdio&gt;
-int main(void){
-    constexpr unsigned int s_char =  ;//C++11 Usage
-    constexpr unsigned int s_short =  ;
-    constexpr unsigned int s_int =  ;
-    constexpr unsigned int s_long =  ;
-    constexpr unsigned int s_long_long =  ;
-
-    printf(
-        "char型の大きさ:%d byte\n"
-        "short型の大きさ:%d byte\n"
-        "int型の大きさ:%d byte\n"
-        "long型の大きさ:%d byte\n"
-        "long long型の大きさ:%d byte\n",
-        s_char, s_short, s_int, s_long, s_long_long
-    )
-    return 0;
-}</pre>
-            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1')"></form>
-            <section id="answer1" style="display: none;">
-                <h4>回答</h4>
-                <p>3～7行目のみ示す。</p>
-                <pre class="brush: cpp;">    constexpr unsigned int s_char =  sizeof(char);//C++11 Usage
-    constexpr unsigned int s_short =  sizeof(short);
-    constexpr unsigned int s_int =  sizeof(int);
-    constexpr unsigned int s_long =  sizeof(long);
-    constexpr unsigned int s_long_long =  sizeof(long long);
-</pre>
-            </section>
-        </article>
     </section>
     <section>
         <h2 id="signed_unsigned">signedとunsigned</h2>
@@ -281,19 +237,8 @@ unsigned char temp = 6;</pre>
         <p>1行目と2行目は同値。4行目と5行目が同値である保証はないし、だからといって4行目と6行目が同値である保証もない（処理系定義）</p>
     </section>
     <section>
-        <h2 id="type_auto">C++11の型推論機能</h2>
-        <p>ちょっとC言語を離れてC++を見ていきます。今は型が短いのでいいですが、今に</p>
-        <pre class="brush: cpp;">vector&lt;string&gt;::iterator it;
-map&lt;int,list&lt;string&gt;&gt;::iterator i</pre>
-        <p>とか使い出します。こんなに長ったらく書くのはめんdいですし、タイピングミスしやすかったり、コードが見づらくなったりと、3拍子揃って書きたくないです。</p>
-        <p>そこでauto型の出番です。</p>
-        <pre class="brush: cpp;">unsigned int x = 10;
-auto l = x;</pre>
-        <p>とかすると変数lの型はunsigned int型になります。便利だね。なお、C++03まではautoは別の意味で使われていたので注意です。<b>言うまでもなくコンパイラーが型を推測できないとダメです。</b></p>
-    </section>
-    <section>
         <h2 id="typedef">typedef</h2>
-        <p>C/C++にはtypedefという便利な機能があります。さっそく使ってみましょう。</p>
+        <p>C言語にはtypedefという便利な機能があります。さっそく使ってみましょう。</p>
         <pre class="brush: cpp;">typedef unsigned long DWORD;
 typedef DWORD COLORREF;
 unsigned long window_head = 0x00FFCCFF;
@@ -320,25 +265,10 @@ typedef signed char myint8_t;</pre>
         </section>
     </section>
     <section>
-        <h2>C++11の機能、alias declaration</h2>
-        <p>typedefは便利なのですが、別名が容易にわかりにくいという欠点があります。そこでalias declarationです。</p>
-        <pre class="brush: cpp;">using type1 = int;//typedef int type1;
-using type2 = int [10];//typedef int type2[10];
-using f = void (*)(int, char);//typedef void (*f)(int, char);
-template&lt;class Value> using dict = std::map&lt;std::string, Value>;//typedefでは書けない</pre>
-        <p>そのうち関数ポインタやりますけど、ほんとtypedefは意味不明な記法ですからね、助かります。</p>
-        <p>
-            参考リンク<br>
-            <a href="http://cpplover.blogspot.jp/2009/05/ctypedefaliasdeclaration.html">C++の新しいtypedef方法、alias　declaration | 本の虫</a><br>
-            <a href="http://faithandbrave.hateblo.jp/entry/20090507/1241685990"> 関数ポインタの型に名前を付ける - Faith and Brave - C++で遊ぼう</a><br>
-            <a href="http://qiita.com/Linda_pp/items/44a67c64c14cba00eef1">typedef は C++11 ではオワコン - Qiita</a>
-        </p>
-    </section>
-    <section>
-        <h2 id="stdint">stdint.h/cstdint</h2>
+        <h2 id="stdint">stdint.h</h2>
         <p>先ほど「文字以外の目的でchar型を使うときはtypedefして使うようにしましょう」と言いましたが、毎回typedefするのはめんdいです。</p>
-        <p>また、先程から散々言ってるように、C/C++では型の大きさについて、明確な規定はほぼありません。これでは厳密に何bitかを使いたいとき(HTTP通信など)に困ってしまいます。</p>
-        <p>そこでstdint.h/cstdintの出番です。これはC99/C++11で追加された標準ライブラリで、主に以下の型が使えます。</p>
+        <p>また、先程から散々言ってるように、C言語では型の大きさについて、明確な規定はほぼありません。これでは厳密に何bitかを使いたいとき(HTTP通信など)に困ってしまいます。</p>
+        <p>そこでstdint.h/cstdintの出番です。これはC99で追加された標準ライブラリで、主に以下の型が使えます。</p>
         <blockquote><a>int8_t, uint8_t, int16_t, uint16_t, int32_t, uint32_t, int64_t, uint64_t</a></blockquote>
         <p>これらは厳密に型の大きさが決まっています。(ゆえにすべての処理系で実装されているわけではない)</p>
         <pre class="brush: cpp;">uint8_t color_r = 187;
@@ -362,19 +292,7 @@ len = 21;//エラー</pre>
         <h2 id="int_literals">整数リテラル</h2>
         <pre class="brush: cpp;">unsigned int len = 20;</pre>
         <p>のように、何気なく数値を書いていますが、この数値は「リテラル」と呼ばれます。どう見ても小数ではないのでこれは「整数リテラル」ですね。</p>
-        <p>
-            なお、浮動小数点リテラルについては<br>
-            C++11の文法と機能(C++11: Syntax and Feature)<br>
-            <a href="http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.fcon">http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml#lex.fcon</a><br>
-            に投げます。
-        </p>
         <dl>
-            <dt>2進数的記法(C++14,VisualStudio2013は未対応,VisualStudio2015は対応)</dt>
-            <dd>
-                <pre class="brush: cpp;">int a = 0b11;// 10進数では、3
-int d = 0B1011 ;// 10進数では、11</pre>
-                このように「0b」または「0B」のあとに数字を書きます。
-            </dd>
             <dt>8進数的記法</dt>
             <dd>
                 <pre class="brush: cpp; gutter:false;">int e = 01234;// 10進数では、668</pre>
@@ -387,13 +305,19 @@ int d = 0B1011 ;// 10進数では、11</pre>
                 <pre class="brush: cpp; gutter:false;">int x = 0x1234 ;// 10進数では、4660</pre>
                 このように「0x」のあとに数字を書きます。
             </dd>
+            <dt>2進数的記法(C言語非公式拡張, C++14)</dt>
+            <dd>
+                <pre class="brush: cpp;">int a = 0b11;// 10進数では、3
+int d = 0B1011 ;// 10進数では、11</pre>
+                このように「0b」または「0B」のあとに数字を書きます。
+            </dd>
         </dl>
         <p>なにが言いたいかというと、<b>うっかりして0から数字を書くな</b>よ！ということです。</p>
     </section>
     <section>
         <h2 id="scope">自動変数の生存期間とスコープ</h2>
         <p>自動変数ってなんなんだってばよっ！となってると思いますが、「いままで出てきたような」変数です。ということはそうでない変数があることくらいは「お察しください」。</p>
-        <p>まあグローバル変数とstatic変数なんですが、グローバル変数をつかうくらいならクラスなり、constexprつかえ、という話ですし、static変数はマルチスレッド化の時やポインターが絡むとややこしくなるので余り使いたくないです。</p>
+        <p>まあグローバル変数とstatic変数なんですが、多くの注意点があるので安易に使うべきではありません。</p>
         <p>スコープとはなにか、については見てもらったほうが速いと思います。</p>
         <pre class="brush: cpp;">{
     int a = 10;
@@ -404,7 +328,7 @@ printf("%d\n", a);//エラー
         <p>ずばり{}がスコープです。え？main関数を書いた時に見た？はい、それもスコープです。詳細は関数とはなにかのところで説明します。</p>
         <p>スコープの中で確保された変数はスコープの外にでるときに開放されます。消えてなくなるわけです。よって5行目はエラーになります。</p>
         <p>
-            ちなみにJavaScriptはC/C++とスコープの概念が大きく異なるので、十分注意してください。<br>
+            ちなみにJavaScriptはC言語とスコープの概念が大きく異なるので、十分注意してください。<br>
             JavaScriptのスコープ入門 | BIBORO <br>
             <a href="http://www.biboro.org/snippet/426">http://www.biboro.org/snippet/426</a>
         </p>

@@ -16,7 +16,7 @@
     </script>
 </head>
 <body>
-    <h1>第6章 ～lvalueとrvalueと条件文と～</h1>
+    <h1>第6章 ～条件文～</h1>
     <nav class="top">
         <ul>
             <li><a href="./05function.html" title="前頁">prev</a></li>
@@ -24,82 +24,6 @@
             <li><a href="./07roop_and_split_Sourcecode.html" title="次頁">next</a></li>
         </ul>
     </nav>
-    <section>
-        <h2>lValueとrvalue</h2>
-        <p>lValueとrValueです。左辺値と右辺値という風に訳されることが多いですが(JISのC++規格書日本語訳版がそう訳してる)、誤解を招くのでlValueとrValueと呼ぶことにします。</p>
-        <p>でこれらが何者か？ですが、ちょっと幾つか引用したいと思います(書くのが面倒だったわけじゃないんだからねっ！)。</p>
-        <blockquote cite="http://cpplover.blogspot.jp/2009/11/rvalue-reference_23.html">
-            <p>
-                rvalue reference 完全解説 | 本の虫<br>
-                <a href="http://cpplover.blogspot.jp/2009/11/rvalue-reference_23.html">http://cpplover.blogspot.jp/2009/11/rvalue-reference_23.html</a>
-            </p>
-            <p>
-                Cの時代では、lvalueとrvalueの違いは、代入演算子の左側か右側かという違いだけであった。つまり、left hand value, right hand valueの略である。<br>
-                従って、訳語も、左辺値、右辺値であった。C++においては、これはもはや正しくはない。従って、右辺値、左辺値というのも、誤訳である。<br>
-                それ故に、ここでは、これ以上、左辺値、右辺値という名称を使用しない。
-            </p>
-            <p><b>誤解を恐れずにいえば、lvalueとは、明示的に実体のある、名前付きのオブジェクトであり、rvalueとは、一時的に生成される無名のオブジェクトである。</b></p>
-            <pre class="brush: cpp;">struct X{} ;
-int f() { return 0 ; }
-int main()
-{
-　　int i = 0 ;
-　　i ;　　 // lvalue
-　　0 ;　　 // rvalue
-　　X x ;
-　　x ;　　 // lvalue
-　　X() ;　 // rvalue
-　　f() ;　 // rvalue
-}</pre>
-            <p>上記のコードを読めば、lvalueとrvalueの違いが、なんとなく分かってくれる事と思う。lvalueはrvalueに変換できるが、その逆、rvalueをlvalueに変換することは出来ない。 </p>
-        </blockquote>
-        <blockquote cite="https://msdn.microsoft.com/ja-jp/library/f90831hc.aspx">
-            <p>
-                左辺値と右辺値 | MSDN<br>
-                <a href="https://msdn.microsoft.com/ja-jp/library/f90831hc.aspx">https://msdn.microsoft.com/ja-jp/library/f90831hc.aspx</a>
-            </p>
-            <p>
-                すべての C++ の式は左辺値または右辺値です。 左辺値は、1 つの式を超えて保持するオブジェクトを参照します。 <br>
-                lvalue は、名前を持つオブジェクトと考えることができます。 変更不可能な (const) 変数を含めて、すべての変数は左辺値です。 <br>
-                右辺値は、それを使用する式を超えて保持されない一時的な値です。 lvalues と rvalues の相違点をより詳しく理解するために、次の例について考えてみましょう。
-            </p>
-            <pre class="brush: cpp;">#include &lt;iostream&gt;
-using namespace std;
-int main()
-{
-   int x = 3 + 4;
-   cout &lt;&lt; x &lt;&lt; endl;
-}</pre>
-            <p>この例では、x は、これを定義する式の外側で保持されるので、左辺値です。 式 3 + 4 は右辺値です。定義した式を超えては存在しない一時的な値と評価されるためです。 </p>
-            <p>次の例は、左辺値と右辺値の正しい使用方法と間違った使用方法のいくつかを示しています。</p>
-            <pre class="brush: cpp;">int main()
-{
-   int i, j, *p;
-   // Correct usage: the variable i is an lvalue.
-   i = 7;
-   // Incorrect usage: The left operand must be an lvalue (C2106).
-   7 = i; // C2106
-   j * 4 = 7; // C2106
-   // Correct usage: the dereferenced pointer is an lvalue.
-   *p = i;
-   const int ci = 7;
-   // Incorrect usage: the variable is a non-modifiable lvalue (C3892).
-   ci = 9; // C3892
-   // Correct usage: the conditional operator returns an lvalue.
-   ((i &lt; 3) ? i : j) = 7;
-}</pre>
-        </blockquote>
-        <p>もう説明やめていいかな・・・(なにも説明してないけど)？ようはlvalueは明確に実体があって、rvalueは一時的なものなんだよ。</p>
-        <p>ただこの後説明するreferenceが絡むとすこしわかりにくくなります。例を見てください。<b>ようは関数の戻り値だからといってrvalueとは限らない</b>ってことが言いたかった。</p>
-        <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/lvalue_and_rvalue_with_class/lvalue_and_rvalue_with_class/Source.cpp"></script>
-        <p>
-            classって何とか聞かない。今回はどうでもいいので。そのうち解説します、きっと。<br>
-            もっと詳しく知りたい人は<br>
-            何が lvalue で何が rvalue なのか - iorateの日記<br>
-            <a href="http://d.hatena.ne.jp/iorate/20111207/1323280542">http://d.hatena.ne.jp/iorate/20111207/1323280542</a><br>
-            を見てください。
-        </p>
-    </section>
     <section>
         <h2>bool型と_BOOL型とBOOL型と</h2>
         <p>
@@ -134,7 +58,7 @@ int main()
 #endif  /* stdbool.h */</pre>
         <p>
             C99のbool型は_BOOL型をマクロを使って実装しています（マクロが何かは後ほど）。<br>
-            実際に使い方を見ましょう。C++ではstdbool.hのincludeは不要です(無理にincludeしても勝手にincldueを外されます)。だってC++の基本型だし。
+            実際に使い方を見ましょう。
         </p>
         <pre class="brush: cpp;">#include &lt;stdbool.h&gt;
 int main(void){
@@ -144,7 +68,7 @@ int main(void){
     //後略
     return 0;
 }</pre>
-        <p>C99/C++のbool型は、真と偽はtrueとfalseに対応し、int型に変換すると1と0になります。それ以外の値を入れられることは保証されていません。</p>
+        <p>C99のbool型は、真と偽はtrueとfalseに対応し、int型に変換すると1と0になります。それ以外の値を入れられることは保証されていません。</p>
         <p>
             さて、ここまでならなんら問題はなかったのですが、問題はBOOL型です。ここでいうBOOL型はWin32APIのBOOL型です。<br>
             Win32APIのBOOL型は何をキチがえたのか、平気で負の値とかが入っていたりします。それもそのはず、ただ単にint型をtypedefしてBOOL型を作っているからです。<br>
@@ -363,7 +287,7 @@ else{
         <p>if文を使って書くより簡単ですし(スコープの問題がない)、代入する変数にconstが付けられます(ワタシ的にはここが美味しい)</p>
         <p>
             この書きかたですが、「一行で」かけるので、後に説明するプリプロセッサマクロでしばしば用いられます。<br>
-            ・・・って私は教わったんだけど、マクロにして使ったことってないなぁ。それくらいならinline関数(C++の機能)にしちゃうし。
+            ・・・って私は教わったんだけど、マクロにして使ったことってないなぁ。それくらいならinline関数にしちゃうし。
         </p>
     </section>
     <section>
@@ -547,102 +471,6 @@ int main(){
             このようにゲームなど状態を管理するときに非常に便利です。<br>
             まあ、戻り値にするよりポインターか参照(いずれも後述)を使って引数経由でやったほうがいい気もするけど、ケース・バイ・ケースなので。<br>
             ていうか教えてないし。
-        </p>
-    </section>
-    <section>
-        <h2>enum class</h2>
-        <p>
-            C言語のenumはグローバル空間で宣言されるため、名前衝突の危険が有りました。
-            enum classはscoped enumerationとかStrongly Typed Enumsとも呼ばれ、その名の通りスコープの概念があるenumとなっています。<br>
-            N2347 | Strongly Typed Enums (revision 3)<br>
-            <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2347.pdf">http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2347.pdf</a><br>
-            規格準拠の遅いVisual Studioでもかなり昔から使えたC++11の機能です。
-        </p>
-        <pre class="brush: cpp;">enum class PrimitiveType: std::size_t
-{
-    TriangleList = 0,
-    TriangleStrip,
-    LineList,
-    LineStrip,
-};
-//中略
-PrimitiveType primitiveType = PrimitiveType::TriangleStrip;</pre>
-        <p>
-            Cのenumと違い、いちいちtypedefする必要はありません。<br>
-            「PrimitiveType」はidentifierと呼ばれ、この列挙型の型名となります。<br>
-            「TriangleList」とか「TriangleStrip」とかは列挙子と呼ばれます。<br>
-            identifierの後に「: [型名]」のように続いていますが、これらは列挙子の内部的な型を指定します。省略するとint型になります。
-        </p>
-        <p>enum classでは厳密に型が判定されるので以下の例はすべてダメです。</p>
-        <pre class="brush: cpp;" title="ダメな例">int           primitiveType1 = PrimitiveType::TriangleList; // error
-unsigned char primitiveType2 = PrimitiveType::TriangleList; // error
-std::size_t   primitiveType3 = PrimitiveType::TriangleList; // error</pre>
-        <p>このように書き換える必要があります。</p>
-        <pre class="brush: cpp;" title="正しい例">PrimitiveType primitiveType4 = PrimitiveType::TriangleList;
-std::size_t primitiveType5 = static_cast&lt;std::size_t&gt;(PrimitiveType::TriangleList);</pre>
-        <p>もちろんこれもダメです。どうやって<code>size_t</code>型で負の値を表すのさ、unsignedなのに。</p>
-        <pre class="brush: cpp;" title="enum classの中だって型がチェックされる">enum class PrimitiveType: std::size_t
-{
-    TriangleList = -1, // error, Enumerator value evaluates to -1, which cannot be narrowed to type 'std::size_t'
-};</pre>
-        <p>早速例を見ましょう。</p>
-        <pre class="brush: cpp;">#include "DxLib.h"
-#include &lt;stdio.h&gt;
-//  ゲーム状態
-enum class status_t{
-	STATE_TITLE,//タイトル
-	STATE_MAIN,//メイン
-	STATE_END,//リザルト
-};
-//タイトル処理
-status_t title(){
-	//タイトルを描画
-	//クリック押されたら
-	return status_t::STATE_END;
-}
-//ゲームのメイン処理
-status_t gameMain(){
-	//ゲーム処理
-	//ゲーム終了したら
-	return status_t::STATE_END;
-}
-//リザルト画面など
-status_t ending(){
-	//リザルト画面描画
-	//クリック押されたら
-	return status_t::STATE_MAIN;
-}
-int main(){
-    if(-1 == DxLib_Init()) return -1;
-	status_t function_status = status_t::STATE_TITLE;
-    while(CheckHitKey(KEY_INPUT_ESCAPE)){//function 'CheckHitKey' is DxLibrary's function.
-    	switch (function_status){
-    	case status_t::STATE_TITLE:
-    		function_status = title();
-    		break;
-    	case status_t::STATE_MAIN:
-    		function_status = gameMain();
-    		break;
-    	case status_t::STATE_END:
-    		function_status = ending();
-    		break;
-    	default:
-    		return -1;//エラー
-    	}
-    }
-    DxLib_End();
-	return 0;
-}</pre>
-        <p>
-            参考サイト<br>
-            C3(Composite Computer Club)  »  5月22日は enum class の話。（1日目 #毎日3分 C++11。）<br>
-            <a href="http://www.c3.club.kyutech.ac.jp/archives/1614">http://www.c3.club.kyutech.ac.jp/archives/1614</a><br>
-            C++11 における enum のまとめ - spinorの日記<br>
-            <a href="http://d.hatena.ne.jp/spinor/20110918/1316321563">http://d.hatena.ne.jp/spinor/20110918/1316321563</a><br>
-            enumのスコープを指定する方法 - CREST’S WEBLOG <br>
-            <a href="http://d.hatena.ne.jp/Crest/20111020/1319113048">http://d.hatena.ne.jp/Crest/20111020/1319113048</a><br>
-            C++ 列挙体の宣言 | MSDN<br>
-            <a href="https://msdn.microsoft.com/ja-jp/library/2dzy4k6e.aspx">https://msdn.microsoft.com/ja-jp/library/2dzy4k6e.aspx</a>
         </p>
     </section>
     <nav class="bottom">

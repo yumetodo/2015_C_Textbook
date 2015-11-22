@@ -96,9 +96,6 @@ int_ptr pi, p2;</pre>
 #include&lt;stdlib.h&gt;
 #include&lt;limits.h&gt;//in gcc
 #include&lt;errno.h&gt;//in gcc
-#ifndef __cplusplus
-#define nullptr NULL
-#endif
 int get_integer_num(const int max, const int min){
     //機能：標準入力を数字に変換する。
     //引数：戻り値の最大値,戻り値の最小値
@@ -146,28 +143,12 @@ int main(void){
         <h3>NULLポインタ</h3>
         <p>
             さて、ポインタは宣言した時は普通の変数がそうであるように、変数の値に何が入っているかわかりません。つまり、どこを指しているかわからないポインタ、というわけです。<br>
-            それで、どこも指していないことが保証されているポインタというのがあり、NULLポインタと呼ばれます。<br>
-            詳細は省きますが、C言語的にはNULLがNULLポインタなのですが、みなさんC言語といいつつC++なので、<b>nullptrを使って</b>ください。<br>
-            上のプログラムでもちゃっかり使っています。というかC言語でもnullptrって書きたいがためにむりくりdefineしてますが。<br>
-            下を見てください。C++11以降のC++と思ってください。
+            それで、どこも指していないことが保証されているポインタというのがあり、NULLポインタと呼ばれます。
         </p>
-        <pre class="brush: cpp;">bool hoge1 = (NULL == nullptr);//false
-void* hoge_ptr1 = NULL;
-void* hoge_ptr2 = nullptr;
-bool hoge2 = (hoge_ptr1 == hoge_ptr2);//true
+        <pre class="brush: cpp;">void* hoge_ptr1 = NULL;
 
-//#define NULL 0 となっている場合(C++コンパイラーならほぼ例外なく)
-auto tmp1 = NULL;//int
-auto tmp2 = nullptr;//std::nullptr_t</pre>
-        <p>
-            とくに理由のない限り皆さんはC++としてコンパイルするわけで、標準規格への準拠がとっても遅いことで有名なVCもさすがにnullptrには対応しているので、こちらを使いましょう。<br>
-            え？なんでNULL使っちゃダメかって？・・・ええっとそれを説明するにはC++の関数のオーバーロードのお話をしないといけないので、自分で調べてください。<br>
-            C++ - NULL と nullptr って何が違う？ - Qiita<br>
-            <a href="http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1">http://qiita.com/go_astrayer/items/6afb1592a8a5763fede1</a><br>
-            nullptrキーワード - yohhoyの日記<br>
-            <a href="http://d.hatena.ne.jp/yohhoy/20120503/p1">http://d.hatena.ne.jp/yohhoy/20120503/p1</a><br>
-            らへんが参考になると思います。ちなみにnullptrの型はstd::nullptr_t型です。javascriptだとnullポインタはnullです。・・・まあ、細けーことはいいんだよ、<b>nullptr使え</b>。
-        </p>
+//#define NULL 0 となっている場合(Cコンパイラーならほぼ例外なく)
+auto tmp1 = NULL;//int</pre>
     </section>
     <section>
         <h2>ポインタと初期化</h2>
@@ -176,8 +157,8 @@ auto tmp2 = nullptr;//std::nullptr_t</pre>
             プログラマがその変数に何が入っているかわかるようにすることを初期化といいます。<br>
             ポインタは矢印に例えられますが、矢印の根本と、指示す先があるわけです。<br>
             したがって、矢印の根本(どこを指すか、というアドレス)と矢印の先(さされている確保されたメモリー空間)の双方がプログラマーにとって既知である必要があります。<br>
-            断じて矢印の先を0埋めしたり、根本にnullptrを代入することではありません。<br>
-            0やnullptrを代入する処理は他の値を代入する処理に比べて処理速度が早いというだけで、デバッグのしやすさを考えたら0xccとかを入れたほうがいいことも有ります。<br>
+            断じて矢印の先を0埋めしたり、根本にNULLを代入することではありません。<br>
+            0やNULLを代入する処理は他の値を代入する処理に比べて処理速度が早いというだけで、デバッグのしやすさを考えたら0xccとかを入れたほうがいいことも有ります。<br>
             ようはケース・バイ・ケース。
         </p>
     </section>
@@ -223,13 +204,13 @@ hoge1_p6 = &amp;hoge2;//error</pre>
             <h3>問題</h3>
             <p>以下の3つの関数のうち、コンパイルエラーにならないものはどれか、また理由を述べよ</p>
             <pre class="brush: cpp;">void do_something1(char* dest, char const* src){
-    src = nullptr;
+    src = NULL;
 }
 void do_something2(char* dest, char const* src){
     *src = 'a';
 }
 void do_something3(char* dest, char* const src){
-    src = nullptr;
+    src = NULL;
 }</pre>
             <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1')"></form>
             <section id="answer1" style="display: none;">
@@ -237,7 +218,7 @@ void do_something3(char* dest, char* const src){
                 <p>
                     do_something1関数はコンパイルエラーにならない。なぜならば、変数srcの宣言を英語っぽく読むと<br>
                     'src' is pointer to read-only char.<br>
-                    となり、read-onlyなのはsrcが指し示す先であって根本ではないから。nullptrを代入してもエラーにならないのは当然。<br>
+                    となり、read-onlyなのはsrcが指し示す先であって根本ではないから。NULLを代入してもエラーにならないのは当然。<br>
                     なお、変数srcはdo_something1関数のスタックにある変数だから、do_something1関数の処理が終わり終了すれば開放される。なので、関数の呼び出し元に影響を与えることはない。
                 </p>
             </section>
