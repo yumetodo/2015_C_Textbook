@@ -150,20 +150,20 @@ int a = 10;</pre>
             </dd>
         </dl>
         <dl>
-            <dt>makeファイル</dt>
+            <dt>Makefile</dt>
             <dd>
-                makeファイルには例えば「○○.cというソースファイルをコンパイルして、○○.objを作成する」といったようにビルドすると気の手順が細かく書かれています。<br>
+                Makefileには例えば「○○.cというソースファイルをコンパイルして、○○.oを作成する」といったようにビルドする時の手順が細かく書かれています。<br>
                 <a href="https://github.com/yumetodo/2015_C_Textbook/blob/gh-pages/src/strstr/GNUmakefile">https://github.com/yumetodo/2015_C_Textbook/blob/gh-pages/src/strstr/GNUmakefile</a><br>
                 みたいなやつです。<br>
                 <b>ソースコードに変更があった時だけコンパイルとかを実行できます。</b>別にコンパイル以外のことも実行できるんですけどね。<br>
-                なお大規模になるとmakefileからmakefileを呼び出すことができます。
+                なお大規模になるとMakefileからMakefileを呼び出すことができます (再帰)。
             </dd>
             <dt>[Visual Studio]プロジェクトとソリューション</dt>
             <dd>
-                makeファイルは細かく色々指定できて確かに便利なんですが、いくら殆どコピペできると言ってもmakefileを書くのはめんdです。<br>
+                Makefileは細かく色々指定できて確かに便利なんですが、いくら殆どコピペできると言ってもmakefileを書くのはめんdです。<br>
                 Visual Studioにはその代わりにプロジェクト(拡張子vcxproj)とソリューション(拡張子sln)があります。<br>
                 普通ソリューションには多くても3つ、殆どの場合1つのプロジェクトがあります。プロジェクトごとにいろいろオプションを変えられたりするわけです。<br>
-                便利。これのお陰で「実際この記事を書いてる私はmakeファイルを作ったことないです。」という発言が飛び出るくらいには。
+                便利。これのお陰で「実際この記事を書いてる私はMakfileを作ったことないです。」という発言が飛び出るくらいには。
             </dd>
         </dl>
         <h3>デバッグ、リリース</h3>
