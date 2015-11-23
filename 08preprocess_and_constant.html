@@ -102,15 +102,13 @@
             <p>constは例えばこんなふうに書けるのでした。</p>
 <pre class="brush: cpp;">const int x = 7;
 </pre>
-            <p>
-                ところで変数は関数のスタック上に確保されるのでした。<br>
-                <code>int</code>型のように小さい型ならいいのですが、この後出てくる構造体や大きな配列は大きいサイズなので、(まずないと思いますが)スタックを使い尽くすことがあるかもしれません。<br>
+            <p>ところで、<code>int</code>型のように小さい型ならいいのですが、この後出てくる構造体や大きな配列は大きいサイズなので、スタックにコピーされ、非効率です。<br>
                 そこで
             </p>
-<pre class="brush: cpp;">static const int x = 7;</pre>
+<pre class="brush: cpp;">static const char foo[] = "foo";</pre>
             <p>
                 のように<code>static</code>をつけるといいです。<code>static</code>変数の生存期間はスコープに左右されず(だってスタックに積まれないもん)プログラムの開始から終了までとなります。<br>
-                中には<code>const</code>をつけるなら<code>static const</code>にするべきだ、という宗教も存在しますが、マルチスレッドや、非同期処理やポインタがからむと話が厄介になるのでおすすめしません。
+                中には<code>const</code>をつけるなら<code>static const</code>にするべきだ、という宗教も存在しますが、スタックにコピーされないものもあるのでおすすめしません。
             </p>
             <p class="strong">第一いちいち<code>static</code>って書くなんてめんdじゃないですか。</p>
             <p>
