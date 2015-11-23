@@ -25,7 +25,7 @@
         </ul>
     </nav>
     <section>
-        <h2>bool型と_BOOL型とBOOL型と</h2>
+        <h2>bool型と_Bool型</h2>
         <p>
             C++では当初から真と偽を表すbool型が導入され、C言語でもC99で<code>stdbool.h</code>をincldueすることによりbool型が使えるようになりました。
         </p>
@@ -57,7 +57,7 @@
 
 #endif  /* stdbool.h */</pre>
         <p>
-            C99のbool型は_BOOL型をマクロを使って実装しています（マクロが何かは後ほど）。<br>
+            C99のbool型は_Bool型をマクロを使って実装しています（マクロが何かは後ほど）。<br>
             実際に使い方を見ましょう。
         </p>
         <pre class="brush: cpp;">#include &lt;stdbool.h&gt;
@@ -69,13 +69,6 @@ int main(void){
     return 0;
 }</pre>
         <p>C99のbool型は、真と偽はtrueとfalseに対応し、int型に変換すると1と0になります。それ以外の値を入れられることは保証されていません。</p>
-        <p>
-            さて、ここまでならなんら問題はなかったのですが、問題はBOOL型です。ここでいうBOOL型はWin32APIのBOOL型です。<br>
-            Win32APIのBOOL型は何をキチがえたのか、平気で負の値とかが入っていたりします。それもそのはず、ただ単にint型をtypedefしてBOOL型を作っているからです。<br>
-            これにはC言語が真と偽を非0と0に対応づけてきた歴史も関わってきます。<br>
-            なにが言いたいかというと、false(FALSE)が0であることは保証されているが、true(TRUE)が1であることは保証されない、ということです。<br>
-            うっかりすると足を救われるので注意です。
-        </p>
     </section>
     <section>
         <h2>条件文</h2>
