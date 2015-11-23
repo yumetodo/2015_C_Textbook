@@ -134,7 +134,7 @@ int tmp = (5 == a);//0になる</pre>
         <h2>if文</h2>
         <p>条件式をそれ単体で使うことは、そこまで多くなく、if文やこの後紹介するwhile,for,do-while文と共に用いられます。</p>
         <p>if文はプログラムを組む上で無くてはならないものです。例を見てみましょう。</p>
-        <pre class="brush: cpp;">if(条件式)
+        <pre class="brush: cpp;">if (条件式)
     //条件式が真の時
 else
     //条件式が偽の時</pre>
@@ -157,7 +157,7 @@ if (third_number > max_number){//３番めの数と上で出した「１番目�
 	center_number = max_number;
 	max_number = third_number;
 }
-else if(third_number > center_number){//３番めの数と上で出した「１番目の数と２番めの数」の小さい方と比較
+else if (third_number > center_number){//３番めの数と上で出した「１番目の数と２番めの数」の小さい方と比較
 	min_number = center_number;
 	center_number = third_number;
 }
@@ -174,7 +174,7 @@ else
         <section class="technique">
             <h4>コーディングの作法</h4>
             <p>if文では、else節に正常な動作を書くと、多くの場合ですっきり書けます。</p>
-            <pre class="brush: cpp;">if(条件文){
+            <pre class="brush: cpp;">if (条件文){
     //エラー処理
 }
 else{
@@ -182,10 +182,10 @@ else{
 }</pre>
             <p>大切なのが、正常な動作の時の流れがもっとも簡潔であるように書くことです。</p>
             <p>また、条件式を書く上での注意ですが、同値比較(==)は「=」が2つですが、ついうっかり1つにしてしまいがちです。そこで、このように書くようにしましょう</p>
-            <pre class="brush: cpp;">if(5 == a)//正しい書き方
-if(a == 5)//これも正しい書き方だが、推奨しない、ミスの元
-if(5 = a)//これはコンパイルエラー
-if(a = 5)//これはコンパイルエラーにならない、aに代入した後のaが0か否かが判別される</pre>
+            <pre class="brush: cpp;">if (5 == a)//正しい書き方
+if (a == 5)//これも正しい書き方だが、推奨しない、ミスの元
+if (5 = a)//これはコンパイルエラー
+if (a = 5)//これはコンパイルエラーにならない、aに代入した後のaが0か否かが判別される</pre>
             <p>
                 constがついた変数や、数値、マクロで定義された値を左側、変数を右側に持っていくようにします。<br>
                 こうすることで、書き間違えた時にコンパイルエラーになります。(変更不可能なものに代入しようとしています、など)
@@ -288,8 +288,7 @@ else{
         <p>if文が高級な条件分岐文とするならば、switch文は低級な条件分岐文といえますが、最大のメリットは、一度の条件式で複数の分岐が作れることです。</p>
         <pre class="brush: cpp;">char time_when;
 //do something
-switch (time_when)
-{
+switch (time_when) {
 case 'a':
 	puts("朝");
 	break;
