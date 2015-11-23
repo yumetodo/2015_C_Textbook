@@ -164,37 +164,6 @@ uint32_t add(uint16_t a, uint16_t b){
                         </section>
                     </div>
                 </li>
-                <li>
-                    <div>
-                        <p>以下の機能を持つ関数を作成し、main関数から呼び出し、戻り値をprintf関数で表示せよ。</p>
-                        <dl>
-                            <dt>機能</dt>
-                            <dd>COLORREF型の引数を受け取り、G(緑色)の値を返す。</dd>
-                            <dt>プロトタイプ</dt>
-                            <dd><pre class="brush: cpp; gutter:false;">uint8_t myGetGValue(COLORREF color);</pre></dd>
-                            <dt>ヒント</dt>
-                            <dd>
-                                COLORREF型を使うにはwindows.hを<b>一番先に</b>includeする必要がある。<br>
-                                main関数側はこう書けばいい。
-                                <pre class="brush: cpp;">COLORREF color = RGB(137, 195, 235);//RGBマクロでCOLORREF型の値を作製
-printf("%d", myGetRValue(color));</pre>
-                                当たり前だが、stdint.hをincludeしなければならない。<br>
-                                内部の演算は右シフトとAND演算をすれば求められるはず。<br>
-                                COLORREF型については既に説明した。windows.hをincludeすればあそこで書いたtypedefが既にされている。<br>
-                                マクロ GetGValue を用いてはならない。
-                            </dd>
-                        </dl>
-                        <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-3')"></form>
-                        <section id="answer1-3" style="display: none;">
-                            <h3>回答</h3>
-                            <pre class="brush: cpp;">#include &lt;windows.h&gt;
-#include &lt;stdio.h&gt;
-uint8_t myGetGValue(COLORREF color){
-    return color &gt;&gt; 8;
-}</pre>
-                        </section>
-                    </div>
-                </li>
             </ol>
         </article>
     </section>
