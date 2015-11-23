@@ -94,25 +94,27 @@ int main(){
         </p>
         <pre class="brush: cpp;">#include &lt;stdio.h&gt;
 int main(void){
-   while(1){//whileで無限ループ。
-      puts("ループ1起点");
-      while(1){//2個目の無限ループ
-         puts("ループ2起点");
-         switch(1){//switchまで置いてみます。
-         case 1://これは絶対成立。
-            puts("switch");
-            break;//switchを終了します。
-         }
-         puts("switch完了");
-         break;//ループ2を終了します。
-         puts("ループ2終点");
-      }
-      puts("ループ2完了");
-      break;//ループ1を終了します。
-      puts("ループ1終点");
-   }
-   puts("ループが終わりました。");
-   return 0;
+    while(1){//whileで無限ループ。
+        puts("ループ1起点");
+        while(1){//2個目の無限ループ
+            puts("ループ2起点");
+            switch(1){//switchまで置いてみます。
+            case 1://これは絶対成立。
+                puts("switch");
+                break;//switchを終了します。
+            default:
+                break;
+            }
+            puts("switch完了");
+            break;//ループ2を終了します。
+            puts("ループ2終点");
+        }
+        puts("ループ2完了");
+        break;//ループ1を終了します。
+        puts("ループ1終点");
+    }
+    puts("ループが終わりました。");
+    return 0;
 }</pre>
         <pre class="brush: plain;" title="実行例">ループ1起点
 ループ2起点
