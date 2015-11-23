@@ -39,17 +39,10 @@
             <li>#ifdef/#ifndef</li>
             <li>#error</li>
             <li>#warning</li>
-            <li>
-                #pragma
-                <ul>
-                    <li>#pragma once</li>
-                    <li>#pragma comment</li>
-                    <li>#pragma ident</li>
-                </ul>
-            </li>
+            <li>#pragma</li>
         </ul>
         <p>
-            これだけ種類が有ります。解説するのは#includeと#define、#pragma once、#pragma commentにとどめます。他は<br>
+            これだけ種類が有ります。解説するのは#includeと#defineにとどめます。他は<br>
             <a href="http://itref.fc2web.com/c/preprocessor.html">http://itref.fc2web.com/c/preprocessor.html</a><br>
             を参照してください。とてもわかり易いので。なお、#if/#else/#ifdef/#ifndefはこれまでもこれからもしれっと使います。
         </p>
@@ -74,75 +67,19 @@
             <p>という表現もできます。</p>
         </section>
         <section>
-            <h3>#pragma comment</h3>
-            <p>なんかすでに使っているので解説が必要か疑問ですが、.libファイルや.aファイルをリンカーにくっつけて、とお願いするために使います。ただし先述の通りVCやclang,bcc等限定の機能になります。</p>
-            <p>なのでgccでコンパイルする予定があるなら(常にその可能性を想定するべきですが)さっきのような対策が必要です。</p>
-        </section>
-        <section>
-            <h3>#pragma onceとインクルードガード</h3>
-            <p>その昔#pragma onceが使えなかった頃、ヘッダーファイルが複数読み込まれると、2重定義です、と言われコンパイルエラーになりました。この対策として</p>
-            <pre class="brush: cpp;">#ifndef _INC_STDIO
-#define _INC_STDIO
+            <h3>インクルードガード</h3>
+            <p>ヘッダーファイルが複数読み込まれると、2重定義となりコンパイルエラーになります。この対策として</p>
+            <pre class="brush: cpp;">#ifndef FOO_H
+#define FOO_H
 //ヘッダーファイルの中身を書く
-#endif /* _INC_STDIO */</pre>
-            <p>といったことをしていました。こういう書き方をインクルードガードといいます。でもこんなの書くのはめんdいですよね？そこで生まれたのが#pragma onceです。</p>
-            <p>ヘッダーファイルの冒頭に</p>
-            <pre class="brush: cpp;">#pragma once</pre>
-            <p>と書くだけです。</p>
-            <p>ただし、普通は#defineを使ったインクルードガードと併用します。その理由は実際に使っていれば分かるはず。複数のヘッダーで同じことを書かないといけない時にこれがあると便利なんです。</p>
-        </section>
-        <section>
-            <h3>#pragma warning</h3>
-            <p>実例を見たほうが早いでしょう。プログラムはAviUtlプラグインで有名な透過性ロゴフィルター(makki氏)のSIMD化版(rigaya氏)の一部です。</p>
-            <pre class="brush: cpp; highlight:[11,12];">#pragma warning (push)
-#pragma warning (disable: 4244) //C4244: '=' : 'int' から 'short' への変換です。データが失われる可能性があります。
-static BOOL create_adj_exdata(FILTER *fp, LOGO_HEADER *adjdata, const LOGO_HEADER *data)
-{
-	int i, j;
-	if (data == NULL)
-		return FALSE;
-	// ロゴ名コピー
-	memcpy(adjdata->name, data->name, LOGO_MAX_NAME);
-	// 左上座標設定（位置調整後）
-	adjdata->x = data->x + (int)(fp->track[LOGO_X]-LOGO_XY_MIN)/4 + LOGO_XY_MIN/4;
-	adjdata->y = data->y + (int)(fp->track[LOGO_Y]-LOGO_XY_MIN)/4 + LOGO_XY_MIN/4;
-	//中略
-	return TRUE;
-}
-#pragma warning (pop)</pre>
+#endif // FOO_H</pre>
             <p>
-                このプログラムでは11,12行目がint型からshorに暗黙の型変換を行おうとしているのでコンパイル警告が出ます。<br>
-                もしshort型で表せない大きさのデータだったら正常に変換できないのでこの警告はもっともな話です。むしろ警告してくれてありがとうです。<br>
-                しかし、作者曰くこの場合はそうはならないらしいです。だとすればその警告は目障りです。なのでこのように#pragma warningを使って警告を消しています。<br>
-                ただしプログラム全体でその警告が消えると不都合なので、この関数だけ警告が消えるように#pragma warning (push)/(pop)しています。
+               といったことをします。こういう書き方をインクルードガードといいます。<br>
+               インクルードガードで問題になるのが名前空間の衝突です。その対策として、特定の接頭辞をつける、UUIDをつけるなどがありますが、素直にファイル名の英字を全て大文字に直し、それ以外をアンダーバー ('_')にするというのもあります。その際には、この条件で同じマクロ名になってしまうファイルは置かない、"_H"で終わるマクロを他に定義しないといったことを決めておきます。特に同じマクロ名になってしまうファイル名は、普通にインクルードするときにも紛らわしいので使うべきではありません。<br>
+               アンダーバー1文字と英字大文字1字、アンダーバー2文字のどちらかで始まるものは処理系に予約されているので、ライブラリでもない限り使うべきではありません。
             </p>
-            <p>
-                ただしこの書き方はVCの書き方でgccだとまた書き方が違います。<br>
-                VCだと警告番号ですがgccやclangだと警告の種類を指定するようです。<br>
-                warning | MSDN<br>
-                <a href="https://msdn.microsoft.com/ja-jp/library/2c8f766e.aspx">https://msdn.microsoft.com/ja-jp/library/2c8f766e.aspx</a><br>
-                Diagnostic Pragmas - Using the GNU Compiler Collection (GCC)<br>
-                <a href="https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Pragmas.html">https://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Pragmas.html</a><br>
-                controlling diagnostics via pragmas | clang 3.7 documentation<br>
-                <a href="http://clang.llvm.org/docs/UsersManual.html#controlling-diagnostics-via-pragmas">http://clang.llvm.org/docs/UsersManual.html#controlling-diagnostics-via-pragmas</a>
-            </p>
-            <pre class="brush: cpp;" title="VC">#pragma warning (push)
-#pragma warning (disable: [警告番号])
-    //警告を無効にする部分のコード
-#pragma warning (pop)</pre>
-            <pre class="brush: cpp;" title="gcc">#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "[警告の種類]"
-    //警告を無効にする部分のコード
-#pragma GCC diagnostic pop</pre>
-            <pre class="brush: cpp;" title="clang">#pragma clang diagnostic push
-#pragma clang diagnostic ignored "[警告の種類]"
-    //警告を無効にする部分のコード
-#pragma clang diagnostic pop</pre>
-            <p>
-                大事なことを言います。本来警告が出たら出ないようなコードを書くべきなのです。このように警告を消したり、キャストして警告を消すのはやってはいけません。<br>
-                なんどでもいいますが、本来は「警告を出していただき、コンパイラー様、ありがとうございます」なのです。<br>
-                明確に問題ない、と言える警告を除き、警告を消すことのないようにしましょう。
-            </p>
+            <pre class="brush: cpp;">#define _FOO_H // だめ
+#define __foo_h // これもだめ</pre>
         </section>
     </section>
     <section>
