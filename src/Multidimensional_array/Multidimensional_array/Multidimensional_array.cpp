@@ -5,7 +5,7 @@
 #if !defined (_countof)
 #define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
 
-int sum_array(int const* in_array, const size_t array_num){
+int sum_array(const int *in_array, const size_t array_num){
 	int sum = 0;
 	size_t i;
 	for (i = 0; i < array_num; i++){
@@ -13,7 +13,7 @@ int sum_array(int const* in_array, const size_t array_num){
 	}
 	return sum;
 }
-int64_t calc_annual_working_time(const int working_time[][31], const unsigned int month_per_year){
+int64_t calc_annual_working_time(const int (* working_time)[31], const unsigned int month_per_year){
 	static const int max_of_days_per_month = 31;
 	size_t i;
 	int64_t sum = 0;

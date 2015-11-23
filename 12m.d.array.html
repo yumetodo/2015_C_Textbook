@@ -44,11 +44,11 @@
             sum_array関数は1次元配列(普通の配列)を合計するごくごくありきたりな関数です。問題はcalc_annual_working_time関数です。<br>
             2つの関数のプロトタイプ宣言を見比べてみましょう。
         </p>
-        <pre class="brush: cpp; first-line: 13;">int sum_array(int const* in_array, const size_t array_num);</pre>
-        <pre class="brush: cpp; first-line: 13;">int64_t calc_annual_working_time(const int working_time[][31], const int month_per_year);</pre>
+        <pre class="brush: cpp; first-line: 13;">int sum_array(const int *in_array, const size_t array_num);</pre>
+        <pre class="brush: cpp; first-line: 13;">int64_t calc_annual_working_time(const int (* working_time)[31]);</pre>
         <p>
             1次元配列を受け取るsum_array関数はint const* in_arrayのように受け取っていますが、<br>
-            2次元配列を受け取るcalc_annual_working_time関数はconst int working_time[][31]のようにややこしくなっています。<br>
+            2次元配列を受け取るcalc_annual_working_time関数はconst int (* working_time)[31]のようにややこしくなっています。<br>
             なぜint** working_timeのように書けないのでしょうか？
         </p>
         <p>
