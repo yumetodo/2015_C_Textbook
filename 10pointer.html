@@ -165,7 +165,7 @@ auto tmp1 = NULL;//int</pre>
     <section>
         <h2>ポインタとconst</h2>
         <p>
-            以前constとはread-onlyにするものだと言いました。これがポインターを絡めるとどうなるか見て行きましょう。<br>
+            以前constとは定数だと言いました。これがポインタを絡めるとどうなるか見て行きましょう。<br>
             ポインタには矢印にたとえるならば根本と指し示す先、つまりポインター型変数と実体領域があるのでした。つまりconstはその双方につけることができます。<br>
             ここがややこしいところなのです。以下「根本」、「先」と略します。
         </p>
@@ -176,17 +176,17 @@ auto tmp1 = NULL;//int</pre>
         <pre class="brush: cpp;" title="根本○　先○">int *hoge1_p1 = &amp;hoge1;//'hoge_p1' is pointer to int.
 *hoge1_p1 = 2;//OK
 hoge1_p1 = &amp;hoge2;//OK</pre>
-        <pre class="brush: cpp;" title="根本○ 先×">const int *hoge1_p2 = &amp;hoge1;//'hoge_p2' is pointer to read-only int.
-int const *hoge1_p3 = &amp;hoge1;//'hoge_p3' is pointer to read-only int.
+        <pre class="brush: cpp;" title="根本○ 先×">const int *hoge1_p2 = &amp;hoge1;//'hoge_p2' is pointer to constant int.
+int const *hoge1_p3 = &amp;hoge1;//'hoge_p3' is pointer to constant int.
 *hoge1_p2 = 3;//error
 *hoge1_p3 = 4;//error
 hoge1_p2 = &amp;hoge2;//OK
 hoge1_p3 = &amp;hoge2;//OK</pre>
-        <pre class="brush: cpp;" title="根本× 先○">int * const hoge1_p4 = &amp;hoge1;//'hoge1_p4' is read-only pointer to int.
+        <pre class="brush: cpp;" title="根本× 先○">int * const hoge1_p4 = &amp;hoge1;//'hoge1_p4' is constant pointer to int.
 *hoge1_p4 = 5;//OK
 hoge1_p4 = &amp;hoge2;//error</pre>
-        <pre class="brush: cpp;" title="根本× 先×">const int * const hoge1_p5 = &amp;hoge1;//'hoge1_p5' is read-only pointer to read-only int.
-int const * const hoge1_p6 = &amp;hoge1;//'hoge1_p6' is read-only pointer to read-only int.
+        <pre class="brush: cpp;" title="根本× 先×">const int * const hoge1_p5 = &amp;hoge1;//'hoge1_p5' is constant pointer to constant int.
+int const * const hoge1_p6 = &amp;hoge1;//'hoge1_p6' is constant pointer to constant int.
 *hoge1_p5 = 3;//error
 *hoge1_p6 = 4;//error
 hoge1_p5 = &amp;hoge2;//error
@@ -216,9 +216,7 @@ void do_something3(char* dest, char* const src){
             <section id="answer1" style="display: none;">
                 <h4>回答</h4>
                 <p>
-                    do_something1関数はコンパイルエラーにならない。なぜならば、変数srcの宣言を英語っぽく読むと<br>
-                    'src' is pointer to read-only char.<br>
-                    となり、read-onlyなのはsrcが指し示す先であって根本ではないから。NULLを代入してもエラーにならないのは当然。<br>
+                    do_something1関数はコンパイルエラーにならない。NULLを代入してもエラーにならないのは当然。<br>
                     なお、変数srcはdo_something1関数のスタックにある変数だから、do_something1関数の処理が終わり終了すれば開放される。なので、関数の呼び出し元に影響を与えることはない。
                 </p>
             </section>
