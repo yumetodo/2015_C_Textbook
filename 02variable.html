@@ -175,7 +175,7 @@ char ch = getchar();</pre>
             <ul>
                 <li>
                     char型は8bitだ<br>
-                    →誤り。1byteと定められているだけで、1byte=8bitとは限らない。（確かに殆どの場合でchar型は8bitだけど）
+                    →誤り。1byteと定められているだけで、1byte=8bitとは限らない。実際のビット数はCHAR_BITマクロで取得する。
                 </li>
                 <li>
                     1byte=8bitのとき、signed charは-128～127まで表せる<br>
