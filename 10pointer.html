@@ -75,7 +75,9 @@ printf("%d, %p, %d", a, p, *p);</pre>
 int* p;</pre>
         <p>は同値ですが、</p>
         <pre class="brush: cpp;">int* p1, p2;</pre>
-        <p>とした時、p2の型は「int型」です。もっとも</p>
+        <p>とした時、p2の型は「int型」です。そのため、「int* p」ではなく「int *p」と書くことがあります。</p>
+        <pre class="brush: cpp;">int *p1, *p2; // '*'がそれぞれの変数に適用されることが見た目で分かる</pre>
+        <p>もっとも</p>
         <pre class="brush: cpp;">typedef int* int_ptr;
 int_ptr pi, p2;</pre>
         <p>とすればどちらともint*型になりますが。C言語ってよぐわがんね。</p>
