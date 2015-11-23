@@ -256,17 +256,9 @@ COLORREF window_head = 0x00FFCCFF;</pre>
             <q>When specifying an explicit RGB color, the COLORREF value has the following hexadecimal form:0x00bbggrr</q><br>
             ちなみに1行目と2行目はいずれもWindef.hで定義されているものの引用です。Win32APIに触りたいと思っている方、よく覚えておきましょう。かならすお世話になるでしょう。
         </p>
-        <section class="technique">
-            <h3>コーディングの作法</h3>
-            <p>char型は整数型ですが、主に文字を扱うのに使うことが多い型です。文字以外のデータを扱うのにchar型を使うことは、コードの可読性を下げます。</p>
-            <pre class="brush: cpp;">typedef unsigned char myuint8_t;
-typedef signed char myint8_t;</pre>
-            のようにtypedefして使うようにしましょう。
-        </section>
     </section>
     <section>
         <h2 id="stdint">stdint.h</h2>
-        <p>先ほど「文字以外の目的でchar型を使うときはtypedefして使うようにしましょう」と言いましたが、毎回typedefするのはめんdいです。</p>
         <p>また、先程から散々言ってるように、C言語では型の大きさについて、明確な規定はほぼありません。これでは厳密に何bitかを使いたいとき(HTTP通信など)に困ってしまいます。</p>
         <p>そこでstdint.h/cstdintの出番です。これはC99で追加された標準ライブラリで、主に以下の型が使えます。</p>
         <blockquote><a>int8_t, uint8_t, int16_t, uint16_t, int32_t, uint32_t, int64_t, uint64_t</a></blockquote>
