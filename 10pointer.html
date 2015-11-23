@@ -154,44 +154,40 @@ auto tmp1 = NULL;//int</pre>
         <p>
             改めて、初期化です。<br>
             プログラマがその変数に何が入っているかわかるようにすることを初期化といいます。<br>
-            ポインタは矢印に例えられますが、矢印の根本と、指示す先があるわけです。<br>
-            したがって、矢印の根本(どこを指すか、というアドレス)と矢印の先(さされている確保されたメモリー空間)の双方がプログラマーにとって既知である必要があります。<br>
-            断じて矢印の先を0埋めしたり、根本にNULLを代入することではありません。<br>
-            0やNULLを代入する処理は他の値を代入する処理に比べて処理速度が早いというだけで、デバッグのしやすさを考えたら0xccとかを入れたほうがいいことも有ります。<br>
-            ようはケース・バイ・ケース。
+            ポインタは矢印に例えられますが、矢印と、指示す先があるわけです。<br>
+            したがって、矢印(どこを指すか、というアドレス)と矢印の先(さされている確保されたメモリー空間)の双方がプログラマーにとって既知である必要があります。矢印をNULLにするだけでは不十分です。
         </p>
     </section>
     <section>
         <h2>ポインタとconst</h2>
         <p>
             以前constとは定数だと言いました。これがポインタを絡めるとどうなるか見て行きましょう。<br>
-            ポインタには矢印にたとえるならば根本と指し示す先、つまりポインター型変数と実体領域があるのでした。つまりconstはその双方につけることができます。<br>
-            ここがややこしいところなのです。以下「根本」、「先」と略します。
+            ポインタを矢印にたとえるならばそれに対する指し示す先、つまり実体領域があるのでした。つまりconstはその双方につけることができます。<br>
+            ここがややこしいところなのです。以下「矢」、「先」と略します。書き込み可能を「○」、書き込み不可 (const) を「×」とします。
         </p>
         <pre class="brush: cpp;" title="前提コード">int main(void){
     int hoge1 = 0;
     int hoge2 = 1;
 }</pre>
-        <pre class="brush: cpp;" title="根本○　先○">int *hoge1_p1 = &amp;hoge1;//'hoge_p1' is pointer to int.
+        <pre class="brush: cpp;" title="矢○　先○">int *hoge1_p1 = &amp;hoge1;//'hoge_p1'はintへのポインタ
 *hoge1_p1 = 2;//OK
 hoge1_p1 = &amp;hoge2;//OK</pre>
-        <pre class="brush: cpp;" title="根本○ 先×">const int *hoge1_p2 = &amp;hoge1;//'hoge_p2' is pointer to constant int.
-int const *hoge1_p3 = &amp;hoge1;//'hoge_p3' is pointer to constant int.
-*hoge1_p2 = 3;//error
-*hoge1_p3 = 4;//error
+        <pre class="brush: cpp;" title="矢○ 先×">const int *hoge1_p2 = &amp;hoge1;//'hoge_p2'はint定数へのポインタ
+int const *hoge1_p3 = &amp;hoge1;//'hoge_p3'はint constへのポインタ
+*hoge1_p2 = 3;//エラー
+*hoge1_p3 = 4;//エラー
 hoge1_p2 = &amp;hoge2;//OK
 hoge1_p3 = &amp;hoge2;//OK</pre>
-        <pre class="brush: cpp;" title="根本× 先○">int * const hoge1_p4 = &amp;hoge1;//'hoge1_p4' is constant pointer to int.
+        <pre class="brush: cpp;" title="矢× 先○">int * const hoge1_p4 = &amp;hoge1;//'hoge1_p4'はintへのポインタ定数
 *hoge1_p4 = 5;//OK
 hoge1_p4 = &amp;hoge2;//error</pre>
-        <pre class="brush: cpp;" title="根本× 先×">const int * const hoge1_p5 = &amp;hoge1;//'hoge1_p5' is constant pointer to constant int.
-int const * const hoge1_p6 = &amp;hoge1;//'hoge1_p6' is constant pointer to constant int.
+        <pre class="brush: cpp;" title="矢× 先×">const int * const hoge1_p5 = &amp;hoge1;//'hoge1_p5'はint定数へのポインタ
+int const * const hoge1_p6 = &amp;hoge1;//'hoge1_p6'はintへのポインタ定数
 *hoge1_p5 = 3;//error
 *hoge1_p6 = 4;//error
 hoge1_p5 = &amp;hoge2;//error
 hoge1_p6 = &amp;hoge2;//error</pre>
-        <p>基本型の前にconstを書こうがあとに書こうが意味は変わりませんし型も変わりません。横に英語訳をつけておきましたが、おなじになってるでしょ？</p>
-        <p>ポインタとconstを考えるときは上記のように<b>常に英語訳しましょう</b>。そうすれば混乱することはありません。</p>
+        <p>基本型の前にconstを書こうがあとに書こうが意味は変わりませんし型も変わりません。'*'の前か後ろかを見てください。</p>
         <p>
             参考サイト<br>
             POINTER | 「配列とポインタの完全制覇」<br>
