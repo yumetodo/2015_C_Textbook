@@ -235,25 +235,8 @@ default:
             switch文には必ず「default:」を書きましょう。<br>
             「case 'c':」とかは「ラベル」といいます。後述するgoto文にも登場するので頭の片隅においておいてください。<br>
             「break;」はswitch文を抜け出すために用います。もし、6行目の「break;」がなかった場合、5行目を実行した後8行目を実行します。つまり必ずしもbreakは必須ではありません。<br>
-            switch文を「低級な条件分岐文」と表現したのは、アセンブリコードのjmp命令にそっくりの構文だからです。
+            switch文を「低級な条件分岐文」と表現したのは、コンパイラの最適化段階の表現に近いからです。
         </p>
-        <p>このjmp命令にそっくりという性質を活かして</p>
-        <pre class="brush: cpp;">send(register short *to, register short *from, register count)
-{
-	register n = (count + 7) / 8;
-	switch(count % 8) {
-	case 0:	do {	*to = *from++;
-	case 7:		*to = *from++;
-	case 6:		*to = *from++;
-	case 5:		*to = *from++;
-	case 4:		*to = *from++;
-	case 3:		*to = *from++;
-	case 2:		*to = *from++;
-	case 1:		*to = *from++;
-		} while(--n > 0);
-	}
-}</pre>
-        <p>なんていう、わけわかめなプログラム(<a href="http://ja.wikipedia.org/wiki/Duff%27s_device">Duff's device</a>というプログラム高速化のための最適化技法)を書いた人が居ますが、やめましょう。</p>
         <p>このswitch文、あとで出てくる列挙型(enum)とものすごく相性がいいです。#defineをわんさか書こうとしているそこのアナタ、enumを使いましょう。</p>
     </section>
     <section>
