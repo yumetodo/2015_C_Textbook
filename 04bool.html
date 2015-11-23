@@ -58,98 +58,22 @@
     </section>
     <section>
         <h2>左シフト</h2>
-        <pre class="brush: cpp;">uint32_t si_a = 5;//101
-const uint32_t si_b = 4;
-const uint32_t re_si = si_a &lt;&lt; si_b;//80:1010000</pre>
-        <p>1つ左シフトするごとに、2をかけているのと同じ効果が得られる。この場合は2<sup>4</sup> = 16倍していることになる。</p>
-        <p>かならず以下の点をコーディング時に確認して行うこと。</p>
-        <ul>
-            <li>
-                オーバーフローしないか<br>
-                左シフトの結果がその型の最大値を超えるようなことがあったらだめ、ということ。だからこれはだめ<br>
-                <pre class="brush: cpp; gutter:false;">unsigned int re = UINT_MAX &lt;&lt; 1;</pre>
-            </li>
-            <li>
-                右オペランドが格上げ後の左オペランドの精度以下<br>
-                具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしgcc/clang独自拡張の__builtin_popcount関数を用いるか、<br>
-                math.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
-                <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b &lt; __popcnt(UINT_MAX))? si_a &lt;&lt; si_b : 0;</pre>
-            </li>
-        </ul>
-        <p>
-            まあ、私の説明より参考サイトのほうがきっとわかりやすいです。<br>
-            INT34-C. 負のビット数のシフトやオペランドのビット数以上のシフトを行わない | JPCERT<br>
-            <a href="https://www.jpcert.or.jp/sc-rules/c-int34-c.html">https://www.jpcert.or.jp/sc-rules/c-int34-c.html</a>
-        </p>
+        <pre class="brush: cpp;">const uint8_t fit = 5 &lt;&lt; 4;//80:1010000
+const uint8_t over = 5 &lt;&lt; 30;//64:01000000</pre>
+        <p>左シフトではnビット分ビットがずれる。下nビットは0になり, 元の値の上nビットは無視される。</p>
+        <p>オーバーフローしない限り、1つ左シフトするごとに、2をかけているのと同じ効果が得られる。この場合は2<sup>4</sup> = 16倍していることになる。</p>
+        <p>可読性が下がるので乗算の代わりに用いない。確かにシフト演算のほうが高速だが、そのような最適化はコンパイラがやってくれる。</p>
     </section>
     <section>
         <h2>右シフト</h2>
         <pre class="brush: cpp;">uint32_t si_a = 37;//100101
 const uint32_t si_b = 4;
 const uint32_t re_si = si_a &gt;&gt; si_b;//2:10</pre>
-        <p>左シフトと逆の効果が得られる。</p>
-        <p>かならず以下の点をコーディング時に確認して行うこと。</p>
-        <ul>
-            <li>
-                右オペランドが格上げ後の左オペランドの精度以下<br>
-                「オーバーフローしないか」ともつながるが、例えば32bit変数を32回以上左シフトしたら必ずオーバーフローする。<br>
-                具体的にはSSE4.2のPOPCNT命令を呼び出すMSVC独自拡張の__popcnt関数ないしgcc/clang独自拡張の__builtin_popcount関数を用いるか、<br>
-                math.hのlog2関数を用い、左オペランドのビット数が右オペランド未満であることを確認する。<br>
-                <pre class="brush: cpp; gutter:false;">const uint32_t re_si = (si_b &lt; __popcnt(UINT_MAX))? si_a &gt;&gt; si_b : 0;</pre>
-            </li>
-        </ul>
-        <article>
-            <h3>問題</h3>
-            <img alt="picture of matrix to covert RGB into YCbCr" src="./pic/bt601_bt709.png">
-            <p>
-                下記はRGBの値をBT.601の式に従いRGB(0-255)->YC8(0-4095)->YUV2(16-235)のように変換してYを求めるプログラムである。割り算を使わずシフト演算するものに書き換えよ。</p>
-            <pre class="brush: cpp;">#include &lt;cstdio&gt;
-#include &lt;cstdint&gt;
-typedef uint8_t color_e_t;
-int main(void){
-    const color_e_t r = 137;
-    const color_e_t g = 195;
-    const color_e_t b = 235;
-
-    const color_e_t y = (
-        (
-            (
-                (( 4918*static_cast&lt;uint64_t&gt;(r)+354)/1024)
-                + (( 9655*static_cast&lt;uint64_t&gt;(g)+585)/1024)
-                + (( 1875*static_cast&lt;uint64_t&gt;(b)+523)/1024)
-            )*219 + 383
-        ) / 4096
-    ) + 16;
-
-    printf("R:%d G:%d B:%d -> Y':%d\n", r, g, b, y);
-    return 0;
-}</pre>
-            <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1')"></form>
-            <section id="answer1" style="display: none;">
-                <h4>回答</h4>
-                <pre class="brush: cpp;">#include &lt;cstdio&gt;
-#include &lt;cstdint&gt;
-typedef uint8_t color_e_t;
-int main(void){
-    const color_e_t r = 137;
-    const color_e_t g = 195;
-    const color_e_t b = 235;
-
-    const color_e_t y = (
-        (
-            (
-                (( 4918*static_cast&lt;uint64_t&gt;(r)+354)>>10)
-                + (( 9655*static_cast&lt;uint64_t&gt;(g)+585)>>10)
-                + (( 1875*static_cast&lt;uint64_t&gt;(b)+523)>>10)
-            )*219 + 383
-        )>>12
-    ) + 16;
-
-    printf("R:%d G:%d B:%d -> Y':%d\n", r, g, b, y);
-    return 0;
-}</pre>
-            </section>
-        </article>
+        <p>
+           右シフトには算術シフトと論理シフトの2種類がある。論理シフトでの右シフトは左シフトの逆になるだけだが、算術シフトでは元の値の最上位ビットが維持される。<br>
+           多くの処理系では論理シフトだが、算術シフトのものもあるので注意すること。
+        </p>
+        <p>処理系依存があるので、左シフト以上に除算の代わりに用いることは避ける。</p>
     </section>
     <section>
         <h2>ビットの論理積</h2>
