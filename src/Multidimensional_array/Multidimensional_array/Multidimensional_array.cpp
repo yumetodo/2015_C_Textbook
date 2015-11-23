@@ -1,21 +1,9 @@
 ﻿#include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <algorithm>
+
 #if !defined (_countof)
-#if !defined (__cplusplus)
 #define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
-#else  /* !defined (__cplusplus) */
-extern "C++"
-{
-	template<typename TYPE,	std::size_t SIZE>
-	std::size_t array_length(const TYPE(&)[SIZE]){
-		return SIZE;
-	}
-#define _countof(_Array) array_length(_Array)
-}
-#endif  /* !defined (__cplusplus) */
-#endif  /* !defined (_countof) */
 
 int sum_array(int const* in_array, const size_t array_num){
 	int sum = 0;
@@ -36,9 +24,6 @@ int64_t calc_annual_working_time(const int working_time[][31], const unsigned in
 }
 int main(void){
 	int hanako_worked_time[12][31] = { { 0 } };//単位は分
-	for (auto& x : hanako_worked_time){//なにか値を代入
-		std::fill_n(x, _countof(hanako_worked_time[0]), 720);
-	}
 
 	const int64_t time_sum = calc_annual_working_time(hanako_worked_time, 12);
 	const int64_t fee = time_sum * (1200 / 60);
