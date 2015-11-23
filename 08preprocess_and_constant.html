@@ -113,7 +113,6 @@
             <p>
                 一方で<b>関数の外に書く場合は</b>、グローバル変数(どこからでもアクセスできる変数)になるのを防ぐために<b>必ず<code>static</code>をつけるべき</b>です。<br>
                 こうすることで有効範囲がそのファイルに限定されます。includeしても使えません。<br>
-                <code>constexpr</code>あるんだからそんな場面ないと思いますが。
             </p>
         </section>
         <section>
@@ -135,9 +134,7 @@ int main(void){
                 <pre class="brush: cpp;">auto tmp = 1 &lt;&lt; 12;</pre>
                 <p>となっています。まあ、この場合は</p>
                 <pre class="brush: cpp;">#define BASE_SIZE (1 &lt;&lt; 8)</pre>
-                <p>とすればいいんですけどね。めんdでしょ。きっと忘れるし。今回の例の場合は回避方法は2通りですかね</p>
-                <pre class="brush: cpp;">static const unsigned int BASE_SIZE = 1 &lt;&lt; 8;
-constexpr unsigned int BASE_SIZE = 1 &lt;&lt; 8;</pre>
+                <p>とすればいいんですけどね。</p>
             </section>
             <section>
                 <h4>置換がプロプロセス時であることに起因する問題</h4>
