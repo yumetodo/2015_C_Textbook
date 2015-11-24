@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>～コマンドライン～</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="../syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="../syntaxhighlighter/scripts/shBrushBash.js" type="text/javascript"></script>
+    <script src="../syntaxhighlighter/scripts/shBrushDosBatch-V3.js" type="text/javascript"></script>
+    <link href="../syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="../syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+
+</head>
+<body>
+    <h1>～コマンドライン～</h1>
+     <nav class="bottom">
+        <ul>
+            <li class="disable">prev</li>
+            <li><a href="../index.html" title="目次">main</a></li>
+            <li class="disable">next</li>
+            <!-- <li><a href="./01arikitarina_basic.html" title="次頁">next</a></li> -->
+        </ul>
+    </nav>
+    <section>
+        <h2>CUI(CLI)とGUI</h2>
+        <p>
+            ユーザーインターフェース(User Interface)とは本来コンピュータとユーザーが情報をやり取りする方法のことを指しますが、OSの見た目、操作性と言ってもそこまで語弊はないと思います。<br>
+            この様式には大きくわけてCUIとGUIがあります。
+        </p>
+        <p>CUI(character-based user interface / console user interface)またはCLI(command line interface)とは、キーボードを用いて入力を行い文字によって出力を行う様式のことです。</p>
+        <p>一方GUI(graphical user interface)とはキーボードに限らない入力(マウスとかタッチパネルとか)を持ち、情報の提示に画像や図形を多用した出力をもつ様式のことです。</p>
+        <p>WindwosやMac、それからLinuxOSの一部はGUIですが、端末(tarminal)ないしコマンドプロンプト(command prompt)と呼ばれる物によってCUIも提供することがほとんどです</p>
+        <p>プログラミングをするにあたり、コンパイラやインタプリタを利用することになりますが、これらの多くはCUIで操作するか、GUIだけどCUI向けのコマンドライン引数(後述)を生成しているだけです。</p>
+        <p>Linuxユーザーなら知っていて当然の知識ばかりなので読み飛ばしてください。Windowsユーザーの皆様、Macユーザーの皆様、お付き合いください。仮にもプログラマを自称するなら最低限これだけは知っておくべきです。</p>
+    </section>
+    <section>
+        <h2>ありきたりな世界</h2>
+        <p>とりあえずプログラミングの初めと言ったら、ありきたりな世界、と相場が決まっているので(嘘です)やってみましょう</p>
+        <pre class="brush: bash;">echo arikitari_na_world!</pre>
+        <pre class="brush: plain;" title="出力例">arikitari_na_world!</pre>
+        <p>ちゃんと表示できたでしょうか？</p>
+    </section>
+    <nav class="bottom">
+        <ul>
+            <li class="disable">prev</li>
+            <li><a href="index.html" title="目次">main</a></li>
+            <li class="disable">next</li>
+            <!-- <li><a href="./01arikitarina_basic.html" title="次頁">next</a></li> -->
+        </ul>
+    </nav>
+</body>
+</html>
