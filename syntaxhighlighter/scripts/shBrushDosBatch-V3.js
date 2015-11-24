@@ -42,7 +42,7 @@
         }
 
 	Brush.prototype	= new SyntaxHighlighter.Highlighter();
-	Brush.aliases	= ['dosbatch', 'batch'];
+	Brush.aliases	= ['dosbatch', 'batch', 'bat', 'cmd'];
 
 	SyntaxHighlighter.brushes.DosBatch = Brush;
 

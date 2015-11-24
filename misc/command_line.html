@@ -38,6 +38,10 @@
         <p>WindwosやMac、それからLinuxOSの一部はGUIですが、端末(tarminal)ないしコマンドプロンプト(command prompt)と呼ばれる物によってCUIも提供することがほとんどです</p>
         <p>プログラミングをするにあたり、コンパイラやインタプリタを利用することになりますが、これらの多くはCUIで操作するか、GUIだけどCUI向けのコマンドライン引数(後述)を生成しているだけです。</p>
         <p>Linuxユーザーなら知っていて当然の知識ばかりなので読み飛ばしてください。Windowsユーザーの皆様、Macユーザーの皆様、お付き合いください。仮にもプログラマを自称するなら最低限これだけは知っておくべきです。</p>
+        <p>
+            以下Linuxで一般的なbashとWindwosで標準搭載されているコマンドプロンプト(cmd.exe)を対象に進めていきます。ごめん、dshとzshの方は適宜ググッて読み替えてください。<br>
+            また説明の都合上、以下端末(tarminal)ないしコマンドプロンプト(command prompt)と呼ばれる物の呼称を「tarminal」に統一します。
+        </p>
     </section>
     <section>
         <h2>ありきたりな世界</h2>
@@ -46,10 +50,211 @@
         <pre class="brush: plain;" title="出力例">arikitari_na_world!</pre>
         <p>ちゃんと表示できたでしょうか？</p>
     </section>
+    <section>
+        <h2>カレントディレクトリ</h2>
+        <p>カレントディレクトリとは、tarminalを使う際に、現在見ているディレクトリの位置です。では現在位置を調べてみましょう</p>
+        <pre class="brush: bash;" title="bash">pwd</pre>
+        <pre class="brush: bat;" title="コマンドプロンプト">cd</pre>
+        <pre class="brush: plain;" title="出力例1">/home/yumetodo</pre>
+        <pre class="brush: plain;" title="出力例2">C:\Users\yumetodo</pre>
+        <p>まあ何かしら表示されたと思いますが、そこにあなたはいます。では今のディレクトリにあるものをリストアップしてみましょう。</p>
+        <pre class="brush: bash;" title="bash">ls</pre>
+        <pre class="brush: bat;" title="コマンドプロンプト">dir</pre>
+        <pre class="brush: plain;" title="lsの結果の例">bash.exe.stackdump  bld_lsw_avs.sh*     bld_zlib.sh*       coreupdate.sh*         LICENSE        ojp152_64/        wget.vbs
+bld_bzip2.sh*       bld_lsw_avs_64.sh*  bld_zlib_64.sh*    do_everything.sh       LLVM/          opus/             zlib/
+bld_bzip2_64.sh*    bld_lsw_vps.sh*     bmi.cpp            DxLibEx_Web/           l-smash/       opus_64/          zlib_64/
+bld_ffmpeg.sh*      bld_lsw_vps_64.sh*  bmi.exe*           ffmpeg/                l-smash_64/    packaging.sh*
+bld_ffmpeg_64.sh*   bld_ojp152.sh*      buildmypkg.sh*     ffmpeg_64/             LSW/           packaging_64.sh*
+bld_ls.sh*          bld_ojp152_64.sh*   buildmypkg_64.sh*  FirstAutomatedBld.vbs  LSW_64/        patches/
+bld_ls_64.sh*       bld_opus.sh*        bzip2/             get_patch.sh*          mtrand32.exe*  README.md
+bld_lsw_aviutl.sh*  bld_opus_64.sh*     bzip2_64/          inst_base.sh*          ojp152/        readme_jp.md</pre>
+        <div class="scroll_box">
+            <pre class="brush: plain;" title="dirの結果の例"> ドライブ C のボリューム ラベルは OS_Install です
+ ボリューム シリアル番号は BA32-627F です
+
+ C:\Users\yumetodo のディレクトリ
+
+2015/11/24  12:42    &lt;DIR>          .
+2015/11/24  12:42    &lt;DIR>          ..
+2015/09/29  19:24               273 .bash_history
+2015/05/11  22:25    &lt;DIR>          .codeintel
+2015/09/22  20:39    &lt;DIR>          .dnx
+2015/05/07  02:59                77 .gitconfig
+2015/11/24  12:38    &lt;DIR>          .oracle_jre_usage
+2015/07/30  14:57    &lt;DIR>          .ResophNotes
+2015/10/18  12:06               207 .swfinfo
+2015/10/09  15:28    &lt;DIR>          AppVerifierLogs
+2015/05/07  02:40    &lt;DIR>          Contacts
+2015/11/24  12:34    &lt;DIR>          Desktop
+2015/11/18  13:10    &lt;DIR>          Documents
+2015/11/24  12:08    &lt;DIR>          Downloads
+2015/10/31  03:17    &lt;DIR>          dwhelper
+2015/05/07  02:40    &lt;DIR>          Favorites
+2015/11/22  17:34    &lt;DIR>          Google ドライブ
+2015/10/28  14:53    &lt;DIR>          Links
+2015/05/07  02:59                65 mercurial.ini
+2015/05/25  13:30    &lt;DIR>          miraiken_office
+2015/10/31  03:26    &lt;DIR>          Music
+2015/11/24  12:42    &lt;DIR>          node_modules
+2015/11/22  17:34    &lt;DIR>          OneDrive
+2015/09/28  04:09    &lt;DIR>          Pictures
+2015/05/07  02:40    &lt;DIR>          Saved Games
+2015/05/07  02:40    &lt;DIR>          Searches
+2015/05/07  03:00    &lt;DIR>          SecurityScans
+2015/05/08  01:18    &lt;DIR>          Tracing
+2015/11/23  17:50    &lt;DIR>          Videos
+               4 個のファイル                 622 バイト
+              25 個のディレクトリ  143,727,910,912 バイトの空き領域</pre>
+            </div>
+        <p>まあ人によって違うと思いますがなんかしら表示されたでしょう。次になにかディレクトリを作りましょう。</p>
+        <pre class="brush: bat;">mkdir test</pre>
+        <p>その後再びのディレクトリにあるものをリストアップしてみると、「test」というフォルダができているのが確認できると思います。</p>
+        <p>では作成したディレクトリに移動してみましょう。</p>
+        <pre class="brush: bat;">cd test</pre>
+        <p>その後再びのディレクトリにあるものをリストアップしてみると、lsした場合何も表示されず、dirした場合は</p>
+        <pre class="brush: plain;"> ドライブ C のボリューム ラベルは OS_Install です
+ ボリューム シリアル番号は BA32-627F です
+
+ C:\Users\yumetodo\test のディレクトリ
+
+2015/11/24  14:37    &lt;DIR>          .
+2015/11/24  14:37    &lt;DIR>          ..
+               0 個のファイル                   0 バイト
+               2 個のディレクトリ  143,714,582,528 バイトの空き領域</pre>
+        <p>多分こんな感じなんじゃないかと思います。</p>
+        <p>一つ上の階層に戻るには</p>
+        <pre class="brush: bash;">cd ../</pre>
+        <p>とすればいいです。(Windwosの区切り文字は'\'じゃないのか？と思うかもしれませんが'/'も受け付けてくれます。何時からか知らんけど)</p>
+    </section>
+    <section>
+        <h2>command line 引数</h2>
+        <p>とりあえず以下のように指定してみてください。</p>
+        <pre class="brush: bash;" title="bash">ls -l</pre>
+        <pre class="brush: bat;" title="コマンドプロンプト">dir /d</pre>
+        <p>すると</p>
+        <div class="scroll_box">
+            <pre class="brush: plain;" title="ls -l">合計 1.3M
+-rw-r--r-- 1 yumetodo None 1.3K 5月  28 07:14 bash.exe.stackdump
+-rwxr-xr-x 1 yumetodo None  723 5月   7  2015 bld_bzip2.sh*
+-rwxr-xr-x 1 yumetodo None  703 5月   7  2015 bld_bzip2_64.sh*
+-rwxr-xr-x 1 yumetodo None  735 5月   7  2015 bld_ffmpeg.sh*
+-rwxr-xr-x 1 yumetodo None  710 5月   7  2015 bld_ffmpeg_64.sh*
+-rwxr-xr-x 1 yumetodo None  352 5月   7  2015 bld_ls.sh*
+-rwxr-xr-x 1 yumetodo None  341 5月   7  2015 bld_ls_64.sh*
+-rwxr-xr-x 1 yumetodo None  771 5月   7  2015 bld_lsw_aviutl.sh*
+-rwxr-xr-x 1 yumetodo None 2.0K 5月   7  2015 bld_lsw_avs.sh*
+-rwxr-xr-x 1 yumetodo None 2.2K 5月   7  2015 bld_lsw_avs_64.sh*
+-rwxr-xr-x 1 yumetodo None  788 5月   7  2015 bld_lsw_vps.sh*
+-rwxr-xr-x 1 yumetodo None  357 5月   7  2015 bld_lsw_vps_64.sh*
+-rwxr-xr-x 1 yumetodo None 1.1K 5月   7  2015 bld_ojp152.sh*
+-rwxr-xr-x 1 yumetodo None 1.1K 5月   7  2015 bld_ojp152_64.sh*
+-rwxr-xr-x 1 yumetodo None  468 5月   7  2015 bld_opus.sh*
+-rwxr-xr-x 1 yumetodo None  477 5月   7  2015 bld_opus_64.sh*
+-rwxr-xr-x 1 yumetodo None 1.3K 5月   7  2015 bld_zlib.sh*
+-rwxr-xr-x 1 yumetodo None 1.3K 5月   7  2015 bld_zlib_64.sh*
+-rw-r--r-- 1 yumetodo None 2.6K 11月 20 13:29 bmi.cpp
+-rwxr-xr-x 1 yumetodo None 261K 11月 20 13:30 bmi.exe*
+-rwxr-xr-x 1 yumetodo None 1.6K 5月   7  2015 buildmypkg.sh*
+-rwxr-xr-x 1 yumetodo None 1.5K 5月   7  2015 buildmypkg_64.sh*
+drwxr-xr-x 1 yumetodo None    0 5月   7  2015 bzip2/
+drwxr-xr-x 1 yumetodo None    0 5月   8  2015 bzip2_64/
+-rwxr-xr-x 1 yumetodo None  100 5月   7  2015 coreupdate.sh*
+-rw-r--r-- 1 yumetodo None   44 6月  20 01:58 do_everything.sh
+drwxr-xr-x 1 yumetodo None    0 11月 12 22:48 DxLibEx_Web/
+drwxr-xr-x 1 yumetodo None    0 5月   7  2015 ffmpeg/
+drwxr-xr-x 1 yumetodo None    0 5月   8  2015 ffmpeg_64/
+-rw-r--r-- 1 yumetodo None 9.8K 5月   7  2015 FirstAutomatedBld.vbs
+-rwxr-xr-x 1 yumetodo None  249 5月   7  2015 get_patch.sh*
+-rwxr-xr-x 1 yumetodo None 4.3K 5月   7  2015 inst_base.sh*
+-rw-r--r-- 1 yumetodo None 1.1K 5月   7  2015 LICENSE
+drwxr-xr-x 1 yumetodo None    0 10月  3 02:36 LLVM/
+drwxr-xr-x 1 yumetodo None    0 5月   7  2015 l-smash/
+drwxr-xr-x 1 yumetodo None    0 5月   8  2015 l-smash_64/
+drwxr-xr-x 1 yumetodo None    0 5月   7  2015 LSW/
+drwxr-xr-x 1 yumetodo None    0 5月   8  2015 LSW_64/
+-rwxr-xr-x 1 yumetodo None 313K 6月  15 11:41 mtrand32.exe*
+drwxr-xr-x 1 yumetodo None    0 5月   7  2015 ojp152/
+drwxr-xr-x 1 yumetodo None    0 5月   8  2015 ojp152_64/
+drwxr-xr-x 1 yumetodo None    0 5月   7  2015 opus/
+drwxr-xr-x 1 yumetodo None    0 5月   8  2015 opus_64/
+-rwxr-xr-x 1 yumetodo None 1.2K 5月   7  2015 packaging.sh*
+-rwxr-xr-x 1 yumetodo None  956 5月   7  2015 packaging_64.sh*
+drwxr-xr-x 1 yumetodo None    0 5月   7  2015 patches/
+-rw-r--r-- 1 yumetodo None 2.7K 5月   7  2015 README.md
+-rw-r--r-- 1 yumetodo None 4.5K 5月   7  2015 readme_jp.md
+drwxr-xr-x 1 yumetodo None    0 11月 24 14:33 test/
+-rw-r--r-- 1 yumetodo None 1.1K 5月   7  2015 wget.vbs
+drwxr-xr-x 1 yumetodo None    0 5月   7  2015 zlib/
+drwxr-xr-x 1 yumetodo None    0 5月   8  2015 zlib_64/</pre>
+            </div>
+        <pre class="brush: plain;" title="dir /d"> ドライブ C のボリューム ラベルは OS_Install です
+ ボリューム シリアル番号は BA32-627F です
+
+ C:\Users\yumetodo のディレクトリ
+
+[.]                 .swfinfo            [Google ドライブ]   [Saved Games]
+[..]                [AppVerifierLogs]   [Links]             [Searches]
+.bash_history       [Contacts]          mercurial.ini       [SecurityScans]
+[.codeintel]        [Desktop]           [miraiken_office]   [test]
+[.dnx]              [Documents]         [Music]             [Tracing]
+.gitconfig          [Downloads]         [node_modules]      [Videos]
+[.oracle_jre_usage] [dwhelper]          [OneDrive]
+[.ResophNotes]      [Favorites]         [Pictures]
+               4 個のファイル                 622 バイト
+              26 個のディレクトリ  143,714,451,456 バイトの空き領域</pre>
+        <p><code>ls</code>と<code>dir /d</code>、<code>ls- l</code>と<code>dir</code>が似た感じの出力結果になりましたね。まあそこはどうでもいいんですが。</p>
+        <p>でこのスペース空けて<code>-l</code>とか<code>/d</code>とか指定したのがコマンドライン引数と呼ばれます。</p>
+        <p>コマンドライン引数はスペース区切りで渡されます。</p>
+        <pre class="brush: plain;">x264  --preset slow --bitrate -1 --pass 3 --stats "%{savfile}.stats" --qpstep 12 --qcomp 0.7 --vbv-bufsize -1 --vbv-maxrate -1 --aq-strength 0.25 --psy-rd 0.25:0 --keyint -1 --min-keyint 4 --bframes 4 --deblock 1:1 --no-fast-pskip --no-dct-decimate --colormatrix smpte170m</pre>
+        <p>一般的に</p>
+        <pre class="brush: plain;">[commnad name] --help
+[commnad name] -h
+[commnad name] /?</pre>
+        <p>などでコマンドラインオプションの説明を見れるようになっていることが多いです。Unix系だとmanコマンドなんてのもありますね。</p>
+    </section>
+    <section>
+        <h2>標準出力のリダイレクト</h2>
+        <p>さて先程まではtarminalに文字を表示させましたが、今度はファイルに書きだして見ましょう。</p>
+        <pre class="brush: bash;">echo arikitari_na_world > tmp.txt</pre>
+        <p>さて、テキストを適当なエディタで開いてくださいな。ちゃんと「arikitari_na_world」と書かれていれば成功です。</p>
+        <p>ではこの状態でもう一度内容を変えて実行するとどうでしょうか？</p>
+        <pre class="brush: bash;">echo Hello_world > tmp.txt</pre>
+        <p>「Hello_world」と書かれていたと思います。上書きされたわけですね。追記するには</p>
+        <pre class="brush: bash;">echo Hello_world > tmp.txt
+echo arikitari_na_world >> tmp.txt</pre>
+        <p>とすればいいです。</p>
+        <p>一般に標準出力はTerminalに表示されますが、このように切り替えることができます。</p>
+    </section>
+    <section>
+        <h2>標準エラー出力のリダイレクト</h2>
+        <p>Terminalによってやり方がマチマチなので割愛します</p>
+    </section>
+    <section>
+        <h2>標準入力のリダイレクト</h2>
+        <p>標準入力だってリダイレクトできます。先ほどの続きで</p>
+        <pre class="brush: bash;">sort &lt; tmp.txt</pre>
+        <p>とすると</p>
+        <pre class="brush: plain;" title="出力">arikitari_na_world
+Hello_world</pre>
+        <p>というかんじで標準入力をファイルからできます。余談ですが単純にファイルを表示したいなら</p>
+        <pre class="brush: bash;" title="bash">cat tmp.txt</pre>
+        <pre class="brush: bat;" title="コマンドプロンプト">type tmp.txt</pre>
+        <p>とすればいいです。Windowsユーザーの方は、Unicode文字を手軽にコマンドプロンプトに表示する手段ですので覚えておきましょう。</p>
+    </section>
+    <section>
+        <h2>パイプ</h2>
+        <p>パイプとはプログラムAの出力をプログラムBの標準入力につなげるものです。別に標準出力だけではありません。まあやってみましょう。</p>
+        <pre class="brush: bash;" title="bash">ls -l | grep tm</pre>
+        <pre class="brush: bat;" title="コマンドプロンプト">dir | findstr tm</pre>
+        <pre class="brush: plain;" title="ls -l | grep tm の結果例">-rw-r--r-- 1 yumetodo None   31 11月 24 17:10 tmp.txt</pre>
+        <pre class="brush: plain;" title="dir | findstr tm の結果例">2015/11/24  17:11                35 tmp.txt</pre>
+        <p><code>ls -l</code>,<code>dir</code>コマンドは先程紹介したので割愛するとして、<code>grep</code>,<code>findstr</code>コマンドは、引数に与えられた文字列を含む行を表示するコマンドです</p>
+        <p>つまり、<code>ls -l</code>,<code>dir</code>の結果(標準出力に出力された文字列)を<code>grep</code>,<code>findstr</code>(の標準入力)に入力したわけです。</p>
+    </section>
     <nav class="bottom">
         <ul>
             <li class="disable">prev</li>
-            <li><a href="index.html" title="目次">main</a></li>
+            <li><a href="../index.html" title="目次">main</a></li>
             <li class="disable">next</li>
             <!-- <li><a href="./01arikitarina_basic.html" title="次頁">next</a></li> -->
         </ul>
