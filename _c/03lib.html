@@ -1,0 +1,113 @@
+---
+chapter: 3
+title: ライブラリ
+---
+<section>
+    <h2>ライブラリ</h2>
+    <p>
+        ライブラリはプログラマがよく使う機能をひとまとめにしたものです。<br>
+        C言語にはライブラリを使う仕組みが施されており、他人が書いたコードをもう一度書くということを防いでいます。
+        (「車輪の再発明」の防止)
+    </p>
+</section>
+<section>
+    <h2>プロトタイプ宣言とヘッダファイル</h2>
+    <p>
+        第一章では前に書かれた関数を呼び出せるとしていました。
+        しかし、ライブラリの関数はソースコードに書かれていないため、何もせずには呼び出すことができません。
+        そこで、関数の実体の代わりにプロトタイプ宣言というものが書かれたファイル (ヘッダファイル) を読み込んでソースコード内に展開することで解決します。
+    </p>
+    <p>プロトタイプ宣言では、関数宣言の頭の部分のみを書いて、最後に';'で終端させます。</p>
+    <pre class="brush: cpp;">// プロトタイプ宣言のみを行う
+int callee(void);
+
+int caller(void)
+{
+	return callee(); // 問題なく呼び出せる
+}</pre>
+    <p>
+        プロトタイプ宣言では、引数がない場合には必ずvoidを書いてください。
+        これは、かつてはvoidがなければ引数には何を渡しても良いという間違いを誘発する定義になっていたためです。
+    </p>
+    <p>
+        ヘッダファイルの内容をソースコード内に展開するには#includeを使います。
+        なお、ヘッダファイルの拡張子は慣習的に.hとなっています。
+    </p>
+    <pre class="brush: cpp;">// callee.h
+int callee(void);</pre>
+    <pre class="brush: cpp;">// caller.c
+#include "callee.h"
+
+int caller(void)
+{
+	return callee(); // 問題なく呼び出せる
+}</pre>
+    これは次のように展開されます。
+    <pre class="brush: cpp;">
+int callee(void);
+
+int caller(void)
+{
+	return callee();
+}</pre>
+    <p>
+        ソースファイルと同じディレクトリにあるヘッダファイルをインクルードする場合にはファイル名を'"' (ダブルクオーテーション)で囲みます。
+        異なるディレクトリにある場合には'<'、'>'で囲みます。
+    </p>
+<section>
+    <h2>C標準ライブラリ</h2>
+    <p>C標準ライブラリとは、C言語自体が提供しているライブラリのことです。</p>
+    <p>主に次のヘッダファイルがあります。</p>
+    <p>
+        assert.h	診断機能<br>
+        ctype.h	文字操作<br>
+        errno.h	エラー<br>
+        float.h	浮動小数点型の特性<br>
+        limits.h	整数型の大きさ<br>
+        locale.h	文化圏固有操作<br>
+        math.h	数学<br>
+        setjmp.h	非局所分岐<br>
+        signal.h	シグナル操作<br>
+        stdarg.h	可変個数の実引数<br>
+        stddef.h	共通の定義<br>
+        stdio.h	入出力<br>
+        stdlib.h	一般ユーティリティ<br>
+        string.h	文字列操作<br>
+        time.h	日付及び時間
+    </p>
+    <p>この中から、必要な関数があるものをインクルードします。</p>
+    <p>ここで次のコードを見てください。</p>
+    <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/003_arikitari_na_world.c"></script>
+    <p>
+        puts関数が出ています。これはどういう関数でしょうか？この関数はC標準ライブラリの関数なので関数名でググってみます。
+        大概は「関数名 man」で適当な情報が出ます。<br>
+        <a href="http://linuxjm.osdn.jp/html/LDP_man-pages/man3/putc.3.html">http://linuxjm.osdn.jp/html/LDP_man-pages/man3/putc.3.html</a><br>
+        以下の様な点に着目して見てください。
+    </p>
+    <ul>
+        <li>
+            プロトタイプ宣言は？<br>
+            →<pre class="brush: cpp;">int puts(const char *s);</pre>
+        </li>
+        <li>
+            戻り値の型は？<br>
+            →int型
+        </li>
+        <li>
+            どんな戻り値が帰ってくるの？<br>
+            →エラー時はEOF(-1と定義されています)、正常なときは負ではない数
+        </li>
+        <li>
+            引数の型は？<br>
+            →const char *型 (すみません、この型については後ほど。ここでは文字の集合を要求しています)
+        </li>
+        <li>
+            引数に指定するものは？<br>
+            →標準出力に出力したい文字列（標準出力についても後ほど。端末と思っていてとりあえずは構いません。）
+        </li>
+        <li>
+            includeしないといけないヘッダーファイルは？<br>
+            →stdio.h
+        </li>
+    </ul>
+</section>
