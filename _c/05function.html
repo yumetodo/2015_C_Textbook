@@ -9,18 +9,21 @@ title: 関数
         これまで見てきたmain関数も関数の一つです。C言語においてとにかく大事なものです。そのくせ独習Cの説明は十分とは言えません、あれで説明してるつもりなんですかね。
     </p>
     <p>関数の一般的な書き方は</p>
-    <pre class="brush: plain;">[戻り値の型] [関数名](仮引数リスト){
-//処理
+    <pre class="brush: plain;">[戻り値の型] [関数名](仮引数リスト)
+{
+	// 処理
 }</pre>
     <p>です。戻り値の型がvoid以外の時は、必ず戻り値を返さなければなりません。</p>
-    <pre class="brush: cpp;">//これは誤り
-int do_something(void){
-//do something
+    <pre class="brush: cpp;">// これは誤り
+int do_something(void)
+{
+	// 何かする
 }
-//これは正しい
-int do_something2(void){
-//do something
-return 0;
+// これは正しい
+int do_something2(void)
+{
+	// 何かする
+	return 0;
 }</pre>
     <p>実際に関数を作るときには「プロトタイプ宣言」という物を書くことになる。書き方を立方体の体積を求める関数を例に説明する。</p>
     <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/call_function.cpp"></script>
