@@ -1,0 +1,242 @@
+---
+chapter: 5
+title: 関数
+---
+<section>
+    <h2>関数とは</h2>
+    <p>
+        既にそこかしこで出てますが、改めて。関数とは、処理の集合です。C言語では、すべてのプログラムは必ず1つ以上の関数が含まれています。<br>
+        これまで見てきたmain関数も関数の一つです。C言語においてとにかく大事なものです。そのくせ独習Cの説明は十分とは言えません、あれで説明してるつもりなんですかね。
+    </p>
+    <p>関数の一般的な書き方は</p>
+    <pre class="brush: plain;">[戻り値の型] [関数名](仮引数リスト){
+//処理
+}</pre>
+    <p>です。戻り値の型がvoid以外の時は、必ず戻り値を返さなければなりません。</p>
+    <pre class="brush: cpp;">//これは誤り
+int do_something(void){
+//do something
+}
+//これは正しい
+int do_something2(void){
+//do something
+return 0;
+}</pre>
+    <p>実際に関数を作るときには「プロトタイプ宣言」という物を書くことになる。書き方を立方体の体積を求める関数を例に説明する。</p>
+    <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/call_function.cpp"></script>
+    <pre class="brush: cpp;">double calc_volume(double si, double s2, double s3);
+//[戻り値の型] [関数名](仮引数リスト);</pre>
+    <p>
+        2行目が関数のプロトタイプ宣言と呼ばれるものだ。戻り値の型、関数名、仮引数リストを書く。<br>
+        なお、その関数を使用するまでに関数が宣言されている必要があるため、原則として#define文やtypedefや定数宣言の直後にまとめて書いておくこと。
+    </p>
+    <p>このcalc_volume関数が定義されるのは、10～13行目の部分だ。ここで関数の実際の処理を書く。</p>
+    <p>この関数が呼び出される7行目だ。ここで初めて実際に定義に基づいて処理を行う。calc_volume関数内のreturn文にかいたものが変数resultに代入されている。</p>
+</section>
+<section>
+    <h2>C標準ライブラリ</h2>
+    <p>C標準ライブラリとは、プログラマーがよく使う機能をひとまとめにしてC言語自体が提供している関数群のことです。</p>
+    <p>
+        代表的なものとしては、puts, getchar, fgets, time, clock, printf, sprintf, scanf, strcomp, memcpy, malloc, callocなどの関数でしょうか。<br>
+        これらはいくつかのヘッダーファイルをincludeすることで使えます。<br>
+        例えば、printf関数はstdio.h, calloc関数はstdlib.h, clock関数はtime.hをincludeすることで使えます。<br>
+        includeし忘れると、コンパイラーに「そんな関数知らねーよ」と怒られます。
+    </p>
+    <p>ここで改めてはじめて書いたコードを見てください。</p>
+    <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/001_arikitari_na_world.c"></script>
+    <p>
+        puts関数が出ています。これはどういう関数でしょうか？この関数はC標準ライブラリの関数なので関数名でググってみます。大概は「関数名 man」で適当な情報がでる。<br>
+        <a href="http://linuxjm.osdn.jp/html/LDP_man-pages/man3/putc.3.html">http://linuxjm.osdn.jp/html/LDP_man-pages/man3/putc.3.html</a><br>
+        以下の様な点に着目して見てください。
+    </p>
+    <ul>
+        <li>
+            プロトタイプ宣言は？<br>
+            →<pre class="brush: cpp;">int puts(const char *s);</pre>
+        </li>
+        <li>
+            戻り値の型は？<br>
+            →int型
+        </li>
+        <li>
+            どんな戻り値が帰ってくるの？<br>
+            →エラー時はEOF(-1にdefineされています)、正常なときは負ではない数
+        </li>
+        <li>
+            引数の型は？<br>
+            →const char *型(すみません、ポインタについては後ほど。ここでは文字の集合を要求しています)
+        </li>
+        <li>
+            引数に指定するものは？<br>
+            →標準出力に出力したい文字列（標準出力についても後ほど。コンソール画面と思っていてとりあえずは構いません。）
+        </li>
+        <li>
+            includeしないといけないヘッダーファイルは？<br>
+            →stdio.h
+        </li>
+    </ul>
+</section>
+<section>
+    <h2>関数の型</h2>
+    <p>宣言、とか定義とかさっきから言ってるところからもう察しているかも知れませんが、関数も変数と同じくオブジェクトなので、メモリー上に実体があり、型も存在します。</p>
+    <p>「型」がなにかについては変数のところで説明しましたが、「型」とはコンパイラにオブジェクトをどういう風にメモリー上に配置したらいいのか教えるものなのでした。</p>
+    <p>関数になってもなにも変わりません。コンパイラーに</p>
+    <ul>
+        <li>戻り値の型</li>
+        <li>仮引数の型</li>
+    </ul>
+    <p>
+        を教えます。だからcalc_volume関数の型は、「double(double, double, double)」型です。これが分かれば、コンパイラは関数を呼び出すコードを書いてくれます。<br>
+        このことは関数ポインタのところで大事になるので、覚えておいてくだい。
+    </p>
+</section>
+<section>
+    <h2>関数を作って使ってみよう</h2>
+    <p>細かい理屈はひとまず置いておいて、まあ関数を作ってみましょう。</p>
+    <article>
+        <h2>練習問題</h2>
+        <ol>
+            <li>
+                <div>
+                    <p>main関数の他に以下の機能を持つ関数を書き、main関数から呼び出せ。</p>
+                    <dl>
+                        <dt>機能</dt>
+                        <dd>puts関数を呼び出し、「関数arikitari_na_kannsuuが実行されました」と表示する</dd>
+                        <dt>プロトタイプ</dt>
+                        <dd><pre class="brush: cpp; gutter:false;">void arikitari_na_kannsuu(void);</pre></dd>
+                    </dl>
+                    <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-1')"></form>
+                    <section id="answer1-1" style="display: none;">
+                        <h3>回答</h3>
+                        <p>こんな感じかな？</p>
+                        <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+void arikitari_na_kannsuu(void){
+puts("関数arikitari_na_kannsuuが実行されました");
+}</pre>
+                    </section>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p>以下の機能を持つ関数を作成し、main関数から呼び出し、戻り値をprintf関数で表示せよ。</p>
+                    <dl>
+                        <dt>機能</dt>
+                        <dd>2つの引数を受け取り、その和を返す。</dd>
+                        <dt>プロトタイプ</dt>
+                        <dd><pre class="brush: cpp; gutter:false;">uint32_t add(uint16_t a, uint16_t b);</pre></dd>
+                        <dt>ヒント</dt>
+                        <dd>
+                            main関数側はこう書けばいい。
+                            <pre class="brush: cpp; gutter:false;">printf("%ld", add(7, 2));</pre>
+                            当たり前だが、stdint.hをincludeしなければならない。
+                        </dd>
+                    </dl>
+                    <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1-2')"></form>
+                    <section id="answer1-2" style="display: none;">
+                        <h3>回答</h3>
+                        <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+uint32_t add(uint16_t a, uint16_t b){
+return a + b;
+}</pre>
+                    </section>
+                </div>
+            </li>
+        </ol>
+    </article>
+</section>
+<section>
+    <h2>スタック領域</h2>
+    <p>
+        Ｃで扱うメモリ領域は一般に、プログラム領域、静的領域、スタック領域、ヒープ領域の 4つに大別されます。<br>
+        main関数が呼び出される時にある程度広い範囲のメモリーを確保します。この領域をスタック領域、といいます。<br>
+        変数をメモリー上に確保して～とか、関数はメモリー上に実体があり～とか言ってましたが、ここのことです。<br>
+        自動変数(これまで見てきた変数)や関数の引数、戻り値、リターンアドレスなどはここに記録されます。<br>
+        ではどういう風に記録されていくのでしょうか？
+    </p>
+    <ol>
+        <li>main関数が呼ばれるとき、スタック領域を確保する</li>
+        <li>引数を後ろから順に書き込む</li>
+        <li>復帰情報(リターンアドレスなど)を書き込む</li>
+        <li>関数の処理が始まって、変数が確保されたりする</li>
+    </ol>
+    <p>わかりにくいので図で説明します。</p>
+    <img alt="スタック領域" src="./pic/stack_area.png">
+    <p>プログラムが呼ばれると、スタック領域が確保されます。初期化コードはそのあとにmain関数の引数や、戻り値の領域、リターンアドレスといったものを書き込みます。(図の一番左)</p>
+    <p>何が言いたかったか、ですが、単純。関数も変数となんら変わりません！・・・てことです。いやね、これがわからんと関数ポインタが説明できんのよ。</p>
+</section>
+<section>
+    <h2>main関数の引数って何？</h2>
+    <p>先ほどさらっと「引数」という言葉を使いましたが、解説がまだでした。実例を見て行きましょう。</p>
+    <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/002_show_argv.c"></script>
+    <p>さて疑問が噴出していることと思いますが気にすることはありません。[i]とかifとかforとかはちゃんと後で説明します。これをコンパイルしてできた002_show_argv.exeを</p>
+    <pre class="brush: plain;">002_show_argv.exe arikitari na world!</pre>
+    <p>のように実行してみてください。すると</p>
+    <pre class="brush: plain;">argv[0]:[任意の場所]\002_show_argv.exe
+argv[1]:arikitari
+argv[2]:na
+argv[3]:world!
+</pre>
+    <p>
+        のようになったと思います。こんな感じでexeはコマンドライン引数を受け取れるんだなぁと思っていてください。<br>
+        これを使ってプログラムにいろいろな値を与えられるわけです。
+    </p>
+</section>
+<section>
+    <h2>関数を書く時の注意</h2>
+    <p>まずはこれを見てください。</p>
+    <script src="http://ideone.com/e.js/JoSm1E" type="text/javascript"></script>
+    <p>
+        なんと330行！まあ世の中には<a href="http://ideone.com/kNwsrx">ひとつの関数で2458行になる超絶関数(通称never ending function)</a>もあるにはあるのですが、さすがに紹介したくない。<br>
+        Ｃプログラミング診断室／最長不倒関数／プログラムの紹介<br>
+        <a href="http://www.pro.or.jp/~fuji/mybooks/cdiag/cdiag.10.2.html">http://www.pro.or.jp/~fuji/mybooks/cdiag/cdiag.10.2.html</a><br>
+        このプログラムの出典は<br>
+        Ｃプログラミング診断室／上司が問題／はじめに<br>
+        <a href="http://www.pro.or.jp/~fuji/mybooks/cdiag/cdiag.3.1.html">http://www.pro.or.jp/~fuji/mybooks/cdiag/cdiag.3.1.html</a><br>
+        で、そのサイトにこのプログラムの問題点が詳しく書いてありますが、見て行きましょう。
+    </p>
+    <ul>
+        <li>
+            変数名が混乱を招く名前になっていること
+        </li>
+        <li>
+            短くすることにこだわって後で見たときに分かりにくい名前にしている
+        </li>
+        <li>
+            意味のない大文字と小文字の使い分けをしている
+        </li>
+        <li>
+            フラグ(条件変化の一時保存変数)の多様
+        </li>
+        <li>
+            同じことの記述
+        </li>
+        <li>
+            main関数が長い
+        </li>
+        <li>
+            意味不明な初期化をしている
+        </li>
+    </ul>
+    <p>
+        などが挙げられます。他にもありますけどまあそこは慣れていくことで学んでください。<br>
+        プログラミングを行う時に大切なことは
+    </p>
+    <ul>
+        <li>
+            後で見直しても分かりやすいこと
+        </li>
+        <li>
+            書く量は少なくすること
+        </li>
+        <li>
+            関数は短く。<b>特に</b>main関数は最小限の長さで
+        </li>
+    </ul>
+    <p>
+        今回のソース、私が見ても途中で見るの嫌になりました。というか見るのが嫌になるのは私だけではないと思います。<br>
+        皆さんはこんなの書かないでください。不具合が発生しても原因究明に無駄に時間割くことになります。<br>
+        大事なことなのでもう一度言います。<br>
+        プログラムは<b>見やすく・短く・少なく</b>です。
+    </p>
+</section>

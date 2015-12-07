@@ -1,0 +1,289 @@
+---
+chapter: 6
+title: 条件文
+---
+<section>
+    <h2>bool型と_Bool型</h2>
+    <p>
+        C++では当初から真と偽を表すbool型が導入され、C言語でもC99で<code>stdbool.h</code>をincldueすることによりbool型が使えるようになりました。
+    </p>
+    <pre class="brush: cpp; first-line: 24;" title="stdbol.h (mingw32)">/*
+ * ISO C Standard:  7.16  Boolean type and values  &lt;stdbool.h&gt;
+ */
+
+#ifndef _STDBOOL_H
+#define _STDBOOL_H
+
+#ifndef __cplusplus
+
+#define bool    _Bool
+#define true    1
+#define false   0
+
+#else /* __cplusplus */
+
+/* Supporting &lt;stdbool.h&gt; in C++ is a GCC extension.  */
+#define _Bool   bool
+#define bool    bool
+#define false   false
+#define true    true
+
+#endif /* __cplusplus */
+
+/* Signal that all the definitions are present.  */
+#define __bool_true_false_are_defined   1
+
+#endif  /* stdbool.h */</pre>
+    <p>
+        C99のbool型は_Bool型をマクロを使って実装しています（マクロが何かは後ほど）。<br>
+        実際に使い方を見ましょう。
+    </p>
+    <pre class="brush: cpp;">#include &lt;stdbool.h&gt;
+int main(void){
+//前略
+bool no_first_skip = true;
+bool no_dct_decimate = false;
+//後略
+return 0;
+}</pre>
+    <p>C99のbool型は、真と偽はtrueとfalseに対応し、int型に変換すると1と0になります。それ以外の値を入れられることは保証されていません。</p>
+</section>
+<section>
+    <h2>条件文</h2>
+    <p>
+        前にbit演算のところでAND演算とかOR演算とかやったと思いますが、それをbit単位でなく、変数単位でやるのが条件文です。<br>
+        条件文の演算結果は事実上bool型になります。つまり、真と偽は、1と0に対応します。例を見てみましょう。
+    </p>
+    <pre class="brush: cpp;">int a = 10;
+int tmp = (5 == a);//0になる</pre>
+    <p>条件文は多くの場合大小比較や同値比較と同時に用いられるので、その演算子をまとめておきましょう。</p>
+    <table>
+        <tr>
+            <th>演算子</th>
+            <th>意味</th>
+        </tr>
+
+        <tr>
+            <td>==</td>
+            <td>等しい</td>
+        </tr>
+        <tr>
+            <td>!=</td>
+            <td>等しくない</td>
+        </tr>
+        <tr>
+            <td>&lt;=</td>
+            <td>(左は)(右)以下である</td>
+        </tr>
+        <tr>
+            <td>&gt;=</td>
+            <td>(右は)(左)以下である</td>
+        </tr>
+        <tr>
+            <td>&lt;</td>
+            <td>(左は)(右)より小さい</td>
+        </tr>
+        <tr>
+            <td>&gt;</td>
+            <td>(左は)(右)より大きい</td>
+        </tr>
+    </table>
+    <p>これに加えてAND,OR,NOT演算子があります</p>
+    <table>
+        <tr>
+            <th>演算子</th>
+            <th>意味</th>
+        </tr>
+        <tr>
+            <td>&amp;&amp;</td>
+            <td>かつ(AND)</td>
+        </tr>
+        <tr>
+            <td>||</td>
+            <td>または(OR)</td>
+        </tr>
+        <tr>
+            <td>!</td>
+            <td>否定(NOT)</td>
+        </tr>
+    </table>
+</section>
+<section>
+    <h2>if文</h2>
+    <p>条件式をそれ単体で使うことは、そこまで多くなく、if文やこの後紹介するwhile,for,do-while文と共に用いられます。</p>
+    <p>if文はプログラムを組む上で無くてはならないものです。例を見てみましょう。</p>
+    <pre class="brush: cpp;">if (条件式)
+//条件式が真の時
+else
+//条件式が偽の時</pre>
+    <p>
+        この書き方だと処理が一行しか書けません。複数行書くときは{}を使います。<br>
+        気をつけて欲しいのですが、{}がなくともブロックがあります。ところで言うまでもないですが、else節はなくても構いません。
+    </p>
+    <pre class="brush: cpp;">int first_number, second_number, third_number, max_number, center_number, min_number;
+//3つの変数になにか値を代入
+if (first_number > second_number){//１番目の数と２番めの数を比較
+	max_number = first_number;
+	center_number = second_number;
+}
+else{
+	max_number = second_number;
+	center_number = first_number;
+}
+if (third_number > max_number){//３番めの数と上で出した「１番目の数と２番めの数」の大きい方と比較
+	min_number = center_number;
+	center_number = max_number;
+	max_number = third_number;
+}
+else if (third_number > center_number){//３番めの数と上で出した「１番目の数と２番めの数」の小さい方と比較
+	min_number = center_number;
+	center_number = third_number;
+}
+else{//3番目の数が最小の時
+	min_number = third_number;
+}</pre>
+    <p>このようにif文 else if のように連ねて書くことも可能です。</p>
+    <pre class="brush: cpp;">if(5 == a)
+int x = 7;
+else
+x = 6;//これはだめ
+</pre>
+    <p>そもそもif文の中で変数を宣言しないようにしましょう。<b>変数を宣言したい、そう思ったら、直ちにその部分を関数化</b>しましょう。</p>
+    <section class="technique">
+        <h4>コーディングの作法</h4>
+        <p>if文では、else節に正常な動作を書くと、多くの場合ですっきり書けます。</p>
+        <pre class="brush: cpp;">if (条件文){
+//エラー処理
+}
+else{
+//正常動作
+}</pre>
+        <p>大切なのが、正常な動作の時の流れがもっとも簡潔であるように書くことです。</p>
+        <p>また、条件式を書く上での注意ですが、同値比較(==)は「=」が2つですが、ついうっかり1つにしてしまいがちです。そこで、このように書くようにしましょう</p>
+        <pre class="brush: cpp;">if (5 == a)//正しい書き方
+if (a == 5)//これも正しい書き方
+if (5 = a)//これはコンパイルエラー
+if (a = 5)//これはコンパイルエラーにならない、aに代入した後のaが0か否かが判別される</pre>
+        <p>
+            constがついた変数や、数値、マクロで定義された値を左側、変数を右側に持っていくようにすることがあります。<br>
+            こうすることで、書き間違えた時にコンパイルエラーになります。(変更不可能なものに代入しようとしています、など)
+        </p>
+        <p>エラー処理等、明確に実行文が1行しかない、と言える時を除き、原則{}はつけましょう。あとで文が増えた時に付け忘れるのを防ぐことができます。</p>
+    </section>
+</section>
+
+<section>
+    <h2>3項演算子</h2>
+    <p>if文とは一味ちがう書き方です。見てみましょう。</p>
+    <pre class="brush: cpp" title="3項演算子を使って書く">const int hoge = 17;
+const int isEven = (hoge % 2)? 1324 : 2432;</pre>
+    <pre class="brush: cpp;" title="if文で書く">const int hoge = 17;
+int isEven;
+if(hoge % 2){
+isEven = 1324;
+}
+else{
+isEven = 2432;
+}</pre>
+    <p>if文を使って書くより簡単ですし(スコープの問題がない)、代入する変数にconstが付けられます(ワタシ的にはここが美味しい)</p>
+    <p>
+        この書きかたですが、「一行で」かけるので、後に説明するプリプロセッサマクロでしばしば用いられます。<br>
+        ・・・って私は教わったんだけど、マクロにして使ったことってないなぁ。それくらいならinline関数にしちゃうし。
+    </p>
+</section>
+<section>
+    <h2>switch文</h2>
+    <p>if文が高級な条件分岐文とするならば、switch文は低級な条件分岐文といえますが、最大のメリットは、一度の条件式で複数の分岐が作れることです。</p>
+    <pre class="brush: cpp;">char time_when;
+//do something
+switch (time_when) {
+case 'a':
+	puts("朝");
+	break;
+case 'b':
+	puts("昼");
+	break;
+case 'c':
+	puts("夜");
+break;
+default:
+	break;
+}</pre>
+    <p>
+        switch文には必ず「default:」を書きましょう。<br>
+        「case 'c':」とかは「ラベル」といいます。後述するgoto文にも登場するので頭の片隅においておいてください。<br>
+        「break;」はswitch文を抜け出すために用います。もし、6行目の「break;」がなかった場合、5行目を実行した後8行目を実行します。つまり必ずしもbreakは必須ではありません。<br>
+        switch文を「低級な条件分岐文」と表現したのは、コンパイラの最適化段階の表現に近いからです。
+    </p>
+    <p>このswitch文、あとで出てくる列挙型(enum)とものすごく相性がいいです。#defineをわんさか書こうとしているそこのアナタ、enumを使いましょう。</p>
+</section>
+<section>
+    <h3>enum型(列挙型)</h3>
+    <p>enum型とは列挙型と呼ばれており、switch文と相性がいいんです。</p>
+    <pre class="brush: cpp;">enum status{
+STATE_TITLE,//タイトル
+STATE_MAIN,//メイン
+STATE_END,//リザルト
+};</pre>
+    <p>ここでstatusはタグ名と言います。タグ名を除いた";"の前まで全体が型となります。enumはtypedefして初めて真価を発揮します。</p>
+    <pre class="brush: cpp;">typedef enum{
+STATE_TITLE,//タイトル
+STATE_MAIN,//メイン
+STATE_END,//リザルト
+}status_t;</pre>
+    <p>typedefするときはタグ名は省略してもいいです。なお、「STATE_ENDのあとになんで","が置けるんだ？」と思ったあなた、よく勉強しています。enumに関しては書けるんです(C89からだっけ・・・？)</p>
+    <p>実際に例を見ていきましょう</p>
+    <pre class="brush: cpp;">#include "DxLib.h"
+#include &lt;stdio.h&gt;
+//  ゲーム状態
+typedef enum{
+STATE_TITLE,//タイトル
+STATE_MAIN,//メイン
+STATE_END,//リザルト
+}status_t;
+//タイトル処理
+status_t title(){
+//タイトルを描画
+//クリック押されたら
+return STATE_END;
+}
+//ゲームのメイン処理
+status_t gameMain(){
+//ゲーム処理
+//ゲーム終了したら
+return STATE_END;
+}
+//リザルト画面など
+status_t ending(){
+//リザルト画面描画
+//クリック押されたら
+return STATE_MAIN;
+}
+int main(){
+if(-1 == DxLib_Init()) return -1;
+status_t function_status = STATE_TITLE;
+while(CheckHitKey(KEY_INPUT_ESCAPE)){//function 'CheckHitKey' is DxLibrary's function.
+    switch (function_status){
+        case STATE_TITLE:
+            function_status = title();
+            break;
+        case STATE_MAIN:
+            function_status = gameMain();
+            break;
+        case STATE_END:
+            function_status = ending();
+            break;
+        default:
+            return -1;//エラー
+    }
+}
+DxLib_End();
+return 0;
+}
+</pre>
+    <p>
+        このようにゲームなど状態を管理するときに非常に便利です。<br>
+        まあ、戻り値にするよりポインターか参照(いずれも後述)を使って引数経由でやったほうがいい気もするけど、ケース・バイ・ケースなので。<br>
+        ていうか教えてないし。
+    </p>
+</section>

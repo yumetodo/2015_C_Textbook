@@ -1,0 +1,215 @@
+---
+chapter: 11
+title: 配列とポインタ演算
+---
+<section>
+    <h2>配列とポインタ演算</h2>
+    <p>
+        はい、配列です。しょっちゅうポインタと混同されるかわいそうな子です。<br>
+        ・・・ちゃんと説明します。配列とは、英語ではarrayと言います。配列は、（宣言時に指定される要素数）×（配列の要素の型の大きさ）分メモリーをスタック領域に確保し、<br>
+        それを配列の要素の型の大きさづつに区切ってつかいます。忘れがちなことですが、<b>配列は0から始まります。</b><br>
+        宣言する方法は
+    </p>
+    <pre class="brush: cpp;">int cell[10];</pre>
+    <p>
+        みたいに書きます。[]の中に要素数を指定するのですが、この要素数はコンパイル時にきまっている必要が有ります(C99/C11以外)。<br>
+        なのでC99/C11以外ではこんな書き方はできません。また、スタックにどれだけ空きがあるか分からないので避けるべきです。
+    </p>
+    <pre class="brush: cpp">unsigned int i = 10;
+int tmp[i];</pre>
+    <p>
+        まあ実際に使ってみましょう。
+    </p>
+    <pre class="brush: cpp; highlight:[8,15,25];">#include&lt;stdio.h&gt;
+#include&lt;time.h&gt;
+#if !defined (_countof)
+#define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
+#endif
+int main(void){
+int num[10] = { 0 };//(宣言時に指定される要素数)×(配列の要素の型の大きさ)分メモリーをスタック領域に確保
+for(unsigned int i = 0; i &lt; (sizeof(num) / sizeof(*num)); i++){
+    *(num + i) = clock();
+}
+for(unsigned int i = 0; i &lt; (sizeof(num) / sizeof(*num)); i++){
+    printf("%d,", *(num + i));
+}
+putchar('\n');
+int* num_p = num;
+printf(
+	"_countof(num):%d,_countof(num_p):%d, sizeof(num_:%d, sizeof(num_p):%d\n",
+	_countof(num), _countof(num_p), sizeof(num), sizeof(num_p)
+);
+for(unsigned int i = 0; i &lt; _countof(num); i++){
+    printf("%d,", *(num_p + i));
+}
+putchar('\n');
+for(unsigned int i = 0; i &lt; _countof(num); i++){
+    printf("%d,", num[i]);
+}
+putchar('\n');
+for(unsigned int i = 0; i &lt; _countof(num); i++){
+    printf("%d,", num_p[i]);
+}
+putchar('\n');
+for(unsigned int i = 0; i &lt; _countof(num); i++){
+    printf("&amp;num[%d]:%p\n", i, &amp;num[i]);
+}
+return 0;
+}</pre>
+    <p>実行例としてはこんなかんじでしょうか。</p>
+    <pre class="brush: plain">4859,4860,4860,4861,4861,4861,4862,4862,4862,4863,
+_countof(num):10,_countof(num_p):1, sizeof(num_:40, sizeof(num_p):4
+4859,4860,4860,4861,4861,4861,4862,4862,4862,4863,
+4859,4860,4860,4861,4861,4861,4862,4862,4862,4863,
+4859,4860,4860,4861,4861,4861,4862,4862,4862,4863,
+&amp;num[0]:0xbfa4d84c
+&amp;num[1]:0xbfa4d850
+&amp;num[2]:0xbfa4d854
+&amp;num[3]:0xbfa4d858
+&amp;num[4]:0xbfa4d85c
+&amp;num[5]:0xbfa4d860
+&amp;num[6]:0xbfa4d864
+&amp;num[7]:0xbfa4d868
+&amp;num[8]:0xbfa4d86c
+&amp;num[9]:0xbfa4d870</pre>
+    <p>
+        7行目で「{}」という見慣れないものが有りますが、初期化子リストとかいうものです。この場合初期化する意味はないのですが、説明のために使っています。<br>
+        リストに書いた値の個数が配列の要素数より小さい場合、残りの要素が0で埋められる、という性質を利用しています。
+    </p>
+    <p>
+        11～23行目と24～34行目を比較すれば分かるかと思いますが、以下の3つはすべて同値です。というより1番目の簡便記法が2番目と3番目です。
+    </p>
+    <pre class="brush: cpp;">*(num + i)
+num[i]
+i[num]</pre>
+    <p>ただし、<b>3行目の書き方はしないように</b>しましょう。普通1行目の書き方はめんどいので2行目のように「num[i]」と書きます。といえば分かるように、演算子「[]」は配列とはなんの関係もない演算子です(添字演算子って言います)。</p>
+    <p>
+        よく勘違いされますが、numの型は「int*」型ではありません。「int[10]」型です。どう違うかは多次元配列のとこで説明します。
+    </p>
+
+
+    <p>
+        ただし、sizeof演算子と&amp;演算子(アドレス演算子)のオペランドと配列初期化時の文字列リテラルと(lvalue)参照に代入するときは以外は常にポインタ型に読み替えられます。詳細はおいおい。
+    </p>
+    <p>
+        15行目を見てください。ここでnum代入したことでnum_pは配列numの先頭要素をさしています。だから配列と同じく*(num_p + i)とかnum_p[i]のように書けるわけです。<br>
+        ここについてはすぐに詳細解説をします。<br>
+        ちなみにこのポインタが配列を挿してなかった場合、num_pは要素数1の配列のように扱われるので、num_p[1]とすることは許されてもnum_p[2]と書いたり、num_p[1]に何かを代入することは許されません。
+    </p>
+    <pre class="brush: cpp;">sizeof(num) / sizeof(*num)</pre>
+    <p>
+        と書きましたが、これ自体は配列の要素数を求めています。さっきの話通り、numはint[10]型だからsizeof(num)でnumの配列全体の大きさが分かるわけです。あとは要素1つの大きさで割れば要素数が求まるよね？<br>
+        ちなみにこの方法は有名なのでnumofマクロとか_countofマクロとして知られ、Visual Studioでは、stdlib.hをincludeすると_countofマクロが使えます。(日本語版のMSDNの訳が腐ってるので英語版を見てください)<br>
+        <a href="https://msdn.microsoft.com/en-US/library/ms175773.aspx">https://msdn.microsoft.com/en-US/library/ms175773.aspx</a><br>
+        gccの場合は・・・ここを参照してください。<br>
+        <a href="http://stackoverflow.com/questions/4415530/equivalents-to-msvcs-countof-in-other-compilers">http://stackoverflow.com/questions/4415530/equivalents-to-msvcs-countof-in-other-compilers</a><br>
+        これらを使うと配列以外に使用するとコンパイルエラーになってくれます。だってあくまでint[10]型だからこんなことが出来るわけで、int*型に対して使えるわけがないよね？<br>
+    </p>
+</section>
+<section>
+    <h3>ポインタ演算</h3>
+    <p>
+        さて、先ほど*(num_p + i)のようにさらっとポインタ演算という機能を使っていました。これはもともとC言語の前身、B言語にあった機能です。<br>
+        ポインタ演算とは、ポインタに整数を足したり引いたりポインタ同士で引き算を行ったりする演算です。<br>
+        コンパイラーには、numの要素の型の大きさがわかっています。だってでっかく確保したメモリー空間をint型の大きさで区切っただけだもんね、あたりまえだよね。<br>
+        この区切り一つ一つを配列の要素と言うわけですが、これに1加算すると隣の区切りが見られる、ということになります。例を見てください。
+    </p>
+    <pre class="brush: cpp;">int hoge[] = {5, 7, 9, 4};
+int* hoge_p = hoge;
+printf("sizeof(int)=%d", sizeof(int));
+printf("hoge_p..%p:%d", hoge_p, *hoge_p);
+hoge_p++;
+printf("hoge_p..%p:%d", hoge_p, *hoge_p);</pre>
+    <p>hoge_pの値がsizeof(int)分加算されているのがわかると思います。配列でhoge[2]とか書けるのはこの機能のおかげなのです。まあ普段は意識することはないのですが。</p>
+</section>
+<section>
+    <h3>添字演算子とポインタと配列と</h3>
+    <pre class="brush: cpp; first-line: 14; highlight:[15];">    putchar('\n');
+int* num_p = num;
+printf(
+	"_countof(num):%d,_countof(num_p):%d, sizeof(num_:%d, sizeof(num_p):%d\n",
+	_countof(num), _countof(num_p), sizeof(num), sizeof(num_p)
+);
+</pre>
+    <p>
+        改めてさっきのプログラムの15行目を見てください。numはここでは配列の名前です。が、しかし単なるポインタ型に読み替えられます。つまり、numと書いた瞬間それはint[10]型からint*型に読み替えられているわけです。<br>
+        注意して欲しいのが、「Cでは、配列名の後に[]を付けずに配列名だけ単独で書くと、配列の先頭要素へのポインタ、という意味になります」というのは嘘だ、ということです。<br>
+        配列の宣言時に確かに[]を使いますが(俺は宣言時のをstd::vectorみたいに()にしてればこんな誤解はなかったと思うんだが)、それ以外では先にちらっと話した4つの例外を除き、<br>
+        <b>配列は問答無用でポインタに読み替えられます</b>。<br>
+        だって、これら全部同じ意味だもんね。あたりまえだよね。(プログラム例は前橋和弥著 C言語ポインタ完全制覇p57-p61を改変)
+    </p>
+    <blockquote>
+        <pre class="brush: cpp; highlight:[6,7,8];" title="プログラムA">#include&lt;stdio.h&gt;
+int main(void){
+int array[5] = { 0, 1, 2, 3, 4 };
+unsigned int i;
+int* p;
+for(p = &amp;array[0]; p != &amp;array[5]; p++){
+    printf("%d," *p);
+}
+
+return 0;
+}
+</pre>
+        <pre class="brush: cpp; first-line: 6;" title="プログラムB">p = &amp;array[0];
+for(i = 0; i &lt; 5; i++){
+printf("%d," *(p + i));
+}</pre>
+        <pre class="brush: cpp; first-line: 6;" title="プログラムC">p = array;
+//&amp;array[0] -&gt; &amp;*(array + 0) -&gt; array + 0 -&gt; array
+//みたいなイメージ。&amp;*(array + 0)なんて書き方はできないけど。
+for(i = 0; i &lt; 5; i++){
+printf("%d," *(p + i));
+}</pre>
+        <pre class="brush: cpp; first-line: 6;" title="プログラムD">p = array;
+for(i = 0; i &lt; 5; i++){
+printf("%d," p[i]);
+}</pre>
+        <pre class="brush: cpp; first-line: 6;" title="プログラムE">for(i = 0; i &lt; 5; i++){
+printf("%d," array[i]);
+}</pre>
+    </blockquote>
+    <p>それで、上記のプログラムからついでに</p>
+    <pre class="brush: cpp;">*(num + i)
+num[i]
+i[num]</pre>
+    <p>の証明もできたわけですが。</p>
+</section>
+<section>
+    <h2>配列とメモリー空間とオーバーフローとバッファオーバーラン</h2>
+    <p>なんどでもいいますが配列は単に大きく確保したメモリー空間を指定型に区切っているだけです。では確保していない領域に書き込もうとすると？</p>
+    <pre class="brush: cpp;">int arr[5];
+for(size_t i = 0; i &lt;= _countof(arr); i++){
+arr[i] = i;//配列の範囲をこえて値を書き込んでいる
+}</pre>
+    <p>
+        i=_countof(arr)の時、つまりi=5の時、書き込む位置は確保されていない領域です。<br>
+        <b>確保していない領域まで書き込んでしまうことをバッファオーバーランとかバッファオーバーフローといいます</b>。でこれの何が問題なのでしょうか？
+    </p>
+    <p>以前も関数のところで紹介した図を再度掲示します。よく見てください。</p>
+    <img alt="スタック領域" src="./pic/stack_area.png">
+    <p>
+        配列も自動変数なのでスタック領域に確保されます。で注意するべきなのが、配列の要素番号が大きい物のほうがebpレジスタ(スタックの底を示すもの)に近い方に確保されるということです。<br>配列のアドレスを要素数の小さい方から表示させた時にちゃんと値が増えていたことを思い出してください。
+    </p>
+    <p>
+        つまりなにが問題なのかというと、配列より先に確保された自動変数や関数のリターンアドレスがバッファオーバーランによって書き換えられることを意味しています。<br>
+        なので<code>return 0;</code>すらできなくなるわけです。<br>それだけならともかく、配列にファイルなどから何かを読み込む場合、バッファオーバーランを起こすプログラムに悪意のあるバイト列を読み込ませることでリターンアドレスを書き換え、悪意のあるプログラムを呼び出すことができます<br>
+        このように、バッファオーバーランとは実に恐ろしい問題なのです。<br>
+        それ故C言語では<b>確保していない領域にポインターを指すことすら認めていません</b>。
+    </p>
+    <p>なので<b>配列に何かを書き込むときは、必ず配列の要素数を確認するように</b>しましょう。</p>
+    <p>ただし、割とどうでもいいことですが、配列の要素数番目にポインターを指すことは認められています。書き込んだらダメですが。</p>
+    <p>
+        参考サイト<br>
+        6-1. バッファオーバーラン　その１「こうして起こる」 | IPA ISEC セキュアプログラミング講座<br>
+        <a href="http://www.ipa.go.jp/security/awareness/vendor/programmingv1/b06_01.html">http://www.ipa.go.jp/security/awareness/vendor/programmingv1/b06_01.html</a><br>
+        スタック領域の構成 | 分かりやす～いコンピュータ技術情報<br>
+        <a href="http://hack.ninja-web.net/academy003-060.htm">http://hack.ninja-web.net/academy003-060.htm</a>
+    </p>
+</section>
+<section>
+    <h2>argvについて補足</h2>
+    <p>今更言うまでもありませんがmain関数で引数を受け取る場合は</p>
+    <pre class="brush: cpp;">int main(int argc, char* argv[]);</pre>
+    <p>のように書きますが、argvはchar**型です。多分char*型の配列が渡されているんでしょう。で、argv[argc]はNULLポインタであることが保証されています。たま～に必要になる知識ですので覚えていてください。</p>
+</section>

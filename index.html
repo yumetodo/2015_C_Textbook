@@ -1,216 +1,187 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="utf-8" />
-    <title>目次とかとか | C言語講習会テキスト2015</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
-    <link rel="stylesheet" href="./css/style.css">
-    <script src="./syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
-    <script src="./syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
-    <script src="./syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
-    <link href="./syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
-    <link href="./syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript">
-        SyntaxHighlighter.all();
-    </script>
-</head>
-<body>
-    <h1>C言語講習会テキスト2015</h1>
+---
+title: "目次とかとか | C言語講習会テキスト2015"
+---
+<section>
+    <h2>はじめに</h2>
+    <p>みなさま、<strong>ナマステ</strong>。</p>
+    <p>
+        みなさま、はじめまして。このC言語テキストの執筆代表にいつの間にかなってしまった<a href="https://twitter.com/yumetodo">yumetodo</a>です。<br>
+        ゆっくりとありきたりなC言語講習を受けていってください。
+    </p>
+    <iframe width="312" height="176" src="http://ext.nicovideo.jp/thumb/sm25261912" scrolling="no" style="border:solid 1px #CCC;" frameborder="0">
+        <a href="http://www.nicovideo.jp/watch/sm25261912">【ニコニコ動画】【Minecraft】ありきたりな工業と魔術S2 Part01【ゆっくり実況】</a>
+    </iframe>
+    <p>・・・と某所の丸パクリのありきたりネタはさておき、このテキストについて説明していきます。はいそこ、すでにありきたりじゃないとか言わない。</p>
+    <p>
+        まず言いたいこととして、このテキストは一度読んだだけで理解できるようには作っていません。何周かして初めて理解できることもあるでしょう。<br>
+        なので、一度に理解しようとせず、何回も読むといいと思います。<br>
+    </p>
+    <p>
+        このC言語テキストは、東京理科大学神楽坂キャンパス所属のサークル、神楽坂一丁目通信局のprog部,DTM部,CG部のうちのprog部の後輩への指導用に書いたものですが、<br>
+        神楽坂一丁目通信局<br>
+        <a href="http://kagucho.net/">http://kagucho.net/</a><br>
+        一切内輪ネタは書いていませんので安心してお読みください。
+    </p>
+    <p>その他の注意事項もまとめましょうか。</p>
+</section>
+<section>
+    <h2>注意事項</h2>
+    <ul>
+        <li><b>一度読んでもきっと理解できません。</b></li>
+        <li>printf, scanf系, gets, atoi系関数は縛り。<b>とくにscanf。絶対に数値入力に使わせるものか。</b></li>
+        <li>Visual Studioでここで紹介した機能がすべて使えるわけではありません。<b>おのれVS。</b></li>
+        <li>
+            掲載しているソースコードは特に記述のない限り、以下の環境でコンパイルし実行できることを確認しています。
+            <ul>
+                <li>Visual Studio 2015 Community</li>
+                <li>msys2 mingw gcc5.2.0 -std=c14</li>
+                <li>msys2 mingw clang3.7.0 -std=c14</li>
+            </ul>
+        </li>
+        <li>
+            ここに掲載しているサンプルコードは特に記述のない限り、<b>一応</b>MIT Licenseです。<br>
+            また、<b>本の虫というサイトからの</b>コピペ・・・ゲフンゲフン、<b>引用部分はGNU Free Documentation License v1.3になります。</b>コピーレフトなんですね。<br>
+            もっともそれが目的を達する唯一の手段の場合はライセンスもクソもありませんし、プログラムとして意味を成さないものも同様ですが。<br>
+            ようは著作権を乗っ取らないでくれってこと。正直そこまでLicenseは気にしていない。自由なソフトウェアには賛成だけどコピーレフトはいただけないと思う。
+        </li>
+        <li>最低限四則演算が理解できていること、コマンドプロンプト or Terminalの操作が分かること、が前提となります。</li>
+        <li>C++への移行がスムーズに進むように心がけています(そういうテキストになっているとは言っていない)</li>
+        <li>時間的制約から誤字脱字の修正が間に合っていません。</li>
+        <li>少しでも疑問に思ったらまずググれ、ググって苦しんだあともう一度このテキストを見ればかなり理解できるはず。</li>
+        <li>私はMinecraftの動画が好きだ</li>
+        <li>ありきたりって意外と難しい</li>
+    </ul>
+</section>
+<section>
+    <h2>目次</h2>
+        {% assign sorted_docs = site.collections["c"].docs | sort: "chapter" %}
+        {% for doc in sorted_docs %}
+            {{ doc.chapter }}. <a href="{{ site.url }}{{ doc.url }}">{{ doc.title }}</a></br>
+        {% endfor %}
+</section>
+<section>
+    <h2>コンパイラー及び開発環境導入</h2>
     <section>
-        <h2>はじめに</h2>
-        <p>みなさま、<strong>ナマステ</strong>。</p>
-        <p>
-            みなさま、はじめまして。このC言語テキストの執筆代表にいつの間にかなってしまった<a href="https://twitter.com/yumetodo">yumetodo</a>です。<br>
-            ゆっくりとありきたりなC言語講習を受けていってください。
-        </p>
-        <iframe width="312" height="176" src="http://ext.nicovideo.jp/thumb/sm25261912" scrolling="no" style="border:solid 1px #CCC;" frameborder="0">
-            <a href="http://www.nicovideo.jp/watch/sm25261912">【ニコニコ動画】【Minecraft】ありきたりな工業と魔術S2 Part01【ゆっくり実況】</a>
-        </iframe>
-        <p>・・・と某所の丸パクリのありきたりネタはさておき、このテキストについて説明していきます。はいそこ、すでにありきたりじゃないとか言わない。</p>
-        <p>
-            まず言いたいこととして、このテキストは一度読んだだけで理解できるようには作っていません。何周かして初めて理解できることもあるでしょう。<br>
-            なので、一度に理解しようとせず、何回も読むといいと思います。<br>
-        </p>
-        <p>
-            このC言語テキストは、東京理科大学神楽坂キャンパス所属のサークル、神楽坂一丁目通信局のprog部,DTM部,CG部のうちのprog部の後輩への指導用に書いたものですが、<br>
-            神楽坂一丁目通信局<br>
-            <a href="http://kagucho.net/">http://kagucho.net/</a><br>
-            一切内輪ネタは書いていませんので安心してお読みください。
-        </p>
-        <p>その他の注意事項もまとめましょうか。</p>
-    </section>
-    <section>
-        <h2>注意事項</h2>
-        <ul>
-            <li><b>一度読んでもきっと理解できません。</b></li>
-            <li>printf, scanf系, gets, atoi系関数は縛り。<b>とくにscanf。絶対に数値入力に使わせるものか。</b></li>
-            <li>Visual Studioでここで紹介した機能がすべて使えるわけではありません。<b>おのれVS。</b></li>
+        <h3>Visual Studio 2015</h3>
+        <ol>
+            <li><a href="https://www.visualstudio.com/downloads/download-visual-studio-vs">https://www.visualstudio.com/downloads/download-visual-studio-vs</a>にアクセスする</li>
             <li>
-                掲載しているソースコードは特に記述のない限り、以下の環境でコンパイルし実行できることを確認しています。
-                <ul>
-                    <li>Visual Studio 2015 Community</li>
-                    <li>msys2 mingw gcc5.2.0 -std=c14</li>
-                    <li>msys2 mingw clang3.7.0 -std=c14</li>
-                </ul>
+                <img src="./pic/vs_2015_dl.png" alt="vs2015 dlpage"><br>
+                ダウンロードを押す。
             </li>
-            <li>
-                ここに掲載しているサンプルコードは特に記述のない限り、<b>一応</b>MIT Licenseです。<br>
-                また、<b>本の虫というサイトからの</b>コピペ・・・ゲフンゲフン、<b>引用部分はGNU Free Documentation License v1.3になります。</b>コピーレフトなんですね。<br>
-                もっともそれが目的を達する唯一の手段の場合はライセンスもクソもありませんし、プログラムとして意味を成さないものも同様ですが。<br>
-                ようは著作権を乗っ取らないでくれってこと。正直そこまでLicenseは気にしていない。自由なソフトウェアには賛成だけどコピーレフトはいただけないと思う。
-            </li>
-            <li>最低限四則演算が理解できていること、コマンドプロンプト or Terminalの操作が分かること、が前提となります。</li>
-            <li>C++への移行がスムーズに進むように心がけています(そういうテキストになっているとは言っていない)</li>
-            <li>時間的制約から誤字脱字の修正が間に合っていません。</li>
-            <li>少しでも疑問に思ったらまずググれ、ググって苦しんだあともう一度このテキストを見ればかなり理解できるはず。</li>
-            <li>私はMinecraftの動画が好きだ</li>
-            <li>ありきたりって意外と難しい</li>
-        </ul>
-    </section>
-    <section>
-        <h2>目次</h2>
-        <p style="margin: 0 0 0 10px;">0. <a href="./00the_first_step.html">はじめの一歩(00the_first_step.html)</a></p>
-        <ol style="margin-top: 0;">
-            <li><a href="./01arikitarina_basic.html">基本事項(01arikitarina_basic.html)</a></li>
-            <li><a href="./02variable.html">変数(02variable.html)</a></li>
-            <li><a href="./03calc.html">算術演算(03calc.html)</a></li>
-            <li><a href="./04bool.html">論理演算(04bool.html)</a></li>
-            <li><a href="./05function.html">関数(05function.html)</a></li>
-            <li><a href="./06conditional_state.html">条件文(06conditional_state.html)</a></li>
-            <li><a href="./07loop_and_split_code.html">ループとファイル分割(07roop_and_split_code.html)</a></li>
-            <li><a href="./08preprocess_and_constant.html">プロプロセッサと定数まとめ(08preprocess_and_constant.html)</a></li>
-            <li><a href="./09stdio.html">標準入出力(09stdio.html)</a></li>
-            <li><a href="./10pointer.html">ポインタ(10pointer.html)</a></li>
-            <li><a href="./11array.html">配列(11array.html)</a></li>
-            <li><a href="./12m.d.array.html">多次元配列(12m.d.array.html)</a></li>
-            <li><a href="./13structure.html">構造体(13structure.html)</a></li>
+            <li><a href="https://azulea.wordpress.com/2015/07/21/visual-studio-2015-vs2015-%E3%81%AE%E3%80%8C%E6%A8%99%E6%BA%96%E3%80%8D%E3%81%AB%E3%81%AF-c-%E3%81%8C%E5%90%AB%E3%81%BE%E3%82%8C%E3%81%A6%E3%81%84%E3%81%AA%E3%81%84/">https://azulea.wordpress.com/2015/07/21/visual-studio-2015-vs2015-の「標準」には-c-が含まれていない</a>を参照してカスタムインストールでインストール。</li>
         </ol>
     </section>
     <section>
-        <h2>コンパイラー及び開発環境導入</h2>
-        <section>
-            <h3>Visual Studio 2015</h3>
-            <ol>
-                <li><a href="https://www.visualstudio.com/downloads/download-visual-studio-vs">https://www.visualstudio.com/downloads/download-visual-studio-vs</a>にアクセスする</li>
-                <li>
-                    <img src="./pic/vs_2015_dl.png" alt="vs2015 dlpage"><br>
-                    ダウンロードを押す。
-                </li>
-                <li><a href="https://azulea.wordpress.com/2015/07/21/visual-studio-2015-vs2015-%E3%81%AE%E3%80%8C%E6%A8%99%E6%BA%96%E3%80%8D%E3%81%AB%E3%81%AF-c-%E3%81%8C%E5%90%AB%E3%81%BE%E3%82%8C%E3%81%A6%E3%81%84%E3%81%AA%E3%81%84/">https://azulea.wordpress.com/2015/07/21/visual-studio-2015-vs2015-の「標準」には-c-が含まれていない</a>を参照してカスタムインストールでインストール。</li>
-            </ol>
-        </section>
-        <section>
-            <h3>Visual Studio 2013</h3>
-            <ol>
-                <li>
-                    まずは普通にVisual Studio 2013をインストールする。私はCommunity版で十分に満足しているが、どうしてもというならProfessional版でもいいだろう。<br>
-                    <a href="http://rigaya34589.blog135.fc2.com/blog-entry-539.html">rigayaの日記兼メモ帳  Visual Studio Community 2013</a><br>
-                    大事なのは可能な限り最新版を使うということだ。ただでさえ規格準拠の遅いVCの古いバージョンを使うとかプロのどM以外の何物でもない。
-                </li>
-                <li>
-                    Visual C++ Compiler November 2013 CTPを入れる<br>
-                    <a href="http://nekko1119.hatenablog.com/entry/2013/11/19/062321">Visual C++ Compiler November 2013 CTPがやってきた！ - C++と色々</a><br>
-                    <a href="http://blog.livedoor.jp/haruka_sao/archives/52056922.html">遥佐保の技術メモ:[C++]VisualStudio2013NovCTP：C++17(予定)resumable/await紹介 - livedoor Blog（ブログ）</a><br>
-                    <a href="http://blogs.msdn.com/b/vcblog/archive/2013/11/18/announcing-the-visual-c-compiler-november-2013-ctp.aspx">Announcing the Visual C++ Compiler November 2013 CTP - Visual C++ Team Blog - Site Home - MSDN Blogs</a><br>
-                    を参考に。これによりC++11や14の機能への対応が増える。constexprとかconstexprとか戻り値の型推論とかdecltype(auto)とか。
-                </li>
-            </ol>
-        </section>
-        <section>
-            <h3>gcc, clang</h3>
-            <ol>
-                <li>
-                    <a href="https://github.com/MaverickTse/lsw-build2/blob/master/readme_jp.md">lsw-build2/readme_jp.md at master · MaverickTse/lsw-build2</a><br>
-                    の「初回のビルド方法 (半自動版)」の項の手順7まで実行する。ただし MSYS2のコンソールを閉じないこと。
-                </li>
-                <li>
-                    <pre class="brush: plain">pacman -S mingw-w64-x86_64-gdb
+        <h3>Visual Studio 2013</h3>
+        <ol>
+            <li>
+                まずは普通にVisual Studio 2013をインストールする。私はCommunity版で十分に満足しているが、どうしてもというならProfessional版でもいいだろう。<br>
+                <a href="http://rigaya34589.blog135.fc2.com/blog-entry-539.html">rigayaの日記兼メモ帳  Visual Studio Community 2013</a><br>
+                大事なのは可能な限り最新版を使うということだ。ただでさえ規格準拠の遅いVCの古いバージョンを使うとかプロのどM以外の何物でもない。
+            </li>
+            <li>
+                Visual C++ Compiler November 2013 CTPを入れる<br>
+                <a href="http://nekko1119.hatenablog.com/entry/2013/11/19/062321">Visual C++ Compiler November 2013 CTPがやってきた！ - C++と色々</a><br>
+                <a href="http://blog.livedoor.jp/haruka_sao/archives/52056922.html">遥佐保の技術メモ:[C++]VisualStudio2013NovCTP：C++17(予定)resumable/await紹介 - livedoor Blog（ブログ）</a><br>
+                <a href="http://blogs.msdn.com/b/vcblog/archive/2013/11/18/announcing-the-visual-c-compiler-november-2013-ctp.aspx">Announcing the Visual C++ Compiler November 2013 CTP - Visual C++ Team Blog - Site Home - MSDN Blogs</a><br>
+                を参考に。これによりC++11や14の機能への対応が増える。constexprとかconstexprとか戻り値の型推論とかdecltype(auto)とか。
+            </li>
+        </ol>
+    </section>
+    <section>
+        <h3>gcc, clang</h3>
+        <ol>
+            <li>
+                <a href="https://github.com/MaverickTse/lsw-build2/blob/master/readme_jp.md">lsw-build2/readme_jp.md at master · MaverickTse/lsw-build2</a><br>
+                の「初回のビルド方法 (半自動版)」の項の手順7まで実行する。ただし MSYS2のコンソールを閉じないこと。
+            </li>
+            <li>
+                <pre class="brush: plain">pacman -S mingw-w64-x86_64-gdb
 pacman -S libxml2-devel
 pacman -S mingw-w64-x86_64-clang </pre>
-                    と実行する。最後の2行はclangも入れる人のみ
-                </li>
-                <li>コンソールを閉じる</li>
-                <li>
-                    ビルドするときは、<br>
-                    32bit向けにはmingw32_shell.bat を、64bit向けにはmingw64_shell.batを実行し、その上でコンパイラーを走らせる。
-                </li>
-                <li>
-                    コンパイラーとかとかを更新するときは上記リンクの手順5～7を繰り返す。
-                </li>
-            </ol>
-        </section>
+                と実行する。最後の2行はclangも入れる人のみ
+            </li>
+            <li>コンソールを閉じる</li>
+            <li>
+                ビルドするときは、<br>
+                32bit向けにはmingw32_shell.bat を、64bit向けにはmingw64_shell.batを実行し、その上でコンパイラーを走らせる。
+            </li>
+            <li>
+                コンパイラーとかとかを更新するときは上記リンクの手順5～7を繰り返す。
+            </li>
+        </ol>
+    </section>
+</section>
+<section>
+    <h2>The MIT License (MIT)</h2>
+    <p>The MIT License (MIT)</p>
+    <p>Copyright (c) 2015 神楽坂一丁目通信局Prog部</p>
+    <p>Permission is hereby granted, free of charge, to any person obtaining a copy<br>
+    of this software and associated documentation files (the "Software"), to deal<br>
+    in the Software without restriction, including without limitation the rights<br>
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<br>
+    copies of the Software, and to permit persons to whom the Software is<br>
+    furnished to do so, subject to the following conditions:</p>
+    <p>The above copyright notice and this permission notice shall be included in<br>
+    all copies or substantial portions of the Software.</p>
+    <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<br>
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<br>
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE<br>
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<br>
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<br>
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN<br>
+    THE SOFTWARE.</p>
+</section>
+<section>
+    <h2>執筆者・開発環境・お問い合わせ</h2>
+    <section>
+        <h3>執筆者</h3>
+        <ul>
+            <li><a href="https://twitter.com/yumetodo">yumetodo</a>(どうやら主筆らしい)</li>
+            <li>神御田</li>
+            <li>たけ</li>
+        </ul>
     </section>
     <section>
-        <h2>The MIT License (MIT)</h2>
-        <p>The MIT License (MIT)</p>
-        <p>Copyright (c) 2015 神楽坂一丁目通信局Prog部</p>
-        <p>Permission is hereby granted, free of charge, to any person obtaining a copy<br>
-        of this software and associated documentation files (the "Software"), to deal<br>
-        in the Software without restriction, including without limitation the rights<br>
-        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell<br>
-        copies of the Software, and to permit persons to whom the Software is<br>
-        furnished to do so, subject to the following conditions:</p>
-        <p>The above copyright notice and this permission notice shall be included in<br>
-        all copies or substantial portions of the Software.</p>
-        <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<br>
-        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,<br>
-        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE<br>
-        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER<br>
-        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,<br>
-        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN<br>
-        THE SOFTWARE.</p>
+        <h3>校正</h3>
+        <ul>
+            <li>yuchu</li>
+            <li>GAMEBOY</li>
+        </ul>
     </section>
     <section>
-        <h2>執筆者・開発環境・お問い合わせ</h2>
-        <section>
-            <h3>執筆者</h3>
-            <ul>
-                <li><a href="https://twitter.com/yumetodo">yumetodo</a>(どうやら主筆らしい)</li>
-                <li>神御田</li>
-                <li>たけ</li>
-            </ul>
-        </section>
-        <section>
-            <h3>校正</h3>
-            <ul>
-                <li>yuchu</li>
-                <li>GAMEBOY</li>
-            </ul>
-        </section>
-        <section>
-            <h3>お世話になったサイト、参考書</h3>
-            <dl>
-                <dt>本の虫</dt>
-                <dd><a href="http://cpplover.blogspot.jp/">http://cpplover.blogspot.jp/</a></dd>
-                <dd>著作者 : 江添亮</dd>
-                <dd>License : GNU Free Documentation License v1.3</dd>
-                <dt>C++11の文法と機能(C++11: Syntax and Feature)</dt>
-                <dd><a href="http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml">http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml</a></dd>
-                <dd>著作者 : 江添亮</dd>
-                <dd>License : GNU Free Documentation License v1.3</dd>
-                <dt>C言語ポインタ完全制覇</dt>
-                <dd>著作者 : 前橋和也</dd>
-                <dd>License : 未調査</dd>
-                <dt>Ｃプログラミング診断室</dt>
-                <dd><a href="http://www.pro.or.jp/~fuji/mybooks/cdiag/index.html">http://www.pro.or.jp/~fuji/mybooks/cdiag/index.html</a></dd>
-                <dd>著作者 : 藤原博文</dd>
-                <dd>License : 未調査</dd>
-            </dl>
-        </section>
-        <p>
-            開発はURLからお察しの通りGiuHubで行っています。<br>
-            yumetodo/2015_C_Textbook 神楽坂一丁目通信局C言語講習会テキスト<br>
-            <a href="https://github.com/yumetodo/2015_C_Textbook/tree/gh-pages">https://github.com/yumetodo/2015_C_Textbook/tree/gh-pages</a>
-        </p>
-        <p>
-            内容に誤りを見つけた際、こんなことも書いてほしいという場合などなどは<br>
-            Issues · yumetodo/2015_C_Textbook <br>
-            <a href="https://github.com/yumetodo/2015_C_Textbook/issues">https://github.com/yumetodo/2015_C_Textbook/issues</a><br>
-            または<br>
-            Twitter @yumetodo <br>
-            <a href="https://twitter.com/yumetodo">https://twitter.com/yumetodo</a><br>
-            まで。
-        </p>
+        <h3>お世話になったサイト、参考書</h3>
+        <dl>
+            <dt>本の虫</dt>
+            <dd><a href="http://cpplover.blogspot.jp/">http://cpplover.blogspot.jp/</a></dd>
+            <dd>著作者 : 江添亮</dd>
+            <dd>License : GNU Free Documentation License v1.3</dd>
+            <dt>C++11の文法と機能(C++11: Syntax and Feature)</dt>
+            <dd><a href="http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml">http://ezoeryou.github.io/cpp-book/C++11-Syntax-and-Feature.xhtml</a></dd>
+            <dd>著作者 : 江添亮</dd>
+            <dd>License : GNU Free Documentation License v1.3</dd>
+            <dt>C言語ポインタ完全制覇</dt>
+            <dd>著作者 : 前橋和也</dd>
+            <dd>License : 未調査</dd>
+            <dt>Ｃプログラミング診断室</dt>
+            <dd><a href="http://www.pro.or.jp/~fuji/mybooks/cdiag/index.html">http://www.pro.or.jp/~fuji/mybooks/cdiag/index.html</a></dd>
+            <dd>著作者 : 藤原博文</dd>
+            <dd>License : 未調査</dd>
+        </dl>
     </section>
-</body>
-</html>
+    <p>
+        開発はURLからお察しの通りGiuHubで行っています。<br>
+        yumetodo/2015_C_Textbook 神楽坂一丁目通信局C言語講習会テキスト<br>
+        <a href="https://github.com/yumetodo/2015_C_Textbook/tree/gh-pages">https://github.com/yumetodo/2015_C_Textbook/tree/gh-pages</a>
+    </p>
+    <p>
+        内容に誤りを見つけた際、こんなことも書いてほしいという場合などなどは<br>
+        Issues · yumetodo/2015_C_Textbook <br>
+        <a href="https://github.com/yumetodo/2015_C_Textbook/issues">https://github.com/yumetodo/2015_C_Textbook/issues</a><br>
+        または<br>
+        Twitter @yumetodo <br>
+        <a href="https://twitter.com/yumetodo">https://twitter.com/yumetodo</a><br>
+        まで。
+    </p>
+</section>

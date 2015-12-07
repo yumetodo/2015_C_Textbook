@@ -1,0 +1,30 @@
+{% capture chapter_title %}{% if page.chapter %}第{{ page.chapter }}章 {% endif %}~{{ page.title }}~{% endcapture %}
+
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <title>{{chapter_title}}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sanitize.css/2.0.0/sanitize.min.css">
+    <link rel="stylesheet" href="{{site.url}}/css/style.css">
+    <script src="{{site.url}}/syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="{{site.url}}/syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+    <script src="{{site.url}}/syntaxhighlighter/scripts/shBrushCpp_kai.js" type="text/javascript"></script>
+    <link href="{{site.url}}/syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+    <link href="{{site.url}}/syntaxhighlighter/styles/shThemeMidnight_likeVS.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+
+</head>
+<body>
+    <h1>{{ chapter_title }}</h1>
+    {% if page.description %}
+        <h1>{{ page.description }}</h1>
+    {% endif %}
+    {% include article_nav.html %}
+    {{ content }}
+    {% include article_nav.html %}
+</body>
+</html>

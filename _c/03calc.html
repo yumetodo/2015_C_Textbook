@@ -1,0 +1,79 @@
+---
+chapter: 3
+title: 算術演算
+---
+<section>
+    <h2>算術演算</h2>
+    <p>やっぱり計算出来ないとプログラミングは始まりません。というわけでまずは算術演算。</p>
+    <pre class="brush: cpp;">int i = 0, delay_time;
+//中略
+i = i + 1;
+double time = 8.5 - 2.1;
+double cure = 1.5 * time;
+double damage = cure / 10;
+unsigned int temp1 = delay_time / 60;
+tm_sec += delay_time % 60;
+i += 1;
+cure -= 10;
+i++;
+++i;
+i--;
+--i;</pre>
+    <p>3行目から7行目が四則演算ですね。6行目の割り算は整数精度で行われ、小数点以下は0に近い方向に切り捨てられることを忘れないで下さい。</p>
+    <p>8行目は割り算の余りを求めるものです。これは整数精度の時のみ使えます。もし浮動小数点型で割り算のあまりを求めたいときは、math.hのfmod関数を使いましょう。</p>
+    <p>9行目は2行目の略記です。10行目のように引き算などほかの演算記号も同じように使えます。</p>
+    <p>11行目と12行目はインクリメント演算子、13行目と14行目はデクリメント演算子と呼ばれます。1増やしたり1減らしたりする処理を簡便に書くことができます。</p>
+    <table>
+        <tr> <th>演算</th><th>演算子</th><th>例</th><th>意味</th> </tr>
+        <tr> <td rowspan="2">インクリメント</td><td rowspan="2" class="Cent">++</td><td>a++</td><td>a に 1 を加える（後置演算）</td> </tr>
+        <tr> <td>++a</td><td>a に 1 を加える（前置演算）</td> </tr>
+        <tr> <td rowspan="2">デクリメント</td><td rowspan="2" class="Cent">--</td><td>a--</td><td>a から 1 を引く（後置演算）</td> </tr>
+        <tr> <td>--a</td><td>a から 1 を引く（前置演算）</td> </tr>
+    </table>
+    <p>使用上の注意です。下のコードを見てくだい。</p>
+    <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/increment_decrement.c"></script>
+    <p>インクリメント・デクリメント演算子は前置と後置で意味が変わるので注意です。私は覚えるのがめんdいので、後置しか使わない派です。</p>
+</section>
+<section>
+    <h2>暗黙の型変換とキャスト</h2>
+    <p>ここまでの例ではすべて計算するものの型は揃っていました。では違う場合はどうなるでしょう？</p>
+    <pre class="brush: cpp;">const int a = 10;
+const double b = 3;
+auto ans = a / b;
+int ans2 = ans;
+auto ans3 = (int)ans;</pre>
+    <p>変数ansの型はdouble、ansには3.3333333(以下略)が入ります。</p>
+    <p>一方でans2の型はint、ans2には3が入ります。</p>
+    <p>また3行目のように型を明示することもできます。これを「キャスト」といいます。ans3の型はint型になります。</p>
+    <dl>
+        <dt>式の中で行われる変換</dt>
+        <dd>
+            優先順位の高い型に変換されます。優先順位は<br>
+            <q>bool &lt; char &lt; short &lt; int &lt; long &lt; long long &lt; float &lt; double</q><br>
+            です。
+        </dd>
+        <dt>代入時の変換</dt>
+        <dd>左辺の型と右辺の型が異なっている場合は、左辺の型に変換します。</dd>
+        <dt>キャスト時の変換</dt>
+        <dd>有無をいわさずに指定した型に変換されます。</dd>
+    </dl>
+    <p>
+        この法則にしたがって解釈すると、3行目は、aの型はint、bの型はdoubleなのでaがdouble型に変換され(式の中で行われる変換)、double型同士の計算となります。<br>
+        また4行目は変数ansの型はdoubleですが、左辺のans2の型がintなのでint型に変換されます(代入時の変換)。
+    </p>
+    <p>このことを利用して割り算の余り(surplus)を求めてみましょう。</p>
+    <pre class="brush: cpp;">const double input = 23;
+const int divisor = 7;
+const int temp = (int)input / divisor;
+const double surplus = input - (divisor * temp);</pre>
+    <p>inputをキャストする必要があるのか？と怒られそうですが、べつに整数精度の結果で事足るのでキャストしました。</p>
+    <p>よくキャストを「ある型とみなす」と説明する人が居ますが、誤りです。bitの並びが変わることもあることからわかるように、実際に変換されます。</p>
+    <section class="technique">
+        <h3>コーディングの作法</h3>
+        <p>C言語のキャストは、非常に強力で、どんな型にでも変換ができます。ゆえにしてはいけない型変換もできてしまいます。</br>
+            もっとも、まともなコーディングをしていれば、malloc,calloc,realloc関数以外でキャストを使う場面はないはずです。<br>
+            もしあなたがキャストを使おうとしているならば、それはあなたが寝ぼけているのか、ライブラリ作者がうっかりしている、ということになります。<br>
+            後者なら、作者に文句を言いましょう。(実際私はDxLibraryの作者に色の扱いについて文句を言って、Ver 3.13eで修正してもらいました)
+        </p>
+        <p>signedとunsignedの変換はとくに理由のない限りしないようにしましょう。</p>
+</section>

@@ -1,0 +1,24 @@
+collections:
+    c:
+        output: true
+    misc:
+        output: true
+
+defaults:
+    -
+        scope:
+            path: ""
+        values:
+            layout: default
+    -
+        scope:
+            path: c
+        values:
+            layout: article
+    -
+        scope:
+            path: misc
+        values:
+            layout: article
+
+url: https://yumetodo.github.io/2015_C_Textbook

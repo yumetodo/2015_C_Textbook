@@ -1,0 +1,28 @@
+{%if page.chapter %}
+    {% assign previous = page.chapter | minus: 1 %}
+    {% assign next = page.chapter | plus: 1 %}
+
+    {% for doc in site.collections[page.collection].docs %}
+        {% if doc.chapter == previous %}
+            {% assign previous_url = doc.url %}
+        {% elsif doc.chapter == next %}
+            {% assign next_url = doc.url %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<nav class="bottom">
+    <ul>
+        {% if previous_url %}
+            <li><a href="{{ site.url }}{{ previous_url }}" title="前頁">prev</a></li>
+        {% else %}
+            <li class="disable">prev</li>
+        {% endif %}
+            <li><a href="{{ site.url }}" title="目次">main</a></li>
+        {% if next_url %}
+            <li><a href="{{ site.url }}{{ next_url }}" title="次頁">next</a></li>
+        {% else %}
+            <li class="disable">next</li>
+        {% endif %}
+    </ul>
+</nav>
