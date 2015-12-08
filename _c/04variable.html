@@ -219,7 +219,7 @@ unsigned char temp = 6;</pre>
 </section>
 <section>
     <h2 id="typedef">typedef</h2>
-    <p>C言語にはtypedefという便利な機能があります。さっそく使ってみましょう。</p>
+    <p>C言語にはtypedefという機能があります。さっそく使ってみましょう。</p>
     <pre class="brush: cpp;">typedef unsigned long DWORD;
 typedef DWORD COLORREF;
 unsigned long window_head = 0x00FFCCFF;
@@ -230,7 +230,7 @@ COLORREF window_head = 0x00FFCCFF;</pre>
         2行目ではDWORD型にCOLORREF型という別名をつけています。
     </p>
     <p>
-        こんな風に別名を付けて何がありがたいかというと、長い型名を短くかけるというのもそうですが、型名を調べるだけでそのデータの格納方法がわかるということです。<br>
+        こんな風に別名を付けて何がありがたいかというと、型名を調べるだけでそのデータの格納方法がわかるということです。<br>
         3行目では何をしているのかさっぱりですが、4行目を見るとなんか色が関係することをやってるんだな、と察せます。<br>
         さらに「COLORREF」でぐぐれば、その詳細もわかります。<br>
         <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/dd183449%28v=vs.85%29.aspx">https://msdn.microsoft.com/en-us/library/windows/desktop/dd183449%28v=vs.85%29.aspx</a><br>
