@@ -3,56 +3,10 @@ chapter: 7
 title: 条件文
 ---
 <section>
-    <h2>bool型と_Bool型</h2>
-    <p>
-        C++では当初から真と偽を表すbool型が導入され、C言語でもC99で<code>stdbool.h</code>をincldueすることによりbool型が使えるようになりました。
-    </p>
-    <pre class="brush: cpp; first-line: 24;" title="stdbol.h (mingw32)">/*
- * ISO C Standard:  7.16  Boolean type and values  &lt;stdbool.h&gt;
- */
-
-#ifndef _STDBOOL_H
-#define _STDBOOL_H
-
-#ifndef __cplusplus
-
-#define bool    _Bool
-#define true    1
-#define false   0
-
-#else /* __cplusplus */
-
-/* Supporting &lt;stdbool.h&gt; in C++ is a GCC extension.  */
-#define _Bool   bool
-#define bool    bool
-#define false   false
-#define true    true
-
-#endif /* __cplusplus */
-
-/* Signal that all the definitions are present.  */
-#define __bool_true_false_are_defined   1
-
-#endif  /* stdbool.h */</pre>
-    <p>
-        C99のbool型は_Bool型をマクロを使って実装しています（マクロが何かは後ほど）。<br>
-        実際に使い方を見ましょう。
-    </p>
-    <pre class="brush: cpp;">#include &lt;stdbool.h&gt;
-int main(void){
-//前略
-bool no_first_skip = true;
-bool no_dct_decimate = false;
-//後略
-return 0;
-}</pre>
-    <p>C99のbool型は、真と偽はtrueとfalseに対応し、int型に変換すると1と0になります。それ以外の値を入れられることは保証されていません。</p>
-</section>
-<section>
     <h2>条件文</h2>
     <p>
         前にbit演算のところでAND演算とかOR演算とかやったと思いますが、それをbit単位でなく、変数単位でやるのが条件文です。<br>
-        条件文の演算結果は事実上bool型になります。つまり、真と偽は、1と0に対応します。例を見てみましょう。
+        条件文の演算結果は真ならば1、偽であれば0となります。例を見てみましょう。
     </p>
     <pre class="brush: cpp;">int a = 10;
 int tmp = (5 == a);//0になる</pre>
@@ -286,4 +240,50 @@ return 0;
         まあ、戻り値にするよりポインターか参照(いずれも後述)を使って引数経由でやったほうがいい気もするけど、ケース・バイ・ケースなので。<br>
         ていうか教えてないし。
     </p>
+</section>
+<section>
+    <h2>bool型と_Bool型</h2>
+    <p>
+        C++では当初から真と偽を表すbool型が導入され、C言語でもC99で<code>stdbool.h</code>をincldueすることによりbool型が使えるようになりました。
+    </p>
+    <pre class="brush: cpp; first-line: 24;" title="stdbol.h (mingw32)">/*
+ * ISO C Standard:  7.16  Boolean type and values  &lt;stdbool.h&gt;
+ */
+
+#ifndef _STDBOOL_H
+#define _STDBOOL_H
+
+#ifndef __cplusplus
+
+#define bool    _Bool
+#define true    1
+#define false   0
+
+#else /* __cplusplus */
+
+/* Supporting &lt;stdbool.h&gt; in C++ is a GCC extension.  */
+#define _Bool   bool
+#define bool    bool
+#define false   false
+#define true    true
+
+#endif /* __cplusplus */
+
+/* Signal that all the definitions are present.  */
+#define __bool_true_false_are_defined   1
+
+#endif  /* stdbool.h */</pre>
+    <p>
+        C99のbool型は_Bool型をマクロを使って実装しています（マクロが何かは後ほど）。<br>
+        実際に使い方を見ましょう。
+    </p>
+    <pre class="brush: cpp;">#include &lt;stdbool.h&gt;
+int main(void){
+//前略
+bool no_first_skip = true;
+bool no_dct_decimate = false;
+//後略
+return 0;
+}</pre>
+    <p>C99のbool型は、真と偽はtrueとfalseに対応し、int型に変換すると1と0になります。それ以外の値を入れられることは保証されていません。</p>
 </section>
