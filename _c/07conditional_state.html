@@ -67,13 +67,14 @@ int tmp = (5 == a);//0になる</pre>
     <p>条件式をそれ単体で使うことは、そこまで多くなく、if文やこの後紹介するwhile,for,do-while文と共に用いられます。</p>
     <p>if文はプログラムを組む上で無くてはならないものです。例を見てみましょう。</p>
     <pre class="brush: cpp;">if (条件式)
-//条件式が真の時
+	/* 条件式が真の時 */;
 else
-//条件式が偽の時</pre>
+	/* 条件式が偽の時 */;</pre>
     <p>
         この書き方だと処理が一行しか書けません。複数行書くときは{}を使います。<br>
-        気をつけて欲しいのですが、{}がなくともブロックがあります。ところで言うまでもないですが、else節はなくても構いません。
+        気をつけて欲しいのですが、{}がなくともブロックがあります。その場合は次の<code>;</code>までがブロックとなります。
     </p>
+    <p>ところで言うまでもないですが、else節はなくても構いません。</p>
     <pre class="brush: cpp;">int first_number, second_number, third_number, max_number, center_number, min_number;
 //3つの変数になにか値を代入
 if (first_number > second_number){//１番目の数と２番めの数を比較
