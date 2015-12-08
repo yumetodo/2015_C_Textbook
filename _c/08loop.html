@@ -7,43 +7,58 @@ title: ループ
     <p>プログラミング言語へのループ文の導入は画期的なものでした。while文はC言語におけるもっとも簡単なループ文です。</p>
     <pre class="brush: cpp;">while (継続条件) 実行文;</pre>
     <p>if文と同様、実行文は{}を使って複数行書くことができます。例を見てみましょう。</p>
-    <pre class="brush: cpp;">while ('\n' != getchar());</pre>
+    <pre class="brush: cpp;">while (getchar() != '\n');</pre>
     <p>例えば、</p>
-    <pre class="brush: cpp;">#include&lt;stdio.h&gt;
-#include&lt;stdlib.h&gt;
-int get_integer_num(const int max, const int min){
-//機能：標準入力を数字に変換する。
-//引数：戻り値の最大値,戻り値の最小値
-//戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
-char s[100];
+    <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
 
-if (NULL == fgets(s, 100, stdin)){
-    if (feof(stdin)){//エラーの原因がEOFか切り分け
-        return EOF;
-    }
-    //改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
-    size_t i;
-    for(i = 0; i &lt; 100 &amp;&amp; '\0' == s[i]; i++);//strlenもどき
-    if('\n' != s[i - 1]) while(getchar() != '\n');//入力ストリームを掃除
-    return INT_MIN;
+int get_integer_num(const int max, const int min)
+{
+	//機能：標準入力を数字に変換する。
+	//引数：戻り値の最大値,戻り値の最小値
+	//戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
+	char s[100];
+
+	if (fgets(s, 100, stdin) == NULL) {
+		// エラーの原因がEOFか切り分け
+		if (feof(stdin))
+			return EOF;
+
+		// 改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
+		size_t i;
+		for (i = 0; i &lt; 100 &amp;&amp; s[i] == '\0'; i++); // strlenもどき
+
+		if (s[i - 1] != '\n')
+			while (getchar() != '\n'); // 入力ストリームを掃除
+
+		return INT_MIN;
+	}
+
+	if (s[0] == '\n')
+		return INT_MIN;
+
+	errno = 0;
+	const long t = strtol(s, NULL, 10);
+	if (errno != 0 || t &lt; min || t &lt; max)
+		return INT_MIN;
+
+	return (int)t;
 }
-if ('\n' == s[0]) return INT_MIN;
-errno = 0;
-const long t = strtol(s, NULL, 10);
-if (0 != errno || t &lt; min || max &lt; t)
-    return INT_MIN;
-return (int)t;
-}
-int main(){
+
+int main()
+{
 	int num;
 	int sum = 0;
-	while (1){
+
+	while (1) {
 		printf("数値を入力してください(-1で終了):");
 		num = get_integer_num(INT_MAX, INT_MIN);
-		if (-1 == num || INT_MIN == num || EOF == num)
+		if (num == -1 || num == INT_MIN || num == EOF)
 			break;
+
 		sum += num;
 	}
+
 	printf("入力した数値の合計は%dです。\n", sum);
 	return 0;
 }
@@ -52,16 +67,18 @@ int main(){
 <section>
     <h2>for文</h2>
     <p>はっきり言って、for文のほうがwhile文より使いやすいです。そしてfor文はこのあと説明する配列と殆どの場合一緒に使います。</p>
-    <pre class="brush: cpp;">for (初期化文; 継続条件; カウンター等実行文);</pre>
-    <pre class="brush: cpp;">for (unsigned int i = 0, sum = 0; i &lt; 10; i++) sum += i;</pre>
+    <pre class="brush: cpp;">for (初期化文; 継続条件; カウンター等実行文)
+	実行文;</pre>
+    <pre class="brush: cpp;">for (unsigned int i = 0, sum = 0; i &lt; 10; i++)
+	sum += i;</pre>
     <p>こんな感じ。まあそのうち呼吸をするがごとく登場するので、これ以上は例を上げないでおきます。実用的な例を上げたほうが良いもんね、やっぱり。</p>
 </section>
 <section>
     <h2>do-while文</h2>
     <p>事後評価文とでも言えばいいのでしょうか。whileと違い、一度実行し、それからループするかを判断します。</p>
-    <pre class="brush: cpp;">do{
-//実行文
-}while (継続条件)</pre>
+    <pre class="brush: cpp;">do
+	実行文;
+while (継続条件)</pre>
     <p>これまた多くの場合、ポインターや標準入力とともに使うので実例はその時に。</p>
 </section>
 <section>
@@ -71,28 +88,36 @@ int main(){
         しかしときにはこれが役に立つこともあります。breakはすでに使っている気もしますが、気にしない。例を見ましょう。
     </p>
     <pre class="brush: cpp;">#include &lt;stdio.h&gt;
-int main(void){
-while(1){//whileで無限ループ。
-    puts("ループ1起点");
-    while(1){//2個目の無限ループ
-        puts("ループ2起点");
-        switch(1){//switchまで置いてみます。
-        case 1://これは絶対成立。
-            puts("switch");
-            break;//switchを終了します。
-        default:
-            break;
-        }
-        puts("switch完了");
-        break;//ループ2を終了します。
-        puts("ループ2終点");
-    }
-    puts("ループ2完了");
-    break;//ループ1を終了します。
-    puts("ループ1終点");
-}
-puts("ループが終わりました。");
-return 0;
+int main()
+{
+	// whileで無限ループ。
+	while(1) {
+		puts("ループ1起点");
+		// 2個目の無限ループ
+		while(1) {
+			puts("ループ2起点");
+			switch(1) {
+				// switchまで置いてみます。
+				case 1: // これは絶対成立。
+					puts("switch");
+					break; // switchを終了します。
+
+				default:
+					break;
+			}
+
+			puts("switch完了");
+			break; // ループ2を終了します。
+			puts("ループ2終点");
+		}
+
+		puts("ループ2完了");
+		break; // ループ1を終了します。
+		puts("ループ1終点");
+	}
+
+	puts("ループが終わりました。");
+	return 0;
 }</pre>
     <pre class="brush: plain;" title="実行例">ループ1起点
 ループ2起点
@@ -102,19 +127,30 @@ switch完了
 ループが終わりました。</pre>
     <p>break文のイメージは湧いたでしょうか？よく勘違いするのが「break文は{}を抜ける」というものです。そうではなくあくまでも<b>ループ文とswitch文を抜ける</b>ものなので注意です。ではcontinue文です。</p>
     <pre class="brush: cpp;">#include &lt;stdio.h&gt;
-int main(void){
-   int i,j;
-   for(i = 1; i &lt; 3; i++){
-  printf("%d回目のループA実行中\n",i);
-  for(j = 1; j &lt; 3; j++){
-     printf("%d/%d回目のループB実行中\n",i,j);//ループA/ループBの現在値を表示
-     continue;//(1)無条件にループをcontinueします。
-     puts("ループBブロック終端です");//必ずcontinueされるのでここは実行されません。
-  }
-  puts("ループAブロック終端です");
-   }
-   puts("ループが終わりました。");
-   return 0;
+
+int main()
+{
+	int i, j;
+
+	for (i = 1; i &lt; 3; i++) {
+		printf("%d回目のループA実行中\n",i);
+
+		for (j = 1; j &lt; 3; j++) {
+			// ループA/ループBの現在値を表示
+			printf("%d/%d回目のループB実行中\n", i, j);
+
+			// (1)無条件にループをcontinueします。
+			continue;
+
+			// 必ずcontinueされるのでここは実行されません。
+			puts("ループBブロック終端です"); 
+		}
+
+		puts("ループAブロック終端です");
+	}
+
+	puts("ループが終わりました。");
+	return 0;
 }</pre>
     <pre class="brush: plain;">1回目のループA実行中
 1/1回目のループB実行中
@@ -126,43 +162,60 @@ int main(void){
 ループAブロック終端です
 ループが終わりました。</pre>
     <p>では組み合わせてみましょうかね～</p>
-    <pre class="brush: cpp;">#include&lt;stdio.h&gt;
-#include&lt;stdlib.h&gt;
-int get_integer_num(const int max, const int min){
-//機能：標準入力を数字に変換する。
-//引数：戻り値の最大値,戻り値の最小値
-//戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
-char s[100];
+    <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
 
-if (NULL == fgets(s, 100, stdin)){
-    if (feof(stdin)){//エラーの原因がEOFか切り分け
-        return EOF;
-    }
-    //改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
-    size_t i;
-    for(i = 0; i &lt; 100 &amp;&amp; '\0' == s[i]; i++);//strlenもどき
-    if('\n' != s[i - 1]) while(getchar() != '\n');//入力ストリームを掃除
-    return INT_MIN;
+int get_integer_num(const int max, const int min)
+{
+	// 機能：標準入力を数字に変換する。
+	// 引数：戻り値の最大値,戻り値の最小値
+	// 戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
+	char s[100];
+
+	if (fgets(s, 100, stdin) == NULL) {
+		// エラーの原因がEOFか切り分け
+		if (feof(stdin))
+			return EOF;
+
+		//改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
+		size_t i;
+		for(i = 0; i &lt; 100 &amp;&amp; '\0' == s[i]; i++); // strlenもどき
+		if (s[i - 1] != '\n')
+			while (getchar() != '\n'); // 入力ストリームを掃除
+
+		return INT_MIN;
+	}
+
+	if (s[0] == '\n')
+		return INT_MIN;
+
+	errno = 0;
+	const long t = strtol(s, NULL, 10);
+	if (errno != 0 || t &lt; min || max &lt; t)
+		return INT_MIN;
+
+	return (int)t;
 }
-if ('\n' == s[0]) return INT_MIN;
-errno = 0;
-const long t = strtol(s, NULL, 10);
-if (0 != errno || t &lt; min || max &lt; t)
-    return INT_MIN;
-return (int)t;
-}
-int main(){
-int num;
-int sum = 0;
-while (1){
-    printf("数値を入力してください(-1で終了):");
-    num = get_integer_num(INT_MAX, INT_MIN);
-    if (-1 == num || INT_MIN == num || EOF == num)
-    if(num &lt; 0) continue;
-        sum += num;
-}
-printf("入力した数値の合計は%dです。\n", sum);
-return 0;
+
+int main()
+{
+	int num;
+	int sum = 0;
+
+	while (1) {
+		printf("数値を入力してください(-1で終了):");
+		num = get_integer_num(INT_MAX, INT_MIN);
+		if (num == -1 || num == INT_MIN || num == EOF)
+			break;
+
+		if (num &lt; 0)
+			continue;
+
+		sum += num;
+	}
+
+	printf("入力した数値の合計は%dです。\n", sum);
+	return 0;
 }</pre>
     <p>んな感じで冒頭のサンプルが正の数のみ加算するようになりました。もう一度言うけど<b>break,continueを書かないほうがすっきりすることが多いです</b></p>
 </section>
