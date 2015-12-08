@@ -12,11 +12,20 @@ title: ループ
     <pre class="brush: cpp;">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
+/*
+  機能：標準入力を数字に変換する。
+  引数：戻り値の最大値,戻り値の最小値
+  戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
+ */
+/*
+  注: EOFとはファイル終端のこと。
+  UNIXでは全てのものをファイルとして扱う原則があり、それに倣っている。
+
+  '\n'とは改行文字のこと。
+  エンターキーを押すことで入力される。
+ */
 int get_integer_num(const int max, const int min)
 {
-	//機能：標準入力を数字に変換する。
-	//引数：戻り値の最大値,戻り値の最小値
-	//戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
 	char s[100];
 
 	if (fgets(s, 100, stdin) == NULL) {
@@ -24,7 +33,7 @@ int get_integer_num(const int max, const int min)
 		if (feof(stdin))
 			return EOF;
 
-		// 改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
+		// 改行文字が入力を受けた配列にない場合、入力ストリームに改行文字がある
 		size_t i;
 		for (i = 0; i &lt; 100 &amp;&amp; s[i] == '\0'; i++); // strlenもどき
 
@@ -177,7 +186,7 @@ int get_integer_num(const int max, const int min)
 		if (feof(stdin))
 			return EOF;
 
-		//改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
+		//改行文字が入力を受けた配列にない場合、入力ストリームに改行文字がある
 		size_t i;
 		for(i = 0; i &lt; 100 &amp;&amp; '\0' == s[i]; i++); // strlenもどき
 		if (s[i - 1] != '\n')
