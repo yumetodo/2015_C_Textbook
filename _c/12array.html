@@ -26,8 +26,8 @@ int tmp[i];</pre>
 #define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
 #endif
 int main(void){
-int num[10] = { 0 };//(宣言時に指定される要素数)×(配列の要素の型の大きさ)分メモリーをスタック領域に確保
-for(unsigned int i = 0; i &lt; (sizeof(num) / sizeof(*num)); i++){
+	int num[10] = { 0 };//(宣言時に指定される要素数)×(配列の要素の型の大きさ)分のメモリが関数開始時に確保される。
+	for(unsigned int i = 0; i &lt; (sizeof(num) / sizeof(*num)); i++){
     *(num + i) = clock();
 }
 for(unsigned int i = 0; i &lt; (sizeof(num) / sizeof(*num)); i++){
