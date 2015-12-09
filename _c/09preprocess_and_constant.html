@@ -102,9 +102,10 @@ title: プロプロセッサと定数まとめ
             <h4>単なるソースコード置換であることに起因する問題</h4>
             <p>早速例を見ましょう。</p>
             <pre class="brush: cpp;">#define BASE_SIZE 1 &lt;&lt; 8
-int main(void){
-auto tmp = BASE_SIZE + 4;
-return 0;
+int main()
+{
+	auto tmp = BASE_SIZE + 4;
+	return 0;
 }</pre>
             <p>tmpの型はいうまでもなく<code>int</code>ですね。で、tmpには何が入るでしょうか？260？いえいえ、4096です。なぜならばこれは以下のように置換されるからです。</p>
             <pre class="brush: cpp;">auto tmp = 1 &lt;&lt; 8 + 4;</pre>
