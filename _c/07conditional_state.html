@@ -175,28 +175,26 @@ switch (time_when) {
     <h3>enum型(列挙型)</h3>
     <p>enum型とは列挙型と呼ばれており、switch文と相性がいいんです。</p>
     <pre class="brush: cpp;">enum status {
-	STATE_TITLE,//タイトル
-	STATE_MAIN,//メイン
-	STATE_END,//リザルト
+	STATE_TITLE,
+	STATE_MAIN,
+	STATE_END,
 };</pre>
     <p>ここでstatusはタグ名と言います。タグ名を除いた";"の前まで全体が型となります。enumはtypedefして初めて真価を発揮します。</p>
     <pre class="brush: cpp;">typedef enum {
-STATE_TITLE,//タイトル
-STATE_MAIN,//メイン
-STATE_END,//リザルト
+STATE_TITLE,
+STATE_MAIN,
+STATE_END,
 } status_t;</pre>
     <p>typedefするときはタグ名は省略してもいいです。なお、「STATE_ENDのあとになんで","が置けるんだ？」と思ったあなた、よく勉強しています。enumに関しては書けるんです(C89からだっけ・・・？)</p>
     <p>実際に例を見ていきましょう</p>
     <pre class="brush: cpp;">#include "DxLib.h"
 #include &lt;stdio.h&gt;
-//  ゲーム状態
 typedef enum {
-	STATE_TITLE,//タイトル
-	STATE_MAIN,//メイン
-	STATE_END,//リザルト
-}status_t;
+	STATE_TITLE,
+	STATE_MAIN,
+	STATE_END,
+} status_t;
 
-//タイトル処理
 status_t title()
 {
 	//タイトルを描画
@@ -204,19 +202,19 @@ status_t title()
 	return STATE_END;
 }
 
-//ゲームのメイン処理
 status_t gameMain()
 {
 	//ゲーム処理
 	//ゲーム終了したら
 	return STATE_END;
 }
-//リザルト画面など
+
 status_t ending(){
 	//リザルト画面描画
 	//クリック押されたら
 	return STATE_MAIN;
 }
+
 int main()
 {
 	if(DxLib_Init() == -1)
