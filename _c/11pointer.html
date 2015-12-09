@@ -13,12 +13,14 @@ title: ポインタ
         では早速その住所(アドレス)を取得してみましょう。
     </p>
     <pre class="brush: cpp;">#include &lt;stdio.h&gt;
-int main(void){
-int p = 20,;
-printf(
-    "変数p: %d\n"
-    "変数pのアドレス: %p\n",
-    p, &amp;p
+
+int main()
+{
+	int p = 20;
+	printf(
+	    "変数p: %d\n"
+	    "変数pのアドレス: %p\n",
+	    p, &amp;p
 );
 }</pre>
     <p>
@@ -67,51 +69,67 @@ int_ptr pi, p2;</pre>
         なお、どんな型でもさせるポインタ型というのもあり、void*型がそれです。ただし、使用時はキャストして元の型をコンパイラーに教える必要があります。<br>
         といったように内部的にchar*やint*があるわけではなく、単にコンパイラーが何から派生したか覚えてくれている、というだけのことなのです。
     </p>
-    <pre class="brush: cpp;">#include&lt;stdio.h&gt;
-#include&lt;stdlib.h&gt;
-#include&lt;limits.h&gt;
-#include&lt;errno.h&gt;
-int get_integer_num(const int max, const int min){
+    <pre class="brush: cpp;">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;errno.h&gt;
+
 //機能：標準入力を数字に変換する。
 //引数：戻り値の最大値,戻り値の最小値
 //戻り値：入力した数字、エラー時はINT_MIN, EOFのときはEOF
-char s[100];
+int get_integer_num(const int max, const int min)
+{
+	char s[100];
 
-if (NULL == fgets(s, 100, stdin)){
-    if (feof(stdin)){//エラーの原因がEOFか切り分け
-        return EOF;
-    }
-    //改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
-    size_t i;
-    for(i = 0; i &lt; 100 &amp;&amp; '\0' == s[i]; i++);//strlenもどき
-    if('\n' != s[i - 1]) while(getchar() != '\n');//入力ストリームを掃除
-    return INT_MIN;
+	if (fgets(s, 100, stdin) == NULL) {
+		// エラーの原因がEOFか切り分け
+		if (feof(stdin))
+			return EOF;
+
+		// 改行文字が入力を受けた配列にない場合、入力ストリームにごみがある
+		size_t i;
+		for(i = 0; i &lt; 100 &amp;&amp; '\0' == s[i]; i++); // strlenもどき
+		if(s[i - 1] != '\n')
+			while(getchar() != '\n'); // 入力ストリームを掃除
+
+		return INT_MIN;
+	}
+
+	if (s[0] == '\n')
+		return INT_MIN;
+
+	errno = 0;
+	const long t = strtol(s, NULL, 10);
+	if (0 != errno || t &lt; min || max &lt; t)
+	    return INT_MIN;
+
+	return (int)t;
 }
-if ('\n' == s[0]) return INT_MIN;
-errno = 0;
-const long t = strtol(s, NULL, 10);
-if (0 != errno || t &lt; min || max &lt; t)
-    return INT_MIN;
-return (int)t;
+
+int compare_int(const void *a, const void *b)
+{
+	return *static_cast&lt;int*&gt;(a) - *static_cast&lt;int*&gt;(b);
 }
-int compare_int(const void *a, const void *b){
-return *static_cast&lt;int*&gt;(a) - *static_cast&lt;int*&gt;(b);
-}
-int main(void){
-const int num1 = get_integer_num(INT_MAX, INT_MIN);
-if(num1 == INT_MIN) return -1;
-const int num1 = get_integer_num(INT_MAX, INT_MIN);
-if(num2 == INT_MIN) return -1;
-const int result = compare_int(&amp;num1, &amp;num2);
-if(result > 0){
-    puts("num1のほうが大きい");
-}
-else if(0 == result){
-    puts("num1とnum2は等しい");
-}
-else{
-    puts("num2のほうが大きい");
-}
+
+int main()
+{
+	const int num1 = get_integer_num(INT_MAX, INT_MIN);
+	if (num1 == INT_MIN)
+		return -1;
+
+	const int num1 = get_integer_num(INT_MAX, INT_MIN);
+	if (num2 == INT_MIN)
+		return -1;
+
+	const int result = compare_int(&amp;num1, &amp;num2);
+	if (result > 0)
+		puts("num1のほうが大きい");
+	else if (result == 0)
+		puts("num1とnum2は等しい");
+	else
+		puts("num2のほうが大きい");
+
+	return 0;
 }</pre>
 </section>
 <section>
@@ -175,14 +193,17 @@ hoge1_p6 = &amp;hoge2;//error</pre>
     <article>
         <h3>問題</h3>
         <p>以下の3つの関数のうち、コンパイルエラーにならないものはどれか、また理由を述べよ</p>
-        <pre class="brush: cpp;">void do_something1(char* dest, char const* src){
-src = NULL;
+        <pre class="brush: cpp;">void do_something1(char* dest, char const* src)
+{
+	src = NULL;
 }
-void do_something2(char* dest, char const* src){
-*src = 'a';
+void do_something2(char* dest, char const* src)
+{
+	*src = 'a';
 }
-void do_something3(char* dest, char* const src){
-src = NULL;
+void do_something3(char* dest, char* const src)
+{
+	src = NULL;
 }</pre>
         <form><input type="button" value="表示/非表示" onclick="change_answer_state('answer1')"></form>
         <section id="answer1" style="display: none;">
