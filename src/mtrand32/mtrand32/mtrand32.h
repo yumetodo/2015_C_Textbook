@@ -29,7 +29,7 @@ template<typename rand_type> class mtrand32
 public:
 	mtrand32(rand_type min, rand_type max) : distribution(min, max){
 		this->engine = create_engine();
-		static_assert(std::is_arithmetic<rand_type>::value == true, "'rand_type' is illegal type.");//非算術型にはコンパイルエラーを
+		static_assert(std::is_arithmetic<rand_type>::value == true, "'rand_type' is not illegal type.");//非算術型にはコンパイルエラーを
 	}
 	rand_type mtrand(void) {
 		return this->distribution(this->engine);
