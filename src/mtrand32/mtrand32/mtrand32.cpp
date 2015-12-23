@@ -48,7 +48,7 @@ seed_v_t mtrand32_create_seed() {
 	char* heap = static_cast<char*>(malloc(sizeof(char) * 2));
 	sed_v.push_back(static_cast<std::uint_least32_t>(reinterpret_cast<std::uint_least64_t>(heap)));//ヒープ領域のアドレスもベクターに追加
 	free(heap);
-	return std::move(sed_v);
+	return sed_v;
 }
 std::mt19937 create_engine() {
 	auto sed_v = mtrand32_create_seed();
