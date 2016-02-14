@@ -1,10 +1,15 @@
 ---
 chapter: 14
-title: 多次元配列
+title: いろいろなポインタ
 ---
 <section>
-    <h2>多次元配列</h2>
-    <p>その名の通り添字が増えて多次元になるのですが、実体は一次元配列を簡単にしたものです (糖衣構文)。</p>
+    <h2>配列のポインタと多次元配列</h2>
+    <p>配列のポインタは次のように表せます。</p>
+    <pre class="brush: cpp; first-line: 13;">int (* p)[2]</pre>
+    <p>
+       これはint型が2個の配列のポインタ、pを表します。<br>
+       配列が現れる例として多次元配列があります。その名の通り添字が増えて多次元になります。
+    </p>
     <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/Multidimensional_array/Multidimensional_array/Multidimensional_array.cpp"></script>
     <p>まずはmain関数から見て行きましょう。22行目を見てください。</p>
     <pre class="brush: cpp; first-line: 21; highlight:[22];">int main(void){
@@ -18,119 +23,23 @@ title: 多次元配列
     <pre class="brush: cpp; first-line: 13;">int sum_array(const int *in_array, const size_t array_num);</pre>
     <pre class="brush: cpp; first-line: 13;">int64_t calc_annual_working_time(const int (* working_time)[31]);</pre>
     <p>
-        1次元配列を受け取るsum_array関数はint const* in_arrayのように受け取っていますが、<br>
-        2次元配列を受け取るcalc_annual_working_time関数はconst int (* working_time)[31]のようにややこしくなっています。<br>
-        なぜint **working_timeのように書けないのでしょうか？
-    </p>
+        1次元配列を受け取るsum_array関数はint const* in_arrayのように受け取っていますが、
+        2次元配列を受け取るcalc_annual_working_time関数はconst int (* working_time)[31]となっています。
     <p>
-        その理由は実体が一次元配列であることに由来します。<br>
-        上記の例の場合、例えばworking_time[6][7]にアクセスしたい場合、内部ではsizeof(working_time[0])*6 + 7のようにポインタ演算しています。<br>
-        この演算をコンパイラーにしてもらうためには、sizeof(working_time[0])がコンパイラーに分かる必要が有ります。ここで大事なのが「型」です。
+        ところで、なぜint **working_timeのように書けないのでしょうか? int **working_timeとした場合、
+        working_time[0]にはintのポインタがあるという意味になりますが、
+        実際にはintが31個並んだ配列があります。似ているようで異なるものです。
     </p>
+</section>
+<section>
+    <h2>関数ポインタ</h2>
+    <p>関数のポインタは次のように表せます。配列のポインタと似ていますね。</p>
+    <pre class="brush: cpp; first-line: 13;">void (* p)(void)</pre>
     <p>
-        そもそも変数hanako_worked_timeの型は何でしょうか？<br>
-        答えはint[12][31]型です。ところで、配列は式の中では4つの例外を除きポインタに読み替えられるのでした。<br>
-        １次元配列を渡しているsum_array関数でint in_array[31]と書かず、const int *in_arrayと書いた理由がこれでした。どうせ[31]の部分は失われるので。
-        ２次元配列を渡しているcalc_annual_working_time関数に渡すときも同様に[12]の部分は情報が失われます。しかし、*working_timeの型はint*ではなくint[31]です。<br>
-        つまり、working_timeの型はint**ではなくint(*)[31]、となるわけです。<br>
-        このため、calc_annual_working_time関数の引数はそれを示す必要があります。
+       これは値を取らず、返さない関数へのポインタ、pを表します。構造体に関数ポインタをもたせることによって、
+       データとコードに関連をもたせることが出来ます。これは構造化プログラミングや、
+       オブジェクト指向プログラミングという考え方につながるものです。
     </p>
-    <p>
-        でつまりは実体は一次配列なので当然メモリー上で連続してますよ、ということでsampleプログラムを書いてみました。
-    </p>
-    <div class="scroll_box">
-    <pre class="brush: cpp;" title="検証用プログラム">#include &lt;stdio.h>
-#ifndef _countof
-#define _countof( arr ) ( sizeof( arr ) / sizeof ( *arr ) )
-#endif
-typedef struct{
-void* key;
-char name[20];
-} inferior_pair;
-int main(){
-int aa[2][3];
-
-printf("sizeof(int) :  %zu\n", sizeof(int));
-printf("sizeof(aa) : %zu\n", sizeof(aa));
-printf("sizeof(aa[0]) : %zu\n", sizeof(aa[0]));
-printf("sizeof(aa[0][0]) : %zu\n", sizeof(aa[0][0]));
-
-inferior_pair inferior_map[sizeof(aa) + _countof(aa) + 1];
-size_t n = 0;
-
-inferior_map[n].key = aa;
-#ifdef _MSC_VER
-sprintf_s(inferior_map[n].name, sizeof(inferior_map[n].name), "aa");
-#else
-sprintf(inferior_map[n].name, "aa");
-#endif
-printf("%s : %p\n", inferior_map[n].name, aa);
-++n;
-
-for(size_t i = 0; i &lt; _countof(aa); ++i, ++n){
-    inferior_map[n].key = aa[i];
-#ifdef _MSC_VER
-    sprintf_s(inferior_map[n].name, sizeof(inferior_map[n].name), "aa[%zu]", i);
-#else
-    sprintf(inferior_map[n].name, "aa[%zu]", i);
-#endif
-    printf("%s : %p\n", inferior_map[n].name, aa[i]);
-}
-
-//fase 1
-for(size_t i = 0; i &lt; _countof(aa); ++i){
-    for(size_t j = 0; j &lt; _countof(*aa); ++j, ++n){
-        inferior_map[n].key = &amp;aa[i][j];
-#ifdef _MSC_VER
-        sprintf_s(inferior_map[n].name, sizeof(inferior_map[n].name), "aa[%zu][%zu]", i, j);
-#else
-        sprintf(inferior_map[n].name, "aa[%zu][%zu]", i, j);
-#endif
-        printf("%s : %p\n", inferior_map[n].name, &amp;aa[i][j]);
-    }
-}
-
-//fase 2
-for(size_t i = 0; i &lt; _countof(aa) + 1; ++i){
-    printf("comparing with %s\n", inferior_map[i].name);
-    for(size_t j = 0; j &lt; n; ++j){
-        if(i == j) continue;//自分自身と比較しても仕方ない
-        if(inferior_map[i].key == inferior_map[j].key){
-            printf("match : %s\n", inferior_map[j].name);
-        }
-    }
-}
-return 0;
-}</pre></div>
-    <pre class="brush: plain" title="実行例">sizeof(int) :  4
-sizeof(aa) : 24
-sizeof(aa[0]) : 12
-sizeof(aa[0][0]) : 4
-aa : 0x7fff8a905ac0
-aa[0] : 0x7fff8a905ac0
-aa[1] : 0x7fff8a905acc
-aa[0][0] : 0x7fff8a905ac0
-aa[0][1] : 0x7fff8a905ac4
-aa[0][2] : 0x7fff8a905ac8
-aa[1][0] : 0x7fff8a905acc
-aa[1][1] : 0x7fff8a905ad0
-aa[1][2] : 0x7fff8a905ad4
-comparing with aa
-match : aa[0]
-match : aa[0][0]
-comparing with aa[0]
-match : aa
-match : aa[0][0]
-comparing with aa[1]
-match : aa[1][0]</pre>
-    <p>
-        ただ、このままだと、もし、hanako_worked_timeの配列の要素数、たとえば宣言がint hanako_worked_time[12][33]とかなった場合、calc_annual_working_time関数の引数も変更しなければならないので、そうならないようにtypedefを用いて解決します。<br>
-    <pre class="brush: cpp;">
-typedef int Year[12][33];
-
-int64_t calc_annual_working_time(const Year working_time, const unsigned int month_per_year);
-
-Year hanako_worked_time;
-</pre>
-    <p>それでも、この"31"の部分を実行中に変更することはできません。その場合は、1次元配列を2次元配列っぽく使うしかありません。</p>
+    <p>次に例を示します。</p>
+    <script src="http://gist-it.appspot.com/github/yumetodo/2015_C_Textbook/blob/gh-pages/src/c/14var_pointer/function.c"></script>
 </section>
