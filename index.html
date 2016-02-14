@@ -54,7 +54,8 @@ title: "目次とかとか | C言語講習会テキスト2015"
 </section>
 <section>
     <h2>目次</h2>
-        {% assign sorted_docs = site.collections["c"].docs | sort: "chapter" %}
+        {% assign collection = site.collections | where: "label", "c" | first %}
+        {% assign sorted_docs = collection.docs | sort: "chapter" %}
         {% for doc in sorted_docs %}
             {{ doc.chapter }}. <a href="{{ site.url }}{{ doc.url }}">{{ doc.title }}</a></br>
         {% endfor %}
