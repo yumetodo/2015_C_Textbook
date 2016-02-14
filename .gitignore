@@ -193,6 +193,10 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 
+# Unix
+*.o
+a.out
+
 #other
 _site
 constant.html
