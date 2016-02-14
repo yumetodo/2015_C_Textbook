@@ -1,8 +1,9 @@
 {%if page.chapter %}
     {% assign previous = page.chapter | minus: 1 %}
     {% assign next = page.chapter | plus: 1 %}
+    {% assign collection = site.collections | where: "label", page.collection | first %}
 
-    {% for doc in site.collections[page.collection].docs %}
+    {% for doc in collection.docs %}
         {% if doc.chapter == previous %}
             {% assign previous_url = doc.url %}
         {% elsif doc.chapter == next %}
