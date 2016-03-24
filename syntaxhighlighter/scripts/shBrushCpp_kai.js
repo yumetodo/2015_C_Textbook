@@ -197,8 +197,8 @@
 			{ regex: SyntaxHighlighter.regexLib.doubleQuotedString,		css: 'string' },			// strings
 			{ regex: SyntaxHighlighter.regexLib.singleQuotedString,		css: 'string' },			// strings
 			{ regex: /!(?:defined)/g,　css: 'preprocessor' },
-			{ regex: new RegExp(this.getKeywords(preprocessor_word), 'gm'),	css: 'preprocessor' },
-			{ regex: new RegExp(this.getKeywords(typedefined), 'gm'),	css: 'color1 bold' },
+			{ regex: new RegExp(this.getKeywords(preprocessor_word), 'gm'),			css: 'preprocessor' },
+			{ regex: new RegExp(this.getKeywords(typedefined)+"(?!.*&gt;$)", 'gm'),	css: 'color1 bold' },
 			{ regex: new RegExp(this.getKeywords(macro), 'gm'),			css: 'color2 bold' },
 			{ regex: new RegExp(this.getKeywords(reserved), 'gm'),		css: 'keyword bold' }
 			];
