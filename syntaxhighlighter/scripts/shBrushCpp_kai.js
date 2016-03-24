@@ -23,8 +23,8 @@
 	function Brush(){
 		// Copyright 2006 Shin, YoungJin
 	
-		var reserved = 	'__stdcall __cdecl and and_eq asm _asm auto bitand bitor ' + 
-						' bool break case catch class compl co1nstexpr const const_cast continue __declspec decltype constexpr ' +
+		var reserved = 	'__stdcall __cdecl alignas alignof and and_eq asm _asm auto bitand bitor ' + 
+						' bool break case catch class compl constexpr const const_cast continue __declspec decltype constexpr ' +
 						'default delete deprecated dllexport dllimport do dynamic_cast else enum __exception ' +
 						'explicit export extern __finally false for friend goto if inline ' +
 						'mutable naked namespace new noinline noreturn not nothrow not_eq nullptr ' +
@@ -68,28 +68,9 @@
 						'BOOST_PLATFORM_CONFIG BOOST_HAS_PRAGMA_ONCE __REQUIRED_RPCNDR_H_VERSION__ __REQUIRED_RPCSAL_H_VERSION__ BOOST_MPL_AUX_LAMBDA_SUPPORT ' +
 						'BOOST_ASIO_MOVE_CAST BOOST_ASIO_WRITE_HANDLER_CHECK ';
 
-		var typedefined = 'INPUT_PLUGIN_TABLE INPUT_HANDLE FILTER_DLL EXFUNC AVI_FILE_HANDLE SYS_INFO FILE_INFO FRAME_STATUS FILTER_PROC_INFO __m128 ' +
-						'__m128i __m128d __m256 __m256i __m256d dummy_handler_t au_video_output_handler_t yuv420_list func_convert_yuv420ple_i_to_yuv444p16le AVFrame ' +
-						'AVPicture COLOR_PLUGIN_TABLE COLOR_PROC_INFO MULTI_THREAD_FUNC PIXEL_YC lsmash_reader_t video_option_t lsmash_handler_t AVS_Library AVS_ShutdownFunc ' +
-						'AVS_ApplyFunc AVS_Value AVS_ScriptEnvironment AVS_VideoInfo AVS_Clip AVS_FilterInfo AVSC_CC AVS_VideoFrameBuffer AVS_VideoFrame WAVEFORMATEX ' +
-						'audio_option_t AVSampleFormat lwlibav_file_handler_t AVPixelFormat IClip PClip PVideoFrame VideoInfo AVCodec AVStream ' +
-						'IScriptEnvironment ATOM BOOL BOOLEAN BYTE CHAR COLORREF DWORD DWORDLONG DWORD_PTR ' +
-						'DWORD32 DWORD64 FLOAT HACCEL HALF_PTR HANDLE HBITMAP HBRUSH HCOLORSPACE HCONV ' +
-						'HCONVLIST HCURSOR HDC HDDEDATA HDESK HDROP HDWP HENHMETAFILE HFILE HFONT ' +
-						'HGDIOBJ HGLOBAL HHOOK HICON HINSTANCE HKEY HKL HLOCAL HMENU HMETAFILE ' +
-						'HMODULE HMONITOR HPALETTE HPEN HRESULT HRGN HRSRC HSZ HWINSTA HWND ' +
-						'INT INT_PTR INT32 INT64 LANGID LCID LCTYPE LGRPID LONG LONGLONG ' +
-						'LONG_PTR LONG32 LONG64 LPARAM LPBOOL LPBYTE LPCOLORREF LPCSTR LPCTSTR LPCVOID ' +
-						'LPCWSTR LPDWORD LPHANDLE LPINT LPLONG LPSTR LPTSTR LPVOID LPWORD LPWSTR ' +
-						'LRESULT PBOOL PBOOLEAN PBYTE PCHAR PCSTR PCTSTR PCWSTR PDWORDLONG PDWORD_PTR ' +
-						'PDWORD32 PDWORD64 PFLOAT PHALF_PTR PHANDLE PHKEY PINT PINT_PTR PINT32 PINT64 ' +
-						'PLCID PLONG PLONGLONG PLONG_PTR PLONG32 PLONG64 POINTER_32 POINTER_64 PSHORT PSIZE_T ' +
-						'PSSIZE_T PSTR PTBYTE PTCHAR PTSTR PUCHAR PUHALF_PTR PUINT PUINT_PTR PUINT32 ' +
-						'PUINT64 PULONG PULONGLONG PULONG_PTR PULONG32 PULONG64 PUSHORT PVOID PWCHAR PWORD ' +
-						'PWSTR SC_HANDLE SC_LOCK SERVICE_STATUS_HANDLE SHORT SIZE_T SOCKET SSIZE_T TBYTE TCHAR ' +
-						'UCHAR UHALF_PTR UINT UINT_PTR UINT32 UINT64 ULONG ULONGLONG ULONG_PTR ULONG32 ' +
-						'ULONG64 USHORT USN VOID WCHAR WORD WPARAM WPARAM WPARAM BITMAP errno_t ' +
-						'BITMAPINFO BITMAPINFOHEADER BITMAPFILEHEADER RECT HWND HDC IplImage clock_t _complex _dev_t ' +
+		var typedefined = '' +
+						//Standerd C
+						'clock_t _complex _dev_t ' +
 						'_diskfree_t div_t ldiv_t _exception _EXCEPTION_POINTERS FILE _finddata_t _finddatai64_t _wfinddata_t _wfinddatai64_t ' +
 						'__finddata64_t __wfinddata64_t _FPIEEE_RECORD fpos_t _HEAPINFO _HFILE lconv intptr_t jmp_buf mbstate_t ' +
 						'_off_t _onexit_t _PNH ptrdiff_t _purecall_handler sig_atomic_t size_t _stat __stat64 _stati64 ' +
@@ -97,15 +78,9 @@
 						'wctrans_t wctype_t wint_t int8_t int16_t int32_t int64_t uint8_t uint16_t uint32_t uint64_t ' +
 						'int_least8_t int_least16_t int_least32_t int_least64_t uint_least8_t uint_least16_t uint_least32_t uint_least64_t ' +
 						'int_fast8_t int_fast16_t int_fast32_t int_fast64_t uint_fast8_t uint_fast16_t uint_fast32_t uint_fast64_t ' +
-						'intmax_t uintmax_t ' +
-						'_BOOL AVFormatContext AVMediaType AVCodecID AVPacket AVCodecContext MyAVPacketList PacketQueue AudioParams ' +
-						'Clock Frame FrameQueue Decoder show_mode VideoState SDL_AudioSpec lsmash_file_parameters_t lsmash_movie_parameters_t lsmash_root_t ' +
-						'lsmash_file_t Pixel Pixel32 Pixel8 PixCoord PixDim PixOffset SFLOAT libavsmash_audio_output_handler_t libavsmash_video_scaler_handler_t ' +
-						'libavsmash_video_output_handler_t lwlibav_audio_output_handler_t lwlibav_video_scaler_handler_t lwlibav_video_output_handler_t progress_handler_t lw_log_handler_t AVSValue lw_audio_output_handler_t extended_summary_t libavsmash_summary_t ' +
-						'codec_configuration_t libavsmash_audio_decode_handler_t order_converter_t libavsmash_video_decode_handler_t lwlibav_option_t audio_frame_info_t lwlibav_audio_decode_handler_t lwlibav_extradata_t lwlibav_extradata_handler_t lwlibav_decode_handler_t ' +
-						'lw_field_info_t video_frame_info_t order_converter_t lwlibav_video_decode_handler_t progress_indicator_t audio_samples_t lw_video_scaler_handler_t lw_video_frame_order_t lw_video_output_handler_t as_video_output_handler_t ' +
-						'as_video_buffer_handler_t lwindex_helper_t video_timestamp_t video_timestamp_temp_t lw_log_level AVAudioResampleContext AVMixCoeffType AVResampleFilterType AVResampleDitherMethod output_colorspace_tag ' +
-						'output_colorspace_index PIXEL_LW48 lsmash_media_parameters_t libavsmash_handler_t libavsmash_audio_info_handler_t libavsmash_video_info_handler_t atomic_char atomic_schar atomic_uchar atomic_char16_t ' +
+						'intmax_t uintmax_t _BOOL ' +
+						//C++ STL
+						'atomic_char atomic_schar atomic_uchar atomic_char16_t ' +
 						'atomic_char32_t atomic_wchar_t atomic_short atomic_ushort atomic_int atomic_uint atomic_long atomic_ulong atomic_llong atomic_ullong ' +
 						'atomic_int8_t atomic_uint8_t atomic_int16_t atomic_uint16_t atomic_int32_t atomic_uint32_t atomic_int64_t atomic_uint64_t atomic_int_least8_t atomic_uint_least8_t ' +
 						'atomic_int_least16_t atomic_uint_least16_t atomic_int_least32_t atomic_uint_least32_t atomic_int_least64_t atomic_uint_least64_t atomic_int_fast8_t atomic_uint_fast8_t atomic_int_fast16_t atomic_uint_fast16_ ' +
@@ -144,15 +119,70 @@
 						'make_unsigned rank remove_all_extents remove_const remove_cv remove_extent remove_pointer remove_reference remove_volatile integral_constant ' +
 						'false_type true_type unordered_map unordered_multimap unordered_multiset unordered_set tuple_element tuple_size identity pair ' +
 					    'gslice gslice_array indirect_array mask_array slice valarray vector bitset numeric_limits auto_ptr unique_ptr shared_ptr ' +
-					    'forward enable_shared_from_this IID' +
-					    'const_buffer tcp endpoint acceptor socket io_service async_result async_result_init handler_type async_result_type_helper AsyncStatus ' +//boost.asio
-					    'RPC_IF_HANDLE IAsyncInfo IInspectable win_event posix_event std_event null_event event atomic_count basic_handle native_type native_handle_type lowest_layer_type' +
+					    'forward enable_shared_from_this ' +
+						//SIMD
+						'__m128 __m128i __m128d __m256 __m256i __m256d ' + 
+						//AviUtl
+						'INPUT_PLUGIN_TABLE INPUT_HANDLE FILTER_DLL EXFUNC AVI_FILE_HANDLE SYS_INFO FILE_INFO FRAME_STATUS FILTER_PROC_INFO ' +
+						'COLOR_PLUGIN_TABLE COLOR_PROC_INFO MULTI_THREAD_FUNC PIXEL_YC ' +
+						//Win32api
+						'ATOM BOOL BOOLEAN BYTE CHAR COLORREF DWORD DWORDLONG DWORD_PTR ' +
+						'DWORD32 DWORD64 FLOAT HACCEL HALF_PTR HANDLE HBITMAP HBRUSH HCOLORSPACE HCONV ' +
+						'HCONVLIST HCURSOR HDC HDDEDATA HDESK HDROP HDWP HENHMETAFILE HFILE HFONT ' +
+						'HGDIOBJ HGLOBAL HHOOK HICON HINSTANCE HKEY HKL HLOCAL HMENU HMETAFILE ' +
+						'HMODULE HMONITOR HPALETTE HPEN HRESULT HRGN HRSRC HSZ HWINSTA HWND ' +
+						'INT INT_PTR INT32 INT64 LANGID LCID LCTYPE LGRPID LONG LONGLONG ' +
+						'LONG_PTR LONG32 LONG64 LPARAM LPBOOL LPBYTE LPCOLORREF LPCSTR LPCTSTR LPCVOID ' +
+						'LPCWSTR LPDWORD LPHANDLE LPINT LPLONG LPSTR LPTSTR LPVOID LPWORD LPWSTR ' +
+						'LRESULT PBOOL PBOOLEAN PBYTE PCHAR PCSTR PCTSTR PCWSTR PDWORDLONG PDWORD_PTR ' +
+						'PDWORD32 PDWORD64 PFLOAT PHALF_PTR PHANDLE PHKEY PINT PINT_PTR PINT32 PINT64 ' +
+						'PLCID PLONG PLONGLONG PLONG_PTR PLONG32 PLONG64 POINTER_32 POINTER_64 PSHORT PSIZE_T ' +
+						'PSSIZE_T PSTR PTBYTE PTCHAR PTSTR PUCHAR PUHALF_PTR PUINT PUINT_PTR PUINT32 ' +
+						'PUINT64 PULONG PULONGLONG PULONG_PTR PULONG32 PULONG64 PUSHORT PVOID PWCHAR PWORD ' +
+						'PWSTR SC_HANDLE SC_LOCK SERVICE_STATUS_HANDLE SHORT SIZE_T SOCKET SSIZE_T TBYTE TCHAR ' +
+						'UCHAR UHALF_PTR UINT UINT_PTR UINT32 UINT64 ULONG ULONGLONG ULONG_PTR ULONG32 ' +
+						'ULONG64 USHORT USN VOID WCHAR WORD WPARAM WPARAM WPARAM BITMAP errno_t ' +
+						'BITMAPINFO BITMAPINFOHEADER BITMAPFILEHEADER RECT HWND HDC ' +
+						'WAVEFORMATEX IID ' +
+						//FFmpeg
+						'AVFormatContext AVMediaType AVCodecID AVPacket AVCodecContext MyAVPacketList PacketQueue AudioParams ' +
+						'Clock Frame FrameQueue Decoder show_mode VideoState SDL_AudioSpec ' +
+						'AVAudioResampleContext AVMixCoeffType AVResampleFilterType AVResampleDitherMethod ' +
+						'AVS_Library AVS_ShutdownFunc AVS_ApplyFunc AVS_Value AVS_ScriptEnvironment AVS_VideoInfo AVS_Clip AVS_FilterInfo AVSC_CC ' +
+						'IScriptEnvironment AVFrame AVPicture AVS_VideoFrameBuffer AVS_VideoFrame ' +
+						'AVSampleFormat AVPixelFormat IClip PClip PVideoFrame VideoInfo AVCodec AVStream ' +
+						//L-smash
+						//L-SMASH-Works
+						'lsmash_reader_t video_option_t lsmash_handler_t audio_option_t ' +
+						'dummy_handler_t au_video_output_handler_t yuv420_list func_convert_yuv420ple_i_to_yuv444p16le lwlibav_file_handler_t ' +
+						'lsmash_file_parameters_t lsmash_movie_parameters_t lsmash_root_t ' +
+						'lsmash_file_t Pixel Pixel32 Pixel8 PixCoord PixDim PixOffset SFLOAT libavsmash_audio_output_handler_t libavsmash_video_scaler_handler_t ' +
+						'libavsmash_video_output_handler_t lwlibav_audio_output_handler_t lwlibav_video_scaler_handler_t lwlibav_video_output_handler_t ' +
+						'progress_handler_t lw_log_handler_t AVSValue lw_audio_output_handler_t extended_summary_t libavsmash_summary_t ' +
+						'codec_configuration_t libavsmash_audio_decode_handler_t order_converter_t libavsmash_video_decode_handler_t lwlibav_option_t ' +
+						'audio_frame_info_t lwlibav_audio_decode_handler_t lwlibav_extradata_t lwlibav_extradata_handler_t lwlibav_decode_handler_t ' +
+						'lw_field_info_t video_frame_info_t order_converter_t lwlibav_video_decode_handler_t progress_indicator_t audio_samples_t ' +
+						'lw_video_scaler_handler_t lw_video_frame_order_t lw_video_output_handler_t as_video_output_handler_t ' +
+						'as_video_buffer_handler_t lwindex_helper_t video_timestamp_t video_timestamp_temp_t lw_log_level ' +
+						'output_colorspace_tag output_colorspace_index ' +
+						'PIXEL_LW48 lsmash_media_parameters_t libavsmash_handler_t libavsmash_audio_info_handler_t libavsmash_video_info_handler_t ' +
+					    //boost.asio
+					    'const_buffer tcp endpoint acceptor socket io_service async_result async_result_init handler_type async_result_type_helper AsyncStatus ' +
+					    'RPC_IF_HANDLE IAsyncInfo IInspectable win_event posix_event std_event null_event event atomic_count basic_handle native_type ' +
+					    'native_handle_type lowest_layer_type' +
 					    'io_service basic_io_object basic_object_handle basic_random_access_handle type_check' +
 					    'ObjectHandleService HandleService WaitHandler RandomAccessHandleService ConstBufferSequence '+//Boost.asio template
-					    'distance_impl apply msvc_eti_base iter_fold iterator_range long_ distance encode_type_impl decode_type_impl decode_nested_template_helper_impl encode_type decode_type ' +//Boost.mpl
-					    'enable_if_c lazy_enable_if_c disable_if_c lazy_disable_if_c ' +//Boost
-					    'T_ T Args TYPE reference pointer limit iterator Value type Handler Signature First Last Tag Cond next Cont ' +//for Template
-					    'counter_iterator nth_loop rand_type Then Else IF my_uniform_distribution PrimitiveType status_t color_e_t myuint8_t ' +//Frequently used name
+					    //Boost.mpl
+					    'distance_impl apply msvc_eti_base iter_fold iterator_range long_ distance encode_type_impl ' +
+					    'decode_type_impl decode_nested_template_helper_impl encode_type decode_type ' +
+					    //Boost
+					    'enable_if_c lazy_enable_if_c disable_if_c lazy_disable_if_c ' +
+					    //OpenCV 1.0
+						'IplImage ' +
+						//for Template
+					    'T_ T Args TYPE reference pointer limit iterator Value type Handler Signature First Last Tag Cond next Cont ' +
+					    //Frequently used name
+					    'counter_iterator nth_loop rand_type Then Else IF my_uniform_distribution PrimitiveType status_t color_e_t myuint8_t ' +
 					    'rgb_t bignum_t BIGNUM uint shared_const_buffer MutableBufferSequence';
 
 		var preprocessor_word = 'alloc_text auto_inline bss_seg check_stack code_seg comment component conform const_seg data_seg deprecated detect_mismatch ' +
