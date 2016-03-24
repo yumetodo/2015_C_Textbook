@@ -352,6 +352,8 @@
 						'LPD_DIENUMDEVICESCALLBACKA LPD_DIENUMDEVICESCALLBACKW LPD_DIENUMEFFECTSCALLBACKA LPD_DIENUMEFFECTSCALLBACKW ' +
 						'D_IDirectInputDevice D_IDirectInputDevice2 D_IDirectInputDevice7 D_IDirectInputDevice8 D_IDirectInput8 ' +
 						'D_IDirectInput D_IDirectInput2 D_IDirectInput7 D_IDirectInputEffect ' +
+						//DxLib(DxThreadWin.h)
+						'DX_CRITICAL_SECTION THREAD_INFO ' +
 						//DxLib(DxSoundWin.h)
 						'SOUNDBUFFER_CALLBACK SOUNDBUFFER_PF SOUNDSYSTEMDATA_PF MIDIHANDLEDATA_PF MIDISYSTEMDATA_PF ' +
 					    //DxLib(DxHandle.h)
