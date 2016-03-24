@@ -387,7 +387,7 @@
 	}
 
 	Brush.prototype	= new SyntaxHighlighter.Highlighter();
-	Brush.aliases	= ['cpp+dxlib', 'c+dxlib'];
+	Brush.aliases	= ['cpp_dxlib', 'c_dxlib'];
 
 	SyntaxHighlighter.brushes.Cpp = Brush;
 
